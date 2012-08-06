@@ -1,4 +1,4 @@
-# [adam-p.github.com](adam-p.github.com)
+# [adam-p.github.com](http://adam-p.github.com)
 
 This is the source for my little Github pages personal site.
 
