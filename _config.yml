@@ -1,0 +1,11 @@
+sitename: Adam Pritchard
+sitedescription: coder, etc.
+titleprefix: adam-p
+
+navigation:
+- text: Home
+  url: /
+  name: home
+- text: Résumé
+  url: /resume/
+  name: resume
