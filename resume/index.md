@@ -51,7 +51,7 @@ Windows, Linux, Mac, Solaris, iOS.
 
 ##### In general
 
-If I don’t already know it, I can pick it quickly and adeptly.
+If I don’t already know it, I can pick it up quickly and adeptly.
 
 
 ## Experience
