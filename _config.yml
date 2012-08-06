@@ -15,3 +15,5 @@ navigation:
 - text: Contact
   url: /contact/
   name: contact
+
+exclude: README.md
