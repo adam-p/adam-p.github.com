@@ -7,7 +7,8 @@ name: resume
 # {{ page.title }}
 
 [pritchard.adam@gmail.com](mailto:pritchard.adam@gmail.com)  
-+1-416-949-5138
++1-416-949-5138  
+Toronto, Canada
 
 
 ## Major Shipped Projects

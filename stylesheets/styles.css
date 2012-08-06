@@ -376,31 +376,11 @@ footer {
   }
 }
 
-/*
-@media print, screen and (max-width: 720px) {
-  body {
-    word-wrap:break-word;
-  }
-
+@media print, screen and (min-width: 480px) and (max-width: 960px) {
   header {
-    padding:10px 20px 0;
-    margin-right: 0;
-  }
-
-  section {
-    padding:10px 0 10px 20px;
-    margin:0 0 30px;
-  }
-
-  footer {
-    margin: 0 0 0 30px;
-  }
-
-  header ul, header p.view {
-    position:static;
+    height: 150px;
   }
 }
-*/
 
 @media print, screen and (max-width: 480px) {
 

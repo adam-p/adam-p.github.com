@@ -6,6 +6,12 @@ navigation:
 - text: Home
   url: /
   name: home
+- text: Projects
+  url: /projects/
+  name: projects
 - text: Résumé
   url: /resume/
   name: resume
+- text: Contact
+  url: /contact/
+  name: contact
