@@ -4,8 +4,9 @@ title: Projects
 name: projects
 ---
 
-<script src="projects.js">
-</script>
+{% raw %}
+<script src="projects.js"></script>
+{% endraw %}
 
 # {{ page.title }}
 
@@ -13,6 +14,7 @@ name: projects
 
 ### Github projects
 
+{% raw %}
 <div id="github-repos">
   Loading...
 
@@ -27,12 +29,13 @@ name: projects
     </div>
   </div>
 </div>
-
+{% endraw %}
 
 ### Bitbucket projects
 
 I mostly use Github for personal stuff now, but I still have a couple Bitbucket repos.
 
+{% raw %}
 <div id="bitbucket-repos">
   Loading...
 
@@ -45,3 +48,4 @@ I mostly use Github for personal stuff now, but I still have a couple Bitbucket 
     </div>
   </div>
 </div>
+{% endraw %}
