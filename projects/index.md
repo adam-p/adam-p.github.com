@@ -4,7 +4,8 @@ title: Projects
 name: projects
 ---
 
-<script src="projects.js"></script>
+<script src="projects.js">
+</script>
 
 # {{ page.title }}
 
