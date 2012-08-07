@@ -1,4 +1,5 @@
 $(function() {
+  return;
   //
   // Load project lists dynamically using Github and Bitbucket APIs.
   //
