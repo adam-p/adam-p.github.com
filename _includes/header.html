@@ -28,7 +28,7 @@
                 {% assign current = 'current' %}
               {% endif %}
 
-              <li class="{% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %}">
+              <li>
                 <a class="buttons {{ current }}" href="{{ link.url }}">{{ link.text }}</a>
               </li>
             {% endfor %}
