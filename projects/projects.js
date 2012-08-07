@@ -3,13 +3,14 @@ $(function() {
   // Load project lists dynamically using Github and Bitbucket APIs.
   //
 
-  $.getJSON('https://api.github.com/users/adam-p/repos', function(repos, textStatus, jqXHR) {
+  $.getJSON('https://api.github.com/users/adam-p/repos?callback=?', function(repos, textStatus, jqXHR) {
     var i, repoTemplate, repo;
-    
     if (textStatus !== 'success') {
       $('#github-repos').text('Failed to load repos');
       return;
     }
+
+    repos = repos.data;
 
     repos = repos.filter(function(elem) {
       // Don't show forks of other projects or private repos.
@@ -40,8 +41,6 @@ $(function() {
     }
   });
 
-  // We need to use JSONP for the Bitbucket request, as it doesn't provide a CORS
-  // header in the response.
   $.getJSON('https://api.bitbucket.org/1.0/users/adamp?callback=?', function(repos, textStatus, jqXHR) {
     var i, repoTemplate, repo;
 
