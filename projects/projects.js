@@ -21,10 +21,13 @@ $(function() {
       return a.pushed_at < b.pushed_at;
     });
 
-    repoTemplate = $('#github-repos').find('#repo-template');
+    // Make sure to pull out the template before emptying the element.
+    repoTemplate = $('#github-repos').find('.repo-template');
     $('#github-repos').empty();
+
     for (i = 0; i < repos.length; i++) {
-      repo = repoTemplate.clone().attr('id', null).css('display', '');
+      repo = repoTemplate.clone().removeClass('repo-template').css('display', '');
+
       repo.find('.repo-name').text(repos[i].name);
       repo.find('.repo-link').attr('href', repos[i].html_url);
       repo.find('.repo-desc').text(repos[i].description);
@@ -60,10 +63,13 @@ $(function() {
       return a.last_updated < b.last_updated;
     });
 
-    repoTemplate = $('#bitbucket-repos').find('#repo-template');
+    // Make sure to pull out the template before emptying the element.
+    repoTemplate = $('#bitbucket-repos').find('.repo-template');
     $('#bitbucket-repos').empty();
+
     for (i = 0; i < repos.length; i++) {
-      repo = repoTemplate.clone().attr('id', null).css('display', '');
+      repo = repoTemplate.clone().removeClass('repo-template').css('display', '');
+
       repo.find('.repo-name').text(repos[i].name);
       repo.find('.repo-link').attr('href', 'https://bitbucket.org/'+repos[i].owner+'/'+repos[i].slug);
       repo.find('.repo-desc').text(repos[i].description);
