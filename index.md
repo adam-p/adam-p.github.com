@@ -6,6 +6,5 @@ name: home
 
 # {{ page.title }}
 
-Stuff about me!
-
-Not much here yet besides what's in [my résumé](/resume).
+Welcome to my little site. It mostly has software development-related information,
+but there's some other stuff here and there. Feel free poke around.

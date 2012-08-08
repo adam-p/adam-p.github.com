@@ -6,6 +6,8 @@ name: contact
 
 # {{ page.title }}
 
+Please don't hesitate to contact me. I'm usually a pretty sociable guy.
+
 ## Email
 
 [pritchard.adam@gmail.com](mailto:pritchard.adam@gmail.com)
