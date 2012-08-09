@@ -1,0 +1,79 @@
+---
+layout: page
+title: Photos
+name: photos
+---
+
+<style>
+#albums {
+  overflow: hidden;
+  width: 100%;
+}
+
+.album {
+  float: left;
+  padding: 5px;
+}
+</style>
+
+<script>
+$(function() {
+  $.getJSON('https://picasaweb.google.com/data/feed/api/user/pritchard.adam?alt=json', function(data, textStatus, jqXHR) {
+    console.log(arguments);
+
+    if (textStatus !== 'success') {
+      $('#albums').text('Failed to load albums');
+      return;
+    }
+
+    var albumTemplate = $('#album-template').html();
+
+    // Remove the "Loading..." message
+    $('#albums').empty();
+
+    $.each(data.feed.entry, function() {
+      if (!this['gphoto$numphotos'] || this['gphoto$numphotos']['$t'] < 1) return;
+      if (this['gphoto$albumType']) return;
+
+      var albumInfo = { 'album_url': this['link'][1]['href'],
+                        'thumbnail_url': this['media$group']['media$thumbnail'][0]['url'],
+                        'numphotos': this['gphoto$numphotos']['$t'],
+                        'album_title': this['media$group']['media$title'][0] ? 
+                          this['media$group']['media$title'][0]['$t'] :
+                          this['media$group']['media$title']['$t']
+                      };
+
+      $('#albums').append(_.template(albumTemplate, albumInfo));
+    });
+
+  });
+});
+</script>
+
+<h1>Photos</h1>
+
+<div id="albums">
+  Loading...
+</div>
+
+<script id="album-template" type="text/template">
+  <div class="album">
+    <!-- This HTML adapted from the Picasa embed code -->
+    <table style="width:194px;">
+      <tr>
+        <td align="center" style="height:194px;background:url(https://picasaweb.google.com/s/c/transparent_album_background.gif) no-repeat left">
+          <a href="<%= album_url %>?authuser=0&feat=embedwebsite">
+            <img src="<%= thumbnail_url %>" width="160" height="160" style="margin:1px 0 0 4px;">
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align:center;font-size:11px">
+          <a href="<%= album_url %>?authuser=0&feat=embedwebsite" style="font-weight:bold;text-decoration:none;">
+            <%= album_title %><br>(<%= numphotos %> photos)
+          </a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</script>
