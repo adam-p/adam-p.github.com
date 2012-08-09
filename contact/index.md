@@ -8,6 +8,8 @@ name: contact
 
 Please don't hesitate to contact me. I'm usually a pretty sociable guy.
 
+I live in Toronto, Canada.
+
 ## Email
 
 [pritchard.adam@gmail.com](mailto:pritchard.adam@gmail.com)
