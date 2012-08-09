@@ -34,6 +34,37 @@ $(function() {
     });
   });
 
+  $.getJSON('https://api.github.com/users/adam-p/gists?callback=?', function(gists, textStatus, jqXHR) {
+    var gistTemplate;
+
+    if (textStatus !== 'success') {
+      $('#github-gists').text('Failed to load gists');
+      return;
+    }
+
+    gists = gists.data;
+
+    gists = gists.filter(function(elem) {
+      // Don't show private gists.
+      return !elem.private;
+    });
+
+    gists.sort(function(a, b) {
+      return a.updated_at < b.updated_at;
+    });
+
+    // Make sure to pull out the template before emptying the element.
+    gistTemplate = $('#github-gist-template').html();
+    
+    // Remove the "Loading..." message
+    $('#github-gists').empty();
+
+    // Render the gists
+    $.each(gists, function() {
+      $('#github-gists').append(_.template(gistTemplate, this));
+    });
+  });
+
   $.getJSON('https://api.bitbucket.org/1.0/users/adamp?callback=?', function(repos, textStatus, jqXHR) {
     var repoTemplate;
 

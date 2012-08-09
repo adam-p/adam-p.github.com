@@ -7,3 +7,7 @@ This is the source for my little Github pages personal site.
 * Make the first page look not so empty.
 
 * Put something useful in the footer or remove it.
+
+## License
+
+http://adampritchard.mit-license.org/
