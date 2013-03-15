@@ -16,7 +16,7 @@ Toronto, Canada
 ##### Censorship Circumvention (2009-present)
 Part of a team of four devs responsible for all aspects of design and development. The circumvention system allows users in non-open-internet regions (China, Iran, etc.) to get access to censored sites. Our customers tend to be international news agencies that need to provide access to their sites in the targeted regions. This is a very hostile environment (there are constant blockages and possibility of attacks) that has required both quick responses to problems and long term planning for more creative approaches. The service is used by at least tens of thousands of users in a dozen countries and a dozen languages.
 
-##### Storage Key Manager (2004-2009)
+##### Storage Encryption Key Manager (2004-2009)
 Co-wrote the specification and design for an enterprise storage key management system. This included high-availability and clustering, high-assurance data destruction, information lifecycle management, standards-based interfaces, and all other aspects of the system. I was also part of the team that developed and delivered the final system (dev team size varied between 3 and 6). The IP was purchased by Sun Microsystems Inc., and I was hired along with it. While at Sun, I (along with a few others on the team) received a Sun Award of Excellence for our work. By the time I left Sun, the Key Manager was selling well and was driving even larger sales of encrypting tape drives. The product seems to continue to be offered [by Oracle](http://www.oracle.com/us/products/servers-storage/storage/storage-software/oracle-key-manager/overview/index.html).
 
 ##### CipherShare (2001-present)
@@ -29,15 +29,15 @@ Member of a two-person team that designed, developed, and delivered one of the f
 
 ##### Programming languages
 
-Python, C, C++, JavaScript (+HTML+CSS), PHP, Java, SQL (and stored procedure stuff like PL/pgSQL). Also some: Objective-C, shell scripts, C#. 
+Python, C/C++, JavaScript (+HTML+CSS), PHP, Java, SQL (and stored procedure stuff like PL/pgSQL). Also some: Objective-C, shell scripts, C#. 
 
 ##### Tools
 
 **IDEs**: Netbeans, MSVC++, Eclipse, Xcode. 
 
-**Source control**: Mercurial, Subversion, Perforce, SourceSafe. 
+**Source control**: Git, Mercurial, Subversion, Perforce, SourceSafe. 
 
-**Issue tracking**: Trac, LaunchPad, FogBugz, TestTrack, Bug Tracker, VersionOne. 
+**Issue tracking**: Github, Bitbucket, Kiln, Trac, LaunchPad, FogBugz, TestTrack, Bug Tracker, VersionOne. 
 
 **Miscellaneous**: DialogBlocks, VirtualBox, VMWare. 
 
@@ -47,11 +47,11 @@ PostgreSQL, MySQL, MS SQL Server.
 
 ##### OSes
 
-Windows, Linux, Mac, Solaris, iOS.
+Windows, Android, Linux, Mac, Solaris, iOS.
 
 ##### In general
 
-If I don’t already know it, I can pick it up quickly and adeptly.
+If I don’t already know it, I can get up to speed pretty quickly.
 
 
 ## Experience
