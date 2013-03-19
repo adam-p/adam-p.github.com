@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: mainpage
 title: Adam Pritchard
 name: home
 ---
@@ -8,3 +8,7 @@ name: home
 
 Welcome to my little site. It mostly has software development-related information,
 but there's some other stuff here and there. Feel free poke around.
+
+{% for link in site.navigation %}
+### [{{ link.text }}]({{ link.url }})
+{% endfor %}

@@ -1,0 +1,30 @@
+---
+layout: none
+---
+
+{% include header.html %}
+
+  {% include nav.html %}
+
+  <div class="container-fluid">
+    <h2><a href="{{ page.url }}">{{ page.title }}</a></h2>
+
+    {{ content }}
+
+    <div class="row-fluid">
+      <div class="span12">
+        <p>
+          <a href="{{ page.url }}">permalink</a>
+        </p>
+        <p>
+          tags: {{ page.tags | join: ", " }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    {% include comments.html %}
+  </div>
+
+{% include footer.html %}

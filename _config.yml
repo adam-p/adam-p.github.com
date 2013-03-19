@@ -1,19 +1,31 @@
-sitename: Adam Pritchard
-sitedescription: coder, etc.
+name: Adam Pritchard
+description: coder, etc.
+url: http://www.crypti.cc
+
+exclude:
+- README.md
+- node_modules
+- less
+
 titleprefix: adam-p
 
 navigation:
-- text: Home
-  url: /
-  name: home
+- text: Blog
+  url: /blog/
+  name: blog
 - text: Projects
   url: /projects/
   name: projects
-- text: Résumé
-  url: /resume/
-  name: resume
+- text: CV
+  url: /cv/
+  name: cv
 - text: Contact
   url: /contact/
   name: contact
 
-exclude: README.md
+permalink: /blog/:year/:month/:day/:title
+
+markdown: redcarpet
+
+redcarpet:
+  extensions: [smart, tables, strikethrough, lax_spacing]

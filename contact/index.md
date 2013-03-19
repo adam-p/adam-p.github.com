@@ -30,4 +30,6 @@ Launchpad: [https://launchpad.net/~adam+](https://launchpad.net/~adam+)
 
 Google+: [https://profiles.google.com/pritchard.adam](https://profiles.google.com/pritchard.adam)
 
+Twitter: [@adampritchard](https://twitter.com/adampritchard)
+
 LinkedIn: [http://www.linkedin.com/in/adampritchard](http://www.linkedin.com/in/adampritchard)
