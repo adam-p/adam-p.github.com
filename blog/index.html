@@ -6,24 +6,39 @@ name: blog
 
 <blink>IN PROGRESS. NO ACTUAL POSTS YET.</blink>
 
+<div class="row-fluid">
+  <div class="span12 text-right">
+    <a href="feed.xml">RSS/Atom</a>
+  </div>
+</div>
+
 <h1>Blog Posts</h1>
+
 
 {% for post in site.posts %}
   {% if post.published %}
+    <hr>
     <div class="row-fluid">
       <div class="span12 post-excerpt">
-        <h4><a href="{{ post.url }}">{{ post.title }}</a></h4>
-        <div>
-          {{ post.date | date: "%Y-%m-%d" }}
+        <div class="post-specs">
+          <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+          <div>
+            {{ post.date | date: "%Y-%m-%d" }}
+          </div>
+          <!--
+          <div>
+            tags: {{ post.tags | join: ", " }}
+          </div>
+          -->
         </div>
-        <div>
-            category: {{ post.category }}
-        </div>
-        <div class="body">
+
+        <div class="post-body">
           <div>
             {{ post.content | truncatewords: 100 }}
           </div>
-          <div class="overflow-fade"></div>
+            <div class="overflow-fade text-right">
+              <h1><a href="{{ post.url }}">&gt;&gt;&gt;</a></h1>
+            </div>
         </div>
       </div>
     </div>

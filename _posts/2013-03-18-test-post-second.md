@@ -1,6 +1,6 @@
 ---
 layout: post
-title: this is my second frontmatter title
+title: This is My Second Frontmatter Title
 category: mycat1
 tags: [mytag1, mytag2]
 published: true

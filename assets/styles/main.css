@@ -106,10 +106,23 @@ h1, h2, h3, h4, h5, h6 {
 .post-excerpt {
 }
 
-.post-excerpt .body {
+.post-excerpt .post-specs {
+  padding: 0 1em 1em 1em;
+  background-image: -webkit-linear-gradient(bottom,rgba(30, 92, 80, 0.3),rgba(30, 92, 80, 1.0));
+  background-image: -moz-linear-gradient(bottom,rgba(30, 92, 80, 0.3),rgba(30, 92, 80, 1.0));
+  background-image: linear-gradient(to top,rgba(30, 92, 80, 0.3), rgba(30, 92, 80, 1.0));
+  margin: 0;
+}
+
+.post-excerpt .post-body {
   position: relative;
-    max-height: 150px;
-    overflow-y: hidden;
+  max-height: 150px;
+  overflow-y: hidden;
+  margin: 0;
+  padding: 0 2em 0 4em;
+  background-image: -webkit-linear-gradient(bottom,rgba(30, 92, 80, 0),rgba(30, 92, 80, 0.3));
+  background-image: -moz-linear-gradient(bottom,rgba(30, 92, 80, 0),rgba(30, 92, 80, 0.3));
+  background-image: linear-gradient(to top,rgba(30, 92, 80, 0), rgba(30, 92, 80, 0.3));
 }
 
 .post-excerpt .overflow-fade {
@@ -122,4 +135,15 @@ h1, h2, h3, h4, h5, h6 {
   background-image: -webkit-linear-gradient(bottom,rgba(51,61,59,1.0),rgba(51,61,59,0));
   background-image: -moz-linear-gradient(bottom,rgba(51,61,59,1.0),rgba(51,61,59,0));
   background-image: linear-gradient(to top,rgba(51,61,59,1.0),rgba(51,61,59,0));
+}
+
+.post-excerpt .overflow-fade a {
+  display: block;
+  font-size: 80px;
+}
+
+/* TODO: do this with Bootstrap/less */
+hr {
+  border-top: 1px solid #555;
+  border-bottom: 1px solid #777;
 }
