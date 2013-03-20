@@ -137,6 +137,13 @@ h1, h2, h3, h4, h5, h6 {
   background-image: linear-gradient(to top,rgba(51,61,59,1.0),rgba(51,61,59,0));
 }
 
+.post-excerpt .overflow-fade h1 {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+}
+
 .post-excerpt .overflow-fade a {
   display: block;
   font-size: 80px;
