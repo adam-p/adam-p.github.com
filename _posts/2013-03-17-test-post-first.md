@@ -1,7 +1,7 @@
 ---
 layout: post
 title: this is my frontmatter title
-category: mycat1
+category: mycat2
 tags: [mytag1, mytag2]
 published: true
 ---

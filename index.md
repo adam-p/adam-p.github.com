@@ -12,3 +12,5 @@ but there's some other stuff here and there. Feel free poke around.
 {% for link in site.navigation %}
 ### [{{ link.text }}]({{ link.url }})
 {% endfor %}
+
+### [Markdown Here <i class="icon-external-link"></i>](http://www.markdown-here.com)

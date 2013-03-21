@@ -7,9 +7,21 @@ layout: none
   {% include nav.html %}
 
   <div class="container-fluid">
-    <h2><a href="{{ page.url }}">{{ page.title }}</a></h2>
 
-    {{ content }}
+    <div class="row-fluid">
+      <div class="span12 post-head">
+        <h2><a href="{{ page.url }}">{{ page.title }}</a></h2>
+        <p>
+          {{ page.date | date: "%Y-%m-%d" }}
+        </p>
+      </div>
+    </div>
+
+    <div class="row-fluid">
+      <div class="span12">
+        {{ content }}
+      </div>
+    </div>
 
     <div class="row-fluid">
       <div class="span12">
@@ -23,10 +35,13 @@ layout: none
         -->
       </div>
     </div>
-  </div>
 
-  <div class="container-fluid">
-    {% include comments.html %}
-  </div>
+    <div class="row-fluid">
+      <div class="span12 comments">
+        {% include comments.html %}
+      </div>
+    </div>
+
+  </div><!-- container-fluid -->
 
 {% include footer.html %}
