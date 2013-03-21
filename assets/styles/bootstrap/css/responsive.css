@@ -1,6 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Droid+Sans+Mono);
-
-@import url(http://fonts.googleapis.com/css?family=Droid+Sans);
+@import url(http://fonts.googleapis.com/css?family=PT+Mono|Sintony:400,700);
 /*!
  * Bootstrap Responsive v2.3.1
  *
@@ -32,7 +30,7 @@
 .input-block-level {
   display: block;
   width: 100%;
-  min-height: 32px;
+  min-height: 32.4px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -208,7 +206,7 @@
   .row-fluid [class*="span"] {
     display: block;
     width: 100%;
-    min-height: 32px;
+    min-height: 32.4px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -557,7 +555,7 @@
   .row-fluid [class*="span"] {
     display: block;
     width: 100%;
-    min-height: 32px;
+    min-height: 32.4px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -851,7 +849,7 @@
   .uneditable-input {
     display: block;
     width: 100%;
-    min-height: 32px;
+    min-height: 32.4px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -887,7 +885,7 @@
   }
   .page-header h1 small {
     display: block;
-    line-height: 22px;
+    line-height: 22.4px;
   }
   input[type="checkbox"],
   input[type="radio"] {
@@ -941,10 +939,10 @@
     position: static;
   }
   .navbar-fixed-top {
-    margin-bottom: 22px;
+    margin-bottom: 22.4px;
   }
   .navbar-fixed-bottom {
-    margin-top: 22px;
+    margin-top: 22.4px;
   }
   .navbar-fixed-top .navbar-inner,
   .navbar-fixed-bottom .navbar-inner {
@@ -964,7 +962,7 @@
   }
   .nav-collapse .nav {
     float: none;
-    margin: 0 0 11px;
+    margin: 0 0 11.2px;
   }
   .nav-collapse .nav > li {
     float: none;
@@ -1053,8 +1051,8 @@
   .nav-collapse .navbar-form,
   .nav-collapse .navbar-search {
     float: none;
-    padding: 11px 15px;
-    margin: 11px 0;
+    padding: 11.2px 15px;
+    margin: 11.2px 0;
     border-top: 1px solid #006f5d;
     border-bottom: 1px solid #006f5d;
     -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 1px 0 rgba(255,255,255,.1);

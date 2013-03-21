@@ -5,10 +5,13 @@ tags: [Markdown Here, Code]
 published: false
 ---
 
-* Create a real summary at the top
+## tl;dr
+
+**Page actions** -- the buttons in a browser's address bar -- are a **surprising UI failure**.
+
+When adding a button for a browser extension, a choice must be made whether to make it a "page action" or a "browser action" (button on the toolbar). But **browsers have failed to communicate the interactiveness** of page actions, and **almost no one -- techy or layman -- realizes that they're clickable**. 
 
 ---
-
 
 When adding a button to the [**Markdown Here**](http://www.markdown-here.com) browser extension I had to decide where to put it: in the address bar or on the toolbar.
 
@@ -24,8 +27,6 @@ I'm going to use the Chrome extension development terminology:
 </dl>
 
 
-* ["Page actions"](http://developer.chrome.com/extensions/pageAction.html) are the buttons and status indicators located in the address/omni/awesome bar. 
-* ["Browser actions"](http://developer.chrome.com/extensions/browserAction.html) are buttons on the browser toolbar.
 
 
 https://groups.google.com/forum/#!topic/markdown-here/NjQRYcD1mgY/discussion
