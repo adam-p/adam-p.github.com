@@ -1,4 +1,6 @@
 @import url(http://fonts.googleapis.com/css?family=Droid+Sans+Mono);
+
+@import url(http://fonts.googleapis.com/css?family=Droid+Sans);
 /*!
  * Bootstrap v2.3.1
  *
@@ -206,7 +208,7 @@ textarea {
 }
 body {
   margin: 0;
-  font-family: Droid Sans Mono;
+  font-family: Droid Sans;
   font-size: 16px;
   line-height: 22px;
   color: #c0d5d1;
@@ -811,7 +813,7 @@ address {
 code,
 pre {
   padding: 0 3px 2px;
-  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  font-family: Droid Sans Mono, Monaco, Menlo, Consolas, "Courier New", monospace;
   font-size: 14px;
   color: #333333;
   -webkit-border-radius: 3px;
@@ -893,7 +895,7 @@ input,
 button,
 select,
 textarea {
-  font-family: Droid Sans Mono;
+  font-family: Droid Sans;
 }
 label {
   display: block;
