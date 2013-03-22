@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=PT+Mono|Sintony:400,700);
+@import url(http://fonts.googleapis.com/css?family=PT+Mono|Roboto:300,700,300italic,700italic);
 /*!
  * Bootstrap v2.3.1
  *
@@ -206,7 +206,7 @@ textarea {
 }
 body {
   margin: 0;
-  font-family: Sintony, Verdana, Geneva, sans-serif;
+  font-family: Roboto, Verdana, Geneva, sans-serif;
   font-size: 16px;
   line-height: 22.4px;
   color: #c0d5d1;
@@ -893,7 +893,7 @@ input,
 button,
 select,
 textarea {
-  font-family: Sintony, Verdana, Geneva, sans-serif;
+  font-family: Roboto, Verdana, Geneva, sans-serif;
 }
 label {
   display: block;
