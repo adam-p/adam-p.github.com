@@ -1,8 +1,8 @@
 ---
 layout: post
-title: No One Knows to Click on a pageAction
+title: No One Knows to Click on a Page Action
 tags: [Markdown Here, Code]
-published: true
+published: false
 ---
 
 THIS POST IS STILL A WORK IN PROGRESS
@@ -67,7 +67,7 @@ Some page actions have a verb-based tooltip if you hover long enough. *Some*. *I
 
 It's a little shocking how poorly the interactiveness is communicated to the user.
 
-### Maybe the kids will get it?
+### Maybe our future selves will get it?
 
 <!-- dropping into HTML to float the image, since it's so vertical -->
 <a href="/assets/img/blog/windows8-clickable.png">
@@ -80,14 +80,28 @@ But even if you accept the everything-is-interactive ideal, page actions are sti
 
 Maybe once users have fully embraced/internalized the idea that there are no extraneous UI elements, they won't need hover effects and raised borders. Maybe there'll be a great awakening to the utility of page actions. But until then...
 
+## How to rescue page actions
+
+They need to look less like small, monochrome, passive, static icons. They need some standard button cues, both initially and on hover; employ one or more of: raised-ness, colour, border, more visual strength.
+
+(I suspect that even the Chrome-style toolbar buttons -- like the three-line settings button -- are also below most laypeople's threshold to recognize the click affordance. I've seen that in action in my own family-tech-support experience. Those buttons also lack most historical click cues. But let's tilt at one windmill at a time...)
+
+### Tangent: Chrome needs to allow both page and browser actions
+
+Finally, Chrome should allow extensions to provide both page actions and browser actions. 
+
+In the screenshot at the top of this page, you can that [Pocket's](http://getpocket.com/) Firefox extension uses both button styles: the page action is for saving the current page, while the browser action is for showing your saved pages. Similarly for the bookmarks buttons: page action for bookmarking the page, browser action for viewing bookmarks. 
+
+(Markdown Here also has a button in each place, but it's not as compelling a use case, since it's just a convenience to work around the page action affordance opacity. Both buttons toggle Markdown rendering; the page action only shows when focus is in a valid target; you can hide the toolbar button if you're one of the few page-action-savvy users. But, still, I wish I could provide the same flexibility to my Chrome users that I do to my Firefox users.)
+
+In Chrome, Pocket only has a browser action (which, oddly enough, acts only like its Firefox page action), and bookmarks only have a page action (and a whole toolbar). I can't think of any reason for Chrome to prevent extensions from providing both, and there are certainly good use cases for allowing them. 
+
 ## Back to Browser Action
 
-So I switched the Chrome button to be a browser action. 
+I eventually switched the Markdown Here toggle button in Chrome to be a browser action. Even though it clearly, spiritually, should be a page action, I just can't ignore the fact that most users will not recognize it as clickable in that form. 
 
+I have had [one complaint](https://github.com/adam-p/markdown-here/issues/45) about the button location, but the user seemed satisfied that I made the rational choice after I explained it.
 
+---
 
-
-https://github.com/adam-p/markdown-here/issues/45
-
-
-Mention that Pocket went with browserAction
+Postscript: First blog post ever! Yay! Thanks to Casey Watts for suggesting that I write it.

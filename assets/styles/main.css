@@ -1,14 +1,13 @@
 
 @font-face {
     font-family: 'TitleFont';
-    src: url('/assets/font/BPdotsBold-webfont.eot');
-    src: url('/assets/font/BPdotsBold-webfont.eot?#iefix') format('embedded-opentype'),
-         url('/assets/font/BPdotsBold-webfont.woff') format('woff'),
-         url('/assets/font/BPdotsBold-webfont.ttf') format('truetype'),
-         url('/assets/font/BPdotsBold-webfont.svg#BPdotsBold') format('svg');
+    src: url('/assets/font/BPdotsSquareBold-webfont.eot');
+    src: url('/assets/font/BPdotsSquareBold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/assets/font/BPdotsSquareBold-webfont.woff') format('woff'),
+         url('/assets/font/BPdotsSquareBold-webfont.ttf') format('truetype'),
+         url('/assets/font/BPdotsSquareBold-webfont.svg#BPdotsSquareBold') format('svg');
     font-weight: bold;
     font-style: normal;
-
 }
 
 
