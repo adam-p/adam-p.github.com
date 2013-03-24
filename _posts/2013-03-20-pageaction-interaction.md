@@ -5,27 +5,23 @@ tags: [Markdown Here, Code]
 published: false
 ---
 
-THIS POST IS STILL A WORK IN PROGRESS
-
-## tl;dr
-
 **Page actions** -- the buttons in a browser's address bar -- are a **surprising UI failure**.
 
 When adding a button for a browser extension, a choice must be made whether to make it a "page action" or a "browser action" (button on the toolbar). But **browsers have failed to communicate the interactiveness** of page actions, and **almost no one -- techy or layman -- realizes that they're clickable**. 
 
 ---
 
-When adding a button to the [**Markdown Here**](http://www.markdown-here.com) browser extension I had to decide where to put it: in the address bar or on the toolbar.
+To complement the context menu item and hotkey, and to fulfil [a user feature request](https://github.com/adam-p/markdown-here/issues/34), I decided to add a button to the [**Markdown Here**](http://www.markdown-here.com) browser extension. It turned out that simply deciding *where* to put the button was a bit part of the effort...
 
 ## Page Action vs. Browser Action
 
 I'm going to use the Chrome extension development terminology: 
 
 <dl>
-  <dt><a href="http://developer.chrome.com/extensions/pageAction.html">Page actions</a> (<code>pageAction</code>)...</dt>
-  <dd>are the buttons and status indicators located in the address/omni/awesome bar.</dd>
-  <dt><a href="http://developer.chrome.com/extensions/browserAction.html">Browser actions</a> (<code>browserAction</code>)...</dt>
-  <dd>are buttons on the browser toolbar.</dd>
+  <dt>Page actions...</dt>
+  <dd>are the buttons and status indicators located in the address/omni/awesome bar. (<a href="http://developer.chrome.com/extensions/pageAction.html">See <code>pageAction</code> API info</a>.)</dd>
+  <dt>Browser actions...</dt>
+  <dd>are buttons on the browser toolbar. (<a href="http://developer.chrome.com/extensions/browserAction.html">See <code>browserAction</code> API info</a>.)</dd>
 </dl>
 
 ![Firefox page and browser buttons](/assets/img/blog/firefox-button.png "Firefox page and browser buttons")
@@ -36,13 +32,13 @@ The choice initially seemed pretty obvious: use a page action. From Chrome's [do
 
 > Don't use browser actions for features that make sense for only a few pages. Use page actions instead.
 
-Markdown Here is on applicable to some rich-edit compose elements (email, mostly), so that admonition seems to apply to pretty directly. Like many people, I'm sure, I don't like occasional-use buttons cluttering up my toolbar. So I implemented the button as a page action.
+Markdown Here's button is only applicable to some rich-edit compose elements (email, mostly), so that admonition seems to apply to pretty directly. Like many people, I don't like occasional-use buttons cluttering up my toolbar, so I initially implemented the button as a page action.
 
 ## Apparently Imperceptible Affordance
 
 ...And then I showed the cool new button to my significant other, who said something along the lines of "I can click that?" Which is a pretty damning statement, for a button.
 
-I must admit that I had some suspicions about the obviousness of page actions' clickability. I'm fairly sure it took me a while to realize I could click them, and I'm a) pretty technically savvy, and b) pretty hover-over-everything-that-looks-interesting curious. But if a user is _not_ both of those things...?
+I must admit that I had some suspicions about the obviousness of page actions' clickability. I'm fairly sure it took me a while to realize I could click them, and I'm a) pretty technically savvy, and b) pretty hover-over-everything-that-looks-interesting curious. But what if a user is _not_ both of those things...?
 
 So I asked around. I asked in the [Markdown Here Google Group](https://groups.google.com/forum/#!topic/markdown-here/NjQRYcD1mgY/discussion), the [UX StackExchange](http://ux.stackexchange.com/questions/33987/browser-extensions-page-action-or-browser-action), and on [Google+](https://plus.google.com/u/0/112228900913862544865/posts/9HbUjid2UvV). These are the sorts of responses I got:
 
@@ -61,7 +57,7 @@ It's hard to blame users for this lack of [affordance](http://en.wikipedia.org/w
 Page actions do not display any of the typical this-is-a-clickable-thing traits. For the most part, page actions:
 
 * are not raised or underlined, like a standard button or a link, so most people won't hover over them, but even if the user does hover, page actions...
-* do not change at all when hovered over -- no outline, no colour change, no raise-up, no clicky mouse cursor.
+* do not change at all when hovered over -- no outline, no colour change, no raise-up, no clicky-hand mouse cursor.
 
 Some page actions have a verb-based tooltip if you hover long enough. *Some*. *If*. *Long enough*. 
 
@@ -74,7 +70,7 @@ It's a little shocking how poorly the interactiveness is communicated to the use
   <img src="/assets/img/blog/windows8-clickable.png" title="Windows 8 clickable text" alt="Windows 8 clickable text" class="pull-right" style="max-height: 20em; margin-left: 2em;">
 </a>
 
-Above I coyly dropped "At least, not yet." There is a trend in UI design towards everything on-screen being interactive unless explicitly disabled-looking. Windows 8 has gone this way, as has Chrome and, to a slightly lesser extend, Firefox. There's very, very little text or window chrome that's non-interactive. 
+Above I coyly dropped "At least, not yet." There is a trend in UI design toward everything on-screen being interactive unless explicitly disabled-looking. Windows 8 has gone this way, as has Chrome and, to a slightly lesser extent, Firefox. There's very, very little text or window chrome that's non-interactive. 
 
 But even if you accept the everything-is-interactive ideal, page actions are still different than most other elements, since there's no hover effect. And page actions are further hampered by the minimalistic design aesthetic that Chrome and Firefox seem to have adopted for them -- a monochrome outline icon that can easily be read as disabled.
 
@@ -82,7 +78,7 @@ Maybe once users have fully embraced/internalized the idea that there are no ext
 
 ## How to rescue page actions
 
-They need to look less like small, monochrome, passive, static icons. They need some standard button cues, both initially and on hover; employ one or more of: raised-ness, colour, border, more visual strength.
+Page actions need to look less like small, monochrome, passive, static icons. They need some standard button cues, both initially and on hover; they should employ one or more of: raisèd-ness, colour, border, more visual strength.
 
 (I suspect that even the Chrome-style toolbar buttons -- like the three-line settings button -- are also below most laypeople's threshold to recognize the click affordance. I've seen that in action in my own family-tech-support experience. Those buttons also lack most historical click cues. But let's tilt at one windmill at a time...)
 
@@ -96,12 +92,12 @@ In the screenshot at the top of this page, you can that [Pocket's](http://getpoc
 
 In Chrome, Pocket only has a browser action (which, oddly enough, acts only like its Firefox page action), and bookmarks only have a page action (and a whole toolbar). I can't think of any reason for Chrome to prevent extensions from providing both, and there are certainly good use cases for allowing them. 
 
-## Back to Browser Action
+## So it's back to a browser action
 
-I eventually switched the Markdown Here toggle button in Chrome to be a browser action. Even though it clearly, spiritually, should be a page action, I just can't ignore the fact that most users will not recognize it as clickable in that form. 
+I finally switched the Markdown Here toggle button in Chrome to be a browser action. Even though it clearly, spiritually, should be a page action, I just can't ignore the fact that most users will not recognize it as clickable in that form. 
 
 I have had [one complaint](https://github.com/adam-p/markdown-here/issues/45) about the button location, but the user seemed satisfied that I made the rational choice after I explained it.
 
 ---
 
-Postscript: First blog post ever! Yay! Thanks to Casey Watts for suggesting that I write it.
+Postscript: First blog post ever! Yay! Thanks to [Casey Watts](http://caseywatts.github.com/) for suggesting that I write it.

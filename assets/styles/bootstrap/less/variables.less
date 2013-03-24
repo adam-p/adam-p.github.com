@@ -44,18 +44,18 @@
 
 // Typography
 // -------------------------
-@import url(http://fonts.googleapis.com/css?family=PT+Mono|Roboto:300,700,300italic,700italic);
+@import url(http://fonts.googleapis.com/css?family=Roboto:300,700,300italic,700italic);
 
-@sansFontFamily:  TitleFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+@sansFontFamily:  "Helvetica Neue", Helvetica, Arial, sans-serif;
 @serifFontFamily: "Palatino Linotype", "Book Antiqua", Palatino, serif;
-@monoFontFamily:  "PT Mono", Monaco, Menlo, Consolas, monospace;
+@monoFontFamily:  Monaco, Menlo, Consolas, monospace;
 
 @baseFontSize:  16px;
 @baseFontFamily:  Roboto, Verdana, Geneva, sans-serif;
 @baseLineHeight:  @baseFontSize * 1.4;
 @altFontFamily: @serifFontFamily;
 
-@headingsFontFamily:  inherit;
+@headingsFontFamily:  TitleFont, @serifFontFamily;
 @headingsFontWeight:  bold;
 @headingsColor: rgb(107, 197, 179);
 

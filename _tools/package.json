@@ -1,7 +1,8 @@
 {
   "private": true,
   "dependencies": {
+    "underscore": "*",
     "less": "*",
     "watchr": "*"
-  }  
+  }
 }

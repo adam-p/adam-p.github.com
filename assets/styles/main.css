@@ -1,25 +1,22 @@
-
+@import url(http://fonts.googleapis.com/css?family=Roboto:300,700,300italic,700italic);
 @font-face {
-    font-family: 'TitleFont';
-    src: url('/assets/font/BPdotsSquareBold-webfont.eot');
-    src: url('/assets/font/BPdotsSquareBold-webfont.eot?#iefix') format('embedded-opentype'),
-         url('/assets/font/BPdotsSquareBold-webfont.woff') format('woff'),
-         url('/assets/font/BPdotsSquareBold-webfont.ttf') format('truetype'),
-         url('/assets/font/BPdotsSquareBold-webfont.svg#BPdotsSquareBold') format('svg');
-    font-weight: bold;
-    font-style: normal;
+  font-family: 'TitleFont';
+  src: url('/assets/font/BPdotsSquareBold-webfont.eot');
+  src: url('/assets/font/BPdotsSquareBold-webfont.eot?#iefix') format('embedded-opentype'), url('/assets/font/BPdotsSquareBold-webfont.woff') format('woff'), url('/assets/font/BPdotsSquareBold-webfont.ttf') format('truetype'), url('/assets/font/BPdotsSquareBold-webfont.svg#BPdotsSquareBold') format('svg');
+  font-weight: bold;
+  font-style: normal;
 }
-
-
 /* apply a natural box layout model to all elements */
 /* From: http://paulirish.com/2012/box-sizing-border-box-ftw/ */
-* { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
-
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
 body {
   background-image: url('../img/background.png');
   background-repeat: repeat;
 }
-
 /* Set a max-width for horizontal fluid layout and make it centered */
 /* This is overriding Bootstrap styles */
 .container-fluid {
@@ -27,46 +24,51 @@ body {
   margin-left: auto;
   max-width: 950px;
 }
-
 .navbar img {
   height: 1em;
   vertical-align: text-top;
 }
-
 footer {
   margin: 3em 1em 1em 1em;
 }
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'TitleFont', Arial, sans-serif;
+h1 {
+  font-size: 36px;
 }
-
+h2 {
+  font-size: 28px;
+}
+h3 {
+  font-size: 20px;
+}
+h4 {
+  font-size: 17.6px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 13.6px;
+}
 .brand {
-  font-family: 'TitleFont', Arial, sans-serif;
+  font-family: TitleFont, "Palatino Linotype", "Book Antiqua", Palatino, serif;
 }
-
-.post-excerpt {
-}
-
 .post-excerpt .post-specs {
   padding: 0 1em 1em 1em;
-  background-image: -webkit-linear-gradient(bottom,rgba(30, 92, 80, 0.3),rgba(30, 92, 80, 1.0));
-  background-image: -moz-linear-gradient(bottom,rgba(30, 92, 80, 0.3),rgba(30, 92, 80, 1.0));
-  background-image: linear-gradient(to top,rgba(30, 92, 80, 0.3), rgba(30, 92, 80, 1.0));
+  background-image: -webkit-linear-gradient(bottom, rgba(30, 92, 80, 0.3), #1e5c50);
+  background-image: -moz-linear-gradient(bottom, rgba(30, 92, 80, 0.3), #1e5c50);
+  background-image: linear-gradient(to top, rgba(30, 92, 80, 0.3), #1e5c50);
   margin: 0;
 }
-
 .post-excerpt .post-body {
   position: relative;
   max-height: 150px;
   overflow-y: hidden;
   margin: 0;
   padding: 0 2em 0 4em;
-  background-image: -webkit-linear-gradient(bottom,rgba(30, 92, 80, 0),rgba(30, 92, 80, 0.3));
-  background-image: -moz-linear-gradient(bottom,rgba(30, 92, 80, 0),rgba(30, 92, 80, 0.3));
-  background-image: linear-gradient(to top,rgba(30, 92, 80, 0), rgba(30, 92, 80, 0.3));
+  background-image: -webkit-linear-gradient(bottom, rgba(30, 92, 80, 0), rgba(30, 92, 80, 0.3));
+  background-image: -moz-linear-gradient(bottom, rgba(30, 92, 80, 0), rgba(30, 92, 80, 0.3));
+  background-image: linear-gradient(to top, rgba(30, 92, 80, 0), rgba(30, 92, 80, 0.3));
 }
-
 .post-excerpt .overflow-fade {
   display: block;
   height: 100px;
@@ -74,40 +76,44 @@ h1, h2, h3, h4, h5, h6 {
   bottom: 0;
   left: 0;
   right: 0;
-  background-image: -webkit-linear-gradient(bottom,rgba(51,61,59,1.0),rgba(51,61,59,0));
-  background-image: -moz-linear-gradient(bottom,rgba(51,61,59,1.0),rgba(51,61,59,0));
-  background-image: linear-gradient(to top,rgba(51,61,59,1.0),rgba(51,61,59,0));
+  background-image: -webkit-linear-gradient(bottom, #333d3b, rgba(51, 61, 59, 0));
+  background-image: -moz-linear-gradient(bottom, #333d3b, rgba(51, 61, 59, 0));
+  background-image: linear-gradient(to top, #333d3b, rgba(51, 61, 59, 0));
 }
-
 .post-excerpt .overflow-fade h1 {
   position: absolute;
   right: 0;
   bottom: 0;
   width: 100%;
 }
-
 .post-excerpt .overflow-fade a {
   display: block;
   font-size: 80px;
 }
-
 /* TODO: do this with Bootstrap/less */
 hr {
   border-top: 1px solid #555;
   border-bottom: 1px solid #777;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
 }
-
 .post-head {
   margin-bottom: 1em;
 }
-
 /* TODO: do this in Bootstrap (code.less and variables.less) */
 pre {
   /* The standard Bootstrap value is rgba(245, 245, 245, 1.0), but I find that a little stark. */
+
   background-color: #F5F5F5;
   background-color: rgba(245, 245, 245, 0.9);
 }
-
+code {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #ccc;
+  box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+  border: none;
+}
 /* Tone down the whiteness of the Disqus elements with a bit of transparency */
 .comments {
   opacity: 0.9;

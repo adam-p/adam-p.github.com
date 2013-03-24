@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=PT+Mono|Roboto:300,700,300italic,700italic);
+@import url(http://fonts.googleapis.com/css?family=Roboto:300,700,300italic,700italic);
 /*!
  * Bootstrap v2.3.1
  *
@@ -618,7 +618,7 @@ h4,
 h5,
 h6 {
   margin: 11.2px 0;
-  font-family: inherit;
+  font-family: TitleFont, "Palatino Linotype", "Book Antiqua", Palatino, serif;
   font-weight: bold;
   line-height: 22.4px;
   color: #6bc5b3;
@@ -811,7 +811,7 @@ address {
 code,
 pre {
   padding: 0 3px 2px;
-  font-family: "PT Mono", Monaco, Menlo, Consolas, monospace;
+  font-family: Monaco, Menlo, Consolas, monospace;
   font-size: 14px;
   color: #333333;
   -webkit-border-radius: 3px;
@@ -3823,7 +3823,7 @@ input[type="submit"].btn.btn-mini {
 .navbar-search .search-query {
   margin-bottom: 0;
   padding: 4px 14px;
-  font-family: TitleFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   font-weight: normal;
   line-height: 1;
