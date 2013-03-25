@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Roboto:300,700,300italic,700italic);
+@import url(http://fonts.googleapis.com/css?family=Roboto:300,500,300italic,500italic);
 @font-face {
   font-family: 'TitleFont';
   src: url('/assets/font/BPdotsSquareBold-webfont.eot');
@@ -16,6 +16,7 @@
 body {
   background-image: url('../img/background.png');
   background-repeat: repeat;
+  font-weight: 300;
 }
 /* Set a max-width for horizontal fluid layout and make it centered */
 /* This is overriding Bootstrap styles */
@@ -30,6 +31,10 @@ body {
 }
 footer {
   margin: 3em 1em 1em 1em;
+}
+strong,
+b {
+  font-weight: 500;
 }
 h1 {
   font-size: 36px;

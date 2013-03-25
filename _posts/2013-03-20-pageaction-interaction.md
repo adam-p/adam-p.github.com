@@ -2,7 +2,7 @@
 layout: post
 title: No One Knows to Click on a Page Action
 tags: [Markdown Here, Code]
-published: false
+published: true
 ---
 
 **Page actions** -- the buttons in a browser's address bar -- are a **surprising UI failure**.
@@ -11,7 +11,7 @@ When adding a button for a browser extension, a choice must be made whether to m
 
 ---
 
-To complement the context menu item and hotkey, and to fulfil [a user feature request](https://github.com/adam-p/markdown-here/issues/34), I decided to add a button to the [**Markdown Here**](http://www.markdown-here.com) browser extension. It turned out that simply deciding *where* to put the button was a bit part of the effort...
+To complement the context menu item and hotkey, and to fulfil [a user feature request](https://github.com/adam-p/markdown-here/issues/34), I decided to add a button to the [**Markdown Here**](http://www.markdown-here.com) browser extension. It turned out that simply deciding *where* to put the button was a big part of the effort...
 
 ## Page Action vs. Browser Action
 
@@ -26,13 +26,13 @@ I'm going to use the Chrome extension development terminology:
 
 ![Firefox page and browser buttons](/assets/img/blog/firefox-button.png "Firefox page and browser buttons")
 
-In that screenshot you can see the two styles co-existing in Firefox, which suggests there's no real implementation decision to make -- just provide both, and let the user decide which style they like. That's true in Firefox (although there's still a lesser decision there of whether or not to add the toolbar button by default), but in Chrome you can only have a page action _or_ a browser action, but not both.
+In the screenshot above you can see the two styles co-existing in Firefox, which suggests there's no real implementation decision to make -- just provide both, and let the user decide which style they like. That's true in Firefox (although there's still the lesser decision of whether or not to add the toolbar button by default), but in Chrome you can either have a page action _or_ a browser action, not both.
 
 The choice initially seemed pretty obvious: use a page action. From Chrome's [documentation for browser actions](http://developer.chrome.com/extensions/browserAction.html#tips):
 
 > Don't use browser actions for features that make sense for only a few pages. Use page actions instead.
 
-Markdown Here's button is only applicable to some rich-edit compose elements (email, mostly), so that admonition seems to apply to pretty directly. Like many people, I don't like occasional-use buttons cluttering up my toolbar, so I initially implemented the button as a page action.
+Markdown Here's button is only applicable to some rich-edit compose elements (email, mostly), so that admonition seems to apply pretty directly. Like many people, I don't like occasional-use buttons cluttering up my toolbar, so I initially implemented the button as a page action.
 
 ## Apparently Imperceptible Affordance
 
@@ -42,7 +42,7 @@ I must admit that I had some suspicions about the obviousness of page actions' c
 
 So I asked around. I asked in the [Markdown Here Google Group](https://groups.google.com/forum/#!topic/markdown-here/NjQRYcD1mgY/discussion), the [UX StackExchange](http://ux.stackexchange.com/questions/33987/browser-extensions-page-action-or-browser-action), and on [Google+](https://plus.google.com/u/0/112228900913862544865/posts/9HbUjid2UvV). These are the sorts of responses I got:
 
-* "This purely anecdotal, but I work in the web industry, and use chrome everyday, and didn't realise the page actions were clickable. I agree with you that they look more like signifiers than they do clickable buttons."
+* "This [is] purely anecdotal, but I work in the web industry, and use [C]hrome everyday, and didn't realise the page actions were clickable. I agree with you that they look more like signifiers than they do clickable buttons."
 * "But I agree that they don't function well as buttons, perhaps this is by the design of the icon (not "raising" the element to give it depth)."
 * "pageAction in the abstract is a great idea, but I always find its use a little jarring. And I agree it's not button-like at all, more just informational."
 
@@ -72,7 +72,7 @@ It's a little shocking how poorly the interactiveness is communicated to the use
 
 Above I coyly dropped "At least, not yet." There is a trend in UI design toward everything on-screen being interactive unless explicitly disabled-looking. Windows 8 has gone this way, as has Chrome and, to a slightly lesser extent, Firefox. There's very, very little text or window chrome that's non-interactive. 
 
-But even if you accept the everything-is-interactive ideal, page actions are still different than most other elements, since there's no hover effect. And page actions are further hampered by the minimalistic design aesthetic that Chrome and Firefox seem to have adopted for them -- a monochrome outline icon that can easily be read as disabled.
+But even if you accept the "everything is interactive" ideal, page actions are still different than most other elements, since there's no hover effect. And page actions are further hampered by the minimalistic design aesthetic that Chrome and Firefox seem to have adopted for them -- a monochrome outline icon that can easily be read as disabled.
 
 Maybe once users have fully embraced/internalized the idea that there are no extraneous UI elements, they won't need hover effects and raised borders. Maybe there'll be a great awakening to the utility of page actions. But until then...
 
@@ -86,7 +86,7 @@ Page actions need to look less like small, monochrome, passive, static icons. Th
 
 Finally, Chrome should allow extensions to provide both page actions and browser actions. 
 
-In the screenshot at the top of this page, you can that [Pocket's](http://getpocket.com/) Firefox extension uses both button styles: the page action is for saving the current page, while the browser action is for showing your saved pages. Similarly for the bookmarks buttons: page action for bookmarking the page, browser action for viewing bookmarks. 
+In the screenshot at the top of this post, you see can that [Pocket's](http://getpocket.com/) Firefox extension uses both button styles: the page action is for saving the current page, while the browser action is for showing your saved pages. Similarly for the bookmarks buttons: page action for bookmarking the page, browser action for viewing bookmarks. 
 
 (Markdown Here also has a button in each place, but it's not as compelling a use case, since it's just a convenience to work around the page action affordance opacity. Both buttons toggle Markdown rendering; the page action only shows when focus is in a valid target; you can hide the toolbar button if you're one of the few page-action-savvy users. But, still, I wish I could provide the same flexibility to my Chrome users that I do to my Firefox users.)
 

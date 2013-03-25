@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Roboto:300,700,300italic,700italic);
+@import url(http://fonts.googleapis.com/css?family=Roboto:300,500,300italic,500italic);
 /*!
  * Bootstrap v2.3.1
  *
@@ -619,7 +619,7 @@ h5,
 h6 {
   margin: 11.2px 0;
   font-family: TitleFont, "Palatino Linotype", "Book Antiqua", Palatino, serif;
-  font-weight: bold;
+  font-weight: 500;
   line-height: 22.4px;
   color: #6bc5b3;
   text-rendering: optimizelegibility;
