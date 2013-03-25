@@ -39,8 +39,14 @@ footer {
   margin: 3em 1em 1em 1em;
 }
 
+@boldFontWeight: 500;
+
 strong, b {
-  font-weight: 500;
+  font-weight: @boldFontWeight;
+}
+
+dt {
+  font-weight: @boldFontWeight;
 }
 
 h1 { font-size: @baseFontSize * 2.25; } // ~36px

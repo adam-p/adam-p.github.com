@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Roboto:300,500,300italic,500italic);
+@import url(http://fonts.googleapis.com/css?family=Roboto:300,300italic,500,500italic);
 @font-face {
   font-family: 'TitleFont';
   src: url('/assets/font/BPdotsSquareBold-webfont.eot');
@@ -34,6 +34,9 @@ footer {
 }
 strong,
 b {
+  font-weight: 500;
+}
+dt {
   font-weight: 500;
 }
 h1 {

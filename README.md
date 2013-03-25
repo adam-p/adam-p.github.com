@@ -6,14 +6,16 @@ This is the source for my little Github pages personal site.
 
 ## TODO
 
-* Fix inline code styling.
+* Get Roboto pack from FontSquirrel and set 300 as normal and 500 as bold (and get rid of b, strong, etc. overrides).
 
-* Pick better fonts.
+* Make the blog post excerpt size bigger.
 
-# Make the blog post excerpt size bigger.
+* Make navbar font bold and maybe tone down orange-ness.
 
-* Move `variables.less` out of `bootstrap` and it use it more widely?
-  * If that happens, make sure to update `watchnbuild.js` with `less` include path.
+* Pick better/more header fonts?
+  - Erin thinks the pixel font is too pixel-y (especially since the background is as well).
+
+* Main font seems too small on Macbook17. Make it bigger? Detect device something-something?
 
 * Make the first page look not so empty.
 
