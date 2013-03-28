@@ -6,14 +6,13 @@ This is the source for my little Github pages personal site.
 
 ## TODO
 
+* Add ToC to CV.
+  * Maybe use Bootstrap's [ScrollSpy](http://twitter.github.com/bootstrap/javascript.html#scrollspy).
+
 * Pick better/more header fonts?
   - Erin thinks the pixel font is too pixel-y (especially since the background is as well).
 
 * Main font seems too small on Macbook17. Make it bigger? Detect device something-something?
-
-* Make the first page look not so empty.
-
-* Take navbar off first page.
 
 ## License
 
