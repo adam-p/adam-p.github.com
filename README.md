@@ -6,8 +6,6 @@ This is the source for my little Github pages personal site.
 
 ## TODO
 
-* Make the blog post excerpt size bigger.
-
 * Make navbar font bold and maybe tone down orange-ness.
 
 * Pick better/more header fonts?
