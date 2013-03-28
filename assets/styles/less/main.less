@@ -1,16 +1,5 @@
 @import "../bootstrap/less/variables.less";
 
-@font-face {
-    font-family: 'TitleFont';
-    src: url('/assets/font/BPdotsSquareBold-webfont.eot');
-    src: url('/assets/font/BPdotsSquareBold-webfont.eot?#iefix') format('embedded-opentype'),
-         url('/assets/font/BPdotsSquareBold-webfont.woff') format('woff'),
-         url('/assets/font/BPdotsSquareBold-webfont.ttf') format('truetype'),
-         url('/assets/font/BPdotsSquareBold-webfont.svg#BPdotsSquareBold') format('svg');
-    font-weight: bold;
-    font-style: normal;
-}
-
 
 /* apply a natural box layout model to all elements */
 /* From: http://paulirish.com/2012/box-sizing-border-box-ftw/ */
@@ -19,7 +8,7 @@
 body {
   background-image: url('../img/background.png');
   background-repeat: repeat;
-  font-weight: 300;
+  font-weight: @baseFontWeight;
 }
 
 /* Set a max-width for horizontal fluid layout and make it centered */
@@ -38,8 +27,6 @@ body {
 footer {
   margin: 3em 1em 1em 1em;
 }
-
-@boldFontWeight: 500;
 
 strong, b {
   font-weight: @boldFontWeight;

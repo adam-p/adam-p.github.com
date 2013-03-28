@@ -44,7 +44,18 @@
 
 // Typography
 // -------------------------
-@import url(http://fonts.googleapis.com/css?family=Roboto:300,300italic,500,500italic);
+@import url(http://fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,500,500italic);
+
+@font-face {
+    font-family: 'TitleFont';
+    src: url('/assets/font/BPdotsSquareBold-webfont.eot');
+    src: url('/assets/font/BPdotsSquareBold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/assets/font/BPdotsSquareBold-webfont.woff') format('woff'),
+         url('/assets/font/BPdotsSquareBold-webfont.ttf') format('truetype'),
+         url('/assets/font/BPdotsSquareBold-webfont.svg#BPdotsSquareBold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
 
 @sansFontFamily:  "Helvetica Neue", Helvetica, Arial, sans-serif;
 @serifFontFamily: "Palatino Linotype", "Book Antiqua", Palatino, serif;
@@ -58,6 +69,11 @@
 @headingsFontFamily:  TitleFont, @serifFontFamily;
 @headingsFontWeight:  500;
 @headingsColor: rgb(107, 197, 179);
+
+// adam-p added:
+@baseFontWeight: 300;
+@boldFontWeight: 500;
+@blockquoteFontWeight: 100;
 
 
 // Component sizing

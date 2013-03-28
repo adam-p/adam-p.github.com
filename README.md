@@ -6,8 +6,6 @@ This is the source for my little Github pages personal site.
 
 ## TODO
 
-* Get Roboto pack from FontSquirrel and set 300 as normal and 500 as bold (and get rid of b, strong, etc. overrides).
-
 * Make the blog post excerpt size bigger.
 
 * Make navbar font bold and maybe tone down orange-ness.
