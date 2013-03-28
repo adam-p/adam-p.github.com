@@ -29,6 +29,9 @@ body {
   height: 1em;
   vertical-align: text-top;
 }
+.navbar .nav {
+  font-weight: 500;
+}
 footer {
   margin: 3em 1em 1em 1em;
 }

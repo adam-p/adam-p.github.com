@@ -6,8 +6,6 @@ This is the source for my little Github pages personal site.
 
 ## TODO
 
-* Make navbar font bold and maybe tone down orange-ness.
-
 * Pick better/more header fonts?
   - Erin thinks the pixel font is too pixel-y (especially since the background is as well).
 
