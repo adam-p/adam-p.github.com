@@ -6,9 +6,6 @@ This is the source for my little Github pages personal site.
 
 ## TODO
 
-* Add ToC to CV.
-  * Maybe use Bootstrap's [ScrollSpy](http://twitter.github.com/bootstrap/javascript.html#scrollspy).
-
 * Pick better/more header fonts?
   - Erin thinks the pixel font is too pixel-y (especially since the background is as well).
 

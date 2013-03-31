@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: cvpage
 title: Adam's Curriculum Vitae
 name: cv
 ---
@@ -12,6 +12,7 @@ Toronto, Canada
 
 <br>
 
+<a name="shipped" id="shipped"></a>
 ## Major Shipped Projects
 
 ##### Censorship Circumvention (2009-present)
@@ -24,6 +25,7 @@ Co-wrote the specification and design for an enterprise storage key management s
 Member of a two-person team that designed, developed, and delivered one of the first (and best!) secure document sharing and collaboration applications.  We upgraded through three versions: going from very simple, small-document-only architecture, to having chat and messaging, handling huge files, and enabling key recovery.  CipherShare is used by such companies as MDS Sciex (scientific equipment) and the Plant Machinery Division of Bechtel (a defence contractor). Development and sales continue under Proven Security Solutions Inc.
 
 
+<a name="skills" id="skills"></a>
 ## Skills
 
 (All of these vary in degree and freshness, but I’ve used all of them in a project at some point.)
@@ -55,6 +57,7 @@ Windows, Android, Linux, Mac, Solaris, iOS.
 If I don’t already know it, I can get up to speed pretty quickly.
 
 
+<a name="experience" id="experience"></a>
 ## Experience
 
 ##### 2009 - present:  Software Developer @ [Psiphon Inc.](http://psiphon.ca/)
@@ -110,6 +113,7 @@ Six month placement through University of Toronto’s Co-op Japan Program.
 * Designed and developed client (applet)/server system for measuring web-page load times for online library.
 
 
+<a name="education" id="education"></a>
 ## Education
 
 ##### University of Toronto
@@ -117,6 +121,7 @@ Six month placement through University of Toronto’s Co-op Japan Program.
 Graduated 2001, H.B.Sc., with distinction; Computer Science specialist, Philosophy major.
 
 
+<a name="interests" id="interests"></a>
 ## Other Interests
 
 Basically the usual geekery...
@@ -127,6 +132,7 @@ Basically the usual geekery...
 * Beer and wine. Not (just) in a debauchery sense.
 
 
+<a name="links" id="links"></a>
 ## Links
 
 ##### Code
