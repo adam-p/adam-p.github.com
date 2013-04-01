@@ -4068,14 +4068,14 @@ input[type="submit"].btn.btn-mini {
   border-radius: 6px 0 6px 6px;
 }
 .navbar-inverse .navbar-inner {
-  background-color: #008e77;
-  background-image: -moz-linear-gradient(top, #00a287, #00705e);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00a287), to(#00705e));
-  background-image: -webkit-linear-gradient(top, #00a287, #00705e);
-  background-image: -o-linear-gradient(top, #00a287, #00705e);
-  background-image: linear-gradient(to bottom, #00a287, #00705e);
+  background-color: #0c7362;
+  background-image: -moz-linear-gradient(top, #00a287, #1d2c29);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00a287), to(#1d2c29));
+  background-image: -webkit-linear-gradient(top, #00a287, #1d2c29);
+  background-image: -o-linear-gradient(top, #00a287, #1d2c29);
+  background-image: linear-gradient(to bottom, #00a287, #1d2c29);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff00a287', endColorstr='#ff00705e', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff00a287', endColorstr='#ff1d2c29', GradientType=0);
   border-color: #252525;
 }
 .navbar-inverse .brand,
@@ -4104,7 +4104,7 @@ input[type="submit"].btn.btn-mini {
 .navbar-inverse .nav .active > a:hover,
 .navbar-inverse .nav .active > a:focus {
   color: #ff6700;
-  background-color: #00705e;
+  background-color: #1d2c29;
 }
 .navbar-inverse .navbar-link {
   color: #ffad76;
@@ -4114,13 +4114,13 @@ input[type="submit"].btn.btn-mini {
   color: #ff6700;
 }
 .navbar-inverse .divider-vertical {
-  border-left-color: #00705e;
+  border-left-color: #1d2c29;
   border-right-color: #00a287;
 }
 .navbar-inverse .nav li.dropdown.open > .dropdown-toggle,
 .navbar-inverse .nav li.dropdown.active > .dropdown-toggle,
 .navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle {
-  background-color: #00705e;
+  background-color: #1d2c29;
   color: #ff6700;
 }
 .navbar-inverse .nav li.dropdown > a:hover .caret,
@@ -4140,8 +4140,8 @@ input[type="submit"].btn.btn-mini {
 }
 .navbar-inverse .navbar-search .search-query {
   color: #ffffff;
-  background-color: #00f0c9;
-  border-color: #00705e;
+  background-color: #507971;
+  border-color: #1d2c29;
   -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1), 0 1px 0 rgba(255,255,255,.15);
   -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.1), 0 1px 0 rgba(255,255,255,.15);
   box-shadow: inset 0 1px 2px rgba(0,0,0,.1), 0 1px 0 rgba(255,255,255,.15);
@@ -4174,17 +4174,17 @@ input[type="submit"].btn.btn-mini {
 .navbar-inverse .btn-navbar {
   color: #ffffff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  background-color: #007561;
-  background-image: -moz-linear-gradient(top, #008972, #005749);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#008972), to(#005749));
-  background-image: -webkit-linear-gradient(top, #008972, #005749);
-  background-image: -o-linear-gradient(top, #008972, #005749);
-  background-image: linear-gradient(to bottom, #008972, #005749);
+  background-color: #085d4f;
+  background-image: -moz-linear-gradient(top, #008972, #131d1b);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#008972), to(#131d1b));
+  background-image: -webkit-linear-gradient(top, #008972, #131d1b);
+  background-image: -o-linear-gradient(top, #008972, #131d1b);
+  background-image: linear-gradient(to bottom, #008972, #131d1b);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff008972', endColorstr='#ff005749', GradientType=0);
-  border-color: #005749 #005749 #000a08;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff008972', endColorstr='#ff131d1b', GradientType=0);
+  border-color: #131d1b #131d1b #000000;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  *background-color: #005749;
+  *background-color: #131d1b;
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
 
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
@@ -4196,12 +4196,12 @@ input[type="submit"].btn.btn-mini {
 .navbar-inverse .btn-navbar.disabled,
 .navbar-inverse .btn-navbar[disabled] {
   color: #ffffff;
-  background-color: #005749;
-  *background-color: #003d33;
+  background-color: #131d1b;
+  *background-color: #090e0d;
 }
 .navbar-inverse .btn-navbar:active,
 .navbar-inverse .btn-navbar.active {
-  background-color: #00241e \9;
+  background-color: #000000 \9;
 }
 .breadcrumb {
   padding: 8px 15px;
