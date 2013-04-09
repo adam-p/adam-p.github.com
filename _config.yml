@@ -2,6 +2,8 @@ name: Adam Pritchard
 description: coder, etc.
 url: http://www.crypti.cc
 
+myfullname: Adam Pritchard
+
 exclude:
 - README.md
 - node_modules
