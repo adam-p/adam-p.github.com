@@ -29,7 +29,7 @@ Submitting the extension was basically the same as everywhere else. But this is 
 
 So... You're going to review my extension, and I'll never know if it's been accepted or rejected or what? And there's no mechanism for me to get an update?
 
-Sure enough, 5 weeks has gone by now. There've been no status update emails, and there's review status info anywhere on the developer website (that I can find). And I'm not the only one -- there are [other people][4] on the forums in the [same boat][5].
+Sure enough, 5 weeks has gone by now. There've been no status update emails, and there's no review status info anywhere on the developer website (that I can find). And I'm not the only one -- there are [other people][4] on the forums in the [same boat][5].
 
 To be clear, this is not at all what the Chrome and Mozilla extension approval process is like. I've had my [fair share of problems][6] with the Mozilla approval process, but I had a queue number, an IRC channel, and reviewers I could communicate with. (The Chrome store has no apparent approval process, because I'm using the standard API. Which is similar to the Safari extension API I'm using. So... why is there any non-negligible review at all?)
 
