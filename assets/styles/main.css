@@ -14,8 +14,6 @@
   box-sizing: border-box;
 }
 body {
-  background-image: url('../img/background.png');
-  background-repeat: repeat;
   font-weight: 300;
 }
 /* Set a max-width for horizontal fluid layout and make it centered */

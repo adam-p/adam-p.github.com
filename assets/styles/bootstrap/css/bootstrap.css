@@ -217,7 +217,7 @@ body {
   font-size: 16px;
   line-height: 22.4px;
   color: #c0d5d1;
-  background-color: #006957;
+  background-color: #002b23;
 }
 a {
   color: #eea16e;
@@ -1716,7 +1716,7 @@ legend + .control-group {
 }
 table {
   max-width: 100%;
-  background-color: #009c81;
+  background-color: #005e4d;
   border-collapse: collapse;
   border-spacing: 0;
 }
@@ -1750,7 +1750,7 @@ table {
   border-top: 2px solid #dddddd;
 }
 .table .table {
-  background-color: #006957;
+  background-color: #002b23;
 }
 .table-condensed th,
 .table-condensed td {
@@ -3466,7 +3466,7 @@ input[type="submit"].btn.btn-mini {
 .nav-tabs > .active > a:hover,
 .nav-tabs > .active > a:focus {
   color: #555555;
-  background-color: #006957;
+  background-color: #002b23;
   border: 1px solid #ddd;
   border-bottom-color: transparent;
   cursor: default;
