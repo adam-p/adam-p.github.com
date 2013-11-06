@@ -70,3 +70,11 @@ Check out the ghetto method of opening the Markdown Here options page in Safari.
 [10]: https://en.wikipedia.org/wiki/Google_Chrome#Chrome_Web_Store
 [11]: http://markdown-here.com/get.html
 [12]: https://devforums.apple.com/thread/179972
+
+---
+
+## Update: Accepted 6 months later
+
+Two days ago (2013-11-04) I received an email indicating that Markdown Here had been accepted into the Safari Extensions Gallery. Phew!
+
+I think the acceptance makes the whole thing even weirder. If they were just sending submissions directly to the trash I could understand, but... Complete silence and then acceptance after 6 months? Are they backed up half a year? Is my extension so complex that it took them that long to review? Wha?
