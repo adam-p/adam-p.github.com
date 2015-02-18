@@ -1,8 +1,12 @@
 # [crypti.cc](http://www.crypti.cc)
 
-Also: [adam-p.github.com](http://adam-p.github.com)
+Also: [https://adam-p.github.io](http://adam-p.github.com)
 
 This is the source for my little Github pages personal site.
+
+## Jekyll
+
+Instructions for running Jekyll locally, for testing the site: https://help.github.com/articles/using-jekyll-with-pages/ ... Except the install fails on Cygwin, so just use `jekyll serve --watch` instead.
 
 ## TODO
 
