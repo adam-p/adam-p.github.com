@@ -15,16 +15,19 @@ name: projects
 
   <script id="github-repo-template" type="text/template">
     <div class="repo">
-      <h4><a href="<%= html_url %>"><%= name %></a></h4>
-      <div><%= description %></div>
+      <h4><a href="<%- html_url %>"><%- name %></a></h4>
+      <div><%- description %></div>
       <div>
-        <% if (watchers_count > 1 || forks_count > 1) { %>
-          <%= pluralize(watchers_count, 'star', 'stars') %>,
-          <%= pluralize(forks_count, 'fork', 'forks') %>.
-        <% } %>
-        <% if (language) { %>
-          Written mostly in <%= language %>.
-        <% } %>
+        <small>
+          <% if (watchers_count > 1 || forks_count > 1) { %>
+            <%- pluralize(watchers_count, 'star', 'stars') %>,
+            <%- pluralize(forks_count, 'fork', 'forks') %>.
+          <% } %>
+          <% if (language) { %>
+            Written mostly in <%- language %>.
+          <% } %>
+          Last updated <%- new Date(updated_at).toLocaleDateString() %>.
+        </small>
       </div>
     </div>
   </script>
@@ -39,8 +42,11 @@ name: projects
 
   <script id="github-gist-template" type="text/template">
     <div class="repo">
-      <h4><a href="<%= html_url %>">Gist <%= id %></a></h4>
-      <div><%= description %></div>
+      <h4><a href="<%- html_url %>"><%- GIST_NAME %></a></h4>
+      <div><%- description %></div>
+      <div>
+        <small>Last updated <%- new Date(updated_at).toLocaleDateString() %>.</small>
+      </div>
     </div>
   </script>
 
@@ -58,27 +64,20 @@ name: projects
 
   <script id="bitbucket-repo-template" type="text/template">
     <div class="repo">
-      <h4><a href="<%= 'https://bitbucket.org/'+owner+'/'+slug %>"><%= name %></a></h4>
-      <div><%= description %></div>
+      <h4><a href="<%- 'https://bitbucket.org/'+owner+'/'+slug %>"><%- name %></a></h4>
+      <div><%- description %></div>
       <div>
-        <% if (followers_count > 1) { %>
-          <%= pluralize(followers_count, 'follower', 'followers') + '. ' %>
-        <% } %>
-        <% if (language) { %>
-          Written mostly in <%= language %>.
-        <% } %>
+        <small>
+          <% if (language) { %>
+            Written mostly in <%- language %>.
+          <% } %>
+          Last updated <%- new Date(utc_last_updated).toLocaleDateString() %>.
+        </small>
       </div>
     </div>
   </script>
 
 </div>
-
-<h3>Non-code stuff</h3>
-
-<h4>Photography</h4>
-
-I'm certainly just a very amateur photographer, but I do really enjoy it. Some of my stuff is public in
-<a href="https://plus.google.com/photos/112228900913862544865/albums">my Google+/Picasa albums</a>.
 
 
 <h2>Professional projects</h2>

@@ -24,7 +24,7 @@ $(function() {
 
     // Make sure to pull out the template before emptying the element.
     repoTemplate = $('#github-repo-template').html();
-    
+
     // Remove the "Loading..." message
     $('#github-repos').empty();
 
@@ -53,9 +53,15 @@ $(function() {
       return a.updated_at < b.updated_at;
     });
 
+    // Create the Gist title the way Github does: with the first asciibetical filename.
+    gists = _.map(gists, function(gist) {
+      gist.GIST_NAME = _.keys(gist.files).sort()[0];
+      return gist;
+    });
+
     // Make sure to pull out the template before emptying the element.
     gistTemplate = $('#github-gist-template').html();
-    
+
     // Remove the "Loading..." message
     $('#github-gists').empty();
 
