@@ -26,8 +26,3 @@ navigation:
   name: contact
 
 permalink: /blog/:year/:month/:day/:title
-
-markdown: redcarpet
-
-redcarpet:
-  extensions: [smart, tables, strikethrough, lax_spacing]
