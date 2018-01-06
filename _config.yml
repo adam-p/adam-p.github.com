@@ -1,6 +1,6 @@
-name: Adam Pritchard
-description: coder, etc.
-url: http://www.crypti.cc
+name: Crypti.cc
+description: Adam Pritchard's blog, resume, projects, etc.
+url: https://www.crypti.cc
 
 myfullname: Adam Pritchard
 
@@ -15,6 +15,9 @@ navigation:
 - text: Blog
   url: /blog/
   name: blog
+- text: In/Co
+  url: /inco/
+  name: inco
 - text: Projects
   url: /projects/
   name: projects
@@ -24,5 +27,3 @@ navigation:
 - text: Contact
   url: /contact/
   name: contact
-
-permalink: /blog/:year/:month/:day/:title
