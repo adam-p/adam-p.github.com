@@ -12,7 +12,7 @@ I received a [pull request](https://github.com/adam-p/markdown-here/pull/232) fo
 
 And then I noticed that he included a [copyright line](https://github.com/adam-p/markdown-here/commit/52cd013413ff4645ed124cef68b5fc9044d65a96#diff-555e8e637d661924e36cdddfba81a23aR9) in the test file. It says "MIT License", which is the license used for the rest of the project, but that got me thinking about what that might mean...
 
-Wikipedia suggests that the [MIT License](http://en.wikipedia.org/wiki/MIT_License) would require me to include his copyright+license notice wherever I use his code. Not a big deal, but annoying. And maybe a slippery slope -- what if I get a bunch more code submissions?
+Wikipedia suggests that the [MIT License](https://en.wikipedia.org/wiki/MIT_License) would require me to include his copyright+license notice wherever I use his code. Not a big deal, but annoying. And maybe a slippery slope -- what if I get a bunch more code submissions?
 
 So I did some research into "Contributor License Agreements" and found that there are a couple more things to be concerned about:
 
@@ -36,15 +36,15 @@ I decided to use [Harmony Agreements](http://www.harmonyagreements.org/) to [gen
 "Signing"
 ---------
 
-Ugh. 
+Ugh.
 
-Some projects -- like Apache -- require you to print out the agreement, sign it, and mail, fax, or scan-and-email it back to them. Another one (I forget which) uses some Adobe e-signing plugin where you draw your signature on the screen. Google requires you to be signed in, but it's just a button press; ditto Twitter (signed in with Twitter, I mean). [CLAHub](https://www.clahub.com/) requires a Github sign-in (with optional typing of "I AGREE"). I think I also saw some projects that just require a filled-in form. 
+Some projects -- like Apache -- require you to print out the agreement, sign it, and mail, fax, or scan-and-email it back to them. Another one (I forget which) uses some Adobe e-signing plugin where you draw your signature on the screen. Google requires you to be signed in, but it's just a button press; ditto Twitter (signed in with Twitter, I mean). [CLAHub](https://www.clahub.com/) requires a Github sign-in (with optional typing of "I AGREE"). I think I also saw some projects that just require a filled-in form.
 
-CLAHub is really cool. It gives you a nice link for your CLA, collects agreements, and runs a bot that watches your project's PRs, checks against the CLAs, and comments on the PR as to whether the PR-user has agreed yet or not. Except... there's a notice saying it's not ready for prime-time, the bot is broken, and the blog hasn't been updated in a year. Also, entrusting a (flaky?) third party with the agreements seems dangerous (although they can be downloaded, so blah). 
+CLAHub is really cool. It gives you a nice link for your CLA, collects agreements, and runs a bot that watches your project's PRs, checks against the CLAs, and comments on the PR as to whether the PR-user has agreed yet or not. Except... there's a notice saying it's not ready for prime-time, the bot is broken, and the blog hasn't been updated in a year. Also, entrusting a (flaky?) third party with the agreements seems dangerous (although they can be downloaded, so blah).
 
 The article I linked above mentions "some [projects] collect agreements through a simple web form (Google Doc is a fine choice)". So I created a Google Form with the CLA and a form for the contributor to provide contact info and indicate agreement. But...
 
-Then I started thinking about non-repudiability. So I did a little reading about [electronic signatures](http://en.wikipedia.org/wiki/Electronic_signature) (not to be confused with digital signatures). Which is a horrible rabbit hole. Anyway, it made me seriously doubt that a row in a Google Spreadsheet with someone's maybe-correct address and the words "I AGREE" really constitutes a legal signature. (Even in the Google and Twitter cases -- how would they prove that they didn't just fiddle some bits to make it look like I signed?)
+Then I started thinking about non-repudiability. So I did a little reading about [electronic signatures](https://en.wikipedia.org/wiki/Electronic_signature) (not to be confused with digital signatures). Which is a horrible rabbit hole. Anyway, it made me seriously doubt that a row in a Google Spreadsheet with someone's maybe-correct address and the words "I AGREE" really constitutes a legal signature. (Even in the Google and Twitter cases -- how would they prove that they didn't just fiddle some bits to make it look like I signed?)
 
 And if you're going to do this annoying CLA crap then you might as well hope that it means something, right?
 
@@ -55,7 +55,7 @@ So that's how I did it. See MDH's [CONTRIBUTING.md](https://github.com/adam-p/ma
 Backlash warning
 ----------------
 
-Doing the CLA read-and-agree dance is more effort than not doing it. And some people are offended at the idea of doing it (see the tweet at the top of the "In Defense Of" post.) So, it seems unavoidable that a project with a CLA will get fewer contributions than one without -- some people just won't get past that hurdle. 
+Doing the CLA read-and-agree dance is more effort than not doing it. And some people are offended at the idea of doing it (see the tweet at the top of the "In Defense Of" post.) So, it seems unavoidable that a project with a CLA will get fewer contributions than one without -- some people just won't get past that hurdle.
 
 But it still seems necessary.
 

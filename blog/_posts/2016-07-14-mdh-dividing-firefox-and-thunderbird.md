@@ -9,7 +9,7 @@ published: true
 
 # The story so far
 
-The Firefox and Thunderbird versions of [Markdown Here](http://markdown-here.com/) both used nearly the same code -- an old-style XUL extension. Tb is only capable of using a XUL extension, while Fx supports at least three extension types: [XUL-based](https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School), [Add-on SDK](https://developer.mozilla.org/en-US/Add-ons/SDK) (aka Jetpack, aka jpm), and [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions). WebExtensions is the newest, and is essentially an implementation of Chrome's extension API.
+The Firefox and Thunderbird versions of [Markdown Here](https://markdown-here.com/) both used nearly the same code -- an old-style XUL extension. Tb is only capable of using a XUL extension, while Fx supports at least three extension types: [XUL-based](https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School), [Add-on SDK](https://developer.mozilla.org/en-US/Add-ons/SDK) (aka Jetpack, aka jpm), and [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions). WebExtensions is the newest, and is essentially an implementation of Chrome's extension API.
 
 I've kept my eye on WebExtensions because it's tempting to be able to use identical code across the many major browsers: Chrome, Firefox, Opera, and Edge(?). It seemed premature to do any real work towards using it as it's not yet fully released, and there would be no perceived benefit to users (it's a more-locked-down extension API, so there would be an imperceptible sercurity benefit).
 

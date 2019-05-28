@@ -13,4 +13,4 @@ but there's some other stuff here and there. Feel free poke around.
 ### [{{ link.text }}]({{ link.url }})
 {% endfor %}
 
-### [Markdown Here <i class="icon-external-link"></i>](http://www.markdown-here.com)
+### [Markdown Here <i class="icon-external-link"></i>](https://www.markdown-here.com)

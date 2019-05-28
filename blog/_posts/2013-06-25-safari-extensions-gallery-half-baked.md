@@ -18,12 +18,12 @@ First of all, but least of all: There's no hosting. Unlike the Chrome and Mozill
 
 Submitting the extension was basically the same as everywhere else. But this is the confirmation email:
 
-> Dear Adam Pritchard,  
-> Thank you for submitting your Safari Extension.  
-> Apple reviews all submissions and reserves the right to omit, edit, or reject any submission. Please note you will not receive any further notifications.  
-> We appreciate your interest in Safari.  
-> Sincerely,  
-> Apple Developer  
+> Dear Adam Pritchard,
+> Thank you for submitting your Safari Extension.
+> Apple reviews all submissions and reserves the right to omit, edit, or reject any submission. Please note you will not receive any further notifications.
+> We appreciate your interest in Safari.
+> Sincerely,
+> Apple Developer
 
 (From noreply@adc.apple.com)
 
@@ -43,7 +43,7 @@ I'm not sure how this could be worse. Unfriendly to developers *and* unfriendly 
 
 ![Safari Extensions Gallery still marked as new](/assets/img/blog/safari-gallery-new.png "Safari Extensions Gallery still marked as new")
 
-(Screen-grabbed from the bottom of [this page](https://developer.apple.com/programs/safari/). Age of the Gallery derived from [this article](http://lifehacker.com/5598524/whats-useful-in-the-safari-extensions-gallery).)
+(Screen-grabbed from the bottom of [this page](https://developer.apple.com/programs/safari/). Age of the Gallery derived from [this article](https://lifehacker.com/5598524/whats-useful-in-the-safari-extensions-gallery).)
 
 ## Sweet lemons
 
@@ -59,16 +59,16 @@ Check out the ghetto method of opening the Markdown Here options page in Safari.
 
 ![Markdown Here prefs in Safari](/assets/img/blog/safari-mdh-prefs-checkbox.png "Markdown Here prefs in Safari")
 
-[1]: http://markdown-here.com
-[2]: http://extensions.apple.com
+[1]: https://markdown-here.com
+[2]: https://extensions.apple.com
 [3]: https://addons.mozilla.org/en-US/firefox/addon/markdown-here/statistics/?last=365
 [4]: https://devforums.apple.com/thread/182373?tstart=0
 [5]: https://devforums.apple.com/thread/187144?tstart=0
 [6]: https://github.com/adam-p/markdown-here/issues/21
 [8]: https://www.google.com/search?q=site%3Aextensions.apple.com+Turboglue
-[9]: http://en.wikipedia.org/wiki/Safari_%28web_browser%29#Safari_5
+[9]: https://en.wikipedia.org/wiki/Safari_%28web_browser%29#Safari_5
 [10]: https://en.wikipedia.org/wiki/Google_Chrome#Chrome_Web_Store
-[11]: http://markdown-here.com/get.html
+[11]: https://markdown-here.com/get.html
 [12]: https://devforums.apple.com/thread/179972
 
 ---

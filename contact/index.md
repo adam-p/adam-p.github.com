@@ -32,4 +32,4 @@ Google+: [https://profiles.google.com/pritchard.adam](https://profiles.google.co
 
 Twitter: [@adampritchard](https://twitter.com/adampritchard)
 
-LinkedIn: [http://www.linkedin.com/in/adampritchard](http://www.linkedin.com/in/adampritchard)
+LinkedIn: [https://www.linkedin.com/in/adampritchard](https://www.linkedin.com/in/adampritchard)

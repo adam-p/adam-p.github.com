@@ -11,7 +11,7 @@ When adding a button for a browser extension, a choice must be made whether to m
 
 ---
 
-To complement the context menu item and hotkey, and to fulfil [a user feature request](https://github.com/adam-p/markdown-here/issues/34), I decided to add a button to the [**Markdown Here**](http://www.markdown-here.com) browser extension. It turned out that simply deciding *where* to put the button was a big part of the effort...
+To complement the context menu item and hotkey, and to fulfil [a user feature request](https://github.com/adam-p/markdown-here/issues/34), I decided to add a button to the [**Markdown Here**](https://www.markdown-here.com) browser extension. It turned out that simply deciding *where* to put the button was a big part of the effort...
 
 ## Page Action vs. Browser Action
 
@@ -19,16 +19,16 @@ I'm going to use the Chrome extension development terminology:
 
 <dl>
   <dt>Page actions...</dt>
-  <dd>are the buttons and status indicators located in the address/omni/awesome bar. (<a href="http://developer.chrome.com/extensions/pageAction.html">See <code>pageAction</code> API info</a>.)</dd>
+  <dd>are the buttons and status indicators located in the address/omni/awesome bar. (<a href="https://developer.chrome.com/extensions/pageAction.html">See <code>pageAction</code> API info</a>.)</dd>
   <dt>Browser actions...</dt>
-  <dd>are buttons on the browser toolbar. (<a href="http://developer.chrome.com/extensions/browserAction.html">See <code>browserAction</code> API info</a>.)</dd>
+  <dd>are buttons on the browser toolbar. (<a href="https://developer.chrome.com/extensions/browserAction.html">See <code>browserAction</code> API info</a>.)</dd>
 </dl>
 
 ![Firefox page and browser buttons](/assets/img/blog/firefox-button.png "Firefox page and browser buttons")
 
 In the screenshot above you can see the two styles co-existing in Firefox, which suggests there's no real implementation decision to make -- just provide both, and let the user decide which style they like. That's true in Firefox (although there's still the lesser decision of whether or not to add the toolbar button by default), but in Chrome you can either have a page action _or_ a browser action, not both.
 
-The choice initially seemed pretty obvious: use a page action. From Chrome's [documentation for browser actions](http://developer.chrome.com/extensions/browserAction.html#tips):
+The choice initially seemed pretty obvious: use a page action. From Chrome's [documentation for browser actions](https://developer.chrome.com/extensions/browserAction.html#tips):
 
 > Don't use browser actions for features that make sense for only a few pages. Use page actions instead.
 
@@ -40,7 +40,7 @@ Markdown Here's button is only applicable to some rich-edit compose elements (em
 
 I must admit that I had some suspicions about the obviousness of page actions' clickability. I'm fairly sure it took me a while to realize I could click them, and I'm a) pretty technically savvy, and b) pretty hover-over-everything-that-looks-interesting curious. But what if a user is _not_ both of those things...?
 
-So I asked around. I asked in the [Markdown Here Google Group](https://groups.google.com/forum/#!topic/markdown-here/NjQRYcD1mgY/discussion), the [UX StackExchange](http://ux.stackexchange.com/questions/33987/browser-extensions-page-action-or-browser-action), and on [Google+](https://plus.google.com/u/0/112228900913862544865/posts/9HbUjid2UvV). These are the sorts of responses I got:
+So I asked around. I asked in the [Markdown Here Google Group](https://groups.google.com/forum/#!topic/markdown-here/NjQRYcD1mgY/discussion), the [UX StackExchange](https://ux.stackexchange.com/questions/33987/browser-extensions-page-action-or-browser-action), and on [Google+](https://plus.google.com/u/0/112228900913862544865/posts/9HbUjid2UvV). These are the sorts of responses I got:
 
 * "This [is] purely anecdotal, but I work in the web industry, and use [C]hrome everyday, and didn't realise the page actions were clickable. I agree with you that they look more like signifiers than they do clickable buttons."
 * "But I agree that they don't function well as buttons, perhaps this is by the design of the icon (not "raising" the element to give it depth)."
@@ -52,7 +52,7 @@ I also asked around among people at the office (coders) and among non-programmer
 
 ### Missing Cues
 
-It's hard to blame users for this lack of [affordance](http://en.wikipedia.org/wiki/Affordance) recognition. At least, not yet.
+It's hard to blame users for this lack of [affordance](https://en.wikipedia.org/wiki/Affordance) recognition. At least, not yet.
 
 Page actions do not display any of the typical this-is-a-clickable-thing traits. For the most part, page actions:
 
@@ -86,7 +86,7 @@ Page actions need to look less like small, monochrome, passive, static icons. Th
 
 Finally, Chrome should allow extensions to provide both page actions and browser actions.
 
-In the screenshot at the top of this post, you see can that [Pocket's](http://getpocket.com/) Firefox extension uses both button styles: the page action is for saving the current page, while the browser action is for showing your saved pages. Similarly for the bookmarks buttons: page action for bookmarking the page, browser action for viewing bookmarks.
+In the screenshot at the top of this post, you see can that [Pocket's](https://getpocket.com/) Firefox extension uses both button styles: the page action is for saving the current page, while the browser action is for showing your saved pages. Similarly for the bookmarks buttons: page action for bookmarking the page, browser action for viewing bookmarks.
 
 (Markdown Here also has a button in each place, but it's not as compelling a use case, since it's just a convenience to work around the page action affordance opacity. Both buttons toggle Markdown rendering; the page action only shows when focus is in a valid target; you can hide the toolbar button if you're one of the few page-action-savvy users. But, still, I wish I could provide the same flexibility to my Chrome users that I do to my Firefox users.)
 
@@ -121,4 +121,4 @@ Anyway, I'm leaving Breached as a page action, for the sake of Firefox users.
 
 ---
 
-Postscript: First blog post ever! Yay! Thanks to [Casey Watts](http://caseywatts.github.com/) for suggesting that I write it.
+Postscript: First blog post ever! Yay! Thanks to [Casey Watts](https://caseywatts.github.com/) for suggesting that I write it.

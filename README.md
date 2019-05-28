@@ -1,6 +1,6 @@
-# [crypti.cc](http://www.crypti.cc)
+# [crypti.cc](https://www.crypti.cc)
 
-Also: [https://adam-p.github.io](http://adam-p.github.com)
+Also: [https://adam-p.github.io](https://adam-p.github.com)
 
 This is the source for my little Github pages personal site.
 
@@ -17,4 +17,4 @@ Instructions for running Jekyll locally, for testing the site: https://help.gith
 
 ## License
 
-http://adampritchard.mit-license.org/
+https://adampritchard.mit-license.org/
