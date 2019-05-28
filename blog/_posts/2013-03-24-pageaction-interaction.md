@@ -3,6 +3,7 @@ layout: post
 title: No One Knows to Click on a Page Action
 tags: [Markdown Here, Code]
 published: true
+comments: true
 ---
 
 **Page actions** -- the buttons in a browser's address bar -- are a **surprising UI failure**.

@@ -3,6 +3,7 @@ layout: post
 title: Why and How to Use a Contributor License Agreement
 tags: [Markdown Here, Code]
 published: true
+comments: true
 ---
 
 Background and Motivation

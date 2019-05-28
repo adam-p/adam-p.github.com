@@ -3,6 +3,7 @@ layout: post
 title: "Android Non-Vulnerability: Steal a Device and Keep it Unlocked"
 tags: [Android, Security]
 published: true
+comments: true
 ---
 
 While poking around in my Android phone's developer options, I realized that **if you steal a phone that's currently unlocked because it's in a "trusted place", then you can force it to remain unlocked forever**. (And then I got schooled about that not being a problem.)

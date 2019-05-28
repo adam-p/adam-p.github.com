@@ -3,6 +3,7 @@ layout: post
 title: "Markdown Here: Splitting the Firefox and Thunderbird Extension"
 tags: [MDH, Markdown Here]
 published: true
+comments: true
 ---
 
 [This started as notes to myself to help clarify the problem and solution. It's probably more suited to a Github issue than a blog post, and it may get copied into one.]
