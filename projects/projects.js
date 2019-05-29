@@ -3,7 +3,7 @@ $(function() {
   // Load project lists dynamically using Github and Bitbucket APIs.
   //
 
-  $.getJSON('https://api.github.com/users/adam-p/repos?callback=?', function(repos, textStatus, jqXHR) {
+  $.getJSON('https://api.github.com/users/adam-p/repos?sort=pushed&callback=?', function(repos, textStatus, jqXHR) {
     var repoTemplate;
 
     if (textStatus !== 'success') {
