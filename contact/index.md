@@ -28,8 +28,10 @@ Launchpad: [https://launchpad.net/~adam+](https://launchpad.net/~adam+)
 
 ##### Social
 
-Google+: [https://profiles.google.com/pritchard.adam](https://profiles.google.com/pritchard.adam)
+Facebook: https://www.facebook.com/pritchard.adam
 
-Twitter: [@adampritchard](https://twitter.com/adampritchard)
+Twitter: https://twitter.com/adampritchard
 
-LinkedIn: [https://www.linkedin.com/in/adampritchard](https://www.linkedin.com/in/adampritchard)
+LinkedIn: https://www.linkedin.com/in/adampritchard
+
+Keybase: https://keybase.io/adampritchard
