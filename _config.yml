@@ -1,4 +1,5 @@
 name: Crypti.cc
+title: adam-p
 description: Adam Pritchard's blog, resume, projects, etc.
 url: https://www.crypti.cc
 
@@ -27,3 +28,6 @@ navigation:
 - text: Contact
   url: /contact/
   name: contact
+
+plugins:
+  - jekyll-octicons

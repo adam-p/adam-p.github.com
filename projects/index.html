@@ -9,7 +9,6 @@ name: projects
 <h2>Personal projects</h2>
 
 <h3>Github projects</h3>
-
 <div id="github-repos">
   Loading...
 
@@ -19,12 +18,21 @@ name: projects
       <div><%- description %></div>
       <div>
         <small>
-          <% if (watchers_count > 1 || forks_count > 1) { %>
-            <%- pluralize(watchers_count, 'star', 'stars') %>,
-            <%- pluralize(forks_count, 'fork', 'forks') %>.
+          <% if (watchers_count > 20 || forks_count > 10) { %>
+            <strong>
           <% } %>
+
+          <%- watchers_count %> {% octicon star aria-label:stars %}
+          &nbsp;
+          <%- forks_count %> {% octicon repo-forked aria-label:forks %}
+
+          <% if (watchers_count > 20 || forks_count > 10) { %>
+            </strong>
+          <% } %>
+
+          &nbsp;
           <% if (language) { %>
-            Written mostly in <%- language %>.
+            Written mostly in <strong><%- language %></strong>.
           <% } %>
           Last updated <%- new Date(updated_at).toLocaleDateString() %>.
         </small>
@@ -69,7 +77,7 @@ name: projects
       <div>
         <small>
           <% if (language) { %>
-            Written mostly in <%- language %>.
+            Written mostly in <strong><%- language %></strong>.
           <% } %>
           Last updated <%- new Date(utc_last_updated).toLocaleDateString() %>.
         </small>

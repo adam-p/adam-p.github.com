@@ -1,38 +1,55 @@
 $(function() {
+  "use strict";
+
   //
   // Load project lists dynamically using Github and Bitbucket APIs.
   //
 
-  $.getJSON('https://api.github.com/users/adam-p/repos?sort=pushed&callback=?', function(repos, textStatus, jqXHR) {
-    var repoTemplate;
+  // Github repos results are paged (and I have a couple of pages of them), so we'll build
+  // up a set of them and then process them.
+  var githubRepos = [];
+  (function pullGithubRepos(pageNum) {
+    var url = 'https://api.github.com/users/adam-p/repos?page=' + pageNum + '&callback=?';
+    $.getJSON(url, function(repos, textStatus, jqXHR) {
+      var repoTemplate;
 
-    if (textStatus !== 'success') {
-      $('#github-repos').text('Failed to load repos');
-      return;
-    }
+      if (textStatus !== 'success') {
+        $('#github-repos').text('Failed to load repos');
+        return;
+      }
 
-    repos = repos.data;
+      repos = repos.data;
 
-    repos = repos.filter(function(elem) {
-      // Don't show forks of other projects or private repos.
-      return !elem.fork && !elem.private;
+      if (repos.length > 0) {
+        // Nonzero result. Filter and keep paging.
+        githubRepos = githubRepos.concat(repos.filter(function(elem) {
+          // Don't show forks of other projects or private repos or archived repos.
+          return !elem.fork && !elem.private && !elem.archived;
+        }));
+
+        pullGithubRepos(pageNum+1);
+        return;
+      }
+
+      // No repos in this page, so we're done paging.
+
+      // Sort by last push, descending
+      githubRepos.sort(function(a, b) {
+        return a.pushed_at === b.pushed_at ? 0 : a.pushed_at < b.pushed_at ? 1 : -1;
+      });
+
+      // Make sure to pull out the template before emptying the element.
+      repoTemplate = $('#github-repo-template').html();
+
+      // Remove the "Loading..." message
+      $('#github-repos').empty();
+
+      // Render the repos
+      $.each(githubRepos, function() {
+        $('#github-repos').append(_.template(repoTemplate, this));
+      });
     });
-
-    repos.sort(function(a, b) {
-      return a.pushed_at < b.pushed_at;
-    });
-
-    // Make sure to pull out the template before emptying the element.
-    repoTemplate = $('#github-repo-template').html();
-
-    // Remove the "Loading..." message
-    $('#github-repos').empty();
-
-    // Render the repos
-    $.each(repos, function() {
-      $('#github-repos').append(_.template(repoTemplate, this));
-    });
-  });
+  })(1);
 
   $.getJSON('https://api.github.com/users/adam-p/gists?callback=?', function(gists, textStatus, jqXHR) {
     var gistTemplate;
@@ -49,8 +66,9 @@ $(function() {
       return !elem.private;
     });
 
+    // Sort by recently updated
     gists.sort(function(a, b) {
-      return a.updated_at < b.updated_at;
+      return a.updated_at === b.updated_at ? 0 : a.updated_at < b.updated_at ? 1 : -1;
     });
 
     // Create the Gist title the way Github does: with the first asciibetical filename.
@@ -86,8 +104,9 @@ $(function() {
       return !elem.is_fork && !elem.is_private;
     });
 
+    // Sort by recently updated
     repos.sort(function(a, b) {
-      return a.last_updated < b.last_updated;
+      return a.last_updated === b.last_updated ? 0 : a.last_updated < b.last_updated ? 1 : -1;
     });
 
     // Make sure to pull out the template before emptying the element.
