@@ -68,3 +68,11 @@ I'd really like to thank the Android team for taking the time to reply to my not
 There isn't one. The "Trusted Place + Mock Location" combo isn't a real problem -- it's just a little distasteful. If someone steals your phone and it's unlocked, you'd better hope they're only after the hardware.
 
 This is especially distressing for tablets. Unlike our phone, most of us don't carry our tablet everywhere, so it's much more likely to be stolen from our home. Entering your PIN on your tablet every time is almost as annoying as on your phone, so Smart Lock seems like a good choice. And that means that it's almost certain that your tablet will be stolen unlocked. (If it gets stolen. I have no idea what the likelihood of that is.)
+
+---
+
+## Update
+
+In Android O (a year after I wrote this) Google [added a PIN prompt](https://www.androidpolice.com/2017/06/01/android-o-feature-spotlight-enabling-developer-options-requires-devices-passcode/) when enabling developer options. So, that negates this problem.
+
+Unless you're already a developer...
