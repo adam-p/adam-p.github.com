@@ -66,7 +66,6 @@ Provides censorship circumvention services to users in regions such as China, Ir
 
 * On a team of 4 developers responsible for all design and development of existing and new products, and for dealing with all technical issues that arise (which is pretty often in this line of business).
 * Led a small (1-3) team to develop an internal tool for tracking assets related to running the service.
-* We also developed the [SecDev Cloakroom](http://cyber.secdev.ca/cloakroom/) Connect low-attribution internet access system. We also created a working prototype of a mobile intelligence-gathering system that involved taking photos on iPhones, sending them to iPads to do face detection and identity tagging, and then sending that information on to a computer running [Palantir](https://www.palantir.com/) to be stored in its database.
 
 ##### 2006 - present:  Co-Founder/Developer @ [Proven Security Solutions Inc.](http://www.provensecuritysolutions.com/)
 
