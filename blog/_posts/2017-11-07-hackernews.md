@@ -3,7 +3,7 @@ layout: post
 title: "Front page of Hacker News, and comments on those comments"
 tags: [Markdown Here]
 published: false
-comments: true
+comments: false
 ---
 
 Today I randomly opened Hacker News and saw that [Markdown Here](https://markdown-here.com/) had [made the front page](https://news.ycombinator.com/item?id=15646425). I freaked out a little. I created MDH five years ago! After all this time I had stopped hoping that it would get voted up like that.

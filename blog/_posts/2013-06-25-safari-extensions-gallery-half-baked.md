@@ -3,7 +3,7 @@ layout: post
 title: "Safari Extensions Gallery: half-baked"
 tags: [Markdown Here]
 published: true
-comments: true
+comments: false
 ---
 
 Trying to get [Markdown Here][1] listed in the [Safari Extensions Gallery][2] is by far the worst browser extension "store" experience I've had so far. Shockingly bad.
