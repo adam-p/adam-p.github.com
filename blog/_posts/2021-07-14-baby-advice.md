@@ -16,7 +16,7 @@ A lot of what I'm going to say is negative. I feel like the negative experience 
 
 ...that probably -- and hopefully -- won't affect you.
 
-Paternal post-partum depression is a thing. It affects 10%-25% of fathers, and it doesn't get talked about very much. It can a month or two before birth, or can start after. It's fucking horrible.
+Paternal post-partum depression is a thing. It affects 10%-25% of fathers, and it doesn't get talked about very much. It can start a month or two before birth, or can start after. It's fucking horrible.
 
 If you find yourself sinking into a pit of despair and regret, seek outside help. Your partner is (probably) going to be the absolute worst person to seek help from -- she's going to be high on birth hormones and think that everything is wonderful. If you tell her that you wish a meteor would hit the city to erase everything, she's going to call you a monster and you'll feel worse.
 
@@ -24,9 +24,13 @@ I'm not saying you need to pre-arrange a shrink, but you do need to:
 
 **Monitor yourself for signs of depression**. This will be harder than it sounds, because you'll be sleep-deprived and harried a lot of time. It'll be difficult to accurately gauge your own state. But try to check in with yourself periodically and see if you've been feeling real dark and regretful.
 
-**Figure out who you will talk to if you need it**. The ideal is probably a mental health professional, but it might not need to be, depending on how bad it is. (In my uninformed opinion.) The person needs to be someone who won't be emotionally tied up in (or in love with) your new baby. They need to be able to listen and not judge. They'll need to remind you that what you're feeling is normal (or not abnormal -- see above percentages) and that what you're in now is a phase and will pass. It's hard to believe that a year (let's say) isn't a long time, but you will get out the other side.
+**Figure out who you will talk to if you need it**. The ideal person to talk to is probably a mental health professional, but it might not need to be, depending on how bad your depression is†. The person needs to be someone who won't be emotionally tied up in (or in love with) your new baby. They need to be able to listen and not judge. They'll need to remind you that what you're feeling is normal (or not abnormal -- see above percentages) and that what you're in now is a phase and will pass. It's hard to believe that a year (let's say) isn't a long time, but you will get out the other side.
 
 But before this freaks you out too much, remember that it _doesn't happen to most people_. It's just that the probability is high enough that it's worth being aware of and making some amount of (mental) preparation for.
+
+<small>
+†: Disclaimer: You should always consult a professional and not listen to amateur hacks -- like me -- who suggest otherwise.
+</small>
 
 ## T-8 months
 
@@ -114,7 +118,7 @@ Having (useful) friends or (useful) relatives around can be good at this point. 
 
 But beware of friends or family who are going to sit on your couch and expect tea and biscuits and a lovely chat. They can fuck off for a few months.
 
-Get sleep whenever you can, for as long as you can. If someone is around to help your partner, put in earplugs and sleep in the basement. You're probably starting out sleep-deprived and it'll get worse.
+Get sleep whenever you can, for as long as you can. If someone is around to help your partner, put in earplugs and sleep in the basement, any change you get, any time of the day. You're probably starting out sleep-deprived and it'll get worse.
 
 At some point you will stop feeling so tired-shitty. It's important to remember that this is just a feeling and that you're still sleep-deprived -- your cognitive and physical function is no less impaired. (There is research demonstrating this.) You haven't evolved beyond sleep. You still need it. You need it more than anything.
 
@@ -130,13 +134,13 @@ Maybe you feel (and by "feel" I mean "realize the actuality") that your baby is 
 
 Maybe that counts as "postpartum depression", but it also seems like a fairly rational response to the whole thing. Either way, it's hard to get through.
 
-One important tip that I (thankfully) read somewhere was to fake-it-till-you-make-it love for you child. Say the words, go through the motions of affection. Maybe it won't look or feel entirely natural, but: a) it's better than nothing, and, most importantly, b) it will lead you to feel it properly. It will also serve you very well for years to come, when you're super angry with your kid, but you know that showing love and support is the right move.
+One important tip that I (thankfully) read somewhere was to fake-it-till-you-make-it love for your child. Say the words, go through the motions of affection. Maybe it won't look or feel entirely natural, but: a) it's better than nothing, and, most importantly, b) it will lead you to feel it properly. It will also serve you very well for years to come, when you're super angry with your kid, but you know that showing love and support is the right move.
 
 It might take a long time before you fully care about your child. For me it was probably 10 months before he felt like an actual human, with a personality, who could be interacted with something other than boredom.
 
 That's a long time!
 
-But the time will pass. Eventually a day will come that you realize you legitimately love the kid, and that you're happy to see him, and to interact with him (up to a point -- your kid's capacity for dump, boring crap will be higher than yours for a long, long time). And that you'd rescue him before the cat if the house was on fire.
+But the time will pass. Eventually a day will come that you realize you legitimately love the kid, and that you're happy to see him, and to interact with him (up to a point -- your kid's capacity for dumb, boring crap will be higher than yours for a long, long time). And that you'd rescue him before the cat if the house was on fire.
 
 ## T+1 year --> ∞
 
