@@ -100,7 +100,9 @@ Pack a notebook, and consider installing a voice recorder on your phone. You're 
 
 Seriously, you might not have slept in 24+ hours and just gone through the most stressful time of your life. Things that you normally rely on your brain for should be supplemented where possible.
 
-Take more than 2 weeks leave. I don't know how much, since I only took 2, but it wasn't enough. And don't tell work that you'll be "available". Treat it as if you're going away with just a cell phone and mediocre wifi. Prepare accordingly.
+Install your car seat now. If you don't have a car (like us, at the time), practice installing and uninstalling it in someone else's car. When you need to rush to the hospital or when you need to bring baby home are not the times to be struggling with it.
+
+Arrange more than 2 weeks leave. I don't know how much, since I only took 2, but it wasn't enough. And don't tell work that you'll be "available". Treat it as if you're going away with just a cell phone and mediocre wi-fi. Prepare accordingly.
 
 ## T-0: delivery
 
