@@ -18,6 +18,7 @@ Here's a typical login flow, which we'll reference below:
 
 1. Read the request from the client.
 2. Parse the request. Check for basic validity.
+  - If the check fails, go to step 6, indicating a 400 response.
 3. Look up the username in the DB. Retrieve the hashed[^1] password.
   - If the username is not found, go to step 6, indicating a 401 response.
 4. Hash the incoming password and compare against the stored one.
@@ -75,7 +76,14 @@ The constant time value should be chosen to exceed the possible natural response
 
 Another approach to constant-time excesses would be to have multiple increments of constants. Like, limit the response to 1 second; but if it naturally takes more than 1 second, limit it to 2 seconds; etc. I'm not sure if this is warranted or adds very much. I wouldn't bother. You will also have to be very sure that, say, bad username doesn't always end up in the first time increment while bad passwords always end up in the second.
 
-Some responses can also bypass the constant-time limiting -- specifically successful login requests. If the username and password are both good, then the limiting is doing nothing but making the response needlessly slow.
+#### Exclusions
+
+Since we're only trying to prevent an attacker from distinguishing between "bad username" and "good username but bad password", then any situations that don't reveal that can be excluded from having a constant-time response. For example:
+
+* Successful login. The user knows that the username and password were both good, so a constant-time response achieves nothing except slowing down the valid-user experience.
+* "400 Bad Request" responses. For example, if the username is too long or has invalid characters in it. No account lookup is done, so nothing is revealed.
+
+It might be tempting to also exclude 500 server errors. In theory, something like a DB communication error shouldn't reveal information about the username or password. But such errors can occur for many reasons, some of which may be repeatable by an attacker. It's probably best to keep server errors constant-time, if possible. (Also, such errors should be extremely rare for benign users and shouldn't significantly impact the experience of the service.)
 
 ## Exclude network time from constant-time limiting
 
@@ -88,12 +96,13 @@ The login flow will end up looking like this:
 1. Read the request from the client.
 2. _Record the response start time._
 3. Parse the request. Check for basic validity.
+  - If the check fails, go to step 7, indicating a 400 response.
 4. Look up the username in the DB. Retrieve the hashed password.
   - If the username is not found, go to step 7, indicating a 401 response.
 5. Hash the incoming password and compare against the stored one.
-  - If the password does not match, go to step 6, indicating a 401 response.
+  - If the password does not match, go to step 7, indicating a 401 response.
 6. Do other work to set up the login session.
-7. _If the response is not 200, wait until the constant-time limit has passed since the start time._
+7. _Wait until the constant-time limit has passed since the start time._
 8. Write the response to the client.
 
 First of all, it is _acceptable_ to exclude the network transfers from the constant-time limit because they are completely unaffected by the validity of the input. Additionally, the attacker controls the network input (the request) and has full visibility of the network output (the response). There is nothing to hide here.
