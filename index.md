@@ -1,6 +1,6 @@
 ---
 layout: mainpage
-title: Adam Pritchard
+title: Adam Pritchard's blog, etc.
 name: home
 ---
 
