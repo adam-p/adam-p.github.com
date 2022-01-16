@@ -6,7 +6,7 @@ published: true
 comments: false
 ---
 
-I was recently adding timeouts to a Go HTTP server and ended up exploring how the different settings and approaches act and interact. I'm going to publish my notes here, along with the code I used for testing. Hopefully this will help someone else (or myself) in the future.
+Recently, I was adding timeouts to a Go HTTP server and ended up exploring how the different settings and approaches act and interact. I'm going to publish my notes here, along with the code I used for testing. Hopefully this will help someone else (or myself) in the future.
 
 The timeout testing client can be found here: [github.com/adam-p/httptimeout](https://github.com/adam-p/httptimeout). There is a server in the examples directory that you can make requests to.
 
