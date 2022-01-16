@@ -68,9 +68,9 @@ This is not as simple as it might seem. The handler mw timeout must be shorter t
 
 We certainly can't rely on the timeout mw while reading headers (because there is no middleware at that point), but it's possible that body read and response write timeouts are redundant. Severing the connection seems safer than cancelling the context and hoping something checks it, so we'll set the other timeouts anyway.
 
-[^1]: https://pkg.go.dev/net/http#Server
-[^2]: https://github.com/golang/go/issues/35626
-[^3]: https://blog.cloudflare.com/exposing-go-on-the-internet/#timeouts
-[^4]: https://github.com/golang/go/blob/24239120bfbff9ebee8e8c344d9d3a8ce460b686/src/net/http/server.go#L740
-[^5]: https://github.com/golang/go/blob/24239120bfbff9ebee8e8c344d9d3a8ce460b686/src/net/http/server.go#L3392
-[^6]: https://pkg.go.dev/net/http#TimeoutHandler
+[^1]: [https://pkg.go.dev/net/http#Server](https://pkg.go.dev/net/http#Server)
+[^2]: [https://github.com/golang/go/issues/35626](https://github.com/golang/go/issues/35626)
+[^3]: [https://blog.cloudflare.com/exposing-go-on-the-internet/#timeouts](https://blog.cloudflare.com/exposing-go-on-the-internet/#timeouts)
+[^4]: [https://github.com/golang/go/blob/24239120bfbff9ebee8e8c344d9d3a8ce460b686/src/net/http/server.go#L740](https://github.com/golang/go/blob/24239120bfbff9ebee8e8c344d9d3a8ce460b686/src/net/http/server.go#L740)
+[^5]: [https://github.com/golang/go/blob/24239120bfbff9ebee8e8c344d9d3a8ce460b686/src/net/http/server.go#L3392](https://github.com/golang/go/blob/24239120bfbff9ebee8e8c344d9d3a8ce460b686/src/net/http/server.go#L3392)
+[^6]: [https://pkg.go.dev/net/http#TimeoutHandler](https://pkg.go.dev/net/http#TimeoutHandler)
