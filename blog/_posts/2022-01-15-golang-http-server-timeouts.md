@@ -52,13 +52,15 @@ Observations:
 * Otherwise rough testing with combinations of the read timeouts with WriteTimeout suggests they behave as expected (no interaction).
 
 In addition to the http.Server timeouts we use a timeout middleware, which is basically a wrapper around http.TimeoutHandler[^6]. Here are some observations when the timeout middleware is in play and has a timeout shorter than the connection timeouts:
+
 * Unsurprisingly, the timeout mw's timeout doesn't start ticking until the handler stack is set up, so not until after the headers are read.
 * http.TimeoutHandler uses "503 Service Unavailable" as its timeout response. It seems like "408 Request Timeout" would be a more semantically appropriate response. We could intercept the response write to change that code, but it would get hack-y to distinguish between http.TimeoutHandler returning 503 and, say, our Ping endpoint returning it intentionally. Additionally, returning a 5xx error means that our clients will automatically retry the request, which is a good thing (probably).
   - We could also use a copy of http.TimeoutHandler (~220 lines) to return whatever value we want.
-* It may seem silly to worry about sending a response to the client
+* It may seem silly to worry about sending a response to the client when its connection is so degraded that it probably can't read it. But: a) the timeout response might be a lot smaller than whatever the client is trying to send, b) the client's down pipe might be faster than its up pipe, and c) the timeout might actually be due to our server taking too long to the process, rather than a problem with the client.
 * Whether the client receives the timeout mw 503 response depends on what it's doing. (My test client that gets interrupted writing slowly can't read the response, but if it's trying to read when the timeout happens the response is received okay.)
 * A slow body read is interrupted by the mw timeout with an "i/o timeout" error. I believe this is due to the request context being canceled by the timeout.
 * A long time.Sleep isn't magically interrupted, unsurprisingly. But selecting on ctx.Done and time.After ends early due to the context cancellation.
+* There are two cases[^7] when TimeoutHandler returns 503. The first is, of course, when the deadline it set on the context fires (it could have been set somewhere else, in theory). The other is if the context was canceled for some other reason (such as the client leaving). They are distinguishable from the client side because there's no response body in the latter case.
 
 Note that it is important that the timeout mw have a shorter timeout than the http.Server timeouts. We want the client to receive a response, if possible, rather than just having its connection severed.
 
@@ -74,3 +76,40 @@ We certainly can't rely on the timeout mw while reading headers (because there i
 [^4]: [https://github.com/golang/go/blob/24239120bfbff9ebee8e8c344d9d3a8ce460b686/src/net/http/server.go#L740](https://github.com/golang/go/blob/24239120bfbff9ebee8e8c344d9d3a8ce460b686/src/net/http/server.go#L740)
 [^5]: [https://github.com/golang/go/blob/24239120bfbff9ebee8e8c344d9d3a8ce460b686/src/net/http/server.go#L3392](https://github.com/golang/go/blob/24239120bfbff9ebee8e8c344d9d3a8ce460b686/src/net/http/server.go#L3392)
 [^6]: [https://pkg.go.dev/net/http#TimeoutHandler](https://pkg.go.dev/net/http#TimeoutHandler)
+[^7]: [https://cs.opensource.google/go/go/+/refs/tags/go1.18beta1:src/net/http/server.go;l=3392-3402;bpv=0](https://cs.opensource.google/go/go/+/refs/tags/go1.18beta1:src/net/http/server.go;l=3392-3402;bpv=0)
+
+---
+
+## Addendum
+
+### Let's work through the timeout math
+
+Let's say we want, generally, a 10-second request timeout. So we set TimeoutHandler's timeout to 10 seconds.
+
+We need to pick a ReadHeaderTimeout that is basically independent from that (because the handler timeout doesn't start until _after_ the header read is complete). It seems reasonable to pick 5 seconds.
+
+As discussed above, we prefer the ReadTimeout to be longer than the handler timeout, so the client has a chance of getting the response. Because ReadTimeout ticks away during the header read, the calculation for this is something like:
+```
+ReadTimeout := handler_timeout + ReadHeaderTimeout + wiggle_room
+
+e.g.,
+= 10s + 5s + 200ms
+```
+
+So even if the header read takes 4.9s, we are still left with 10.3s for the body read -- slightly longer than the handler timeout.
+
+WriteTimeout covers from the end of the reads until the end of writing. If there's no body to read, this is the whole post-header request time. So, we want it to be `hander_timeout + wiggle_room`, so something like 10.2s.
+
+IdleTimeout... is independent of any of this stuff. It seems common to set it to a couple of minutes.
+
+### AWS observations
+
+Using an AWS load balancer in front of your Go server muddies the behaviour of some of these timeouts, but doesn't completely obviate them.
+
+ALB seems to buffer all the incoming headers, so ReadHeaderTimeout does nothing. ALB's timeout for reading headers appears to be 60 seconds.
+
+ALB doesn't seem to have a body-read timeout (or at least not one shorter than a couple of minutes). It does seem to be buffering some of the incoming body, since the client can still send some data after the backend server has given up the connection. About 30 seconds after the server drops the connection, the load balance responds with 502 Bad Gateway.
+
+I didn't test the write timeout, but I bet there isn't one.
+
+The ALB idle timeout seems to be 60 seconds.
