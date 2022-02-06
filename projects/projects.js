@@ -11,8 +11,6 @@ $(function() {
   (function pullGithubRepos(pageNum) {
     var url = 'https://api.github.com/users/adam-p/repos?page=' + pageNum + '&callback=?';
     $.getJSON(url, function(repos, textStatus, jqXHR) {
-      var repoTemplate;
-
       if (textStatus !== 'success') {
         $('#github-repos').text('Failed to load repos');
         return;
@@ -39,7 +37,8 @@ $(function() {
       });
 
       // Make sure to pull out the template before emptying the element.
-      repoTemplate = $('#github-repo-template').html();
+      const template = $('#github-repo-template').html();
+      const compiledTemplate = _.template(template);
 
       // Remove the "Loading..." message
       $('#github-repos').empty();
@@ -47,15 +46,13 @@ $(function() {
       // Render the repos
       $.each(githubRepos, function() {
         try {
-          $('#github-repos').append(_.template(repoTemplate, this));
+          $('#github-repos').append(compiledTemplate(this));
         } catch(e) {}
       });
     });
   })(1);
 
   $.getJSON('https://api.github.com/users/adam-p/gists?callback=?', function(gists, textStatus, jqXHR) {
-    var gistTemplate;
-
     if (textStatus !== 'success') {
       $('#github-gists').text('Failed to load gists');
       return;
@@ -80,7 +77,8 @@ $(function() {
     });
 
     // Make sure to pull out the template before emptying the element.
-    gistTemplate = $('#github-gist-template').html();
+    const template = $('#github-gist-template').html();
+    const compiledTemplate = _.template(template);
 
     // Remove the "Loading..." message
     $('#github-gists').empty();
@@ -88,7 +86,7 @@ $(function() {
     // Render the gists
     $.each(gists, function() {
       try {
-        $('#github-gists').append(_.template(gistTemplate, this));
+        $('#github-gists').append(compiledTemplate(this));
       } catch(e) {}
     });
   });
