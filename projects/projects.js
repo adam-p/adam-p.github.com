@@ -46,6 +46,9 @@ $(function() {
 
       // Render the repos
       $.each(githubRepos, function() {
+        if (!this.html_url) {
+          return;
+        }
         $('#github-repos').append(_.template(repoTemplate, this));
       });
     });
@@ -86,38 +89,6 @@ $(function() {
     // Render the gists
     $.each(gists, function() {
       $('#github-gists').append(_.template(gistTemplate, this));
-    });
-  });
-
-  $.getJSON('https://api.bitbucket.org/1.0/users/adamp?callback=?', function(repos, textStatus, jqXHR) {
-    var repoTemplate;
-
-    if (textStatus !== 'success') {
-      $('#bitbucket-repos').text('Failed to load repos');
-      return;
-    }
-
-    repos = repos.repositories;
-
-    repos = repos.filter(function(elem) {
-      // Don't show forks of other projects or private repos.
-      return !elem.is_fork && !elem.is_private;
-    });
-
-    // Sort by recently updated
-    repos.sort(function(a, b) {
-      return a.last_updated === b.last_updated ? 0 : a.last_updated < b.last_updated ? 1 : -1;
-    });
-
-    // Make sure to pull out the template before emptying the element.
-    repoTemplate = $('#bitbucket-repo-template').html();
-
-    // Remove the "Loading..." message
-    $('#bitbucket-repos').empty();
-
-    // Render the repos
-    $.each(repos, function() {
-      $('#bitbucket-repos').append(_.template(repoTemplate, this));
     });
   });
 

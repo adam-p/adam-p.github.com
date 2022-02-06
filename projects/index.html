@@ -60,34 +60,6 @@ name: projects
 
 </div>
 
-
-<h3>Bitbucket projects</h3>
-
-<p>
-  I mostly use Github for personal stuff now, but I still have a couple Bitbucket repos.
-</p>
-
-<div id="bitbucket-repos">
-  Loading...
-
-  <script id="bitbucket-repo-template" type="text/template">
-    <div class="repo">
-      <h4><a href="<%- 'https://bitbucket.org/'+owner+'/'+slug %>"><%- name %></a></h4>
-      <div><%- description %></div>
-      <div>
-        <small>
-          <% if (language) { %>
-            Written mostly in <strong><%- language %></strong>.
-          <% } %>
-          Last updated <%- new Date(utc_last_updated).toLocaleDateString() %>.
-        </small>
-      </div>
-    </div>
-  </script>
-
-</div>
-
-
 <h2>Professional projects</h2>
 
 Rather than duplicate the info and links, please take a look at
