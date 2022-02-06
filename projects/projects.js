@@ -46,10 +46,9 @@ $(function() {
 
       // Render the repos
       $.each(githubRepos, function() {
-        if (!this.html_url) {
-          return;
-        }
-        $('#github-repos').append(_.template(repoTemplate, this));
+        try {
+          $('#github-repos').append(_.template(repoTemplate, this));
+        } catch(e) {}
       });
     });
   })(1);
@@ -88,7 +87,9 @@ $(function() {
 
     // Render the gists
     $.each(gists, function() {
-      $('#github-gists').append(_.template(gistTemplate, this));
+      try {
+        $('#github-gists').append(_.template(gistTemplate, this));
+      } catch(e) {}
     });
   });
 
