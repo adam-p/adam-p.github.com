@@ -6,8 +6,7 @@ name: cv
 
 # {{ page.title }}
 
-[pritchard.adam@gmail.com](mailto:pritchard.adam@gmail.com)  
-+1-416-949-5138  
+[pritchard.adam@gmail.com](mailto:pritchard.adam@gmail.com)
 Toronto, Canada
 
 <br>
@@ -32,17 +31,17 @@ Member of a two-person team that designed, developed, and delivered one of the f
 
 ##### Programming languages
 
-Python, C/C++, JavaScript (+HTML+CSS), PHP, Java, SQL (and stored procedure stuff like PL/pgSQL). Also some: Objective-C, shell scripts, C#. 
+Python, C/C++, JavaScript (+HTML+CSS), PHP, Java, SQL (and stored procedure stuff like PL/pgSQL). Also some: Objective-C, shell scripts, C#.
 
 ##### Tools
 
-**IDEs**: Netbeans, MSVC++, Eclipse, Xcode. 
+**IDEs**: Netbeans, MSVC++, Eclipse, Xcode.
 
-**Source control**: Git, Mercurial, Subversion, Perforce, SourceSafe. 
+**Source control**: Git, Mercurial, Subversion, Perforce, SourceSafe.
 
-**Issue tracking**: Github, Bitbucket, Kiln, Trac, LaunchPad, FogBugz, TestTrack, Bug Tracker, VersionOne. 
+**Issue tracking**: Github, Bitbucket, Kiln, Trac, LaunchPad, FogBugz, TestTrack, Bug Tracker, VersionOne.
 
-**Miscellaneous**: DialogBlocks, VirtualBox, VMWare. 
+**Miscellaneous**: DialogBlocks, VirtualBox, VMWare.
 
 ##### Databases
 
@@ -62,7 +61,7 @@ If I don’t already know it, I can get up to speed pretty quickly.
 
 ##### 2009 - present:  Software Developer @ [Psiphon Inc.](http://psiphon.ca/)
 
-Provides censorship circumvention services to users in regions such as China, Iran, Burma, etc. 
+Provides censorship circumvention services to users in regions such as China, Iran, Burma, etc.
 
 * On a team of 4 developers responsible for all design and development of existing and new products, and for dealing with all technical issues that arise (which is pretty often in this line of business).
 * Led a small (1-3) team to develop an internal tool for tracking assets related to running the service.
@@ -85,9 +84,9 @@ After Kasten Chase (below) went bankrupt, the key management IP was sold to Sun 
 
 ##### 2003 - 2006:  Software Developer @ Kasten Chase Applied Research
 
-Medium-sized (~70) company specializing in security software and hardware. 
+Medium-sized (~70) company specializing in security software and hardware.
 
-* One of the two designers and 2-4 developers of the Keystone enterprise key management appliance.  Responsibilities in all areas of the product (database, business logic, UI, etc.) and in all development stages (design, development, debugging).  
+* One of the two designers and 2-4 developers of the Keystone enterprise key management appliance.  Responsibilities in all areas of the product (database, business logic, UI, etc.) and in all development stages (design, development, debugging).
 * One of the two designers and developers of the CipherShare secure document sharing and collaboration client/server application.  Jointly responsible for all client-side code – business logic, user interface, etc.
 
 ##### 2001 - 2003:  Software Developer @ CipherShare Systems Inc.
@@ -100,7 +99,7 @@ Company created by Apostrophe Software (below) to develop commercial product –
 
 Small bespoke software company specializing in client/server database-driven projects.  Started as a summer student, began full-time in 2000.
 
-* Member of a very small (3-7 people) design and development team.  
+* Member of a very small (3-7 people) design and development team.
 * Worked on a variety of projects, some existing, some new, including:
 * A passport issuing system subcontract for Canadian Bank Note Co. Ltd.; used in Burkina Faso, Africa.  Wrote the image capture, processing, and printing component.
 * A CGI back-end for a drug trial website.
