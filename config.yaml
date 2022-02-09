@@ -1,0 +1,33 @@
+baseURL: 'https://crypti.cc/'
+languageCode: 'en-us'
+title: 'adam-p'
+
+languages:
+  en:
+    languageName: English
+    menu:
+      main:
+        - url: /blog/
+          name: Blog
+          weight: 1
+        - url: /inco/
+          name: In/Co
+          weight: 2
+        - url: /projects/
+          name: Projects
+          weight: 3
+        - url: /cv/
+          name: CV
+          weight: 4
+
+permalinks:
+  blog: 'blog/:year/:month/:slug/'
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: True
+  highlight:
+    style: monokailight
+
+relativeURLs: True

@@ -1,0 +1,72 @@
+{{ define "main" }}
+
+<h1 class="title">{{ .Title }}</h1>
+
+<p>
+  {{ .Content }}
+</p>
+
+<h2>Personal projects</h2>
+
+<hr>
+<h3>GitHub projects</h3>
+<template id="github-repo-template">
+  <div class="repo col-12">
+    <h4><a class="repo__link" href="repo link here">repo name here</a></h4>
+    <div class="repo__description">repo description here</div>
+    <div>
+      <small>
+        <span class="repo__stars-and-forks">
+          <span class="repo__stars">repo stars here</span>
+          <img class="icon" alt="stars" src="/icon/octicons/star-fill.svg">
+          &nbsp;
+          <span class="repo__forks">repo forks here</span>
+          <img class="icon" alt="forks" src="/icon/octicons/repo-forked.svg">
+        </span>
+        &nbsp;
+        <span class="repo__language">
+          Written mostly in <strong class="repo__language__name">repo lang here</strong>.
+        </span>
+        &nbsp;
+        Last pushed to <span class="repo__last-pushed">date here</span>.
+      </small>
+    </div>
+  </div>
+</template>
+<div id="github-repos-placeholder">
+  Loading...
+</div>
+<div id="github-repos" class="row gy-3">
+</div>
+
+<hr>
+<h3>GitHub gists</h3>
+<template id="github-gist-template">
+  <div class="gist col-12">
+    <h4><a class="gist__link" href="gist link here">gist name here</a></h4>
+    <div class="gist__description">gist description here</div>
+    <div>
+      <small>Last updated <span class="gist__last-updated">date here</span>.</small>
+    </div>
+  </div>
+</template>
+<div id="github-gists-placeholder">
+  Loading...
+</div>
+<div id="github-gists" class="row gy-3">
+</div>
+
+<hr>
+<h2>Professional projects</h2>
+
+Rather than duplicate the info and links, please take a look at
+<a href="/cv/">my résumé</a> for stuff about professional work.
+
+{{ $projectsJS := resources.Get "js/projects.js" | resources.Fingerprint "sha512" }}
+<script src="{{ $projectsJS.RelPermalink }}" integrity="{{ $projectsJS.Data.Integrity }}"></script>
+
+{{ end }}
+
+{{ define "footer" }}
+{{ partial "footer" . }}
+{{ end }}

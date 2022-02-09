@@ -1,0 +1,44 @@
+{{ define "main" }}
+<section>
+  <h1 class="title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
+  <h5 class="text-end"> {{ .Date.Format "Monday January 2, 2006" }} </h5>
+  <div>
+        <article>
+           {{ .Content }}
+        </article>
+  </div>
+</section>
+<hr>
+<aside>
+  <p>
+    <h5> {{ .WordCount }} Words </h5>
+  </p>
+
+  {{ if .Params.tags }}
+  <p>
+    <h5>Tags</h5>
+    {{ with .Params.tags }}
+    <ul id="tags">
+      {{ range . }}
+        <li> <a href="{{ "tags" | relURL }}/{{ . | urlize }}">{{ . }}</a> </li>
+      {{ end }}
+    </ul>
+    {{ end }}
+  </p>
+  {{ end }}
+
+  <p>
+      {{ with .PrevInSection }}
+        Previous: <a class="previous" href="{{.RelPermalink}}"> {{.Title}}</a>
+      {{ end }}
+      <br>
+    {{ with .NextInSection }}
+        Next: <a class="next" href="{{.RelPermalink}}"> {{.Title}}</a>
+    {{ end }}
+  </p>
+</aside>
+{{ end }}
+
+{{ define "footer" }}
+{{ partial "footer" . }}
+{{ end }}

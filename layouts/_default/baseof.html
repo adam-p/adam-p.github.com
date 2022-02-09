@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="{{ .Lang }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    {{ .Scratch.Set "pageTitle" .Title }}
+    {{ if ne .Kind "home" }}{{ .Scratch.Set "pageTitle" (print .Title " | " .Site.Title) }}{{ end }}
+    {{ range .AlternativeOutputFormats -}}
+    {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .RelPermalink ($.Scratch.Get "pageTitle") | safeHTML }}
+    {{ end -}}
+
+    <meta name="google-site-verification" content="WxZdzPANRFpehqogDMcTc9HLGXXDJy5If07MuUZvHho" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    {{ $stylesCSS := resources.Get "scss/styles.scss" | resources.ToCSS | resources.Fingerprint "sha512" }}
+    <link rel="stylesheet" href="{{ $stylesCSS.RelPermalink }}" integrity="{{ $stylesCSS.Data.Integrity }}">
+
+    <!-- Blocks may include default content. -->
+    <title>{{ block "title" . }}{{ .Scratch.Get "pageTitle" }}{{ end }}</title>
+  </head>
+  <body>
+    {{ block "navbar" . }}
+      {{ partial "navbar" . }}
+    {{ end }}
+
+    <div class="container-fluid">
+
+    <!-- Code that all your templates share, like a header -->
+    {{ block "main" . }}
+      <!-- The part of the page that begins to differ between templates -->
+    {{ end }}
+
+    {{ block "footer" . }}
+    {{ end }}
+
+    </div>
+
+    {{ $bootstrapJS := resources.Get "node_modules/bootstrap/dist/js/bootstrap.js" | resources.Fingerprint "sha512" }}
+    <script src="{{ $bootstrapJS.RelPermalink }}"integrity="{{ $bootstrapJS.Data.Integrity }}"></script>
+  </body>
+</html>

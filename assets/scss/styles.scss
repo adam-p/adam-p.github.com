@@ -1,0 +1,190 @@
+// Custom.scss
+// Option B: Include parts of Bootstrap
+
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../node_modules/bootstrap/scss/functions";
+
+// 2. Include any default variable overrides here
+$body-bg: #efedec;
+$body-color: #473030;
+$link-color: #b41717;
+$link-hover-color: lighten($link-color, 20%);
+$link-decoration: none;
+$headings-color: lighten($body-color, 15%);
+$navbar-light-brand-color: $headings-color;
+$navbar-light-color: $navbar-light-brand-color;
+$navbar-light-active-color: darken(saturate($navbar-light-color, 45%), 20%);
+
+// This is the standard Bootstrap font set, but without system-ui (because https://infinnie.github.io/blog/2017/systemui.html)
+$font-family-sans-serif:
+  // Safari for macOS and iOS (San Francisco)
+  -apple-system,
+  // Windows
+  "Segoe UI",
+  // Android
+  Roboto,
+  // Basic web fallback
+  "Helvetica Neue", Arial,
+  // Linux
+  "Noto Sans",
+  "Liberation Sans",
+  // Sans serif fallback
+  sans-serif,
+  // Emoji fonts
+  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$font-family-monospace:
+  ui-monospace, // San Francisco Mono on macOS and iOS
+  "Cascadia Mono", "Segoe UI Mono", // Newer Windows monospace fonts that are optionally installed. Most likely to be rendered in Consolas
+  "Liberation Mono", // Linux
+  Menlo, Monaco, Consolas, // A few sensible system font choices
+  monospace;
+// Not a standard Bootstrap variable
+$font-family-serif: Georgia, Cambria, "Times New Roman", Times, serif;
+
+@import "exo2-font.scss";
+$headings-font-family: 'Exo 2', $font-family-serif;
+
+// 3. Include remainder of required Bootstrap stylesheets
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/utilities";
+
+// 4. Include any optional Bootstrap components as you like
+// Layout & components
+@import "../node_modules/bootstrap/scss/root";
+@import "../node_modules/bootstrap/scss/reboot";
+@import "../node_modules/bootstrap/scss/type";
+@import "../node_modules/bootstrap/scss/images";
+@import "../node_modules/bootstrap/scss/containers";
+@import "../node_modules/bootstrap/scss/grid";
+@import "../node_modules/bootstrap/scss/tables";
+@import "../node_modules/bootstrap/scss/forms";
+@import "../node_modules/bootstrap/scss/buttons";
+@import "../node_modules/bootstrap/scss/transitions";
+@import "../node_modules/bootstrap/scss/dropdown";
+@import "../node_modules/bootstrap/scss/button-group";
+@import "../node_modules/bootstrap/scss/nav";
+@import "../node_modules/bootstrap/scss/navbar";
+@import "../node_modules/bootstrap/scss/card";
+@import "../node_modules/bootstrap/scss/accordion";
+@import "../node_modules/bootstrap/scss/breadcrumb";
+@import "../node_modules/bootstrap/scss/pagination";
+@import "../node_modules/bootstrap/scss/badge";
+@import "../node_modules/bootstrap/scss/alert";
+@import "../node_modules/bootstrap/scss/progress";
+@import "../node_modules/bootstrap/scss/list-group";
+@import "../node_modules/bootstrap/scss/close";
+@import "../node_modules/bootstrap/scss/toasts";
+@import "../node_modules/bootstrap/scss/modal";
+@import "../node_modules/bootstrap/scss/tooltip";
+@import "../node_modules/bootstrap/scss/popover";
+@import "../node_modules/bootstrap/scss/carousel";
+@import "../node_modules/bootstrap/scss/spinners";
+@import "../node_modules/bootstrap/scss/offcanvas";
+@import "../node_modules/bootstrap/scss/placeholders";
+// Helpers
+@import "../node_modules/bootstrap/scss/helpers";
+// Utilities
+@import "../node_modules/bootstrap/scss/utilities/api";
+
+// Icons
+@import "bootstrap-icons";
+
+// 5. Add additional custom code here
+
+.navbar {
+  background-color: darken($body-bg, 10%) !important;
+}
+
+.navbar-brand {
+  font-family: $headings-font-family;
+  font-weight: 900;
+}
+
+.container-fluid {
+  // Reading a full-width is annoying, so cap how wide it can go.
+  max-width: 750px;
+  margin-right: auto;
+  margin-left: auto;
+
+  // Without this, long links won't wrap.
+  overflow-wrap: break-word;
+
+  img {
+    @extend .img-fluid;
+  }
+}
+
+img.icon, img[src$="#icon"] {
+  width: 1em;
+  margin-top: -0.25em;
+}
+
+.title {
+  margin-top: 0.5em;
+}
+
+.post-excerpt .post-specs {
+  padding: 0 1em 1em 1em;
+  margin: 0;
+  background-image: linear-gradient(180deg, rgba(shade-color($body-bg, 5%), 1.0), rgba(shade-color($body-bg, 5%), 0));
+}
+
+.post-excerpt .post-body {
+  position: relative;
+  max-height: 200px;
+  overflow-y: hidden;
+  margin: 0;
+  padding: 0 2em 0 4em;
+}
+
+.post-excerpt .overflow-fade {
+  display: block;
+  height: 100px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-image: linear-gradient(180deg, rgba($body-bg, 0), rgba($body-bg, 1.0));
+}
+
+.post-excerpt .overflow-fade h1 {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.post-excerpt .overflow-fade a {
+  display: block;
+  font-size: 40px;
+}
+
+hr {
+  border-top: 1px solid #555;
+  border-bottom: 1px solid #777;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+pre {
+  padding: 0.5em;
+
+  // I want horizontal code scrollbars to more pronounced, so the reader knows that there is some text not visible
+  $code-scroll-color: shade-color($warning, 10%);
+  scrollbar-color: $code-scroll-color rgba(0, 0, 0, 0);
+  &::-webkit-scrollbar {
+    height: auto;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: $code-scroll-color;
+  }
+}
+
+.repo {
+  .repo__popular {
+    font-weight: bold;
+  }
+}

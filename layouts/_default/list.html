@@ -1,0 +1,41 @@
+{{ define "main" }}
+<main>
+    <div>
+        <header>
+            <h1 class="title">{{.Title}}</h1>
+            {{ with .OutputFormats.Get "rss" -}}
+            <a href="{{ .RelPermalink }}"><i class="bi-rss-fill float-end"></i></a>
+            {{ end -}}
+        </header>
+        <!-- "{{.Content}}" pulls from the markdown content of the corresponding _index.md -->
+        {{.Content}}
+    </div>
+
+    <!-- Ranges through content/inco/*.md -->
+    {{ range .Pages }}
+    <hr>
+    <div class="row-fluid">
+      <div class="span12 post-excerpt">
+        <div class="post-specs">
+          <h4><a href="{{.RelPermalink}}">{{ .Title }}</a></h4>
+          <div>
+            {{.Date.Format "2006-01-02"}}
+          </div>
+          <div class="post-body">
+            <div>
+              {{ .Summary }}
+            </div>
+              <div class="overflow-fade text-end">
+                <h1><a href="{{ .RelPermalink }}">&gt;&gt;&gt;</a></h1>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{ end }}
+</main>
+{{ end }}
+
+{{ define "footer" }}
+{{ partial "footer" . }}
+{{ end }}
