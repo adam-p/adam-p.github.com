@@ -1,3 +1,9 @@
+{{ define "relURLBase" }}
+<-- This 404 page may be shown at any URL depth, so purely relative URLs won't work
+    without this help. Note that this breaks our otherwise diligent use of relative URLs. -->
+<base href="/">
+{{ end }}
+
 {{ define "main"}}
 <h1 class="title">404 OH NO</h1>
 
