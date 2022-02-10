@@ -1,7 +1,7 @@
 {{ define "relURLBase" }}
-<-- This 404 page may be shown at any URL depth, so purely relative URLs won't work
-    without this help. Note that this breaks our otherwise diligent use of relative URLs. -->
-<base href="/">
+{{/* This 404 page may be shown at any URL depth, so purely relative URLs won't work
+     without this help. Note that this breaks our otherwise diligent use of relative URLs. */}}
+<base href="{{ .Site.BaseURL }}">
 {{ end }}
 
 {{ define "main"}}
