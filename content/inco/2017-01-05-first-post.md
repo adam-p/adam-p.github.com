@@ -3,6 +3,8 @@ date: "2017-01-05T00:00:00Z"
 published: true
 tags: null
 title: "First Post: someone's last post"
+slug: first-post
+aliases: ['05/first-post.html']
 ---
 
 I often come across digital and physical interface designs that are either great (coherent) or terrible (incoherent). For some mysterious reason I've been wanting to capture such interfaces and share them.

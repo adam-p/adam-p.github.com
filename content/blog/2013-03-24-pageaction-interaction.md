@@ -7,7 +7,7 @@ tags:
 - Code
 title: No One Knows to Click on a Page Action
 slug: "pageaction-interaction"
-aliases: ["pageaction-interaction.html"]
+aliases: ["24/pageaction-interaction.html"]
 ---
 
 **Page actions** -- the buttons in a browser's address bar -- are a **surprising UI failure**.

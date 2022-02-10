@@ -5,7 +5,7 @@ published: true
 tags: null
 title: The Ethics of Driving Speed in Travel Time Estimation
 slug: ethics-travel-time
-aliases: ['ethics-travel-time.html']
+aliases: ['28/ethics-travel-time.html']
 ---
 
 How should travel time be estimated? What are the ethical implications of the approach taken?

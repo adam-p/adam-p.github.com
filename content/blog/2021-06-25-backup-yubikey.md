@@ -5,7 +5,7 @@ published: true
 tags: null
 title: Make sure you have a backup Yubikey
 slug: backup-yubikey
-aliases: ['backup-yubikey.html']
+aliases: ['25/backup-yubikey.html']
 ---
 
 For four years I carried a [Yubikey NEO](https://support.yubico.com/hc/en-us/articles/360013714579-YubiKey-NEO) (USB Type-A) in my pocket, on my keychain. And then it died (would no longer be recognized by any computer).

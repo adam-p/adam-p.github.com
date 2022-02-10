@@ -7,7 +7,7 @@ tags:
 - Code
 title: Why and How to Use a Contributor License Agreement
 slug: contributor-license-agreement
-aliases: ['contributor-license-agreement.html']
+aliases: ['17/contributor-license-agreement.html']
 ---
 
 Background and Motivation
