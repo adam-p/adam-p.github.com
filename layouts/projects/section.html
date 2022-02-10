@@ -62,8 +62,8 @@
 Rather than duplicate the info and links, please take a look at
 <a href="/cv/">my résumé</a> for stuff about professional work.
 
-{{ $projectsJS := resources.Get "js/projects.js" | resources.Fingerprint "sha512" }}
-<script src="{{ $projectsJS.RelPermalink }}" integrity="{{ $projectsJS.Data.Integrity }}"></script>
+{{ $projectsJS := resources.Get "js/projects.js" }}
+<script src="{{ $projectsJS.RelPermalink }}"></script>
 
 {{ end }}
 
