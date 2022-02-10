@@ -5,7 +5,7 @@ published: true
 tags: null
 title: Diving into Go's HTTP server
 slug: golang-http-server-timeouts
-aliases: ['golang-http-server-timeouts']
+aliases: ['golang-http-server-timeouts.html']
 ---
 
 Recently, I was adding timeouts to a Go HTTP server and ended up exploring how the different settings and approaches act and interact. I'm going to publish my notes here, along with the code I used for testing. Hopefully this will help someone else (or myself) in the future.

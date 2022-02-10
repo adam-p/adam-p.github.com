@@ -5,7 +5,7 @@ published: true
 tags: null
 title: Timing attack mitigation must exclude network
 slug: constant-time-network
-aliases: ['constant-time-network']
+aliases: ['constant-time-network.html']
 ---
 
 TL;DR: When trying to prevent timing attacks (e.g., against login username enumeration) by making a request take constant time, make sure you exclude the network read and write time. If you don't, an attacker can slow down their request to bypass it.

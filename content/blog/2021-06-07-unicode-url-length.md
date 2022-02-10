@@ -5,7 +5,7 @@ published: true
 tags: null
 title: 'Dev Story: Unicode URL length limit blues'
 slug: unicode-url-length
-aliases: ['unicode-url-length']
+aliases: ['unicode-url-length.html']
 ---
 
 I have enjoyed reading other people's design and debugging train-of-thought posts, so after I spent two days wrestling with a code problem, I thought I'd write it up. It's not technically exciting, but I think that describing it might be useful to someone -- or my future self -- someday. Or, at the very least, a little amusing.

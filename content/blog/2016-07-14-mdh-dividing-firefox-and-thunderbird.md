@@ -7,7 +7,7 @@ tags:
 - Markdown Here
 title: 'Markdown Here: Splitting the Firefox and Thunderbird Extension'
 slug: mdh-dividing-firefox-and-thunderbird
-aliases: ['mdh-dividing-firefox-and-thunderbird']
+aliases: ['mdh-dividing-firefox-and-thunderbird.html']
 ---
 
 [This started as notes to myself to help clarify the problem and solution. It's probably more suited to a Github issue than a blog post, and it may get copied into one.]

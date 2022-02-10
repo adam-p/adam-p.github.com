@@ -5,7 +5,7 @@ published: true
 tags: []
 title: 'Test post: Markdown Here in Disqus'
 slug: mdh-disqus-test
-aliases: ['mdh-disqus-test']
+aliases: ['mdh-disqus-test.html']
 ---
 
 This is just a stub test post to allow me to try out Markdown Here in Disqus comments.
