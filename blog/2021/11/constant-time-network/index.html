@@ -1,0 +1,171 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<meta name=google-site-verification content="WxZdzPANRFpehqogDMcTc9HLGXXDJy5If07MuUZvHho">
+<link rel=icon type=image/png href=../../../../favicon.png>
+<link rel=stylesheet href=../../../../scss/styles.4e3e257e605f6f4355c5579e847046430c49183da4192a7e74b7cb8bd6e3003809c70fb48742f364c9a52e7a842026e67fef73f24055959dbcd9b86f762c14c8.css integrity="sha512-Tj4lfmBfb0NVxVeehHBGQwxJGD2kGSp+dLfLi9bjADgJxw+0h0LzZMmlLnqEICbmf+9z8kBVlZ282bhvdiwUyA==">
+<title>Timing attack mitigation must exclude network | adam-p</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+<div class=container-fluid>
+<a class=navbar-brand href=../../../../>
+adam-p
+</a>
+<button class=navbar-toggler type=button data-bs-toggle=collapse data-bs-target=#navbarNav aria-controls=navbarNav aria-expanded=false aria-label="Toggle navigation">
+<span class=navbar-toggler-icon></span>
+</button>
+<div class="collapse navbar-collapse" id=navbarNav>
+<ul class=navbar-nav>
+<li class=nav-item>
+<a class=nav-link href=../../../../blog/>Blog</a>
+</li>
+<li class=nav-item>
+<a class=nav-link href=../../../../inco/>In/Co</a>
+</li>
+<li class=nav-item>
+<a class=nav-link href=../../../../projects/>Projects</a>
+</li>
+<li class=nav-item>
+<a class=nav-link href=../../../../cv/>CV</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<div class=container-fluid>
+<section>
+<h1 class=title><a href=../../../../blog/2021/11/constant-time-network/>Timing attack mitigation must exclude network</a></h1>
+<h5 class=text-end> Saturday November 27, 2021 </h5>
+<div>
+<article>
+<p>TL;DR: When trying to prevent timing attacks (e.g., against login username enumeration) by making a request take constant time, make sure you exclude the network read and write time. If you don&rsquo;t, an attacker can slow down their request to bypass it.</p>
+<p>I&rsquo;ll be covering some background and contextual information here. If you don&rsquo;t need it, skip to &ldquo;Exclude network time from constant-time limiting&rdquo;.</p>
+<h2 id=what-is-a-timing-attack>What is a &ldquo;timing attack&rdquo;?</h2>
+<p>Briefly, a timing attack (in this context) is when an attacker observes the time it takes for a server to handle a request to glean some information about the validity of the input they tried. The typical target for this attack is the login request, and in that context there are &ndash; unsurprisingly &ndash; two pieces of information that can be attacked: username and password.</p>
+<p>Here&rsquo;s a typical login flow, which we&rsquo;ll reference below:</p>
+<ol>
+<li>Read the request from the client.</li>
+<li>Parse the request. Check for basic validity.</li>
+</ol>
+<ul>
+<li>If the check fails, go to step 6, indicating a 400 response.</li>
+</ul>
+<ol start=3>
+<li>Look up the username in the DB. Retrieve the hashed<sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup> password.</li>
+</ol>
+<ul>
+<li>If the username is not found, go to step 6, indicating a 401 response.</li>
+</ul>
+<ol start=4>
+<li>Hash the incoming password and compare against the stored one.</li>
+</ol>
+<ul>
+<li>If the password does not match, go to step 6, indicating a 401 response.</li>
+</ul>
+<ol start=5>
+<li>Do other work to set up the login session.</li>
+<li>Write the response to the client.</li>
+</ol>
+<h3 id=testingdiscoveringenumerating-usernames>Testing/discovering/enumerating usernames</h3>
+<p>The time that step #4 takes can be used to test for the existence of a username. If the username isn&rsquo;t found in the DB, the response will come a little faster than if the username is found and then a password hash-and-compare occurs. So an attacker can try out usernames and watch the response time to find out when one exists in the database.</p>
+<p>(Note that multiple requests for a single username may be required to nail down the subtle timing differences.)</p>
+<p>An attacker might use this for testing variations on a single username to target a particular user, or might use huge common username lists or even brute force to enumerate all or nearly all of your users.</p>
+<h4 id=why-do-i-care>Why do I care?</h4>
+<p>Maybe you don&rsquo;t. Maybe you respond with different information depending on whether the username or password is incorrect, because that&rsquo;s more user-friendly. Maybe your site/service is innocuous, there&rsquo;s no sensitive information, or everything is public. Maybe you&rsquo;re confident that your web application firewall or CAPTCHA or other mitigations will prevent this kind of attack.</p>
+<p><em>I</em> care because <a href=https://psiphon.ca>I work on a tool</a> that&rsquo;s questionably legal in many countries. Users have a habit of putting their real name in their username or reusing usernames across multiple sites, many of which will connect that username to their real identity. So I &ndash; and we &ndash; think it best that we limit username testing as best we can (and encourage users to <a href=https://psiphon.ca/en/faq.html#psicash-pseudonym>use pseudonyms</a>).</p>
+<h3 id=testing-passwords>Testing passwords</h3>
+<p>A very bad and wrong way of checking for a password match is to do a simple string comparison on the plaintext password. First of all, you shouldn&rsquo;t be storing plaintext passwords in your DB. Secondly, and relevant to timing attacks, doing a simple string comparison will result in different times taken depending on how many characters in the string match. The string comparison is likely doing a length equality check and then doing a character-by-character equality check, so it&rsquo;s going to return false early as soon as there&rsquo;s a mismatch.</p>
+<p>This is a solved problem. Use a library with a proper password-hashing algorithm, and use its constant-time equality function. (And don&rsquo;t just binary-compare the hashes, since the time that takes might also leak something.)</p>
+<h3 id=other-types-of-requests>Other types of requests</h3>
+<p>&ldquo;Forgot my password&rdquo; requests are similarly vulnerable. Typically, the user enters a username or email address, then there&rsquo;s a lookup to see if the account exists and maybe whether the email address is confirmed, then a token gets generated and stored, then the recovery email is sent. As with the login flow, there are processing differences depending on whether the username or email is found or not, which means timing differences that can be used to discover if the input exists in the DB.</p>
+<p>The same considerations about caring mentioned above apply here as well.</p>
+<h2 id=mitigating-timing-attacks>Mitigating timing attacks</h2>
+<h3 id=preventing-automated-requests>Preventing automated requests</h3>
+<p>Using CAPTCHAs, rate limiting, or a web application firewall can help prevent automated requests that are attempting to enumerate your users. They won&rsquo;t generally help with targeted username testing.</p>
+<p>You should certainly employ these kinds of measures, but my opinion is that they should be used alongside other mitigations.</p>
+<h3 id=randomizing-response-times-not-recommended>Randomizing response times (not recommended)</h3>
+<p>If a random sleep is added to the processing of sensitive requests, then the response timing becomes more difficult to use for timing attacks. But only &ldquo;more difficult&rdquo; &ndash; with enough timing samples, the average can be taken and the attack again becomes viable.</p>
+<h3 id=constant-time-responses>Constant-time responses</h3>
+<p>We&rsquo;re getting closer to the point of this post now.</p>
+<p>Forcing responses to take a fixed amount of time prevents timing analysis. If every response, regardless of input, takes the same amount of time, there&rsquo;s nothing to differentiate and analyze.</p>
+<p>The constant time value should be chosen to exceed the possible natural response time. There are likely going to be outliers where the natural response time exceeds the constant time &ndash; you should log and alert these incidents, as they ruin the mitigation. But, generally, if they&rsquo;re kept very infrequent they still won&rsquo;t provide an attacker enough to work with.</p>
+<p>Another approach to constant-time excesses would be to have multiple increments of constants. Like, limit the response to 1 second; but if it naturally takes more than 1 second, limit it to 2 seconds; etc. I&rsquo;m not sure if this is warranted or adds very much. I wouldn&rsquo;t bother. You will also have to be very sure that, say, bad username doesn&rsquo;t always end up in the first time increment while bad passwords always end up in the second.</p>
+<h4 id=exclusions>Exclusions</h4>
+<p>Since we&rsquo;re only trying to prevent an attacker from distinguishing between &ldquo;bad username&rdquo; and &ldquo;good username but bad password&rdquo;, then any situations that don&rsquo;t reveal that can be excluded from having a constant-time response. For example:</p>
+<ul>
+<li>Successful login. The user knows that the username and password were both good, so a constant-time response achieves nothing except slowing down the valid-user experience.</li>
+<li>&ldquo;400 Bad Request&rdquo; responses. For example, if the username is too long or has invalid characters in it. No account lookup is done, so nothing is revealed.</li>
+</ul>
+<p>It might be tempting to also exclude 500 server errors. In theory, something like a DB communication error shouldn&rsquo;t reveal information about the username or password. But such errors can occur for many reasons, some of which may be repeatable by an attacker. It&rsquo;s probably best to keep server errors constant-time, if possible. (Also, such errors should be extremely rare for benign users and shouldn&rsquo;t significantly impact the experience of the service.)</p>
+<h2 id=exclude-network-time-from-constant-time-limiting>Exclude network time from constant-time limiting</h2>
+<p>We&rsquo;ve finally gotten to the point.</p>
+<p>When forcing a response to be constant time, the network portion of the request processing must be excluded. By this I mean the time taken to read the request from the client and the time taken to write the response. We&rsquo;ll see that it&rsquo;s both <em>acceptable</em> and <em>necessary</em> to do so.</p>
+<p>The login flow will end up looking like this:</p>
+<ol>
+<li>Read the request from the client.</li>
+<li><em>Record the response start time.</em></li>
+<li>Parse the request. Check for basic validity.</li>
+</ol>
+<ul>
+<li>If the check fails, go to step 7, indicating a 400 response.</li>
+</ul>
+<ol start=4>
+<li>Look up the username in the DB. Retrieve the hashed password.</li>
+</ol>
+<ul>
+<li>If the username is not found, go to step 7, indicating a 401 response.</li>
+</ul>
+<ol start=5>
+<li>Hash the incoming password and compare against the stored one.</li>
+</ol>
+<ul>
+<li>If the password does not match, go to step 7, indicating a 401 response.</li>
+</ul>
+<ol start=6>
+<li>Do other work to set up the login session.</li>
+<li><em>Wait until the constant-time limit has passed since the start time.</em></li>
+<li>Write the response to the client.</li>
+</ol>
+<p>First of all, it is <em>acceptable</em> to exclude the network transfers from the constant-time limit because they are completely unaffected by the validity of the input. Additionally, the attacker controls the network input (the request) and has full visibility of the network output (the response). There is nothing to hide here.</p>
+<p>Secondly, it is <em>necessary</em> to exclude the network time.</p>
+<p>If the request read time is included in the constant-time consideration, the mitigation is effectively undermined. The attacker controls the client&rsquo;s network speed, so they can trickle the request out until the constant-time limit is passed. Then they start measuring the response time from the point that the request writing is done. The server will then start processing the request. There will be no sleep in step #7 because the constant-time limit has already been exceeded, so the actual processing time will be plainly visible to the attacker.</p>
+<p>(If the &ldquo;multiple increments of constants&rdquo; approach is used, the attack is more complicated, but I believe it&rsquo;s still viable. The attacker will need to tweak the request speed so that bad-username requests fall into the first increment while bad-password requests fall into the second. Anyway, this hardly matters, since it&rsquo;s acceptable to exclude the request read time.)</p>
+<p>Excluding the response writing time is also necessary. As soon as the first byte of the response is written, the attacker is signaled that the processing is complete and they have the information they need so any constant-time sleeping needs to occur before the response writing is begun.</p>
+<h2 id=other-concerns>Other concerns</h2>
+<p>I worry about the attacker using a simultaneous request flood to slow down all other request processing enough that many or all login requests will exceed the constant-time limit and start revealing the true processing time. Sufficient capacity and/or scaling, combined with anti-denial-of-service measures should be sufficient to mitigate this. It will also be a pretty expensive &ndash; and therefore unlikely &ndash; approach for an attacker to take.</p>
+<h2 id=not-just-http>Not just HTTP</h2>
+<p>I wrote the above in terms of HTTP requests and responses, but it applies to any network protocol.</p>
+<h2 id=final-words>Final words</h2>
+<p>I&rsquo;m writing this because when I was implementing this I screwed up by including the network transfer in the constant-time limit &ndash; it felt cleanest to implement it as middleware, but that was at the wrong level. I only realized the problem while re-reading some tangentially-related code. Hopefully this helps someone else not make the same mistake.</p>
+<section class=footnotes role=doc-endnotes>
+<hr>
+<ol>
+<li id=fn:1 role=doc-endnote>
+<p>Hashed using something appropriate, like argon2, scrypt, or bcrypt.&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+</article>
+</div>
+</section>
+<hr>
+<aside>
+<p>
+<h5> 1741 Words </h5>
+</p>
+<p>
+Previous: <a class=previous href=../../../../blog/2021/06/backup-yubikey/> Make sure you have a backup Yubikey</a>
+<br>
+Next: <a class=next href=../../../../blog/2021/11/ethics-travel-time/> The Ethics of Driving Speed in Travel Time Estimation</a>
+</p>
+</aside>
+<footer class=text-end>
+<small>© 2022 Adam Pritchard</small>
+</footer>
+</div>
+<script src=../../../../node_modules/bootstrap/dist/js/bootstrap.ff5877e383a0bb7f5fda5325db22099f798f8f24ae074fa6dc4cc3bc5496971a3a1da24eff78ddcc63b2f15e9981d91391d74a1fe65699ad66a8e4191e68e8d7.js integrity="sha512-/1h344Ogu39f2lMl2yIJn3mPjySuB0+m3EzDvFSWlxo6HaJO/3jdzGOy8V6ZgdkTkddKH+ZWma1mqOQZHmjo1w=="></script>
+</body>
+</html>
