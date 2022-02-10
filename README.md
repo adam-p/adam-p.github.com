@@ -1,4 +1,4 @@
-# [crypti.cc](https://crypti.cc)
+# [adam-p.ca](https://adam-p.ca)
 
 This is the source for my personal site.
 
