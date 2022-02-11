@@ -188,3 +188,16 @@ pre {
     font-weight: bold;
   }
 }
+
+// Bootstrap's default blockquote styling only applies to the .blockquote class, so it's
+// a hassle to use with markdown-generated blockquote elements. Also, it's too subtle.
+blockquote {
+  @extend .blockquote;
+  border-left: 3px solid tint-color($body-color, 60%);
+  font-family: $font-family-serif;
+  font-size: 1.1em;
+  font-style: italic;
+  line-height: 1.8em;
+  padding: 0 1em;
+  margin-left: 1em;
+}
