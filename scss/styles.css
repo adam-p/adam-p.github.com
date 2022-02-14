@@ -512,10 +512,10 @@ progress {
   font-size: 0.875em;
   text-transform: uppercase; }
 
-.blockquote {
+.blockquote, blockquote {
   margin-bottom: 1rem;
   font-size: 1.25rem; }
-  .blockquote > :last-child {
+  .blockquote > :last-child, blockquote > :last-child {
     margin-bottom: 0; }
 
 .blockquote-footer {
@@ -12938,3 +12938,12 @@ pre {
 
 .repo .repo__popular {
   font-weight: bold; }
+
+blockquote {
+  border-left: 3px solid #b5acac;
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  font-size: 1.1em;
+  font-style: italic;
+  line-height: 1.8em;
+  padding: 0 1em;
+  margin-left: 1em; }
