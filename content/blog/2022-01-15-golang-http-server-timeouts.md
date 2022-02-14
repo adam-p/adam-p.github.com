@@ -3,7 +3,7 @@ comments: false
 date: "2022-01-15T00:00:00Z"
 published: true
 tags: null
-title: Diving into Go's HTTP server
+title: Diving into Go's HTTP server timeouts
 slug: golang-http-server-timeouts
 aliases: ['15/golang-http-server-timeouts.html']
 ---
