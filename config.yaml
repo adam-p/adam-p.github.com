@@ -32,3 +32,9 @@ markup:
     style: monokailight
 
 relativeURLs: True
+
+# Override the RSS feed filename from index.xml to feed.xml to match the name used by the old Jekyll site
+outputFormats:
+  RSS:
+    mediatype: "application/rss"
+    baseName: "feed"
