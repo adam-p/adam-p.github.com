@@ -1,19 +1,656 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on adam-p</title><link>https://adam-p.ca/blog/</link><description>Recent content in Blog on adam-p</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 15 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://adam-p.ca/blog/feed.xml" rel="self" type="application/rss+xml"/><item><title>Diving into Go's HTTP server timeouts</title><link>https://adam-p.ca/blog/2022/01/golang-http-server-timeouts/</link><pubDate>Sat, 15 Jan 2022 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2022/01/golang-http-server-timeouts/</guid><description>Recently, I was adding timeouts to a Go HTTP server and ended up exploring how the different settings and approaches act and interact. I&amp;rsquo;m going to publish my notes here, along with the code I used for testing. Hopefully this will help someone else (or myself) in the future.
-The timeout testing client can be found here: github.com/adam-p/httptimeout. There is a server in the examples directory that you can make requests to.</description></item><item><title>The Ethics of Driving Speed in Travel Time Estimation</title><link>https://adam-p.ca/blog/2021/11/ethics-travel-time/</link><pubDate>Sun, 28 Nov 2021 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2021/11/ethics-travel-time/</guid><description>How should travel time be estimated? What are the ethical implications of the approach taken?
-You enter your destination into your maps app. It finds a few likely routes. It determines the distance of each pretty easily. It checks traffic conditions along the routes. But we don&amp;rsquo;t yet have a travel time estimate. Time equals distance divided by speed, adjusted for traffic.
-What travel speed (traffic notwithstanding) does the app use?</description></item><item><title>Timing attack mitigation must exclude network</title><link>https://adam-p.ca/blog/2021/11/constant-time-network/</link><pubDate>Sat, 27 Nov 2021 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2021/11/constant-time-network/</guid><description>TL;DR: When trying to prevent timing attacks (e.g., against login username enumeration) by making a request take constant time, make sure you exclude the network read and write time. If you don&amp;rsquo;t, an attacker can slow down their request to bypass it.
-I&amp;rsquo;ll be covering some background and contextual information here. If you don&amp;rsquo;t need it, skip to &amp;ldquo;Exclude network time from constant-time limiting&amp;rdquo;.
-What is a &amp;ldquo;timing attack&amp;rdquo;? Briefly, a timing attack (in this context) is when an attacker observes the time it takes for a server to handle a request to glean some information about the validity of the input they tried.</description></item><item><title>Make sure you have a backup Yubikey</title><link>https://adam-p.ca/blog/2021/06/backup-yubikey/</link><pubDate>Fri, 25 Jun 2021 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2021/06/backup-yubikey/</guid><description>For four years I carried a Yubikey NEO (USB Type-A) in my pocket, on my keychain. And then it died (would no longer be recognized by any computer).
-Yubikey&amp;rsquo;s durability claim was:
-Crush-resistant and waterproof, YubiKey NEO is practically indestructible during normal use, weighs only 3g, and attaches to your keychain alongside your house and car keys
-So, they didn&amp;rsquo;t explicitly say &amp;ldquo;carrying it on your keychain won&amp;rsquo;t kill it&amp;rdquo;, but they sure did imply it.</description></item><item><title>Dev Story: Unicode URL length limit blues</title><link>https://adam-p.ca/blog/2021/06/unicode-url-length/</link><pubDate>Mon, 07 Jun 2021 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2021/06/unicode-url-length/</guid><description>I have enjoyed reading other people&amp;rsquo;s design and debugging train-of-thought posts, so after I spent two days wrestling with a code problem, I thought I&amp;rsquo;d write it up. It&amp;rsquo;s not technically exciting, but I think that describing it might be useful to someone &amp;ndash; or my future self &amp;ndash; someday. Or, at the very least, a little amusing.
-(Bonus: While writing this I discovered an error I made while doing the actual work.</description></item><item><title>The short happy life of the Breached extension</title><link>https://adam-p.ca/blog/2019/05/breached/</link><pubDate>Mon, 27 May 2019 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2019/05/breached/</guid><description>In October 2017, Troy Hunt of Have I Been Pwned held a contest inviting people to do something cool with the HIBP API. I decided a) that I would kind of like the special edition ThinkPad he was giving away, and b) that I could probably whip something up pretty quickly.
-I decided to create a browser extension that would simply pull HIBP breach information and show a browser notification &amp;ndash; with the ability to view extra info &amp;ndash; when the user visited a site that had been breached.</description></item><item><title>Markdown Here: Splitting the Firefox and Thunderbird Extension</title><link>https://adam-p.ca/blog/2016/07/mdh-dividing-firefox-and-thunderbird/</link><pubDate>Thu, 14 Jul 2016 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2016/07/mdh-dividing-firefox-and-thunderbird/</guid><description>[This started as notes to myself to help clarify the problem and solution. It&amp;rsquo;s probably more suited to a Github issue than a blog post, and it may get copied into one.]
-The story so far The Firefox and Thunderbird versions of Markdown Here both used nearly the same code &amp;ndash; an old-style XUL extension. Tb is only capable of using a XUL extension, while Fx supports at least three extension types: XUL-based, Add-on SDK (aka Jetpack, aka jpm), and WebExtensions.</description></item><item><title>Android Non-Vulnerability: Steal a Device and Keep it Unlocked</title><link>https://adam-p.ca/blog/2016/05/smart-lock-mock-location/</link><pubDate>Wed, 11 May 2016 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2016/05/smart-lock-mock-location/</guid><description>While poking around in my Android phone&amp;rsquo;s developer options, I realized that if you steal a phone that&amp;rsquo;s currently unlocked because it&amp;rsquo;s in a &amp;ldquo;trusted place&amp;rdquo;, then you can force it to remain unlocked forever. (And then I got schooled about that not being a problem.)
-Security Feature: Smart Lock with Trusted Places Android&amp;rsquo;s Smart Lock allows users to configure conditions under which to keep the phone unlocked. One of the conditions is location &amp;ndash; you can set trusted locations where your phone shouldn&amp;rsquo;t prompt for a PIN/pattern/password when unlocking.</description></item><item><title>Why and How to Use a Contributor License Agreement</title><link>https://adam-p.ca/blog/2015/02/contributor-license-agreement/</link><pubDate>Tue, 17 Feb 2015 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2015/02/contributor-license-agreement/</guid><description>Background and Motivation I received a pull request for Markdown Here that was great: it found a bug, fixed it, and included tests for the fix. However, the PR submitter didn&amp;rsquo;t write the tests using the existing framework, so I figured I&amp;rsquo;d massage his test code into the proper form.
-And then I noticed that he included a copyright line in the test file. It says &amp;ldquo;MIT License&amp;rdquo;, which is the license used for the rest of the project, but that got me thinking about what that might mean&amp;hellip;</description></item><item><title>Test post: Markdown Here in Disqus</title><link>https://adam-p.ca/blog/2013/10/mdh-disqus-test/</link><pubDate>Fri, 18 Oct 2013 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2013/10/mdh-disqus-test/</guid><description>This is just a stub test post to allow me to try out Markdown Here in Disqus comments.
-Right now MDH won&amp;rsquo;t work with Disqus in Chrome because of cross-origin restrictions. See: https://github.com/adam-p/markdown-here/issues/124
-Update: The Disqus edit box is contenteditable, and MDH will render in it, but all formatting seems to get stripped out when you actually post the comment. Seems like the rich-edit-ness is probably just to support Disqus&amp;rsquo;s add-an-image feature.</description></item><item><title>Safari Extensions Gallery: half-baked</title><link>https://adam-p.ca/blog/2013/06/safari-extensions-gallery-half-baked/</link><pubDate>Tue, 25 Jun 2013 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2013/06/safari-extensions-gallery-half-baked/</guid><description>Trying to get Markdown Here listed in the Safari Extensions Gallery is by far the worst browser extension &amp;ldquo;store&amp;rdquo; experience I&amp;rsquo;ve had so far. Shockingly bad.
-No hosting First of all, but least of all: There&amp;rsquo;s no hosting. Unlike the Chrome and Mozilla stores, the Safari store doesn&amp;rsquo;t host the extension for you &amp;ndash; it&amp;rsquo;s really more of a listing of links to wherever you host your extension files. That&amp;rsquo;s not terrible, but:</description></item><item><title>No One Knows to Click on a Page Action</title><link>https://adam-p.ca/blog/2013/03/pageaction-interaction/</link><pubDate>Sun, 24 Mar 2013 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2013/03/pageaction-interaction/</guid><description>Page actions &amp;ndash; the buttons in a browser&amp;rsquo;s address bar &amp;ndash; are a surprising UI failure.
-When adding a button for a browser extension, a choice must be made whether to make it a &amp;ldquo;page action&amp;rdquo; or a &amp;ldquo;browser action&amp;rdquo; (button on the toolbar). But browsers have failed to communicate the interactiveness of page actions, and almost no one &amp;ndash; techy or layman &amp;ndash; realizes that they&amp;rsquo;re clickable.
-To complement the context menu item and hotkey, and to fulfil a user feature request, I decided to add a button to the Markdown Here browser extension.</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on adam-p</title><link>https://adam-p.ca/blog/</link><description>Recent content in Blog on adam-p</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 17 Feb 2022 21:35:37 -0500</lastBuildDate><atom:link href="https://adam-p.ca/blog/feed.xml" rel="self" type="application/rss+xml"/><item><title>Git Submodule vs Subtree</title><link>https://adam-p.ca/blog/2022/02/git-submodule-subtree/</link><pubDate>Thu, 17 Feb 2022 21:35:37 -0500</pubDate><guid>https://adam-p.ca/blog/2022/02/git-submodule-subtree/</guid><description>&lt;p>Every now and then I need to make a choice between using git submodules or subtrees (or nothing), or I get asked about them by coworkers. This is infrequent enough that I forget some of the details each time and need to refresh my memory. So I wrote up these notes to share with my coworkers and to help my future self. Hopefully they’re of some use to others as well.&lt;/p>
+&lt;p>Disclaimer: My experience still isn’t large. I’ve only used each once or twice. And this isn’t a manual for using those commands/tools &amp;ndash; it’s just a concise aid for choosing between them.&lt;/p>
+&lt;p>TL;DR: Subtree is better if you basically want to forget you have external code, or only infrequently update it; submodule is better if you &lt;em>don’t&lt;/em> want to forget that the code is external, and/or if you maybe want to edit and push it.&lt;/p>
+&lt;p>I’d seen a lot of complaining about submodule during research, and had the vague idea that subtree was “better”, but I’ve come to realize that submodule has its place.&lt;/p>
+&lt;p>When you use subtree, you’re basically copying a remote code base into your file structure. The auto-commit comment at the moment you do it will record the remote commit hash, but otherwise there’s no indication anywhere in the repo that a) the subtree happened, b) what the remote repo was, or c) what the commit of the remote repo was.&lt;/p>
+&lt;p>From then on, any changes to the subtree code will be treated just like changes anywhere else in the repo. Any operations to &lt;code>git subtree push&lt;/code> and &lt;code>git subtree pull&lt;/code> the code does weird git directory slicing (which I’ve used before to create a new repo from the subdirectory of an existing repo, retaining commit history for the files in that directory). It’s okay, but clunky.&lt;/p>
+&lt;p>This is in sharp contrast with submodule, where the remote repo code is &lt;em>not&lt;/em> copied. Instead, the remote repo URL is recorded, and its location in the file structure, and the remote repo commit to use. When you clone the repo, you have to separately clone the submodule dependency(ies) (&lt;code>git submodule init&lt;/code>+&lt;code>git submodule update&lt;/code> or &lt;code>git clone --recurse-submodules&lt;/code>). The submodule becomes a separate repo in the file structure, with its own &lt;code>.git&lt;/code> dir. For example, if you do &lt;code>git status&lt;/code> in the submodule directory, it tells you the status of the submodule code and not the outer repo. If you update the submodule repo directory, it changes the submodule&amp;rsquo;s tracked commit in the outer repo, and you commit that in the outer repo.&lt;/p>
+&lt;p>Treating the submodule as a separate entity is easy. You can just do all your usual branching, committing, pushing (the remote is the subrepo remote, not the outer remote).&lt;/p>
+&lt;p>Cloning the subtree is easier because there’s no separate step, but that&amp;rsquo;s not a big deal. For vendoring 3rd party code, submodule won’t actually make a copy, so that’s not okay&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> (unless you fork the 3rd party code first and submodule the fork).&lt;/p>
+&lt;p>So the main decision factors are like:&lt;/p>
+&lt;ul>
+&lt;li>Use &lt;strong>subtree&lt;/strong> when you just want to copy code from an external repo once, or maybe with occasional pulls.&lt;/li>
+&lt;li>Use &lt;strong>submodule&lt;/strong> when you want to make your relationship to the external repo really explicit, or if you intend to make changes to the submodule code from within the context of your repo and push to the external repo.&lt;/li>
+&lt;/ul>
+&lt;section class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1" role="doc-endnote">
+&lt;p>Depending on your vendoring policy and the dependency management system.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/section></description></item><item><title>Diving into Go's HTTP server timeouts</title><link>https://adam-p.ca/blog/2022/01/golang-http-server-timeouts/</link><pubDate>Sat, 15 Jan 2022 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2022/01/golang-http-server-timeouts/</guid><description>&lt;p>Recently, I was adding timeouts to a Go HTTP server and ended up exploring how the different settings and approaches act and interact. I&amp;rsquo;m going to publish my notes here, along with the code I used for testing. Hopefully this will help someone else (or myself) in the future.&lt;/p>
+&lt;p>The timeout testing client can be found here: &lt;a href="https://github.com/adam-p/httptimeout">github.com/adam-p/httptimeout&lt;/a>. There is a server in the examples directory that you can make requests to.&lt;/p>
+&lt;p>I link to it below, but I&amp;rsquo;m going to recommend here that you read Filippo Valsorda&amp;rsquo;s post &lt;a href="https://blog.cloudflare.com/exposing-go-on-the-internet/">&amp;ldquo;So you want to expose Go on the Internet&amp;rdquo;&lt;/a>. It&amp;rsquo;s essential, but I didn&amp;rsquo;t find it had enough quite enough detail about timeouts, hence the below examination.&lt;/p>
+&lt;hr>
+&lt;p>There are two different, overlapping levels of timeout in our HTTP server:&lt;/p>
+&lt;ol>
+&lt;li>Read, write, and idle timeouts on the http.Server&lt;/li>
+&lt;li>The ServeHTTP timeout (this middleware)&lt;/li>
+&lt;/ol>
+&lt;p>The &lt;a href="https://pkg.go.dev/net/http#Server">http.Server timeouts&lt;/a> are overlapping and somewhat confusing (to me &lt;a href="https://github.com/golang/go/issues/35626">and others&lt;/a>) so I&amp;rsquo;ll test and detail how they work (or seem to). (Another important but insufficiently thorough reference is the Cloudflare post &lt;a href="https://blog.cloudflare.com/exposing-go-on-the-internet/#timeouts">&amp;ldquo;So you want to expose Go on the Internet&amp;rdquo;&lt;/a>.)&lt;/p>
+&lt;ul>
+&lt;li>IdleTimeout: &amp;ldquo;IdleTimeout is the maximum amount of time to wait for the next request when keepalives are enabled. If IdleTimeout is zero, the value of ReadTimeout is used.&amp;rdquo; Not relevant to request timeouts.&lt;/li>
+&lt;li>ReadTimeout: &amp;ldquo;The maximum duration for reading the entire request, including the body.&amp;rdquo; It&amp;rsquo;s implemented in net/http by calling SetReadDeadline immediately after Accept.&lt;/li>
+&lt;li>ReadHeaderTimeout: &amp;ldquo;ReadHeaderTimeout is the amount of time allowed to read request headers.&amp;rdquo; Implemented as above.&lt;/li>
+&lt;li>WriteTimeout: &amp;ldquo;WriteTimeout is the maximum duration before timing out writes of the response. It is reset whenever a new request&amp;rsquo;s header is read.&amp;rdquo; This effectively covers the lifetime of the ServeHTTP handler stack.&lt;/li>
+&lt;/ul>
+&lt;p>Observations:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>The documentation makes a big deal out of ReadHeaderTimeout allowing for per-request timeouts based on the headers. &amp;ldquo;The connection&amp;rsquo;s read deadline is reset after reading the headers and the Handler can decide what is considered too slow for the body.&amp;rdquo; &amp;ldquo;Because ReadTimeout does not let Handlers make per-request decisions on each request body&amp;rsquo;s acceptable deadline or upload rate, most users will prefer to use ReadHeaderTimeout.&amp;rdquo; But since http.Request doesn&amp;rsquo;t provide access to the underlying net.Conn, I don&amp;rsquo;t see a way to set a connection deadline from the handler level. (Perhaps it intends the per-request timeout to be done via mw/context rather than via conn deadlines.)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Our TLS terminates at the load balancer, so mention of different TLS behaviour you might see doesn&amp;rsquo;t apply.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>The zero values mean no timeout. These shouldn&amp;rsquo;t be used for anything but toy servers.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>A timeout during header or body read means that there&amp;rsquo;s no response to the client. This is unfortunate but expected.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>A timeout during header read means that there&amp;rsquo;s no server log written for the request. This is even more unfortunate but also not unexpected. The handler stack (including logging middleware) is not set up until the headers are read.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>http.Server timeouts do not themselves cancel the request context. However, if a body read follows the timeout, the resulting error will &lt;a href="https://github.com/golang/go/blob/24239120bfbff9ebee8e8c344d9d3a8ce460b686/src/net/http/server.go#L740">trigger a context cancellation&lt;/a>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>A ReadTimeout during body read results in a log with status of 503. This is initially somewhat surprising. The timeout interrupts the read connection, then the failed read attempt cancels the request context, then the http.TimeoutHandler (discussed below) receives the signal of that cancellation and &lt;a href="https://github.com/golang/go/blob/24239120bfbff9ebee8e8c344d9d3a8ce460b686/src/net/http/server.go#L3392">sends the 503 response&lt;/a>.&lt;/p>
+&lt;p>This is okay, but I&amp;rsquo;d prefer more control over it. (This might be a bigger problem later, when we try to handle &amp;ldquo;context canceled&amp;rdquo; with more nuance.)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>The previous point illustrates (I think) that the read and write channels of the connection are severed by the timeouts separately (the response can be written even though the read is interrupted).&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>ReadHeaderTimeout by itself works as expected. The header read is deadlined, but nothing else is.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>ReadTimeout by itself works as expected. The timeout is shared between the header read and body read.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>ReadHeaderTimeout and ReadTimeout together:&lt;/p>
+&lt;ul>
+&lt;li>If set to the same value, behaviour is indistinguishable from just ReadTimeout being set.&lt;/li>
+&lt;li>If ReadHeaderTimeout is a different value from ReadTimeout:
+&lt;ul>
+&lt;li>If the header read is too slow, then ReadHeaderTimeout is used.&lt;/li>
+&lt;li>If the body read is too slow, then ReadTimeout is used. The time allowed for the body read is the total ReadTimeout minus the time spent reading headers. (As in the ReadTimeout-by-itself case.)&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>I haven&amp;rsquo;t figured out (in a reasonable amount of time) a way to emulate/implement a slow read. I don&amp;rsquo;t know how to stream the response and read of it.&lt;/p>
+&lt;ul>
+&lt;li>But if the WriteTimeout is set to 1ns the client gets EOF immediately.&lt;/li>
+&lt;li>A sleep longer than WriteTimeout before writing the response results in the client getting no data, but the client still takes the sleep-time to disconnect rather than the timeout-time, which seems very strange to me.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a href="https://blog.cloudflare.com/exposing-go-on-the-internet/#timeouts">One of the sources&lt;/a> led me to believe that ReadHeaderTimeout+WriteTimeout would cover the whole request (&amp;ldquo;ReadHeaderTimeout &amp;hellip; covers up to the request headers &amp;hellip; WriteTimeout normally covers the time from the end of the request header read to the end of the response write (a.k.a. the lifetime of the ServeHTTP)&amp;quot;). What actually happens is that the header read timeout is correct, the write timeout is correct, but there&amp;rsquo;s no body read timeout. So the request can spend forever reading the body but when it goes to write the response the write connection has deadlined.&lt;/p>
+&lt;p>I believe that what&amp;rsquo;s happening is that the WriteTimeout is reset every time a read happens, so it&amp;rsquo;s not actually starting as long as there&amp;rsquo;s a body read. (The documentation says WriteTimeout &amp;ldquo;is reset whenever a new request&amp;rsquo;s header is read.&amp;rdquo; But that doesn&amp;rsquo;t seem to be exactly accurate.)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Otherwise rough testing with combinations of the read timeouts with WriteTimeout suggests they behave as expected (no interaction).&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>In addition to the http.Server timeouts we use a timeout middleware, which is basically a wrapper around &lt;a href="https://pkg.go.dev/net/http#TimeoutHandler">http.TimeoutHandler&lt;/a>. Here are some observations when the timeout middleware is in play and has a timeout shorter than the connection timeouts:&lt;/p>
+&lt;ul>
+&lt;li>Unsurprisingly, the timeout mw&amp;rsquo;s timeout doesn&amp;rsquo;t start ticking until the handler stack is set up, so not until after the headers are read.&lt;/li>
+&lt;li>http.TimeoutHandler uses &amp;ldquo;503 Service Unavailable&amp;rdquo; as its timeout response. It seems like &amp;ldquo;408 Request Timeout&amp;rdquo; would be a more semantically appropriate response. We could intercept the response write to change that code, but it would get hack-y to distinguish between http.TimeoutHandler returning 503 and, say, our Ping endpoint returning it intentionally. Additionally, returning a 5xx error means that our clients will automatically retry the request, which is a good thing (probably).
+&lt;ul>
+&lt;li>We could also use a copy of http.TimeoutHandler (~220 lines) to return whatever value we want.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>It may seem silly to worry about sending a response to the client when its connection is so degraded that it probably can&amp;rsquo;t read it. But: a) the timeout response might be a lot smaller than whatever the client is trying to send, b) the client&amp;rsquo;s down pipe might be faster than its up pipe, and c) the timeout might actually be due to our server taking too long to the process, rather than a problem with the client.&lt;/li>
+&lt;li>Whether the client receives the timeout mw 503 response depends on what it&amp;rsquo;s doing. (My test client that gets interrupted writing slowly can&amp;rsquo;t read the response, but if it&amp;rsquo;s trying to read when the timeout happens the response is received okay.)&lt;/li>
+&lt;li>A slow body read is interrupted by the mw timeout with an &amp;ldquo;i/o timeout&amp;rdquo; error. I believe this is due to the request context being canceled by the timeout.&lt;/li>
+&lt;li>A long time.Sleep isn&amp;rsquo;t magically interrupted, unsurprisingly. But selecting on ctx.Done and time.After ends early due to the context cancellation.&lt;/li>
+&lt;li>There are &lt;a href="https://cs.opensource.google/go/go/+/refs/tags/go1.18beta1:src/net/http/server.go;l=3392-3402;bpv=0">two cases&lt;/a> when TimeoutHandler returns 503. The first is, of course, when the deadline it set on the context fires (it could have been set somewhere else, in theory). The other is if the context was canceled for some other reason (such as the client leaving). They are distinguishable from the client side because there&amp;rsquo;s no response body in the latter case.&lt;/li>
+&lt;/ul>
+&lt;p>Note that it is important that the timeout mw have a shorter timeout than the http.Server timeouts. We want the client to receive a response, if possible, rather than just having its connection severed.&lt;/p>
+&lt;p>This is not as simple as it might seem. The handler mw timeout must be shorter than either the WriteTimeout or the time remaining to the ReadTimeout after header reading. But at the handler level we don&amp;rsquo;t know how long the header read took, except that it took less than ReadHeaderTimeout. So our mw timeout should be &lt;code>min(WriteTimeout, ReadTimeout-ReadHeaderTimeout)&lt;/code>.&lt;/p>
+&lt;p>&amp;hellip;Except that calculation ends up feeling very unnatural in practice. Instead, it makes more sense to first choose the desired handler timeout, then set the http.Server connection timeouts based on that. I think that it&amp;rsquo;s reasonable to use 0.5x the timeout for ReadHeaderTimeout and 1x the timeout for ReadTimeout and WriteTimeout.&lt;/p>
+&lt;p>We certainly can&amp;rsquo;t rely on the timeout mw while reading headers (because there is no middleware at that point), but it&amp;rsquo;s possible that body read and response write timeouts are redundant. Severing the connection seems safer than cancelling the context and hoping something checks it, so we&amp;rsquo;ll set the other timeouts anyway.&lt;/p>
+&lt;hr>
+&lt;h2 id="addendum">Addendum&lt;/h2>
+&lt;h3 id="lets-work-through-the-timeout-math">Let&amp;rsquo;s work through the timeout math&lt;/h3>
+&lt;p>Let&amp;rsquo;s say we want, generally, a 10-second request timeout. So we set TimeoutHandler&amp;rsquo;s timeout to 10 seconds.&lt;/p>
+&lt;p>We need to pick a ReadHeaderTimeout that is basically independent from that (because the handler timeout doesn&amp;rsquo;t start until &lt;em>after&lt;/em> the header read is complete). It seems reasonable to pick 5 seconds.&lt;/p>
+&lt;p>As discussed above, we prefer the ReadTimeout to be longer than the handler timeout, so the client has a chance of getting the response. Because ReadTimeout ticks away during the header read, the calculation for this is something like:&lt;/p>
+&lt;pre tabindex="0">&lt;code>ReadTimeout := handler_timeout + ReadHeaderTimeout + wiggle_room
+e.g.,
+= 10s + 5s + 200ms
+&lt;/code>&lt;/pre>&lt;p>So even if the header read takes 4.9s, we are still left with 10.3s for the body read &amp;ndash; slightly longer than the handler timeout.&lt;/p>
+&lt;p>WriteTimeout covers from the end of the reads until the end of writing. If there&amp;rsquo;s no body to read, this is the whole post-header request time. So, we want it to be &lt;code>hander_timeout + wiggle_room&lt;/code>, so something like 10.2s.&lt;/p>
+&lt;p>IdleTimeout&amp;hellip; is independent of any of this stuff. It seems common to set it to a couple of minutes.&lt;/p>
+&lt;h3 id="aws-observations">AWS observations&lt;/h3>
+&lt;p>Using an AWS load balancer in front of your Go server muddies the behaviour of some of these timeouts, but doesn&amp;rsquo;t completely obviate them.&lt;/p>
+&lt;p>ALB seems to buffer all the incoming headers, so ReadHeaderTimeout does nothing. ALB&amp;rsquo;s timeout for reading headers appears to be 60 seconds.&lt;/p>
+&lt;p>ALB doesn&amp;rsquo;t seem to have a body-read timeout (or at least not one shorter than a couple of minutes). It does seem to be buffering some of the incoming body, since the client can still send some data after the backend server has given up the connection. About 30 seconds after the server drops the connection, the load balance responds with 502 Bad Gateway.&lt;/p>
+&lt;p>I didn&amp;rsquo;t test the write timeout, but I bet there isn&amp;rsquo;t one.&lt;/p>
+&lt;p>The ALB idle timeout seems to be 60 seconds.&lt;/p></description></item><item><title>The Ethics of Driving Speed in Travel Time Estimation</title><link>https://adam-p.ca/blog/2021/11/ethics-travel-time/</link><pubDate>Sun, 28 Nov 2021 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2021/11/ethics-travel-time/</guid><description>&lt;p>How should travel time be estimated? What are the ethical implications of the approach taken?&lt;/p>
+&lt;p>You enter your destination into your maps app. It finds a few likely routes. It determines the distance of each pretty easily. It checks traffic conditions along the routes. But we don&amp;rsquo;t yet have a travel time estimate. Time equals distance divided by speed, adjusted for traffic.&lt;/p>
+&lt;p>What travel speed (traffic notwithstanding) does the app use?&lt;/p>
+&lt;ol>
+&lt;li>The speed limit along the route.&lt;/li>
+&lt;li>The speed at which the app user typically drives along the route.&lt;/li>
+&lt;li>The speed at which other motorists typically drive along the route.&lt;/li>
+&lt;/ol>
+&lt;p>We&amp;rsquo;ll set aside option #2 for now. There are many cases where the user has never made the trip that they&amp;rsquo;re planning. We&amp;rsquo;ll discuss an expanded version of it below.&lt;/p>
+&lt;p>The problem with picking between the other two options is that a) most people drive above the speed limit&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> and b) doing so is breaking the law.&lt;/p>
+&lt;p>If we use the speed limit method and our user drives the speed limit, our estimate is good. But most people drive faster than the speed limit, so our estimated time will typically be too high. The user will leave earlier than they need to, drive faster than we estimated, and arrive earlier than they intended to.&lt;/p>
+&lt;p>If we use the typical speed method and our user drives the typical speed, our estimate is good. But if our user is in the minority of law-abiding motorists, we underestimate their travel time and the user arrives late.&lt;/p>
+&lt;p>So there&amp;rsquo;s the quandary: The speed limit method is incorrect for most people and the typical speed method encourages illegal behaviour and punishes law-abiding drivers (by making them late).&lt;/p>
+&lt;p>I think that the speed limit approach is more ethically palatable, because it encourages legal behaviour and because being early is almost always better than being late. But giving travel time estimates that are usually incorrect is extremely unappealing &amp;ndash; your maps app isn&amp;rsquo;t very good if one of your fundamental features is usually wrong.&lt;/p>
+&lt;p>So what do maps apps do and what should they do? To be clear, I know nothing about this domain. I own a car and a cell phone and that&amp;rsquo;s the extent of my qualifications. But we can have fun thinking about it&amp;hellip;&lt;/p>
+&lt;p>One approach could be to split the difference. Give a time estimate in between the speed limit and the speed people usually drive. This doesn&amp;rsquo;t feel great because a) it&amp;rsquo;s still usually going to assume an illegal speed, and b) it&amp;rsquo;s still likely to be incorrect for many people. Nevertheless, I feel like it&amp;rsquo;s probably a good approach. It still errs on the side of being early, is closer to being correct for more people than the speed limit approach, and will result in a smaller speeding fine if followed closely.&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>&lt;/p>
+&lt;p>It&amp;rsquo;s also worth mentioning that below a certain speeding threshold, the probability of getting a ticket approaches zero. (Though this claim is confounded by automated systems, like speeding cameras.)&lt;/p>
+&lt;p>Another approach is to reintroduce option #2 from above, with some extra magic sprinkled on top. The app may not have seen the user drive the exact desired route before, but it has likely seen the user drive similar roads with similar speed limits and can make a very good guess about how fast the user will actually drive.&lt;/p>
+&lt;p>This is a very nice approach. It results in the most accurate predictions for the most users. And it largely allows the app developers/ethicists (probably one and the same) to wash their hands of the charge that they&amp;rsquo;re requiring people to break the law to avoid being late. If the user was law-abiding, they&amp;rsquo;d get law-abiding directions!&lt;/p>
+&lt;p>(For the brief amount of time before there&amp;rsquo;s any data about the user&amp;hellip; probably keep it clean by giving a speed-limit estimate.)&lt;/p>
+&lt;p>I don&amp;rsquo;t know what apps really do. After messing around with Google Maps for a while I managed to &lt;a href="https://goo.gl/maps/8bjzqbrAkTg1QXh56">find a route&lt;/a>&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup> that seems to encourage breaking the speed limit.&lt;/p>
+&lt;p>&lt;img src="../img/blog/401-travel-time.png" alt="Google maps travel time estimate showing 9 minutes for 16.4 kilometers">&lt;/p>
+&lt;p>16.4 kilometers in 9 minutes is 109 kilometers per hour, and the speed limit on highway 401 is 100 km/h. But&amp;hellip; if that 9 minutes is rounded down from 9.9 minutes, then the speed drops to 99.4 km/h. And it did take me about 10 tries to find a route that exceeded the limit. (I hunted in the Toronto area because I know the speed limits, but there are probably much better, longer, traffic-free stretches elsewhere that would be better experiments. Except now it&amp;rsquo;s snowy everywhere that I know, and that will also surely factor into estimates.)&lt;/p>
+&lt;p>Is it okay for a maps app to encourage us to ever break the legal speed limit, even if our previous behaviour &amp;ndash; or the behaviour of others on the same stretch of road &amp;ndash; indicates that we likely will anyway?&lt;/p>
+&lt;p>Even seemingly mundane automated systems can have ethical impacts. As consumers of such systems we need to be cognizant of what behaviours such systems are pushing us towards (and away from), and we should get in the habit of consciously and explicitly asking ourselves how we&amp;rsquo;re being influenced.&lt;/p>
+&lt;p>For those of us who are developers of such systems, we need to make a habit of consciously stepping back and thinking about the impact of our design decisions on our users. What&amp;rsquo;s optimal might not always be what&amp;rsquo;s ethical. And for any non-trivial ethical question, it should be discussed with others. It&amp;rsquo;s difficult to see the ethical traps in one&amp;rsquo;s own design and even harder to find better ways out of them &amp;ndash; the perspective of others is invaluable.&lt;/p>
+&lt;p>Disclaimer: As I said above, I have no domain knowledge here. I did some googling to see if there was discussion or papers about this and found nothing, but it&amp;rsquo;s entirely likely I wasn&amp;rsquo;t searching for the right words.&lt;/p>
+&lt;section class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1" role="doc-endnote">
+&lt;p>This might not be true everywhere, but it sure is where I live.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:2" role="doc-endnote">
+&lt;p>There&amp;rsquo;s also a conversation worth having about the immorality of breaking the law to speed. And if the moral violation is lesser or greater depending on how badly you exceed the limit, or if being in sin is a binary state. Not a conversation I particularly want to have here, with myself, though.&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:3" role="doc-endnote">
+&lt;p>Using a &lt;a href="https://www.google.ca/maps/dir/43.8049634,-79.133491/43.8671479,-78.9525895/@43.7902468,-79.1002391,12.33z/data=!4m2!4m1!3e0">longer link&lt;/a> in case that shortened one breaks.&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/section></description></item><item><title>Timing attack mitigation must exclude network</title><link>https://adam-p.ca/blog/2021/11/constant-time-network/</link><pubDate>Sat, 27 Nov 2021 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2021/11/constant-time-network/</guid><description>&lt;p>TL;DR: When trying to prevent timing attacks (e.g., against login username enumeration) by making a request take constant time, make sure you exclude the network read and write time. If you don&amp;rsquo;t, an attacker can slow down their request to bypass it.&lt;/p>
+&lt;p>I&amp;rsquo;ll be covering some background and contextual information here. If you don&amp;rsquo;t need it, skip to &amp;ldquo;Exclude network time from constant-time limiting&amp;rdquo;.&lt;/p>
+&lt;h2 id="what-is-a-timing-attack">What is a &amp;ldquo;timing attack&amp;rdquo;?&lt;/h2>
+&lt;p>Briefly, a timing attack (in this context) is when an attacker observes the time it takes for a server to handle a request to glean some information about the validity of the input they tried. The typical target for this attack is the login request, and in that context there are &amp;ndash; unsurprisingly &amp;ndash; two pieces of information that can be attacked: username and password.&lt;/p>
+&lt;p>Here&amp;rsquo;s a typical login flow, which we&amp;rsquo;ll reference below:&lt;/p>
+&lt;ol>
+&lt;li>Read the request from the client.&lt;/li>
+&lt;li>Parse the request. Check for basic validity.&lt;/li>
+&lt;/ol>
+&lt;ul>
+&lt;li>If the check fails, go to step 6, indicating a 400 response.&lt;/li>
+&lt;/ul>
+&lt;ol start="3">
+&lt;li>Look up the username in the DB. Retrieve the hashed&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> password.&lt;/li>
+&lt;/ol>
+&lt;ul>
+&lt;li>If the username is not found, go to step 6, indicating a 401 response.&lt;/li>
+&lt;/ul>
+&lt;ol start="4">
+&lt;li>Hash the incoming password and compare against the stored one.&lt;/li>
+&lt;/ol>
+&lt;ul>
+&lt;li>If the password does not match, go to step 6, indicating a 401 response.&lt;/li>
+&lt;/ul>
+&lt;ol start="5">
+&lt;li>Do other work to set up the login session.&lt;/li>
+&lt;li>Write the response to the client.&lt;/li>
+&lt;/ol>
+&lt;h3 id="testingdiscoveringenumerating-usernames">Testing/discovering/enumerating usernames&lt;/h3>
+&lt;p>The time that step #4 takes can be used to test for the existence of a username. If the username isn&amp;rsquo;t found in the DB, the response will come a little faster than if the username is found and then a password hash-and-compare occurs. So an attacker can try out usernames and watch the response time to find out when one exists in the database.&lt;/p>
+&lt;p>(Note that multiple requests for a single username may be required to nail down the subtle timing differences.)&lt;/p>
+&lt;p>An attacker might use this for testing variations on a single username to target a particular user, or might use huge common username lists or even brute force to enumerate all or nearly all of your users.&lt;/p>
+&lt;h4 id="why-do-i-care">Why do I care?&lt;/h4>
+&lt;p>Maybe you don&amp;rsquo;t. Maybe you respond with different information depending on whether the username or password is incorrect, because that&amp;rsquo;s more user-friendly. Maybe your site/service is innocuous, there&amp;rsquo;s no sensitive information, or everything is public. Maybe you&amp;rsquo;re confident that your web application firewall or CAPTCHA or other mitigations will prevent this kind of attack.&lt;/p>
+&lt;p>&lt;em>I&lt;/em> care because &lt;a href="https://psiphon.ca">I work on a tool&lt;/a> that&amp;rsquo;s questionably legal in many countries. Users have a habit of putting their real name in their username or reusing usernames across multiple sites, many of which will connect that username to their real identity. So I &amp;ndash; and we &amp;ndash; think it best that we limit username testing as best we can (and encourage users to &lt;a href="https://psiphon.ca/en/faq.html#psicash-pseudonym">use pseudonyms&lt;/a>).&lt;/p>
+&lt;h3 id="testing-passwords">Testing passwords&lt;/h3>
+&lt;p>A very bad and wrong way of checking for a password match is to do a simple string comparison on the plaintext password. First of all, you shouldn&amp;rsquo;t be storing plaintext passwords in your DB. Secondly, and relevant to timing attacks, doing a simple string comparison will result in different times taken depending on how many characters in the string match. The string comparison is likely doing a length equality check and then doing a character-by-character equality check, so it&amp;rsquo;s going to return false early as soon as there&amp;rsquo;s a mismatch.&lt;/p>
+&lt;p>This is a solved problem. Use a library with a proper password-hashing algorithm, and use its constant-time equality function. (And don&amp;rsquo;t just binary-compare the hashes, since the time that takes might also leak something.)&lt;/p>
+&lt;h3 id="other-types-of-requests">Other types of requests&lt;/h3>
+&lt;p>&amp;ldquo;Forgot my password&amp;rdquo; requests are similarly vulnerable. Typically, the user enters a username or email address, then there&amp;rsquo;s a lookup to see if the account exists and maybe whether the email address is confirmed, then a token gets generated and stored, then the recovery email is sent. As with the login flow, there are processing differences depending on whether the username or email is found or not, which means timing differences that can be used to discover if the input exists in the DB.&lt;/p>
+&lt;p>The same considerations about caring mentioned above apply here as well.&lt;/p>
+&lt;h2 id="mitigating-timing-attacks">Mitigating timing attacks&lt;/h2>
+&lt;h3 id="preventing-automated-requests">Preventing automated requests&lt;/h3>
+&lt;p>Using CAPTCHAs, rate limiting, or a web application firewall can help prevent automated requests that are attempting to enumerate your users. They won&amp;rsquo;t generally help with targeted username testing.&lt;/p>
+&lt;p>You should certainly employ these kinds of measures, but my opinion is that they should be used alongside other mitigations.&lt;/p>
+&lt;h3 id="randomizing-response-times-not-recommended">Randomizing response times (not recommended)&lt;/h3>
+&lt;p>If a random sleep is added to the processing of sensitive requests, then the response timing becomes more difficult to use for timing attacks. But only &amp;ldquo;more difficult&amp;rdquo; &amp;ndash; with enough timing samples, the average can be taken and the attack again becomes viable.&lt;/p>
+&lt;h3 id="constant-time-responses">Constant-time responses&lt;/h3>
+&lt;p>We&amp;rsquo;re getting closer to the point of this post now.&lt;/p>
+&lt;p>Forcing responses to take a fixed amount of time prevents timing analysis. If every response, regardless of input, takes the same amount of time, there&amp;rsquo;s nothing to differentiate and analyze.&lt;/p>
+&lt;p>The constant time value should be chosen to exceed the possible natural response time. There are likely going to be outliers where the natural response time exceeds the constant time &amp;ndash; you should log and alert these incidents, as they ruin the mitigation. But, generally, if they&amp;rsquo;re kept very infrequent they still won&amp;rsquo;t provide an attacker enough to work with.&lt;/p>
+&lt;p>Another approach to constant-time excesses would be to have multiple increments of constants. Like, limit the response to 1 second; but if it naturally takes more than 1 second, limit it to 2 seconds; etc. I&amp;rsquo;m not sure if this is warranted or adds very much. I wouldn&amp;rsquo;t bother. You will also have to be very sure that, say, bad username doesn&amp;rsquo;t always end up in the first time increment while bad passwords always end up in the second.&lt;/p>
+&lt;h4 id="exclusions">Exclusions&lt;/h4>
+&lt;p>Since we&amp;rsquo;re only trying to prevent an attacker from distinguishing between &amp;ldquo;bad username&amp;rdquo; and &amp;ldquo;good username but bad password&amp;rdquo;, then any situations that don&amp;rsquo;t reveal that can be excluded from having a constant-time response. For example:&lt;/p>
+&lt;ul>
+&lt;li>Successful login. The user knows that the username and password were both good, so a constant-time response achieves nothing except slowing down the valid-user experience.&lt;/li>
+&lt;li>&amp;ldquo;400 Bad Request&amp;rdquo; responses. For example, if the username is too long or has invalid characters in it. No account lookup is done, so nothing is revealed.&lt;/li>
+&lt;/ul>
+&lt;p>It might be tempting to also exclude 500 server errors. In theory, something like a DB communication error shouldn&amp;rsquo;t reveal information about the username or password. But such errors can occur for many reasons, some of which may be repeatable by an attacker. It&amp;rsquo;s probably best to keep server errors constant-time, if possible. (Also, such errors should be extremely rare for benign users and shouldn&amp;rsquo;t significantly impact the experience of the service.)&lt;/p>
+&lt;h2 id="exclude-network-time-from-constant-time-limiting">Exclude network time from constant-time limiting&lt;/h2>
+&lt;p>We&amp;rsquo;ve finally gotten to the point.&lt;/p>
+&lt;p>When forcing a response to be constant time, the network portion of the request processing must be excluded. By this I mean the time taken to read the request from the client and the time taken to write the response. We&amp;rsquo;ll see that it&amp;rsquo;s both &lt;em>acceptable&lt;/em> and &lt;em>necessary&lt;/em> to do so.&lt;/p>
+&lt;p>The login flow will end up looking like this:&lt;/p>
+&lt;ol>
+&lt;li>Read the request from the client.&lt;/li>
+&lt;li>&lt;em>Record the response start time.&lt;/em>&lt;/li>
+&lt;li>Parse the request. Check for basic validity.&lt;/li>
+&lt;/ol>
+&lt;ul>
+&lt;li>If the check fails, go to step 7, indicating a 400 response.&lt;/li>
+&lt;/ul>
+&lt;ol start="4">
+&lt;li>Look up the username in the DB. Retrieve the hashed password.&lt;/li>
+&lt;/ol>
+&lt;ul>
+&lt;li>If the username is not found, go to step 7, indicating a 401 response.&lt;/li>
+&lt;/ul>
+&lt;ol start="5">
+&lt;li>Hash the incoming password and compare against the stored one.&lt;/li>
+&lt;/ol>
+&lt;ul>
+&lt;li>If the password does not match, go to step 7, indicating a 401 response.&lt;/li>
+&lt;/ul>
+&lt;ol start="6">
+&lt;li>Do other work to set up the login session.&lt;/li>
+&lt;li>&lt;em>Wait until the constant-time limit has passed since the start time.&lt;/em>&lt;/li>
+&lt;li>Write the response to the client.&lt;/li>
+&lt;/ol>
+&lt;p>First of all, it is &lt;em>acceptable&lt;/em> to exclude the network transfers from the constant-time limit because they are completely unaffected by the validity of the input. Additionally, the attacker controls the network input (the request) and has full visibility of the network output (the response). There is nothing to hide here.&lt;/p>
+&lt;p>Secondly, it is &lt;em>necessary&lt;/em> to exclude the network time.&lt;/p>
+&lt;p>If the request read time is included in the constant-time consideration, the mitigation is effectively undermined. The attacker controls the client&amp;rsquo;s network speed, so they can trickle the request out until the constant-time limit is passed. Then they start measuring the response time from the point that the request writing is done. The server will then start processing the request. There will be no sleep in step #7 because the constant-time limit has already been exceeded, so the actual processing time will be plainly visible to the attacker.&lt;/p>
+&lt;p>(If the &amp;ldquo;multiple increments of constants&amp;rdquo; approach is used, the attack is more complicated, but I believe it&amp;rsquo;s still viable. The attacker will need to tweak the request speed so that bad-username requests fall into the first increment while bad-password requests fall into the second. Anyway, this hardly matters, since it&amp;rsquo;s acceptable to exclude the request read time.)&lt;/p>
+&lt;p>Excluding the response writing time is also necessary. As soon as the first byte of the response is written, the attacker is signaled that the processing is complete and they have the information they need so any constant-time sleeping needs to occur before the response writing is begun.&lt;/p>
+&lt;h2 id="other-concerns">Other concerns&lt;/h2>
+&lt;p>I worry about the attacker using a simultaneous request flood to slow down all other request processing enough that many or all login requests will exceed the constant-time limit and start revealing the true processing time. Sufficient capacity and/or scaling, combined with anti-denial-of-service measures should be sufficient to mitigate this. It will also be a pretty expensive &amp;ndash; and therefore unlikely &amp;ndash; approach for an attacker to take.&lt;/p>
+&lt;h2 id="not-just-http">Not just HTTP&lt;/h2>
+&lt;p>I wrote the above in terms of HTTP requests and responses, but it applies to any network protocol.&lt;/p>
+&lt;h2 id="final-words">Final words&lt;/h2>
+&lt;p>I&amp;rsquo;m writing this because when I was implementing this I screwed up by including the network transfer in the constant-time limit &amp;ndash; it felt cleanest to implement it as middleware, but that was at the wrong level. I only realized the problem while re-reading some tangentially-related code. Hopefully this helps someone else not make the same mistake.&lt;/p>
+&lt;section class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1" role="doc-endnote">
+&lt;p>Hashed using something appropriate, like argon2, scrypt, or bcrypt.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/section></description></item><item><title>Make sure you have a backup Yubikey</title><link>https://adam-p.ca/blog/2021/06/backup-yubikey/</link><pubDate>Fri, 25 Jun 2021 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2021/06/backup-yubikey/</guid><description>&lt;p>For four years I carried a &lt;a href="https://support.yubico.com/hc/en-us/articles/360013714579-YubiKey-NEO">Yubikey NEO&lt;/a> (USB Type-A) in my pocket, on my keychain. And then it died (would no longer be recognized by any computer).&lt;/p>
+&lt;p>&lt;a href="https://web.archive.org/web/20170212170854/https://www.yubico.com/products/yubikey-hardware/yubikey-neo">Yubikey&amp;rsquo;s durability claim&lt;/a> was:&lt;/p>
+&lt;blockquote>
+&lt;p>Crush-resistant and waterproof, YubiKey NEO is practically indestructible during normal use, weighs only 3g, and attaches to your keychain alongside your house and car keys&lt;/p>
+&lt;/blockquote>
+&lt;p>So, they didn&amp;rsquo;t explicitly say &amp;ldquo;carrying it on your keychain won&amp;rsquo;t kill it&amp;rdquo;, but they sure did imply it.&lt;/p>
+&lt;p>The wording for their &lt;a href="https://www.yubico.com/ca/product/yubikey-5-nfc/">new USB Type-A products&lt;/a> is much more tepid:&lt;/p>
+&lt;blockquote>
+&lt;p>Design &amp;amp; Durability: Water Resistant, Crush Resistant&lt;/p>
+&lt;/blockquote>
+&lt;p>Luckily, a few months after I bought the first one I bought a backup that I stored safely, so I wasn&amp;rsquo;t much put out. Here are the two keys side-by-side &amp;ndash; click to see more detail than you need:&lt;/p>
+&lt;a href="../img/blog/yubikeys.jpg">
+&lt;img src="../img/blog/yubikeys.jpg" alt="two Yubikeys, one more worn than the other">
+&lt;/a>
+&lt;p>(After looking at that photo up close I realized that the problem could be that the two middle pins were touching. So I took a small screwdriver and carved them apart. And it works! But that doesn&amp;rsquo;t really undermine the point here, which is&amp;hellip;)&lt;/p>
+&lt;p>So make sure you have a backup Yubikey 2FA hardware token, or you could be very unhappy when it gets damaged beyond use. Then you can carry your day-to-day key in your pocket without worry.&lt;/p></description></item><item><title>Dev Story: Unicode URL length limit blues</title><link>https://adam-p.ca/blog/2021/06/unicode-url-length/</link><pubDate>Mon, 07 Jun 2021 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2021/06/unicode-url-length/</guid><description>&lt;p>I have enjoyed reading other people&amp;rsquo;s design and debugging train-of-thought posts, so after I spent two days wrestling with a code problem, I thought I&amp;rsquo;d write it up. It&amp;rsquo;s not technically exciting, but I think that describing it might be useful to someone &amp;ndash; or my future self &amp;ndash; someday. Or, at the very least, a little amusing.&lt;/p>
+&lt;p>(Bonus: While writing this I discovered an error I made while doing the actual work. See if you can spot it before I reveal it&amp;hellip;)&lt;/p>
+&lt;h2 id="background">Background&lt;/h2>
+&lt;h3 id="the-psiphon-for-windows-ui">The Psiphon for Windows UI&lt;/h3>
+&lt;p>Our &lt;a href="https://github.com/Psiphon-Inc/psiphon-windows">Psiphon for Windows&lt;/a> client uses an Internet Explorer-based HTML control as the GUI, talking to a C++ backend (which itself talks to the Go implementation of our censorship circumvention tech). It has been working reasonably well for the last 6 years. Before that we had a plain, grey-box, dialog-based win32 UI, but the idea of adding a settings UI and localizing everything prompted me to look for other approaches.&lt;/p>
+&lt;p>We have strict executable size requirements, because many of our users have limited bandwidth, and because we run an auto-responder that emails our client software &amp;ndash; the Windows and Android clients attached to a single email. That ruled out a lot of fancy UI approaches, but using the native web control ended up working okay. It meant supporting Internet Explorer 7 through 11 as the HTML/CSS/JS engine, so it wasn&amp;rsquo;t always a lot of fun, but manageable. (And Go recently dropped support for Windows XP, which meant we could raise our minimum IE version to 8, which helps.)&lt;/p>
+&lt;p>For this story, the relevant part of the JS&amp;lt;-&amp;gt;C++ communication is that when the JavaScript wants the C++ to start a login sequence, it does something like this:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-js" data-lang="js">&lt;span style="color:#111">window&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">location&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#d88200">&amp;#39;psi:psicash?{&amp;#34;command&amp;#34;:&amp;#34;login&amp;#34;,&amp;#34;username&amp;#34;:&amp;#34;abc&amp;#34;,&amp;#34;password&amp;#34;:&amp;#34;xyz&amp;#34;}&amp;#39;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>The C++ code gets a window message when the location is going to change and figures out what to do with the URL. (And has the ability to trigger JS functions.)&lt;/p>
+&lt;h3 id="psicash-accounts">PsiCash accounts&lt;/h3>
+&lt;p>Psiphon has an in-app credit system called PsiCash. Users get credit by buying it or by certain rewarded activities. They can spend PsiCash on Speed Boost, which uncaps the network speed and expands the allowed ports.&lt;/p>
+&lt;p>For the last year I&amp;rsquo;ve been working on implementing PsiCash user accounts. Until now a user&amp;rsquo;s PsiCash credit has been tied to a device (or a device&amp;rsquo;s local storage), but accounts will let the user&amp;rsquo;s balance roam across devices, be restored after device failure, and so on.&lt;/p>
+&lt;p>A PsiCash account has a username and password. The PsiCash server is the ultimate arbiter of what&amp;rsquo;s allowed for the username and password. We use the &lt;a href="https://www.rfc-editor.org/rfc/rfc8264.html">PRECIS spec&lt;/a> for what characters are allowed, which is a pretty wide set (which is important to this story).&lt;/p>
+&lt;p>We wanted to let the usernames and passwords be pretty long, but we &lt;a href="https://dev.to/mitchpommers/password-max-length-limits-are-dumb-but-we-need-them-1dpp">needed to give them fixed limits&lt;/a>. We&amp;rsquo;re allowing 200 bytes for the username and 800 bytes for the password. For the widest UTF-8 characters, that&amp;rsquo;s 50 code points and 200 code points, respectively. (For now let&amp;rsquo;s say that a &amp;ldquo;code point&amp;rdquo; is basically what you think of as a &amp;ldquo;character&amp;rdquo; or &amp;ldquo;letter&amp;rdquo;, except not always.)&lt;/p>
+&lt;p>So, the implementation of accounts is pretty far along at this point, and I&amp;rsquo;m writing up test cases, and I&amp;rsquo;m thinking, &amp;ldquo;I should double-check some of these tests&amp;hellip;&amp;rdquo;&lt;/p>
+&lt;h2 id="the-problems-begin">The problems begin&lt;/h2>
+&lt;h3 id="too-many-bytes">Too many bytes&lt;/h3>
+&lt;p>So I put a ton of letters into the username and password fields to see what will happen. And the JS &lt;code>window.onerror&lt;/code> handler catches this: &lt;strong>&amp;ldquo;The data area passed to a system call is too small&amp;rdquo;&lt;/strong>, and the C++ side doesn&amp;rsquo;t get the URL message.&lt;/p>
+&lt;p>Googling for that error doesn&amp;rsquo;t help much. It can happen with &lt;a href="https://techcommunity.microsoft.com/t5/windows-dev-appconsult/desktop-bridge-8211-the-bridge-between-desktop-apps-and-the/ba-p/316488">Desktop Bridge&lt;/a> applications &lt;a href="https://support.microsoft.com/en-us/topic/kb4073393-fix-the-data-area-passed-to-a-system-call-is-too-small-error-when-you-start-a-desktop-bridge-application-on-a-sql-server-5ae0994d-023a-d32b-3aad-526500b53993">running on SQL Server&lt;/a>. There are hotfixes or Microsoft Management Console &lt;a href="https://www.minitool.com/news/the-data-area-passed-to-a-system-call-is-too-small.html">that can help&lt;/a>. None of those a) seem to apply, or b) are reasonable to ask our users to do.&lt;/p>
+&lt;p>I found that passing 2020 or fewer bytes was fine, but passing 2022 or more bytes would trigger that error. But passing exactly 2021 bytes&amp;hellip; was even worse. It would open a browser tab with a URL that started like &lt;code style="white-space:initial;word-break:break-all">res://ieframe.dll/unknownprotocol.htm#psi:psicash?%7B%22command%22%3A%22login%22%2C%22id%22%3A%22MC4yOTc5MjI5MTY4ODU3MjI4%22%2C%22password%22%3A%2201234567890&amp;hellip;&lt;/code>. And there&amp;rsquo;s the user&amp;rsquo;s password in the browser address bar! (We&amp;rsquo;ll call this the &amp;ldquo;&amp;gt;2020 error&amp;rdquo;.)&lt;/p>
+&lt;p>(This is surely due to &lt;a href="https://support.microsoft.com/en-us/topic/maximum-url-length-is-2-083-characters-in-internet-explorer-174e7c8a-6666-f4e0-6fd6-908b53c12246">IE having a URL length limit of 2048&lt;/a> for GET requests. I didn&amp;rsquo;t think of that at the time, and there was probably some URL overhead I wasn&amp;rsquo;t counting. Anyway, it doesn&amp;rsquo;t change the problem for me.)&lt;/p>
+&lt;p>Throwing up obscure, non-actionable error messages is bad enough, but the browser tab thing is terrible. So this can&amp;rsquo;t be allowed to happen.&lt;/p>
+&lt;h3 id="tangent-unicode">Tangent: Unicode&lt;/h3>
+&lt;p>If you&amp;rsquo;re not familiar with Unicode and its encodings, you might want to &lt;a href="#unicode">skip down&lt;/a> and read the appendix about it. But here are some quick definitions of terms I&amp;rsquo;ll be using:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Unicode&lt;/strong>: The system of defining all the letters and characters and emoji and so on. Each Unicode entry has a 32-bit number assigned to it.&lt;/li>
+&lt;li>&lt;strong>Code point&lt;/strong>: The 32-bit value that indicates a Unicode &amp;ldquo;character&amp;rdquo;.&lt;/li>
+&lt;li>&lt;strong>UTF-8 and UTF-16&lt;/strong>: These are the common ways of actually encoding Unicode entries. UTF-8 uses between 1 and 4 single bytes, and UTF-16 uses 1 or 2 double bytes. JavaScript and Windows C++ (&lt;code>wchar_t&lt;/code>) use UTF-16. Almost everything else uses UTF-8.&lt;/li>
+&lt;li>&lt;strong>Code unit&lt;/strong>: These are the individual chunks of an encoding &amp;ndash; the single bytes of UTF-8 or the double bytes of UTF-16.&lt;/li>
+&lt;/ul>
+&lt;p>So a single Unicode code point may be encoded by up to 4 UTF-8 code units (4 bytes total) or 2 UTF-16 code units (4 bytes total).&lt;/p>
+&lt;h3 id="limit-the-input">Limit the input&lt;/h3>
+&lt;p>I hadn&amp;rsquo;t been limiting the username and password input fields because it didn&amp;rsquo;t seem necessary, for reasons like:&lt;/p>
+&lt;ul>
+&lt;li>It&amp;rsquo;s important that the login interface allow at least as many characters as the server will allow in the creation of an account.&lt;/li>
+&lt;li>The bytes vs graphemes distinction makes things a little murky.&lt;/li>
+&lt;li>If we decided to raise the limit on the server side, it&amp;rsquo;d be nice if the clients just worked.&lt;/li>
+&lt;li>If the user enters too many characters&amp;hellip; Then they&amp;rsquo;re entering bad credentials, and that&amp;rsquo;s really up to them.&lt;/li>
+&lt;/ul>
+&lt;p>But allowing the user to hit the &amp;gt;2020 bytes error is unacceptable, so I needed to add input limiting. The &lt;code>&amp;lt;input&amp;gt;&lt;/code> element&amp;rsquo;s &lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/maxlength">&lt;code>maxlength&lt;/code> attribute&lt;/a> seemed like an easy-and-sufficient way to do that.&lt;/p>
+&lt;p>&lt;code>maxlength&lt;/code> is supposed to limit by UTF-16 code &lt;em>unit&lt;/em>, and does so in modern browsers, which is kind of weird. That means that &amp;ldquo;🍕&amp;rdquo; and &amp;ldquo;𪘀&amp;rdquo; count as &lt;em>two&lt;/em> towards the length. Probably not coincidentally, that&amp;rsquo;s how JS&amp;rsquo;s &lt;code>String.length&lt;/code> works: &lt;code>&amp;quot;🍕&amp;quot;.length === 2&lt;/code>. There&amp;rsquo;s no mention on MDN or CanIUse of IE deviating from this (that I can find), but it does &amp;ndash; &lt;code>maxlength&lt;/code> counts code &lt;em>points&lt;/em>, not code &lt;em>units&lt;/em>. Which is great! It means I can set &lt;code>maxlength=50&lt;/code> and get the expected username limiting &amp;ndash; no custom validators required.&lt;/p>
+&lt;p>But it would still be nice to provide more space for input, because of the reasons I had for not limiting in the first place. So let&amp;rsquo;s do a little math:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-js" data-lang="js">&lt;span style="color:#75715e">// We want to be sure we don&amp;#39;t hit the ~2020 limit. Let&amp;#39;s say 1900 is a safe maximum.
+&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75af00">absolute_byte_limit&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">1900&lt;/span>
+&lt;span style="color:#75af00">bytes_per_code_point&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">4&lt;/span>
+&lt;span style="color:#75af00">allowed_code_points&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#75af00">absolute_byte_limit&lt;/span> &lt;span style="color:#f92672">/&lt;/span> &lt;span style="color:#75af00">bytes_per_code_point&lt;/span>
+&lt;span style="color:#f92672">==&amp;gt;&lt;/span> &lt;span style="color:#ae81ff">475&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>So we have something like a 475 code point allowance to split between username and password. Let&amp;rsquo;s say 75 for the username and 400 for the password (we won&amp;rsquo;t be staying here, so it doesn&amp;rsquo;t really matter).&lt;/p>
+&lt;h3 id="simple-change-quick-test-famous-last-words">Simple change, quick test (famous last words)&lt;/h3>
+&lt;p>So I use my numbered input of &lt;code>0123456789&lt;/code>, repeated, to fill the max lengths. Works as expected.&lt;/p>
+&lt;p>Then I try with big long string of &amp;ldquo;𪘀&amp;rdquo; and hit the &amp;gt;2020 error. Ugh.&lt;/p>
+&lt;p>The &lt;code>&amp;lt;input maxlength=&amp;quot;400&amp;quot;&amp;gt;&lt;/code> limiter is working, so that&amp;rsquo;s not the problem.&lt;/p>
+&lt;p>Inspecting the incoming URL on the C++ side reveals the problem: I&amp;rsquo;m calling &lt;code>encodeURIComponent&lt;/code> on the query parameters part (after the &lt;code>?&lt;/code>) of the URL. So each &amp;ldquo;𪘀&amp;rdquo; becomes &amp;ldquo;%F0%AA%98%80&amp;rdquo;. That means the 4 bytes of the UTF-8 (or UTF-16) code point becomes 12 bytes &amp;ndash; there are 3 one-byte characters per byte of UTF-8.&lt;/p>
+&lt;p>Let&amp;rsquo;s do the math again:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-js" data-lang="js">&lt;span style="color:#75af00">absolute_byte_limit&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">1900&lt;/span>
+&lt;span style="color:#75af00">bytes_per_code_point&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">4&lt;/span> &lt;span style="color:#f92672">*&lt;/span> &lt;span style="color:#ae81ff">3&lt;/span> &lt;span style="color:#75715e">// 4x UTF-8 code units, 3 bytes per code unit
+&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75af00">allowed_code_points&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#75af00">absolute_byte_limit&lt;/span> &lt;span style="color:#f92672">/&lt;/span> &lt;span style="color:#75af00">bytes_per_code_point&lt;/span>
+&lt;span style="color:#f92672">==&amp;gt;&lt;/span> &lt;span style="color:#ae81ff">158.3&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>So&amp;hellip; 158 allowed code points? But we need to allow at least 50+200 code points for the username+password. Time to advance to the next level of problem.&lt;/p>
+&lt;p>(Disclosure: I have the juice to change the username and password limits. But I don&amp;rsquo;t want to and this seems like a weak reason to do so.)&lt;/p>
+&lt;h3 id="the-best-encoding-is-no-or-little-encoding">The best encoding is no (or little) encoding?&lt;/h3>
+&lt;p>The most obvious thing to try to alleviate the encoding bloat is to just remove &lt;code>encodeURIComponent&lt;/code>. And it works fine. It appears that the code points are going through as UTF-16 binary &amp;ndash; taking up the minimum possible bytes &amp;ndash; and both the JS and C++ sides were happy.&lt;/p>
+&lt;p>Then I try a space in the password and it automatically gets encoded as &lt;code>%20&lt;/code> (the code point for the space character is &lt;code>U+0020&lt;/code> and so &lt;code>%20&lt;/code> is the URL-escaped UTF-8-encoded version of it).&lt;/p>
+&lt;p>That&amp;rsquo;s a bit of a wrinkle, but fine. I could put the URL-decode call back into the C++ code. Except&amp;hellip; what if there happens to also be the percent-and-two-numbers sequence naturally occurring in the password? We&amp;rsquo;ll unintentionally be altering it. For example: If the password is &lt;code>x%41y&lt;/code>, it would get URL-decoded to &lt;code>xAy&lt;/code>.&lt;/p>
+&lt;p>After doing some research to satisfy myself that percent-encoding is the only thing going on in URLs, I decide that I only need to percent-encode the percent sign. So the password &lt;code>x y%20z&lt;/code> becomes &lt;code>x%20y%2520z&lt;/code> (&lt;code>%25&lt;/code> being the percent-encoded percent sign) in the URL. URL-decoding will reverse that value properly.&lt;/p>
+&lt;p>So, yay? We&amp;rsquo;re back to a reasonable number of bytes. Even a password of 50 percent signs (the only thing getting escaped) will still only bloat to 150 bytes.&lt;/p>
+&lt;h3 id="but-then-ie8-strikes">But then IE8 strikes&lt;/h3>
+&lt;p>I do all my development on a Windows 10 machine, with IE 11. The installed IE version is what gets used for the web control in the app. IE 11 has a handy developer tool that lets you test in various even-older-IE modes. But it&amp;rsquo;s not always 100% accurate, so sometimes I fire up a &lt;a href="https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/">Windows 7 VM with IE 8, 9, or 10&lt;/a> installed to test for real.&lt;/p>
+&lt;p>The simple-ASCII-characters-only test works fine in the Win7+IE8 VM. The test with the maximum count of &amp;ldquo;𪘀&amp;rdquo; does not.&lt;/p>
+&lt;p>Again, I inspect the URL coming into the backend (which is a bit harder now, because I don&amp;rsquo;t have a development environment in the VM). And it looks like IE8 is automatically encoding &amp;ldquo;𪘀&amp;rdquo; as &lt;code>\ud869\ude00&lt;/code> (the two-code-unit UTF-16 encoding). Which is &lt;em>again 12 bytes instead of 4&lt;/em>.&lt;/p>
+&lt;p>I start getting pretty frustrated at this point.&lt;/p>
+&lt;h3 id="when-all-else-fails-base64">When all else fails, base64&lt;/h3>
+&lt;p>So how do I get only ASCII characters in the URL, without bloating by a factor of 3x? How about base64-encoding? That gives us ASCII and a size increase of 33%, which is tolerable.&lt;/p>
+&lt;p>Let&amp;rsquo;s check the math:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-js" data-lang="js">&lt;span style="color:#75af00">absolute_byte_limit&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">1900&lt;/span>
+&lt;span style="color:#75af00">bytes_per_code_point&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">4&lt;/span> &lt;span style="color:#75715e">// 2x UTF-16 code units
+&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75af00">base64_bloat&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">1.33&lt;/span>
+&lt;span style="color:#75af00">allowed_code_points&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#75af00">absolute_byte_limit&lt;/span> &lt;span style="color:#f92672">/&lt;/span> &lt;span style="color:#75af00">bytes_per_code_point&lt;/span> &lt;span style="color:#f92672">/&lt;/span> &lt;span style="color:#75af00">base64_bloat&lt;/span>
+&lt;span style="color:#f92672">==&amp;gt;&lt;/span> &lt;span style="color:#ae81ff">357&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>That gives us an extra 100 code points to play with above our absolute limit of 50+200. Phew!&lt;/p>
+&lt;p>So, I change the encoding to be &lt;code>btoa(JSON.stringify(payload))&lt;/code>, with appropriate decoding on the C++ side. Works as expected on Win10.&lt;/p>
+&lt;p>Doesn&amp;rsquo;t work at all on Win7+IE8. Oh right, forgot, there is no &lt;code>btoa&lt;/code> in IE8. But we already have a polyfill for that, so I just swap it in and try again.&lt;/p>
+&lt;p>And, again, the &lt;em>URL is still too long&lt;/em>. I&amp;rsquo;m losing my mind a little bit now.&lt;/p>
+&lt;h3 id="re-polyfill-json">Re-polyfill JSON&lt;/h3>
+&lt;p>After weeping a little and doing some MessageBox-ing and digging, I realize that the culprit now is IE8&amp;rsquo;s &lt;code>JSON.stringify&lt;/code>.&lt;/p>
+&lt;p>Here&amp;rsquo;s IE9, IE10, IE11, and every other browser:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-js" data-lang="js">&lt;span style="color:#75af00">JSON&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">stringify&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">&amp;#34;𪘀&amp;#34;&lt;/span>&lt;span style="color:#111">)&lt;/span>
+&lt;span style="color:#f92672">==&amp;gt;&lt;/span> &lt;span style="color:#d88200">&amp;#39;&amp;#34;𪘀&amp;#34;&amp;#39;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>And here&amp;rsquo;s IE8:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-js" data-lang="js">&lt;span style="color:#75af00">JSON&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">stringify&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">&amp;#34;𪘀&amp;#34;&lt;/span>&lt;span style="color:#111">)&lt;/span>
+&lt;span style="color:#f92672">==&amp;gt;&lt;/span> &lt;span style="color:#d88200">&amp;#39;&amp;#34;\ud869\ude00&amp;#34;&amp;#39;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Well that&amp;rsquo;s JUST GREAT.&lt;/p>
+&lt;p>I think for a few minutes about how encode objects without using JSON, but that&amp;rsquo;s dumb. And then I remember that, until recently, we used a &lt;a href="https://github.com/douglascrockford/JSON-js">JSON polyfill&lt;/a> because we still supported WinXP+IE7 (which doesn&amp;rsquo;t have JSON support). So I try out the polyfill code in the IE8 console and&amp;hellip; it gives the desired output! Oh, thank goodness.&lt;/p>
+&lt;p>So I modify the polyfill code to always replace the native JSON and conditionally include it for IE8.&lt;/p>
+&lt;p>And test. And it works. Everywhere. For every input.&lt;/p>
+&lt;h2 id="do-you-see-the-mistake-i-made">Do you see the mistake I made?&lt;/h2>
+&lt;p>And later I decide that maybe this story would be amusing or educational for someone, so I should write up a blog post. And as I&amp;rsquo;m writing this blog post I realize that I got something wrong. This:&lt;/p>
+&lt;blockquote>
+&lt;p>it looks like IE8 is automatically encoding &amp;ldquo;𪘀&amp;rdquo; as &lt;code>\ud869\ude00&lt;/code>.&lt;/p>
+&lt;/blockquote>
+&lt;p>Nope. It was JSON doing that, not &amp;ldquo;automatic encoding&amp;rdquo;. Having encountered the space&amp;ndash;&amp;gt;&lt;code>%20&lt;/code> automatic encoding, I think I was primed to lazily attribute more unexpected behaviour to magic.&lt;/p>
+&lt;p>Now, with the JSON polyfill replacement, I could go back to just percent-encoding-percent and regain even more code point space in the URL.&lt;/p>
+&lt;p>I don&amp;rsquo;t think I will, though. I can&amp;rsquo;t shake the question: &amp;ldquo;Is there anything besides percent-encoding that &lt;code>InternetCanonicalizeUrl(ICU_DECODE)&lt;/code> (the win32 URL decode function) will try to decode?&amp;rdquo; If there is, then some user&amp;rsquo;s password will be unusable, and it&amp;rsquo;ll be super hard to diagnose. At the bottom of every email we say, &amp;ldquo;Psiphon will never ask you for your password&amp;rdquo;, so we can&amp;rsquo;t possibly figure out what&amp;rsquo;s wrong with it!&lt;/p>
+&lt;p>Fuzzing might be able to find other cases? Or maybe there&amp;rsquo;s source code for &lt;code>InternetCanonicalizeUrl&lt;/code> that I can inspect (and hope it&amp;rsquo;s the same across Win 7, 8, 8.1, and 10)? But I already spent &lt;em>way too long&lt;/em> on this and I can&amp;rsquo;t spend any more. Time to move on.&lt;/p>
+&lt;h2 id="this-is-an-edited-rendition">This is an edited rendition&lt;/h2>
+&lt;p>This may read like a logical progression of problems, investigations, and (attempted) solutions, but it was so much messier than that. This was my primary task for &lt;em>two days&lt;/em> (not my &lt;em>only&lt;/em> task, but still).&lt;/p>
+&lt;p>It was a painful cycle of:&lt;/p>
+&lt;ol>
+&lt;li>Think everything works.&lt;/li>
+&lt;li>Test, expecting success.&lt;/li>
+&lt;li>Get weird results.&lt;/li>
+&lt;li>Debug, usually in VMs with the &lt;code>alert&lt;/code>-and-&lt;code>MessageBox&lt;/code> version of printfs.&lt;/li>
+&lt;li>Search for explanations. Read MSDN pages, Wikipedia pages, and anything else that might make it make sense.&lt;/li>
+&lt;li>Think of what to do to avoid the problem. Try stuff. Make it nominally work on Win10+IE11.&lt;/li>
+&lt;li>Repeat.&lt;/li>
+&lt;/ol>
+&lt;p>(You know what didn&amp;rsquo;t help? Running out of disk space while trying to work with VMs.)&lt;/p>
+&lt;p>There was also much, &lt;em>much&lt;/em> more profanity than I have allowed here.&lt;/p>
+&lt;hr>
+&lt;p>&lt;a name="unicode" href="#">&lt;/a>&lt;/p>
+&lt;h2 id="appendix-unicode-stuff-as-i-know-it">Appendix: Unicode stuff, as I know it&lt;/h2>
+&lt;p>I am not a Unicode pro, and quite a bit of what I know I learned during this work. I&amp;rsquo;ll give a quick-and-dirty description so we can be on the same page.&lt;/p>
+&lt;p>So, Unicode is a big list of, like, letters and characters and stuff. Each one gets a 32-bit number assigned to it (although there are only 24-bits actually used). &amp;ldquo;A&amp;rdquo; is &lt;code>0x00000041&lt;/code> (65 in decimal), &amp;ldquo;あ&amp;rdquo; is &lt;code>0x00003042&lt;/code> (12354), &amp;ldquo;🍕&amp;rdquo; is &lt;code>0x0001F355&lt;/code> (127829), &amp;ldquo;𪘀&amp;rdquo; is &lt;code>0x0002A600&lt;/code> (173568). These numbers are often written like &lt;code>U+0041&lt;/code>, without so many leading zeros.&lt;/p>
+&lt;p>Those 32-bit Unicode numbers are &amp;ldquo;code points&amp;rdquo;. Some represent &amp;ldquo;graphemes&amp;rdquo; (rendered entities), but some are accents and whatnot that are to be combined with other code points.&lt;/p>
+&lt;p>(Tangent within a tangent: Some things that you might think of as a single &amp;ldquo;character&amp;rdquo;, like the &amp;ldquo;keycap digit one&amp;rdquo; emoji &amp;ldquo;1️⃣&amp;rdquo;, are actually &amp;ldquo;grapheme clusters&amp;rdquo;. In the case of &amp;ldquo;1️⃣&amp;rdquo;, it&amp;rsquo;s actually a combination of three code points: the usual ASCII number &amp;ldquo;1&amp;rdquo;, the &amp;ldquo;VARIATION SELECTOR-16&amp;rdquo; (&lt;code>U+FE0F&lt;/code>), and the &amp;ldquo;COMBINING ENCLOSING KEYCAP&amp;rdquo; (&lt;code>U+20E3&lt;/code>).)&lt;/p>
+&lt;p>So, think of &amp;ldquo;Unicode&amp;rdquo; as an abstract list of code points. Then we need to actually encode those code points.&lt;/p>
+&lt;p>The most direct approach is called UTF-32. It uses 32 bits to encode the 32-bit code point. But the vast majority of code points in common use don&amp;rsquo;t need all 32 bits, so this is a pretty inefficient encoding.&lt;/p>
+&lt;p>The most common encoding is UTF-8. It uses between one and four 8-bit &amp;ldquo;code units&amp;rdquo; to encode a code point. It has the very nice property of encoding English letters, numbers, and punctuation exactly the same as they are in ASCII. If you&amp;rsquo;re encoding text, use UTF-8.&lt;/p>
+&lt;p>But JavaScript and Windows use UTF-16. It uses one or two 16-bit code units to encode a code point. Some quick &lt;a href="https://en.wikipedia.org/wiki/UTF-16#History">Wikipedia reading&lt;/a> suggests that, once upon a time, 16 bits were thought to be enough for Unicode code points. JavaScript and Windows probably adopted that early (UCS2) spec, and then were stuck with it for legacy reasons. UTF-16 is compatible with that old spec, and here we are.&lt;/p></description></item><item><title>The short happy life of the Breached extension</title><link>https://adam-p.ca/blog/2019/05/breached/</link><pubDate>Mon, 27 May 2019 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2019/05/breached/</guid><description>&lt;p>In October 2017, Troy Hunt of &lt;a href="https://haveibeenpwned.com/">Have I Been Pwned&lt;/a> held a &lt;a href="https://www.troyhunt.com/do-something-awesome-with-have-i-been-pwned-and-win-a-lenovo-thinkpad/">contest&lt;/a> inviting people to do something cool with the HIBP API. I decided a) that I would kind of like the special edition ThinkPad he was giving away, and b) that I could probably whip something up pretty quickly.&lt;/p>
+&lt;p>I decided to create a browser extension that would simply pull HIBP breach information and show a browser notification &amp;ndash; with the ability to view extra info &amp;ndash; when the user visited a site that had been breached. And so was born the &lt;a href="https://github.com/adam-p/breached">Breached extension&lt;/a>. (Spoiler: I didn&amp;rsquo;t win.)&lt;/p>
+&lt;blockquote>
+&lt;p>For non-technical readers: A &amp;ldquo;breach&amp;rdquo;, in this context, is when a hacker obtains the user database of a website. A breach generally includes email addresses, passwords (in some form), maybe credit cards, and other stuff you don&amp;rsquo;t want a hacker to have. So &amp;ldquo;breach information&amp;rdquo; about a website tells you that a breach occurred, when it happened, what data was stolen, and how much of it. Which is the kind of thing you should know about before using that website!&lt;/p>
+&lt;/blockquote>
+&lt;p>A month after I released the extension, someone created an issue pointing out that Mozilla &lt;a href="https://github.com/adam-p/breached/issues/5">&amp;ldquo;started working on integrating haveibeenpwned.com warnings into Firefox&amp;rdquo;&lt;/a>. (As I promised there I did (nominally) reach out, but it didn&amp;rsquo;t go anywhere.) A year later that project turned into &lt;a href="https://monitor.firefox.com/">Firefox Monitor&lt;/a>.&lt;/p>
+&lt;p>So, Breached is basically redundant on Firefox. In a sense I&amp;rsquo;m bummed, but I&amp;rsquo;m more flattered &amp;ndash; it was obviously a pretty okay idea!&lt;/p>
+&lt;p>Monitor has a different &lt;a href="https://blog.mozilla.org/security/2018/11/14/when-does-firefox-alert-for-breached-sites/">notification policy&lt;/a>: They only show alerts for sites that have been breached within the last two months. (If I&amp;rsquo;m reading that right. I think the 12-month part is a one-off and is likely just to increase the number of people that will ever see a notification). Breached&amp;rsquo;s policy is&amp;hellip; just, like, show them all. Because I didn&amp;rsquo;t think about that while coding it. I think Monitor&amp;rsquo;s time-limit is better, since many sites will have sorted themselves out and don&amp;rsquo;t deserve a black mark for all time, so I &lt;a href="https://github.com/adam-p/breached/issues/6">might also add a time limit&lt;/a>. (I don&amp;rsquo;t find the notifications noisy, but maybe I just don&amp;rsquo;t visit enough shady sites.)&lt;/p>
+&lt;p>In case you&amp;rsquo;re wondering what Monitor notifications look like, here&amp;rsquo;s one:&lt;/p>
+&lt;p class="text-center">
+&lt;img src="../img/blog/firefox-monitor-breach.png" alt="Firefox Monitor breach notification"
+style="max-width: 600px;">
+&lt;/p>
+&lt;p>And here is Breached&amp;rsquo;s notification:&lt;/p>
+&lt;p class="text-center">
+&lt;img src="../img/blog/breached-notification.png" alt="Breached's breach notification"
+style="max-width: 400px;">
+&lt;/p>
+&lt;p>And the additional-detail popup:&lt;/p>
+&lt;p class="text-center">
+&lt;img src="../img/blog/breached-popup.png" alt="Breached's additional detail popup">
+&lt;/p>
+&lt;p>Well, at least Breached is still relevant on Chrome! For now&amp;hellip;&lt;/p></description></item><item><title>Markdown Here: Splitting the Firefox and Thunderbird Extension</title><link>https://adam-p.ca/blog/2016/07/mdh-dividing-firefox-and-thunderbird/</link><pubDate>Thu, 14 Jul 2016 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2016/07/mdh-dividing-firefox-and-thunderbird/</guid><description>&lt;p>[This started as notes to myself to help clarify the problem and solution. It&amp;rsquo;s probably more suited to a Github issue than a blog post, and it may get copied into one.]&lt;/p>
+&lt;h1 id="the-story-so-far">The story so far&lt;/h1>
+&lt;p>The Firefox and Thunderbird versions of &lt;a href="https://markdown-here.com/">Markdown Here&lt;/a> both used nearly the same code &amp;ndash; an old-style XUL extension. Tb is only capable of using a XUL extension, while Fx supports at least three extension types: &lt;a href="https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School">XUL-based&lt;/a>, &lt;a href="https://developer.mozilla.org/en-US/Add-ons/SDK">Add-on SDK&lt;/a> (aka Jetpack, aka jpm), and &lt;a href="https://developer.mozilla.org/en-US/Add-ons/WebExtensions">WebExtensions&lt;/a>. WebExtensions is the newest, and is essentially an implementation of Chrome&amp;rsquo;s extension API.&lt;/p>
+&lt;p>I&amp;rsquo;ve kept my eye on WebExtensions because it&amp;rsquo;s tempting to be able to use identical code across the many major browsers: Chrome, Firefox, Opera, and Edge(?). It seemed premature to do any real work towards using it as it&amp;rsquo;s not yet fully released, and there would be no perceived benefit to users (it&amp;rsquo;s a more-locked-down extension API, so there would be an imperceptible sercurity benefit).&lt;/p>
+&lt;p>But&amp;hellip; Firefox&amp;rsquo;s multi-process &lt;a href="https://wiki.mozilla.org/Electrolysis">Electrolysis&lt;/a> (E10s) update is nearing release, and &lt;a href="https://github.com/adam-p/markdown-here/issues/207">it breaks MDH&lt;/a>. There are two ways to go about fixing this:&lt;/p>
+&lt;ol>
+&lt;li>Figure out what&amp;rsquo;s wrong in the XUL extension and correct it.&lt;/li>
+&lt;li>Switch to WebExtensions.&lt;/li>
+&lt;/ol>
+&lt;p>I tried to figure out why E10s is breaking the XUL extension, but without any success. Maybe I could figure it out if I tried longer/harder? Or maybe not.&lt;/p>
+&lt;p>I did some testing (and fixing) to make WebExtensions work, and it seems like the best option.&lt;/p>
+&lt;h1 id="the-big-problem-splitting-up-fx-and-tb">The big problem: Splitting up Fx and Tb&lt;/h1>
+&lt;p>Until now, the Firefox and Thunderbird extensions were literally the same extension &amp;ndash; I upload a single file to Mozilla and check off the &amp;ldquo;Firefox&amp;rdquo; and &amp;ldquo;Thunderbird&amp;rdquo; boxes. There is only one extension ID for both. But Thunderbird only supports XUL extensions, so it&amp;rsquo;ll probably be using the XUL version forever.&lt;/p>
+&lt;p>We clearly have a problem: Fx and Tb will have to use fundamentally different extensions, but right now there&amp;rsquo;s only one extension for both. We&amp;rsquo;re going to have to split the userbase. And it&amp;rsquo;s going to be ugly.&lt;/p>
+&lt;p>Specifically, it&amp;rsquo;s going to be very ugly for either the Firefox users &lt;em>or&lt;/em> the Thunderbird users. One platform will receive a message saying, &amp;ldquo;If you want Markdown Here to keep working for you, uninstall the one you have and go install this other one.&amp;rdquo; (The other platform will see no difference.) Ugh. That&amp;rsquo;s going to cost us some users for sure.&lt;/p>
+&lt;p>According to the &lt;a href="https://addons.mozilla.org/en-US/firefox/addon/markdown-here/statistics/usage/applications/?last=30">Mozilla stats for MDH&lt;/a>, there are two-thirds as many Thunderbird daily users of MDH as Firefox daily users. That makes it somewhat preferable to make life difficult for Tb users rather than Fx users.&lt;/p>
+&lt;p>However, I think it&amp;rsquo;s Firefox users who will have to jump through hoops. The XUL extension will still work in Firefox to a sufficient degree to show a message to the user. The WebExtensions extension will not work at all in Thunderbird. So existing Thunderbird users simply cannot be given the WebExtensions version, therefore the WebExtensions version must be the new, separate extension. Therefore it&amp;rsquo;s the Firefox users who must suffer.&lt;/p>
+&lt;p>(A couple of caveats: 1. I have asked in the &lt;a href="https://discourse.mozilla-community.org/t/best-way-to-split-thunderbird-and-firefox-users-because-webextensions/9717">Mozilla extension dev forum&lt;/a> for suggestions for how to do this gracefully; so for I&amp;rsquo;ve received one reply, but it&amp;rsquo;s even more painful. 2. I have a terrible feeling that there actually is a graceful way to do this and I&amp;rsquo;m just not seeing it.)&lt;/p>
+&lt;h1 id="the-plan-such-as-it-is">The plan, such as it is&lt;/h1>
+&lt;ol>
+&lt;li>
+&lt;p>Get the WebExtensions work done. (Most of the effort now is going to be building the separate versions in a sane way.)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Release the brand new WebExtensions version, with a separate ID. (And update the website to point to it, etc.)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Release a new XUL version that does nothing but show Firefox users a message telling them what they need to do to upgrade. (And explaining and apologizing profusely.)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Watch how many users are lost.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>The E10s rollout is supposed to be gradual, so I plan on continuing to support Firefox in the XUL version for the time being, and continuing to show the switch-message when Firefox is detected.&lt;/p>
+&lt;p>&lt;strong>Outstanding question:&lt;/strong> Continue using Addons.Mozilla.Org (aka AMO, aka the main Firefox extension site) or self-host. I&amp;rsquo;ve gone through &lt;a href="https://github.com/adam-p/markdown-here/issues/21">ridiculous hassle&lt;/a> getting MDH approved in the past, and I don&amp;rsquo;t want to do it again. Ever. (This is exacerbated by the fact that I&amp;rsquo;m planning on replacing the Markdown rendering library, and I fear push-back from the AMO reviewers for using a lot of third-party code that&amp;rsquo;s not pre-approved.) The downside of self-hosting is that MDH won&amp;rsquo;t show up in AMO searches, which is surely where a lot of users go when looking for a Firefox extension (versus googling).&lt;/p>
+&lt;p>(The current Firefox and Thunderbird extension is also used by Pale Moon, which is a Firefox fork, and Postbox and Ice Dove, which are Thunderbird forks. There aren&amp;rsquo;t enough users of them to change any of the rationale, and it &lt;a href="https://forum.palemoon.org/viewtopic.php?t=6660">looks like&lt;/a> Pale Moon &lt;a href="https://forum.palemoon.org/viewtopic.php?t=12216">won&amp;rsquo;t be using&lt;/a> E10s. So there&amp;rsquo;s Firefox, and then everything else.)&lt;/p></description></item><item><title>Android Non-Vulnerability: Steal a Device and Keep it Unlocked</title><link>https://adam-p.ca/blog/2016/05/smart-lock-mock-location/</link><pubDate>Wed, 11 May 2016 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2016/05/smart-lock-mock-location/</guid><description>&lt;p>While poking around in my Android phone&amp;rsquo;s developer options, I realized that &lt;strong>if you steal a phone that&amp;rsquo;s currently unlocked because it&amp;rsquo;s in a &amp;ldquo;trusted place&amp;rdquo;, then you can force it to remain unlocked forever&lt;/strong>. (And then I got schooled about that not being a problem.)&lt;/p>
+&lt;h2 id="security-feature-smart-lock-with-trusted-places">Security Feature: Smart Lock with Trusted Places&lt;/h2>
+&lt;p>&lt;a href="https://support.google.com/nexus/answer/6093922?hl=en">Android&amp;rsquo;s Smart Lock&lt;/a> allows users to configure conditions under which to keep the phone unlocked. One of the conditions is location &amp;ndash; you can set trusted locations where your phone shouldn&amp;rsquo;t prompt for a PIN/pattern/password when unlocking.&lt;/p>
+&lt;p>This is a pretty great feature. It&amp;rsquo;s difficult to convince people that the security gained by using a PIN outweighs the inconvenience of constantly entering it. Smart Lock helps mitigate the inconvenience by not requiring the user to constantly enter the PIN at home or at the office.&lt;/p>
+&lt;h2 id="developer-feature-mock-location">Developer Feature: Mock Location&lt;/h2>
+&lt;p>If you&amp;rsquo;re developing a location-aware app, you might want to trick the phone (and your app) into believing that it&amp;rsquo;s somewhere you&amp;rsquo;re not (in a restaurant, near a bus stop, etc.). The Android developer options provide the ability to set a &amp;ldquo;mock location app&amp;rdquo;. This is a separate app that allows you to configure your desired fake location. When the app is set as the mock location app, the phone pretends to be in the location specified by the app.&lt;/p>
+&lt;h2 id="trusted-place--mock-location--perma-unlock">Trusted Place + Mock Location = Perma-Unlock&lt;/h2>
+&lt;p>So if Eve steals Alice&amp;rsquo;s phone from her desk at work, and wants to keep it unlocked until she has more time to peruse it, she can do this:&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>Install a mock location app. Set it to the current location.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Enable Developer Options.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Select the mock location app in the developer options.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>And then Eve walks away, confident that Alice&amp;rsquo;s phone will remain unlocked.&lt;/p>
+&lt;p>Note that none of those steps requires Eve to type in the phone&amp;rsquo;s PIN. If any of them did, this attack would be nullified. (Adding a Smart Lock trusted location does require a PIN, but fooling the phone into thinking that it&amp;rsquo;s always in the current trusted location doesn&amp;rsquo;t.)&lt;/p>
+&lt;p>My recommended solution to the Android team: Require a PIN at step 3. If Alice is a developer, there might already be a mock location app installed and the phone will probably already have the developer options enabled. Step 3 seems like the best intervention point.&lt;/p>
+&lt;p>I also don&amp;rsquo;t like that Smart Lock (and Android Device Manager) respect the mock location. It seems to me that they should be &amp;ldquo;above&amp;rdquo; that.&lt;/p>
+&lt;h3 id="bonus-attack-android-device-manager">Bonus attack: Android Device Manager&lt;/h3>
+&lt;p>Alice realizes that her phone is gone! She jumps on her computer and checks &lt;a href="https://support.google.com/accounts/answer/3265955?hl=en">Android Device Manager&lt;/a>! Except&amp;hellip; it reports that the phone is still at the office, because it also uses the mock location being reported by the phone.&lt;/p>
+&lt;p>Hopefully Alice will do a remote lock (or wipe) anyway, or maybe the location confusion slows her down for a while.&lt;/p>
+&lt;h2 id="vulnerability-disclosure">Vulnerability Disclosure&lt;/h2>
+&lt;p>I filed a security issue with the Android team (&lt;a href="https://code.google.com/p/android/issues/detail?id=204776">#204776&lt;/a>, but it&amp;rsquo;s not publicly visible). The response was that it is &amp;ldquo;working as intended&amp;rdquo;.&lt;/p>
+&lt;blockquote>
+&lt;p>Once someone has access to an unlocked phone, they are able to do anything with it (attempt to root the device, install other malware, etc).&lt;/p>
+&lt;p>We appreciate the report but this is working as intended.&lt;/p>
+&lt;/blockquote>
+&lt;p>I see what they&amp;rsquo;re saying. In theory, the attacker could enable app side-loading, and then install some kind of data-snarfer service, and then give it sufficient permission to exfiltrate everything it can access. The data-snarfer could run even while the phone is locked.&lt;/p>
+&lt;p>Or the attacker could just keep touching the screen to keep it unlocked.&lt;/p>
+&lt;p>(Rooting typically requires a bootloader unlock, which wipes the device. But that&amp;rsquo;s irrelevant if rooting isn&amp;rsquo;t necessary to effect an equivalent attack.)&lt;/p>
+&lt;p>I&amp;rsquo;d really like to thank the Android team for taking the time to reply to my not-super-exciting bug report.&lt;/p>
+&lt;h2 id="grand-conclusion">Grand Conclusion&lt;/h2>
+&lt;p>There isn&amp;rsquo;t one. The &amp;ldquo;Trusted Place + Mock Location&amp;rdquo; combo isn&amp;rsquo;t a real problem &amp;ndash; it&amp;rsquo;s just a little distasteful. If someone steals your phone and it&amp;rsquo;s unlocked, you&amp;rsquo;d better hope they&amp;rsquo;re only after the hardware.&lt;/p>
+&lt;p>This is especially distressing for tablets. Unlike our phone, most of us don&amp;rsquo;t carry our tablet everywhere, so it&amp;rsquo;s much more likely to be stolen from our home. Entering your PIN on your tablet every time is almost as annoying as on your phone, so Smart Lock seems like a good choice. And that means that it&amp;rsquo;s almost certain that your tablet will be stolen unlocked. (If it gets stolen. I have no idea what the likelihood of that is.)&lt;/p>
+&lt;hr>
+&lt;h2 id="update">Update&lt;/h2>
+&lt;p>In Android O (a year after I wrote this) Google &lt;a href="https://www.androidpolice.com/2017/06/01/android-o-feature-spotlight-enabling-developer-options-requires-devices-passcode/">added a PIN prompt&lt;/a> when enabling developer options. So, that negates this problem.&lt;/p>
+&lt;p>Unless you&amp;rsquo;re already a developer&amp;hellip;&lt;/p></description></item><item><title>Why and How to Use a Contributor License Agreement</title><link>https://adam-p.ca/blog/2015/02/contributor-license-agreement/</link><pubDate>Tue, 17 Feb 2015 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2015/02/contributor-license-agreement/</guid><description>&lt;h2 id="background-and-motivation">Background and Motivation&lt;/h2>
+&lt;p>I received a &lt;a href="https://github.com/adam-p/markdown-here/pull/232">pull request&lt;/a> for Markdown Here that was great: it found a bug, fixed it, and included tests for the fix. However, the PR submitter didn&amp;rsquo;t write the tests using the existing framework, so I figured I&amp;rsquo;d massage his test code into the proper form.&lt;/p>
+&lt;p>And then I noticed that he included a &lt;a href="https://github.com/adam-p/markdown-here/commit/52cd013413ff4645ed124cef68b5fc9044d65a96#diff-555e8e637d661924e36cdddfba81a23aR9">copyright line&lt;/a> in the test file. It says &amp;ldquo;MIT License&amp;rdquo;, which is the license used for the rest of the project, but that got me thinking about what that might mean&amp;hellip;&lt;/p>
+&lt;p>Wikipedia suggests that the &lt;a href="https://en.wikipedia.org/wiki/MIT_License">MIT License&lt;/a> would require me to include his copyright+license notice wherever I use his code. Not a big deal, but annoying. And maybe a slippery slope &amp;ndash; what if I get a bunch more code submissions?&lt;/p>
+&lt;p>So I did some research into &amp;ldquo;Contributor License Agreements&amp;rdquo; and found that there are a couple more things to be concerned about:&lt;/p>
+&lt;p>If you ever want to change the project license, you have to get the agreement of all contributors. That includes dual-licensing. Good info about that (and CLAs in general), with specific KDE example: &lt;a href="https://julien.ponge.org/blog/in-defense-of-contributor-license-agreements/">&amp;ldquo;In Defense of License Agreements&amp;rdquo;&lt;/a>.&lt;/p>
+&lt;p>Patent something something. Contributors retain the patent rights unless explicitly granted in the CLA.&lt;/p>
+&lt;p>And just to be clear: Contributors have the copyright on their code &lt;em>by default&lt;/em>, regardless of whether they put the © notice on it. I&amp;rsquo;m not sure about the license.&lt;/p>
+&lt;p>So I decided to require MDH contributors to &amp;ldquo;sign&amp;rdquo; a CLA. Seemed kind of irresponsible not to.&lt;/p>
+&lt;h2 id="picking-a-cla">Picking a CLA&lt;/h2>
+&lt;p>Spending your weekend reading CLAs is a drag.&lt;/p>
+&lt;p>I decided to use &lt;a href="http://www.harmonyagreements.org/">Harmony Agreements&lt;/a> to &lt;a href="http://selector.harmonyagreements.org/">generate&lt;/a> the agreement. (I chose &amp;ldquo;any license&amp;rdquo; for the &amp;ldquo;outbound license option&amp;rdquo;.) The agreement it provides seems pretty good and pretty standard.&lt;/p>
+&lt;p>(Well&amp;hellip; when I first generated a agreement I chose the &amp;ldquo;copyright assignment&amp;rdquo; version instead of &amp;ldquo;copyright license&amp;rdquo;. I even committed it and got the pull-request submitter to sign it. But then I re-read it and realized it was a) not very standard, b) maybe not enforceable, and c) kind of heinous. So I changed to the &amp;ldquo;copyright license&amp;rdquo; form. The difference is something like &amp;ldquo;you&amp;rsquo;re transferring absolute power to me and you lose the ability to use your own code&amp;rdquo; versus &amp;ldquo;you&amp;rsquo;re letting me do whatever I want with your code but it&amp;rsquo;s still yours&amp;rdquo; &amp;ndash; exclusive vs. non-exclusive license, kind of thing.)&lt;/p>
+&lt;h2 id="signing">&amp;ldquo;Signing&amp;rdquo;&lt;/h2>
+&lt;p>Ugh.&lt;/p>
+&lt;p>Some projects &amp;ndash; like Apache &amp;ndash; require you to print out the agreement, sign it, and mail, fax, or scan-and-email it back to them. Another one (I forget which) uses some Adobe e-signing plugin where you draw your signature on the screen. Google requires you to be signed in, but it&amp;rsquo;s just a button press; ditto Twitter (signed in with Twitter, I mean). &lt;a href="https://www.clahub.com/">CLAHub&lt;/a> requires a Github sign-in (with optional typing of &amp;ldquo;I AGREE&amp;rdquo;). I think I also saw some projects that just require a filled-in form.&lt;/p>
+&lt;p>CLAHub is really cool. It gives you a nice link for your CLA, collects agreements, and runs a bot that watches your project&amp;rsquo;s PRs, checks against the CLAs, and comments on the PR as to whether the PR-user has agreed yet or not. Except&amp;hellip; there&amp;rsquo;s a notice saying it&amp;rsquo;s not ready for prime-time, the bot is broken, and the blog hasn&amp;rsquo;t been updated in a year. Also, entrusting a (flaky?) third party with the agreements seems dangerous (although they can be downloaded, so blah).&lt;/p>
+&lt;p>The article I linked above mentions &amp;ldquo;some [projects] collect agreements through a simple web form (Google Doc is a fine choice)&amp;rdquo;. So I created a Google Form with the CLA and a form for the contributor to provide contact info and indicate agreement. But&amp;hellip;&lt;/p>
+&lt;p>Then I started thinking about non-repudiability. So I did a little reading about &lt;a href="https://en.wikipedia.org/wiki/Electronic_signature">electronic signatures&lt;/a> (not to be confused with digital signatures). Which is a horrible rabbit hole. Anyway, it made me seriously doubt that a row in a Google Spreadsheet with someone&amp;rsquo;s maybe-correct address and the words &amp;ldquo;I AGREE&amp;rdquo; really constitutes a legal signature. (Even in the Google and Twitter cases &amp;ndash; how would they prove that they didn&amp;rsquo;t just fiddle some bits to make it look like I signed?)&lt;/p>
+&lt;p>And if you&amp;rsquo;re going to do this annoying CLA crap then you might as well hope that it means something, right?&lt;/p>
+&lt;p>Then I found &lt;a href="https://github.com/Medium/opensource/blob/master/sign-cla.md">Medium&amp;rsquo;s open source project&lt;/a>. It requires contributors to commit a file along with their pull request stating that they agree to the CLA. That seemed&amp;hellip; totally reasonable. The agreement is in-band with the code. In a way that I can&amp;rsquo;t manipulate without invalidating. And much, much less annoying for the contributor than printing/signing/faxing.&lt;/p>
+&lt;p>So that&amp;rsquo;s how I did it. See MDH&amp;rsquo;s &lt;a href="https://github.com/adam-p/markdown-here/blob/master/CONTRIBUTING.md#contributor-license-agreement">CONTRIBUTING.md&lt;/a>. (That&amp;rsquo;s the &lt;a href="https://github.com/blog/1184-contributing-guidelines">filename to use&lt;/a>.)&lt;/p>
+&lt;h2 id="backlash-warning">Backlash warning&lt;/h2>
+&lt;p>Doing the CLA read-and-agree dance is more effort than not doing it. And some people are offended at the idea of doing it (see the tweet at the top of the &amp;ldquo;In Defense Of&amp;rdquo; post.) So, it seems unavoidable that a project with a CLA will get fewer contributions than one without &amp;ndash; some people just won&amp;rsquo;t get past that hurdle.&lt;/p>
+&lt;p>But it still seems necessary.&lt;/p>
+&lt;hr>
+&lt;p>[Note: This is actually an email I wrote to my co-workers after going through this CLA exercise with Markdown Here. That&amp;rsquo;s why the tone is a bit informal and &amp;ldquo;blah&amp;rdquo; is used as if it means something.]&lt;/p></description></item><item><title>Test post: Markdown Here in Disqus</title><link>https://adam-p.ca/blog/2013/10/mdh-disqus-test/</link><pubDate>Fri, 18 Oct 2013 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2013/10/mdh-disqus-test/</guid><description>&lt;p>This is just a stub test post to allow me to try out Markdown Here in Disqus comments.&lt;/p>
+&lt;p>Right now MDH won&amp;rsquo;t work with Disqus in Chrome because of cross-origin restrictions. See: &lt;a href="https://github.com/adam-p/markdown-here/issues/124">https://github.com/adam-p/markdown-here/issues/124&lt;/a>&lt;/p>
+&lt;p>&lt;strong>Update&lt;/strong>: The Disqus edit box is &lt;code>contenteditable&lt;/code>, and MDH will render in it, but all formatting seems to get stripped out when you actually post the comment. Seems like the rich-edit-ness is probably just to support Disqus&amp;rsquo;s add-an-image feature.&lt;/p>
+&lt;p>&lt;strong>Final update&lt;/strong>: I&amp;rsquo;m not longer using Disqus, so there&amp;rsquo;s nothing here to try. Sorry!&lt;/p></description></item><item><title>Safari Extensions Gallery: half-baked</title><link>https://adam-p.ca/blog/2013/06/safari-extensions-gallery-half-baked/</link><pubDate>Tue, 25 Jun 2013 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2013/06/safari-extensions-gallery-half-baked/</guid><description>&lt;p>Trying to get &lt;a href="https://markdown-here.com">Markdown Here&lt;/a> listed in the &lt;a href="https://extensions.apple.com">Safari Extensions Gallery&lt;/a> is by far the worst browser extension &amp;ldquo;store&amp;rdquo; experience I&amp;rsquo;ve had so far. Shockingly bad.&lt;/p>
+&lt;h2 id="no-hosting">No hosting&lt;/h2>
+&lt;p>First of all, but least of all: There&amp;rsquo;s no hosting. Unlike the Chrome and Mozilla stores, the Safari store doesn&amp;rsquo;t host the extension for you &amp;ndash; it&amp;rsquo;s really more of a listing of links to wherever you host your extension files. That&amp;rsquo;s not terrible, but:&lt;/p>
+&lt;ul>
+&lt;li>It&amp;rsquo;s costing me a little bit of money each month to host them.&lt;/li>
+&lt;li>I don&amp;rsquo;t get nice install/usage stats like I do with Chrome and &lt;a href="https://addons.mozilla.org/en-US/firefox/addon/markdown-here/statistics/?last=365">Mozilla&lt;/a>.&lt;/li>
+&lt;/ul>
+&lt;h2 id="no-communication">No communication&lt;/h2>
+&lt;p>Submitting the extension was basically the same as everywhere else. But this is the confirmation email:&lt;/p>
+&lt;blockquote>
+&lt;p>Dear Adam Pritchard,
+Thank you for submitting your Safari Extension.
+Apple reviews all submissions and reserves the right to omit, edit, or reject any submission. Please note you will not receive any further notifications.
+We appreciate your interest in Safari.
+Sincerely,
+Apple Developer&lt;/p>
+&lt;/blockquote>
+&lt;p>(From &lt;a href="mailto:noreply@adc.apple.com">noreply@adc.apple.com&lt;/a>)&lt;/p>
+&lt;p>So&amp;hellip; You&amp;rsquo;re going to review my extension, and I&amp;rsquo;ll never know if it&amp;rsquo;s been accepted or rejected or what? And there&amp;rsquo;s no mechanism for me to get an update?&lt;/p>
+&lt;p>Sure enough, 5 weeks has gone by now. There&amp;rsquo;ve been no status update emails, and there&amp;rsquo;s no review status info anywhere on the developer website (that I can find). And I&amp;rsquo;m not the only one &amp;ndash; there are &lt;a href="https://devforums.apple.com/thread/182373?tstart=0">other people&lt;/a> on the forums in the &lt;a href="https://devforums.apple.com/thread/187144?tstart=0">same boat&lt;/a>.&lt;/p>
+&lt;p>To be clear, this is not at all what the Chrome and Mozilla extension approval process is like. I&amp;rsquo;ve had my &lt;a href="https://github.com/adam-p/markdown-here/issues/21">fair share of problems&lt;/a> with the Mozilla approval process, but I had a queue number, an IRC channel, and reviewers I could communicate with. (The Chrome store has no apparent approval process, because I&amp;rsquo;m using the standard API. Which is similar to the Safari extension API I&amp;rsquo;m using. So&amp;hellip; why is there any non-negligible review at all?)&lt;/p>
+&lt;h2 id="no-search">No search&lt;/h2>
+&lt;p>To top it off, the Safari Extensions Gallery itself&amp;hellip; has no search?!? Let&amp;rsquo;s pick a not-front-page extension at random&amp;hellip; how about the &amp;ldquo;Entertainment&amp;rdquo; category and then the Turboglue extension. (Sorry, there&amp;rsquo;s no way to give you a link to that!). Now try to find it some other way. The search box in the upper-right of that page? &amp;ldquo;No results were found.&amp;rdquo; And&amp;hellip; I can&amp;rsquo;t find another search box. (Unlike Firefox, there&amp;rsquo;s no in-browser extension search.) How about a Google site search? That wouldn&amp;rsquo;t really be an acceptable work-around even if it worked&amp;hellip; but &lt;a href="https://www.google.com/search?q=site%3Aextensions.apple.com+Turboglue">it doesn&amp;rsquo;t anwyay&lt;/a>.&lt;/p>
+&lt;p>(Maybe related: Here&amp;rsquo;s a &lt;a href="https://devforums.apple.com/thread/179972">forum post&lt;/a> by a dev who has had his/her extension approved, but can&amp;rsquo;t actually find it in the Gallery.)&lt;/p>
+&lt;p>I&amp;rsquo;m not sure how this could be worse. Unfriendly to developers &lt;em>and&lt;/em> unfriendly to users. And it&amp;rsquo;s not like Safari extensions are &lt;em>new&lt;/em> &amp;ndash; they&amp;rsquo;ve been around about the &lt;a href="https://en.wikipedia.org/wiki/Safari_%28web_browser%29#Safari_5">same amount of time&lt;/a> &lt;a href="https://en.wikipedia.org/wiki/Google_Chrome#Chrome_Web_Store">as Chrome extensions&lt;/a>.&lt;/p>
+&lt;p>&lt;img src="../img/blog/safari-gallery-new.png" alt="Safari Extensions Gallery still marked as new" title="Safari Extensions Gallery still marked as new">&lt;/p>
+&lt;p>(Screen-grabbed from the bottom of &lt;a href="https://developer.apple.com/programs/safari/">this page&lt;/a>. Age of the Gallery derived from &lt;a href="https://lifehacker.com/5598524/whats-useful-in-the-safari-extensions-gallery">this article&lt;/a>.)&lt;/p>
+&lt;h2 id="sweet-lemons">Sweet lemons&lt;/h2>
+&lt;p>Safari extensions are clearly not Apple&amp;rsquo;s primary concern, and maybe that&amp;rsquo;s okay. It&amp;rsquo;s not a hardcore-extension-geek browser like Firefox; their browser isn&amp;rsquo;t also an OS, unlike Chrome; and they have guaranteed, bundled-with-OS market share, like Internet Explorer (I don&amp;rsquo;t know much about IE&amp;rsquo;s extension support, but it&amp;rsquo;s clearly not as robust as Firefox and Chrome). And they do give me a way to provide a &lt;a href="https://markdown-here.com/get.html">Safari extension to my users&lt;/a> and update it automatically.&lt;/p>
+&lt;hr>
+&lt;h2 id="bonus-whinging">Bonus whinging&lt;/h2>
+&lt;p>It&amp;rsquo;s necessary to generate and register a signing certificate before you can even start to develop a Safari extension (IIRC &amp;ndash; but definitely before publishing). There&amp;rsquo;s no such stumbling block in Firefox and Chrome. Maybe this is due to the absence of hosting? I&amp;rsquo;m not entirely sure how painful it&amp;rsquo;s going to be to set up a new OS X development machine.&lt;/p>
+&lt;p>Check out the ghetto method of opening the Markdown Here options page in Safari. It&amp;rsquo;s probably not &lt;em>just&lt;/em> my dumbness, since I stole the approach from AdBlock.&lt;/p>
+&lt;p>&lt;img src="../img/blog/safari-mdh-prefs-checkbox.png" alt="Markdown Here prefs in Safari">&lt;/p>
+&lt;hr>
+&lt;h2 id="update-accepted-6-months-later">Update: Accepted 6 months later&lt;/h2>
+&lt;p>Two days ago (2013-11-04) I received an email indicating that Markdown Here had been accepted into the Safari Extensions Gallery. Phew!&lt;/p>
+&lt;p>I think the acceptance makes the whole thing even weirder. If they were just sending submissions directly to the trash I could understand, but&amp;hellip; Complete silence and then acceptance after 6 months? Are they backed up half a year? Is my extension so complex that it took them that long to review? Wha?&lt;/p></description></item><item><title>No One Knows to Click on a Page Action</title><link>https://adam-p.ca/blog/2013/03/pageaction-interaction/</link><pubDate>Sun, 24 Mar 2013 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2013/03/pageaction-interaction/</guid><description>&lt;p>&lt;strong>Page actions&lt;/strong> &amp;ndash; the buttons in a browser&amp;rsquo;s address bar &amp;ndash; are a &lt;strong>surprising UI failure&lt;/strong>.&lt;/p>
+&lt;p>When adding a button for a browser extension, a choice must be made whether to make it a &amp;ldquo;page action&amp;rdquo; or a &amp;ldquo;browser action&amp;rdquo; (button on the toolbar). But &lt;strong>browsers have failed to communicate the interactiveness&lt;/strong> of page actions, and &lt;strong>almost no one &amp;ndash; techy or layman &amp;ndash; realizes that they&amp;rsquo;re clickable&lt;/strong>.&lt;/p>
+&lt;hr>
+&lt;p>To complement the context menu item and hotkey, and to fulfil &lt;a href="https://github.com/adam-p/markdown-here/issues/34">a user feature request&lt;/a>, I decided to add a button to the &lt;a href="https://www.markdown-here.com">&lt;strong>Markdown Here&lt;/strong>&lt;/a> browser extension. It turned out that simply deciding &lt;em>where&lt;/em> to put the button was a big part of the effort&amp;hellip;&lt;/p>
+&lt;h2 id="page-action-vs-browser-action">Page Action vs. Browser Action&lt;/h2>
+&lt;p>I&amp;rsquo;m going to use the Chrome extension development terminology:&lt;/p>
+&lt;dl>
+&lt;dt>Page actions...&lt;/dt>
+&lt;dd>are the buttons and status indicators located in the address/omni/awesome bar. (&lt;a href="https://developer.chrome.com/extensions/pageAction.html">See &lt;code>pageAction&lt;/code> API info&lt;/a>.)&lt;/dd>
+&lt;dt>Browser actions...&lt;/dt>
+&lt;dd>are buttons on the browser toolbar. (&lt;a href="https://developer.chrome.com/extensions/browserAction.html">See &lt;code>browserAction&lt;/code> API info&lt;/a>.)&lt;/dd>
+&lt;/dl>
+&lt;p>&lt;img src="../img/blog/firefox-button.png" alt="Firefox page and browser buttons">&lt;/p>
+&lt;p>In the screenshot above you can see the two styles co-existing in Firefox, which suggests there&amp;rsquo;s no real implementation decision to make &amp;ndash; just provide both, and let the user decide which style they like. That&amp;rsquo;s true in Firefox (although there&amp;rsquo;s still the lesser decision of whether or not to add the toolbar button by default), but in Chrome you can either have a page action &lt;em>or&lt;/em> a browser action, not both.&lt;/p>
+&lt;p>The choice initially seemed pretty obvious: use a page action. From Chrome&amp;rsquo;s &lt;a href="https://developer.chrome.com/extensions/browserAction.html#tips">documentation for browser actions&lt;/a>:&lt;/p>
+&lt;blockquote>
+&lt;p>Don&amp;rsquo;t use browser actions for features that make sense for only a few pages. Use page actions instead.&lt;/p>
+&lt;/blockquote>
+&lt;p>Markdown Here&amp;rsquo;s button is only applicable to some rich-edit compose elements (email, mostly), so that admonition seems to apply pretty directly. Like many people, I don&amp;rsquo;t like occasional-use buttons cluttering up my toolbar, so I initially implemented the button as a page action.&lt;/p>
+&lt;h2 id="apparently-imperceptible-affordance">Apparently Imperceptible Affordance&lt;/h2>
+&lt;p>&amp;hellip;And then I showed the cool new button to my significant other, who said something along the lines of &amp;ldquo;I can click that?&amp;rdquo; Which is a pretty damning statement, for a button.&lt;/p>
+&lt;p>I must admit that I had some suspicions about the obviousness of page actions' clickability. I&amp;rsquo;m fairly sure it took me a while to realize I could click them, and I&amp;rsquo;m a) pretty technically savvy, and b) pretty hover-over-everything-that-looks-interesting curious. But what if a user is &lt;em>not&lt;/em> both of those things&amp;hellip;?&lt;/p>
+&lt;p>So I asked around. I asked in the &lt;a href="https://groups.google.com/forum/#!topic/markdown-here/NjQRYcD1mgY/discussion">Markdown Here Google Group&lt;/a>, the &lt;a href="https://ux.stackexchange.com/questions/33987/browser-extensions-page-action-or-browser-action">UX StackExchange&lt;/a>, and on &lt;a href="https://plus.google.com/u/0/112228900913862544865/posts/9HbUjid2UvV">Google+&lt;/a>. These are the sorts of responses I got:&lt;/p>
+&lt;ul>
+&lt;li>&amp;ldquo;This [is] purely anecdotal, but I work in the web industry, and use [C]hrome everyday, and didn&amp;rsquo;t realise the page actions were clickable. I agree with you that they look more like signifiers than they do clickable buttons.&amp;rdquo;&lt;/li>
+&lt;li>&amp;ldquo;But I agree that they don&amp;rsquo;t function well as buttons, perhaps this is by the design of the icon (not &amp;ldquo;raising&amp;rdquo; the element to give it depth).&amp;rdquo;&lt;/li>
+&lt;li>&amp;ldquo;pageAction in the abstract is a great idea, but I always find its use a little jarring. And I agree it&amp;rsquo;s not button-like at all, more just informational.&amp;rdquo;&lt;/li>
+&lt;/ul>
+&lt;p>(Yes, there were some people who knew that page actions are clickable. But the fact that many computer/tech/web/UX-savvy people &lt;em>didn&amp;rsquo;t&lt;/em> know is the more significant observation.)&lt;/p>
+&lt;p>I also asked around among people at the office (coders) and among non-programmer friends, and the vast majority of both groups didn&amp;rsquo;t know they could interact with page actions. At best they thought of them as status indicators, and at worst they couldn&amp;rsquo;t remember ever having noticed them before. &lt;em>Ugh&lt;/em>.&lt;/p>
+&lt;h3 id="missing-cues">Missing Cues&lt;/h3>
+&lt;p>It&amp;rsquo;s hard to blame users for this lack of &lt;a href="https://en.wikipedia.org/wiki/Affordance">affordance&lt;/a> recognition. At least, not yet.&lt;/p>
+&lt;p>Page actions do not display any of the typical this-is-a-clickable-thing traits. For the most part, page actions:&lt;/p>
+&lt;ul>
+&lt;li>are not raised or underlined, like a standard button or a link, so most people won&amp;rsquo;t hover over them, but even if the user does hover, page actions&amp;hellip;&lt;/li>
+&lt;li>do not change at all when hovered over &amp;ndash; no outline, no colour change, no raise-up, no clicky-hand mouse cursor.&lt;/li>
+&lt;/ul>
+&lt;p>Some page actions have a verb-based tooltip if you hover long enough. &lt;em>Some&lt;/em>. &lt;em>If&lt;/em>. &lt;em>Long enough&lt;/em>.&lt;/p>
+&lt;p>It&amp;rsquo;s a little shocking how poorly the interactiveness is communicated to the user.&lt;/p>
+&lt;h3 id="maybe-our-future-selves-will-get-it">Maybe our future selves will get it?&lt;/h3>
+&lt;!-- dropping into HTML to float the image, since it's so vertical -->
+&lt;a href="../img/blog/windows8-clickable.png">
+&lt;img src="../img/blog/windows8-clickable.png" alt="Windows 8 clickable text" class="pull-right" style="max-height: 20em; margin-left: 2em;">
+&lt;/a>
+&lt;p>Above I coyly dropped &amp;ldquo;At least, not yet.&amp;rdquo; There is a trend in UI design toward everything on-screen being interactive unless explicitly disabled-looking. Windows 8 has gone this way, as has Chrome and, to a slightly lesser extent, Firefox. There&amp;rsquo;s very, very little text or window chrome that&amp;rsquo;s non-interactive.&lt;/p>
+&lt;p>But even if you accept the &amp;ldquo;everything is interactive&amp;rdquo; ideal, page actions are still different than most other elements, since there&amp;rsquo;s no hover effect. And page actions are further hampered by the minimalistic design aesthetic that Chrome and Firefox seem to have adopted for them &amp;ndash; a monochrome outline icon that can easily be read as disabled.&lt;/p>
+&lt;p>Maybe once users have fully embraced/internalized the idea that there are no extraneous UI elements, they won&amp;rsquo;t need hover effects and raised borders. Maybe there&amp;rsquo;ll be a great awakening to the utility of page actions. But until then&amp;hellip;&lt;/p>
+&lt;h2 id="how-to-rescue-page-actions">How to rescue page actions&lt;/h2>
+&lt;p>Page actions need to look less like small, monochrome, passive, static icons. They need some standard button cues, both initially and on hover; they should employ one or more of: raisèd-ness, colour, border, more visual strength.&lt;/p>
+&lt;p>(I suspect that even the Chrome-style toolbar buttons &amp;ndash; like the three-line settings button &amp;ndash; are also below most laypeople&amp;rsquo;s threshold to recognize the click affordance. I&amp;rsquo;ve seen that in action in my own family-tech-support experience. Those buttons also lack most historical click cues. But let&amp;rsquo;s tilt at one windmill at a time&amp;hellip;)&lt;/p>
+&lt;h3 id="tangent-chrome-needs-to-allow-both-page-and-browser-actions">Tangent: Chrome needs to allow both page and browser actions&lt;/h3>
+&lt;p>Finally, Chrome should allow extensions to provide both page actions and browser actions.&lt;/p>
+&lt;p>In the screenshot at the top of this post, you see can that &lt;a href="https://getpocket.com/">Pocket&amp;rsquo;s&lt;/a> Firefox extension uses both button styles: the page action is for saving the current page, while the browser action is for showing your saved pages. Similarly for the bookmarks buttons: page action for bookmarking the page, browser action for viewing bookmarks.&lt;/p>
+&lt;p>(Markdown Here also has a button in each place, but it&amp;rsquo;s not as compelling a use case, since it&amp;rsquo;s just a convenience to work around the page action affordance opacity. Both buttons toggle Markdown rendering; the page action only shows when focus is in a valid target; you can hide the toolbar button if you&amp;rsquo;re one of the few page-action-savvy users. But, still, I wish I could provide the same flexibility to my Chrome users that I do to my Firefox users.)&lt;/p>
+&lt;p>In Chrome, Pocket only has a browser action (which, oddly enough, acts only like its Firefox page action), and bookmarks only have a page action (and a whole toolbar). I can&amp;rsquo;t think of any reason for Chrome to prevent extensions from providing both, and there are certainly good use cases for allowing them.&lt;/p>
+&lt;h2 id="so-its-back-to-a-browser-action">So it&amp;rsquo;s back to a browser action&lt;/h2>
+&lt;p>I finally switched the Markdown Here toggle button in Chrome to be a browser action. Even though it clearly, spiritually, should be a page action, I just can&amp;rsquo;t ignore the fact that most users will not recognize it as clickable in that form.&lt;/p>
+&lt;p>I have had &lt;a href="https://github.com/adam-p/markdown-here/issues/45">one complaint&lt;/a> about the button location, but the user seemed satisfied that I made the rational choice after I explained it.&lt;/p>
+&lt;hr>
+&lt;a name="update-20171028"/>
+&lt;h2 id="update-2017-10-28">Update 2017-10-28&lt;/h2>
+&lt;p>Last year &lt;strong>Chrome turned page actions into browser actions&lt;/strong>. The &lt;a href="https://productforums.google.com/d/msg/chrome/wOUFbsKqPg0/K9FBzJh7BAAJ">description of the change&lt;/a> suggests that this was a security decision. Evil stealth extensions were being installed, so now all extensions have to have toolbar buttons to expose them to users. (FWIW, I don&amp;rsquo;t think this is a good solution to the problem. I&amp;rsquo;m sure the majority of users don&amp;rsquo;t pay much attention to random toolbar buttons.) It makes little sense for page action-centric extensions to have both a sometimes-visible address bar button and an always-visible toolbar button, so the Chrome team did away with the address bar button.&lt;/p>
+&lt;p>Firefox hasn&amp;rsquo;t made a similar change. You&amp;rsquo;d think that if there&amp;rsquo;s solid security rationale for one browser, that it&amp;rsquo;d apply to all browsers.&lt;/p>
+&lt;p>This makes the documentation for &lt;code>pageAction&lt;/code> pretty confusing. Check out &lt;a href="https://developer.chrome.com/extensions/pageAction">Chrome&amp;rsquo;s&lt;/a> versus &lt;a href="https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/pageAction">Mozilla&amp;rsquo;s&lt;/a> documentation. Chrome&amp;rsquo;s documentation is kind of incoherent now. There seems to be no reason at all to use page actions, but the doc still suggests that you do.&lt;/p>
+&lt;p>I felt that page actions were kind of unusable before, but&amp;hellip; this is worse?&lt;/p>
+&lt;p>The reason I was looking at this again is because I created another extension, called &lt;a href="https://github.com/adam-p/breached">Breached&lt;/a>, where a page action would, in theory, make the most sense. The button is enabled/shown when the user visits a site that has suffered a breach in the past, exposing user accounts. This is a pretty rare thing (for many people&amp;hellip; who don&amp;rsquo;t use Yahoo Mail), so dedicating a perma-visible toolbar button to it is pretty wasteful. Still, I initially went with a browser action for the reasons given in this post. I even added a notification (shown once per site), so the user could hide the toolbar button and still notice when they visit a breached site.&lt;/p>
+&lt;p>Then a &lt;a href="https://addons.mozilla.org/en-US/firefox/addon/breached/reviews/940746/">reviewer&lt;/a> requested that it be a page action. I thought about it again and realized that the notification also helps with the &amp;ldquo;no one knows to click on a page action&amp;rdquo; problem by telling the user they can click on it. And the always-visible button still bugged me (and, let&amp;rsquo;s face it, most users won&amp;rsquo;t know how to hide buttons). So I changed it to a page action. And&amp;hellip; discovered that there&amp;rsquo;s no visible difference in Chrome. Except page actions don&amp;rsquo;t support badge text, which I was using to show the number of breaches.&lt;/p>
+&lt;p>Anyway, I&amp;rsquo;m leaving Breached as a page action, for the sake of Firefox users.&lt;/p>
+&lt;hr>
+&lt;p>Postscript: First blog post ever! Yay! Thanks to &lt;a href="https://caseywatts.github.com/">Casey Watts&lt;/a> for suggesting that I write it.&lt;/p></description></item></channel></rss>
