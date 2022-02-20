@@ -195,9 +195,9 @@ blockquote {
   @extend .blockquote;
   border-left: 3px solid tint-color($body-color, 60%);
   font-family: $font-family-serif;
-  font-size: 1.1em;
+  font-size: 1.0em;
   font-style: italic;
-  line-height: 1.8em;
+  line-height: 1.6em;
   padding: 0 1em;
   margin-left: 1em;
 }
