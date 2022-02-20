@@ -102,3 +102,7 @@ I remain hopeful that this situation can improve rapidly. Good algorithms tend t
 ## Postscript
 
 The state of this seems so obviously sketchy that I think I must be missing something important. I am still an IPv6 neophyte. Please correct me if I have gotten anything wrong.
+
+---
+
+Edit: I [posted this to /r/ipv6](https://old.reddit.com/r/ipv6/comments/sx8ko7/the_scary_state_of_ipv6_ratelimiting_please_let/) and there are some good comments there.
