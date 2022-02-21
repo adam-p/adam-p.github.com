@@ -45,7 +45,7 @@ adam-p
 <p>But IPv6 is a very different matter.</p>
 <h2 id=a-gazillion-ips>A gazillion IPs</h2>
 <p>When you ask your ISP for an IPv6 assignment, you get <em>at least</em> a <a href=https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#IPv6_CIDR_blocks>/64</a> block &ndash; 2⁶⁴ assignable addresses. <a href=https://www.ripe.net/publications/docs/ripe-690>RIPE suggests</a> giving a /56 prefix (2⁷² addresses == 256 /64 blocks) to home users and a /48 prefix (2⁸⁰ addresses == 65,536 /64 blocks) to businesses (or &ldquo;If you want a simple addressing plan use a /48 for each end-user&rdquo;). <a href=https://datatracker.ietf.org/doc/html/rfc6177>RFC 6177</a> agrees with this guidance, as does <a href=https://blog.apnic.net/2017/07/10/isps-simplifying-customer-ipv6-addressing-part-2/>APNIC</a>.</p>
-<p>Searching for ISPs' IPv6 prefix delegation policies shows that /64<sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup> and /56 are pretty common. Internode in Australia <a href=https://www.internode.on.net/about/our_network/ipv6/>assigns /56 blocks</a> to residential and business customers. In the US, Charter Spectrum also <a href=https://www.reddit.com/r/ipv6/comments/i1b7nk/charter_spectrum_and_ipv6_with_prefix_delegation/>gives /56s</a>. Cogent lets users <a href=https://www.cogentco.com/files/docs/customer_service/faq/ipq_na.txt>request up to /48</a>. (Curiously, Google Fiber reduced their assignment <a href=https://www.reddit.com/r/ipv6/comments/9zerb5/google_fiber_now_defaulting_to_handing_out_a_64/>from /56 to /64</a>.)</p>
+<p>Searching for ISPs' IPv6 prefix delegation policies shows that /64<sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup> and /56 are pretty common. Internode in Australia <a href=https://www.internode.on.net/about/our_network/ipv6/>assigns /56 blocks</a> to residential and business customers. In the US, Charter Spectrum also <a href=https://www.reddit.com/r/ipv6/comments/i1b7nk/charter_spectrum_and_ipv6_with_prefix_delegation/>gives /56s</a>. Cogent lets users <a href=https://www.cogentco.com/files/docs/customer_service/faq/ipq_na.txt>request up to /48</a>.</p>
 <p>So, it&rsquo;s safe to assume that an attacker can obtain at least a /56 and probably a /48. It&rsquo;s also prudent to assume that a determined attacker can utilize all of the addresses at their disposal. And there is at least one <a href=https://github.com/blechschmidt/freebind>tool that does exactly that</a> &ndash; &ldquo;freebind: IPv4 and IPv6 address rate limiting evasion tool&rdquo;.</p>
 <h2 id=whats-the-right-way-to-rate-limit-a-gazillion-ips>What&rsquo;s the right way to rate-limit a gazillion IPs?</h2>
 <p>This <a href=https://serverfault.com/a/863511/476142>StackOverflow answer</a> outlines the best approach I&rsquo;ve found:</p>
@@ -90,7 +90,7 @@ adam-p
 <h2 id=postscript>Postscript</h2>
 <p>The state of this seems so obviously sketchy that I think I must be missing something important. I am still an IPv6 neophyte. Please correct me if I have gotten anything wrong.</p>
 <hr>
-<p>Edit: I <a href=https://old.reddit.com/r/ipv6/comments/sx8ko7/the_scary_state_of_ipv6_ratelimiting_please_let/>posted this to /r/ipv6</a> and there are some good comments there.</p>
+<p>Edit: I <a href=https://old.reddit.com/r/ipv6/comments/sx8ko7/the_scary_state_of_ipv6_ratelimiting_please_let/>posted this to /r/ipv6</a> and there are some good contrary comments there. I particularly like <a href=https://www.reddit.com/r/ipv6/comments/sx8ko7/the_scary_state_of_ipv6_ratelimiting_please_let/hxsbfuh/>this one</a> that talks about IPv6 being better than IPv4 for rate limiting, since providers will generally have a single IPv6 prefix themselves and give out prefixes in a consistent manner, rather than the scattered, different-IP-each-reboot world of IPv4. The comments also talk a lot more about &ldquo;bycatch&rdquo; (over-blocking), which I didn&rsquo;t really. But I still don&rsquo;t feel they&rsquo;re worried enough about how providers and libraries have actually implemented rate limiting at this point in time.</p>
 <section class=footnotes role=doc-endnotes>
 <hr>
 <ol>
@@ -111,7 +111,7 @@ adam-p
 <hr>
 <aside>
 <p>
-<h5> 1734 Words </h5>
+<h5> 1804 Words </h5>
 </p>
 <p>
 Previous: <a class=previous href=../../../../blog/2022/02/git-submodule-subtree/> Git Submodule vs Subtree</a>
