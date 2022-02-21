@@ -105,4 +105,4 @@ The state of this seems so obviously sketchy that I think I must be missing some
 
 ---
 
-Edit: I [posted this to /r/ipv6](https://old.reddit.com/r/ipv6/comments/sx8ko7/the_scary_state_of_ipv6_ratelimiting_please_let/) and there are some good comments there.
+Edit: I [posted this to /r/ipv6](https://old.reddit.com/r/ipv6/comments/sx8ko7/the_scary_state_of_ipv6_ratelimiting_please_let/) and there are some good contrary comments there. I particularly like [this one](https://www.reddit.com/r/ipv6/comments/sx8ko7/the_scary_state_of_ipv6_ratelimiting_please_let/hxsbfuh/) that talks about IPv6 being better than IPv4 for rate limiting, since providers will generally have a single IPv6 prefix themselves and give out prefixes in a consistent manner, rather than the scattered, different-IP-each-reboot world of IPv4. The comments also talk a lot more about "bycatch" (over-blocking), which I didn't really. But I still don't feel they're worried enough about how providers and libraries have actually implemented rate limiting at this point in time.
