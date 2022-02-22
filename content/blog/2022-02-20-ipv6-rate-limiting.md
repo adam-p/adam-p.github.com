@@ -105,4 +105,14 @@ The state of this seems so obviously sketchy that I think I must be missing some
 
 ---
 
-Edit: I [posted this to /r/ipv6](https://old.reddit.com/r/ipv6/comments/sx8ko7/the_scary_state_of_ipv6_ratelimiting_please_let/) and there are some good contrary comments there. I particularly like [this one](https://www.reddit.com/r/ipv6/comments/sx8ko7/the_scary_state_of_ipv6_ratelimiting_please_let/hxsbfuh/) that talks about IPv6 being better than IPv4 for rate limiting, since providers will generally have a single IPv6 prefix themselves and give out prefixes in a consistent manner, rather than the scattered, different-IP-each-reboot world of IPv4. The comments also talk a lot more about "bycatch" (over-blocking), which I didn't really. But I still don't feel they're worried enough about how providers and libraries have actually implemented rate limiting at this point in time.
+Edit 2022-02-21: I [posted this to /r/ipv6](https://old.reddit.com/r/ipv6/comments/sx8ko7/the_scary_state_of_ipv6_ratelimiting_please_let/) and there are some good contrary comments there. I particularly like [this one](https://www.reddit.com/r/ipv6/comments/sx8ko7/the_scary_state_of_ipv6_ratelimiting_please_let/hxsbfuh/) that talks about IPv6 being better than IPv4 for rate limiting, since providers will generally have a single IPv6 prefix themselves and give out prefixes in a consistent manner, rather than the scattered, different-IP-each-reboot world of IPv4. The comments also talk a lot more about "bycatch" (over-blocking), which I didn't really. But I still don't feel they're worried enough about how providers and libraries have actually implemented rate limiting at this point in time.
+
+---
+
+Edit 2022-02-22: 
+
+A coworker pointed out that the way I did the prefixed-IP-canonicalization in my PRs was overly complicated and can be achieved with the stdlib like `ipv6.Mask(net.CIDRMask(56, 128)).String()`. I had tried various approaches with the stdlib and didn't come up with one that worked, but I guess I missed that one. Embarrassing.
+
+I did some searching for fail2ban+ipv6. Their [IPv6 support master plan](https://github.com/fail2ban/fail2ban/issues/1123) is interesting and relevant. [For example](https://github.com/fail2ban/fail2ban/issues/1123#issuecomment-123746872): "I am not sure we will land/release 1 [per-IP blocking] alone since, as was stated, it could immediately be exploited by an attacker to cause resources exhaustion/DoS. May be only if treatment of IPv6 addresses would be made optional with a big fat warning on possible ramifications." Even though it looks like [per-IP IPv6 support](https://github.com/fail2ban/fail2ban/pull/1374) was [added in 0.10](https://www.ctrl.blog/entry/fail2ban-ipv6.html). 
+
+Reading through all of the comments on that issues suggests that fail2ban still only uses a per-IP strategy to block IPv6. And are aware it's insufficient. And stopped discussing it a year and a half ago.
