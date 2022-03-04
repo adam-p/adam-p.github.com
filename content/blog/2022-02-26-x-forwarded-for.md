@@ -1,6 +1,6 @@
 ---
 title: "The perils of the “real” client IP"
-date: 2022-02-26T07:42:10-05:00
+date: 2022-03-04T13:20:10-05:00
 draft: false
 tags: []
 slug: x-forwarded-for
