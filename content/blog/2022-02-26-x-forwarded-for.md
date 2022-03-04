@@ -314,19 +314,19 @@ True-Client-IP: 3.3.3.3
 
 `chi.middleware.RealIP`'s logic goes like: "use the `True-Client-IP`; if that doesn't exist, use the `X-Real-IP`; if that doesn't exist, use `X-Forwarded-For`". So it falls victim to header spoofing.
 
-But, as we've learned, the `chi.middleware.RealIP` warning also isn't good enough when it comes to `X-Forwarded-For` _because you can never, ever trust all of it_[^6]. In the `RealIP` code, the logic I just paraphrased actually ends with "use the leftmost XFF IP address". And we're now suitably scared of using the leftmost XFF IP.
+But, as we've learned, the `chi.middleware.RealIP` warning also isn't good enough when it comes to `X-Forwarded-For` _because you can never, ever trust all of it_[^6]. In the `RealIP` code, the logic I just paraphrased actually ends with "use the leftmost XFF IP address". And we're now suitably scared of using the leftmost XFF IP. (It also does not check that the leftmost "IP" is valid and non-private.)
 
 [^6]: Okay, it's _possible_ for your trusted proxy to blow away the existing XFF value and start fresh. But a) that's not how XFF is supposed to work, b) you're losing potentially useful information, and c) you achieve the same thing by using the rightmost-ish algorithm.
 
 So `chi.middleware.RealIP` falls firmly into the "only safe for non-security use" category. And you _must_ be aware of its header preference order and what your reverse proxy does or doesn't set and let through. In short, it's hard to recommend it.
 
-Chi's rate limiter has identical logic for obtaining the IP address and doesn't have the same warning. So that's bad, for the reasons we've discussed -- the non-XFF headers could be spoofed, the XFF header could be spoofed, the rate limiter could be bypassed, your memory could be exploded. The best way to use it is to not use its "real IP" logic and instead write your own "GetTrustworthyClientIP(request)" and pass that to its ["rate limit by arbitrary keys"](https://github.com/go-chi/httprate/blob/463924d478ea0c19de7265b97371a59a7ebf5fdd/README.md?plain=1#L61) feature.
+Chi's rate limiter has identical logic for obtaining the IP address and doesn't have the same warning. So that's bad, for the reasons we've discussed -- the non-XFF headers could be spoofed, the XFF header could be spoofed, the IP can be garbage, the rate limiter could be bypassed, your memory could be exploded. The best way to use it is to not use its "real IP" logic and instead write your own "GetTrustworthyClientIP(request)" and pass that to its ["rate limit by arbitrary keys"](https://github.com/go-chi/httprate/blob/463924d478ea0c19de7265b97371a59a7ebf5fdd/README.md?plain=1#L61) feature.
 
 Both RealIP and httprate are both using Go's `http.Header.Get` to get the XFF header. As [discussed above](#multiple-headers), this means that switching to taking the rightmost-ish IP wouldn't be sufficient, as an attacker could force the wrong header to be used.
 
 Chi's rate limiter is also the one instance I found of the XFF list being split by comma-space instead of just comma. I think that's wrong.
 
-[Disclosed to maintainer 2022-03-03. Maintainer asked for me to make an issue, so I'm publishing this to point to.]
+[Disclosed to maintainer 2022-03-03. Maintainer requested that I [make an issue](https://github.com/go-chi/chi/issues/711).]
 
 ### didip/tollbooth
 
@@ -350,7 +350,7 @@ There are two more things that bug me about tollbooth's design. The first is tha
 
 The second thing that bugs me is going to get its very own section...
 
-[Disclosed to maintainer 2022-03-03. Maintainer [created PR](https://github.com/didip/tollbooth/pull/99) to fix 2022-03-04. Ongoing discussion there.]
+[2022-03-03: Disclosed to maintainer. 2022-03-04: Maintainer [created a PR](https://github.com/didip/tollbooth/pull/99) to fix it. Ongoing discussion there.]
 
 ### A default list of places to look for the client IP makes no sense
 
@@ -601,6 +601,7 @@ Thanks to [Psiphon Inc.](https://psiphon.ca) for giving me the time to work on t
 ## TODO
 
 * all projects: check for multiple headers weakness
+* all projects: for leftmost, check for valid/non-private
 * Go: create Header.Get issue
 * finish reference implementation
 * probably add some diagrams
