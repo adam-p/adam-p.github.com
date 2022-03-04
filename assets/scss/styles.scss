@@ -7,13 +7,14 @@
 // 2. Include any default variable overrides here
 $body-bg: #efedec;
 $body-color: #473030;
-$link-color: #b41717;
+$link-color: #a81919;
 $link-hover-color: lighten($link-color, 20%);
 $link-decoration: none;
 $headings-color: lighten($body-color, 15%);
 $navbar-light-brand-color: $headings-color;
 $navbar-light-color: $navbar-light-brand-color;
 $navbar-light-active-color: darken(saturate($navbar-light-color, 45%), 20%);
+$code-color: lighten($body-color, 20%);
 
 // This is the standard Bootstrap font set, but without system-ui (because https://infinnie.github.io/blog/2017/systemui.html)
 $font-family-sans-serif:
@@ -115,6 +116,18 @@ $headings-font-family: 'Exo 2', $font-family-serif;
   }
 }
 
+// Bootstrap's default blockquote styling only applies to the .blockquote class, so it's
+// a hassle to use with markdown-generated blockquote elements. Also, it's too subtle.
+blockquote {
+  @extend .blockquote;
+  border-left: 3px solid tint-color($body-color, 60%);
+  font-family: $font-family-serif;
+  font-size: 1.0em;
+  line-height: 1.6em;
+  padding: 0 1em;
+  margin-left: 1em;
+}
+
 img.icon, img[src$="#icon"] {
   width: 1em;
   margin-top: -0.25em;
@@ -172,7 +185,7 @@ pre {
   padding: 0.5em;
 
   // I want horizontal code scrollbars to more pronounced, so the reader knows that there is some text not visible
-  $code-scroll-color: shade-color($warning, 10%);
+  $code-scroll-color: #f0cda6;
   scrollbar-color: $code-scroll-color rgba(0, 0, 0, 0);
   &::-webkit-scrollbar {
     height: auto;
@@ -187,17 +200,4 @@ pre {
   .repo__popular {
     font-weight: bold;
   }
-}
-
-// Bootstrap's default blockquote styling only applies to the .blockquote class, so it's
-// a hassle to use with markdown-generated blockquote elements. Also, it's too subtle.
-blockquote {
-  @extend .blockquote;
-  border-left: 3px solid tint-color($body-color, 60%);
-  font-family: $font-family-serif;
-  font-size: 1.0em;
-  font-style: italic;
-  line-height: 1.6em;
-  padding: 0 1em;
-  margin-left: 1em;
 }
