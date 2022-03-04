@@ -4,9 +4,7 @@
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=google-site-verification content="WxZdzPANRFpehqogDMcTc9HLGXXDJy5If07MuUZvHho">
 <link rel=icon type=image/png href=../../../../favicon.png><link rel=stylesheet href=../../../../scss/styles.css>
-<title>No One Knows to Click on a Page Action | adam-p</title>
-</head>
-<body>
+<title>No One Knows to Click on a Page Action | adam-p</title></head><body>
 <nav class="navbar navbar-expand-md navbar-light bg-light">
 <div class=container-fluid>
 <a class=navbar-brand href=../../../../>
@@ -19,119 +17,76 @@ adam-p
 <ul class=navbar-nav>
 <li class=nav-item>
 <a class=nav-link href=../../../../blog/>Blog</a>
-</li>
-<li class=nav-item>
+</li><li class=nav-item>
 <a class=nav-link href=../../../../inco/>In/Co</a>
-</li>
-<li class=nav-item>
+</li><li class=nav-item>
 <a class=nav-link href=../../../../projects/>Projects</a>
-</li>
-<li class=nav-item>
+</li><li class=nav-item>
 <a class=nav-link href=../../../../cv/>CV</a>
-</li>
-</ul>
-</div>
-</div>
-</nav>
-<div class=container-fluid>
+</li></ul></div></div></nav><div class=container-fluid>
 <section>
-<h1 class=title><a href=../../../../blog/2013/03/pageaction-interaction/>No One Knows to Click on a Page Action</a></h1>
-<h5 class=text-end> Sunday March 24, 2013 </h5>
-<div>
+<h1 class=title><a href=../../../../blog/2013/03/pageaction-interaction/>No One Knows to Click on a Page Action</a></h1><h5 class=text-end> Sunday March 24, 2013 </h5><div>
 <article>
-<p><strong>Page actions</strong> &ndash; the buttons in a browser&rsquo;s address bar &ndash; are a <strong>surprising UI failure</strong>.</p>
-<p>When adding a button for a browser extension, a choice must be made whether to make it a &ldquo;page action&rdquo; or a &ldquo;browser action&rdquo; (button on the toolbar). But <strong>browsers have failed to communicate the interactiveness</strong> of page actions, and <strong>almost no one &ndash; techy or layman &ndash; realizes that they&rsquo;re clickable</strong>.</p>
-<hr>
-<p>To complement the context menu item and hotkey, and to fulfil <a href=https://github.com/adam-p/markdown-here/issues/34>a user feature request</a>, I decided to add a button to the <a href=https://www.markdown-here.com><strong>Markdown Here</strong></a> browser extension. It turned out that simply deciding <em>where</em> to put the button was a big part of the effort&mldr;</p>
-<h2 id=page-action-vs-browser-action>Page Action vs. Browser Action</h2>
-<p>I&rsquo;m going to use the Chrome extension development terminology:</p>
-<dl>
-<dt>Page actions...</dt>
-<dd>are the buttons and status indicators located in the address/omni/awesome bar. (<a href=https://developer.chrome.com/extensions/pageAction.html>See <code>pageAction</code> API info</a>.)</dd>
-<dt>Browser actions...</dt>
-<dd>are buttons on the browser toolbar. (<a href=https://developer.chrome.com/extensions/browserAction.html>See <code>browserAction</code> API info</a>.)</dd>
-</dl>
-<p><img src=../../../../img/blog/firefox-button.png alt="Firefox page and browser buttons"></p>
-<p>In the screenshot above you can see the two styles co-existing in Firefox, which suggests there&rsquo;s no real implementation decision to make &ndash; just provide both, and let the user decide which style they like. That&rsquo;s true in Firefox (although there&rsquo;s still the lesser decision of whether or not to add the toolbar button by default), but in Chrome you can either have a page action <em>or</em> a browser action, not both.</p>
-<p>The choice initially seemed pretty obvious: use a page action. From Chrome&rsquo;s <a href=https://developer.chrome.com/extensions/browserAction.html#tips>documentation for browser actions</a>:</p>
-<blockquote>
-<p>Don&rsquo;t use browser actions for features that make sense for only a few pages. Use page actions instead.</p>
-</blockquote>
-<p>Markdown Here&rsquo;s button is only applicable to some rich-edit compose elements (email, mostly), so that admonition seems to apply pretty directly. Like many people, I don&rsquo;t like occasional-use buttons cluttering up my toolbar, so I initially implemented the button as a page action.</p>
-<h2 id=apparently-imperceptible-affordance>Apparently Imperceptible Affordance</h2>
-<p>&mldr;And then I showed the cool new button to my significant other, who said something along the lines of &ldquo;I can click that?&rdquo; Which is a pretty damning statement, for a button.</p>
-<p>I must admit that I had some suspicions about the obviousness of page actions' clickability. I&rsquo;m fairly sure it took me a while to realize I could click them, and I&rsquo;m a) pretty technically savvy, and b) pretty hover-over-everything-that-looks-interesting curious. But what if a user is <em>not</em> both of those things&mldr;?</p>
-<p>So I asked around. I asked in the <a href=https://groups.google.com/forum/#!topic/markdown-here/NjQRYcD1mgY/discussion>Markdown Here Google Group</a>, the <a href=https://ux.stackexchange.com/questions/33987/browser-extensions-page-action-or-browser-action>UX StackExchange</a>, and on <a href=https://plus.google.com/u/0/112228900913862544865/posts/9HbUjid2UvV>Google+</a>. These are the sorts of responses I got:</p>
-<ul>
-<li>&ldquo;This [is] purely anecdotal, but I work in the web industry, and use [C]hrome everyday, and didn&rsquo;t realise the page actions were clickable. I agree with you that they look more like signifiers than they do clickable buttons.&rdquo;</li>
-<li>&ldquo;But I agree that they don&rsquo;t function well as buttons, perhaps this is by the design of the icon (not &ldquo;raising&rdquo; the element to give it depth).&rdquo;</li>
-<li>&ldquo;pageAction in the abstract is a great idea, but I always find its use a little jarring. And I agree it&rsquo;s not button-like at all, more just informational.&rdquo;</li>
-</ul>
-<p>(Yes, there were some people who knew that page actions are clickable. But the fact that many computer/tech/web/UX-savvy people <em>didn&rsquo;t</em> know is the more significant observation.)</p>
-<p>I also asked around among people at the office (coders) and among non-programmer friends, and the vast majority of both groups didn&rsquo;t know they could interact with page actions. At best they thought of them as status indicators, and at worst they couldn&rsquo;t remember ever having noticed them before. <em>Ugh</em>.</p>
-<h3 id=missing-cues>Missing Cues</h3>
-<p>It&rsquo;s hard to blame users for this lack of <a href=https://en.wikipedia.org/wiki/Affordance>affordance</a> recognition. At least, not yet.</p>
-<p>Page actions do not display any of the typical this-is-a-clickable-thing traits. For the most part, page actions:</p>
-<ul>
-<li>are not raised or underlined, like a standard button or a link, so most people won&rsquo;t hover over them, but even if the user does hover, page actions&mldr;</li>
-<li>do not change at all when hovered over &ndash; no outline, no colour change, no raise-up, no clicky-hand mouse cursor.</li>
-</ul>
-<p>Some page actions have a verb-based tooltip if you hover long enough. <em>Some</em>. <em>If</em>. <em>Long enough</em>.</p>
-<p>It&rsquo;s a little shocking how poorly the interactiveness is communicated to the user.</p>
-<h3 id=maybe-our-future-selves-will-get-it>Maybe our future selves will get it?</h3>
-<a href=../../../../img/blog/windows8-clickable.png>
+<p><strong>Page actions</strong> &ndash; the buttons in a browser&rsquo;s address bar &ndash; are a <strong>surprising UI failure</strong>.</p><p>When adding a button for a browser extension, a choice must be made whether to make it a &ldquo;page action&rdquo; or a &ldquo;browser action&rdquo; (button on the toolbar). But <strong>browsers have failed to communicate the interactiveness</strong> of page actions, and <strong>almost no one &ndash; techy or layman &ndash; realizes that they&rsquo;re clickable</strong>.</p><hr>
+<p>To complement the context menu item and hotkey, and to fulfil <a href=https://github.com/adam-p/markdown-here/issues/34>a user feature request</a>, I decided to add a button to the <a href=https://www.markdown-here.com><strong>Markdown Here</strong></a> browser extension. It turned out that simply deciding <em>where</em> to put the button was a big part of the effort&mldr;</p><h2 id=page-action-vs-browser-action>
+<a class=heading-anchor href=#page-action-vs-browser-action>
+##
+</a>
+Page Action vs. Browser Action
+</h2><p>I&rsquo;m going to use the Chrome extension development terminology:</p><dl>
+<dt>Page actions...</dt><dd>are the buttons and status indicators located in the address/omni/awesome bar. (<a href=https://developer.chrome.com/extensions/pageAction.html>See <code>pageAction</code> API info</a>.)</dd><dt>Browser actions...</dt><dd>are buttons on the browser toolbar. (<a href=https://developer.chrome.com/extensions/browserAction.html>See <code>browserAction</code> API info</a>.)</dd></dl><p><img src=../../../../img/blog/firefox-button.png alt="Firefox page and browser buttons"></p><p>In the screenshot above you can see the two styles co-existing in Firefox, which suggests there&rsquo;s no real implementation decision to make &ndash; just provide both, and let the user decide which style they like. That&rsquo;s true in Firefox (although there&rsquo;s still the lesser decision of whether or not to add the toolbar button by default), but in Chrome you can either have a page action <em>or</em> a browser action, not both.</p><p>The choice initially seemed pretty obvious: use a page action. From Chrome&rsquo;s <a href=https://developer.chrome.com/extensions/browserAction.html#tips>documentation for browser actions</a>:</p><blockquote>
+<p>Don&rsquo;t use browser actions for features that make sense for only a few pages. Use page actions instead.</p></blockquote><p>Markdown Here&rsquo;s button is only applicable to some rich-edit compose elements (email, mostly), so that admonition seems to apply pretty directly. Like many people, I don&rsquo;t like occasional-use buttons cluttering up my toolbar, so I initially implemented the button as a page action.</p><h2 id=apparently-imperceptible-affordance>
+<a class=heading-anchor href=#apparently-imperceptible-affordance>
+##
+</a>
+Apparently Imperceptible Affordance
+</h2><p>&mldr;And then I showed the cool new button to my significant other, who said something along the lines of &ldquo;I can click that?&rdquo; Which is a pretty damning statement, for a button.</p><p>I must admit that I had some suspicions about the obviousness of page actions&rsquo; clickability. I&rsquo;m fairly sure it took me a while to realize I could click them, and I&rsquo;m a) pretty technically savvy, and b) pretty hover-over-everything-that-looks-interesting curious. But what if a user is <em>not</em> both of those things&mldr;?</p><p>So I asked around. I asked in the <a href=https://groups.google.com/forum/#!topic/markdown-here/NjQRYcD1mgY/discussion>Markdown Here Google Group</a>, the <a href=https://ux.stackexchange.com/questions/33987/browser-extensions-page-action-or-browser-action>UX StackExchange</a>, and on <a href=https://plus.google.com/u/0/112228900913862544865/posts/9HbUjid2UvV>Google+</a>. These are the sorts of responses I got:</p><ul>
+<li>&ldquo;This [is] purely anecdotal, but I work in the web industry, and use [C]hrome everyday, and didn&rsquo;t realise the page actions were clickable. I agree with you that they look more like signifiers than they do clickable buttons.&rdquo;</li><li>&ldquo;But I agree that they don&rsquo;t function well as buttons, perhaps this is by the design of the icon (not &ldquo;raising&rdquo; the element to give it depth).&rdquo;</li><li>&ldquo;pageAction in the abstract is a great idea, but I always find its use a little jarring. And I agree it&rsquo;s not button-like at all, more just informational.&rdquo;</li></ul><p>(Yes, there were some people who knew that page actions are clickable. But the fact that many computer/tech/web/UX-savvy people <em>didn&rsquo;t</em> know is the more significant observation.)</p><p>I also asked around among people at the office (coders) and among non-programmer friends, and the vast majority of both groups didn&rsquo;t know they could interact with page actions. At best they thought of them as status indicators, and at worst they couldn&rsquo;t remember ever having noticed them before. <em>Ugh</em>.</p><h3 id=missing-cues>
+<a class=heading-anchor href=#missing-cues>
+###
+</a>
+Missing Cues
+</h3><p>It&rsquo;s hard to blame users for this lack of <a href=https://en.wikipedia.org/wiki/Affordance>affordance</a> recognition. At least, not yet.</p><p>Page actions do not display any of the typical this-is-a-clickable-thing traits. For the most part, page actions:</p><ul>
+<li>are not raised or underlined, like a standard button or a link, so most people won&rsquo;t hover over them, but even if the user does hover, page actions&mldr;</li><li>do not change at all when hovered over &ndash; no outline, no colour change, no raise-up, no clicky-hand mouse cursor.</li></ul><p>Some page actions have a verb-based tooltip if you hover long enough. <em>Some</em>. <em>If</em>. <em>Long enough</em>.</p><p>It&rsquo;s a little shocking how poorly the interactiveness is communicated to the user.</p><h3 id=maybe-our-future-selves-will-get-it>
+<a class=heading-anchor href=#maybe-our-future-selves-will-get-it>
+###
+</a>
+Maybe our future selves will get it?
+</h3><a href=../../../../img/blog/windows8-clickable.png>
 <img src=../../../../img/blog/windows8-clickable.png alt="Windows 8 clickable text" class=pull-right style=max-height:20em;margin-left:2em>
 </a>
-<p>Above I coyly dropped &ldquo;At least, not yet.&rdquo; There is a trend in UI design toward everything on-screen being interactive unless explicitly disabled-looking. Windows 8 has gone this way, as has Chrome and, to a slightly lesser extent, Firefox. There&rsquo;s very, very little text or window chrome that&rsquo;s non-interactive.</p>
-<p>But even if you accept the &ldquo;everything is interactive&rdquo; ideal, page actions are still different than most other elements, since there&rsquo;s no hover effect. And page actions are further hampered by the minimalistic design aesthetic that Chrome and Firefox seem to have adopted for them &ndash; a monochrome outline icon that can easily be read as disabled.</p>
-<p>Maybe once users have fully embraced/internalized the idea that there are no extraneous UI elements, they won&rsquo;t need hover effects and raised borders. Maybe there&rsquo;ll be a great awakening to the utility of page actions. But until then&mldr;</p>
-<h2 id=how-to-rescue-page-actions>How to rescue page actions</h2>
-<p>Page actions need to look less like small, monochrome, passive, static icons. They need some standard button cues, both initially and on hover; they should employ one or more of: raisèd-ness, colour, border, more visual strength.</p>
-<p>(I suspect that even the Chrome-style toolbar buttons &ndash; like the three-line settings button &ndash; are also below most laypeople&rsquo;s threshold to recognize the click affordance. I&rsquo;ve seen that in action in my own family-tech-support experience. Those buttons also lack most historical click cues. But let&rsquo;s tilt at one windmill at a time&mldr;)</p>
-<h3 id=tangent-chrome-needs-to-allow-both-page-and-browser-actions>Tangent: Chrome needs to allow both page and browser actions</h3>
-<p>Finally, Chrome should allow extensions to provide both page actions and browser actions.</p>
-<p>In the screenshot at the top of this post, you see can that <a href=https://getpocket.com/>Pocket&rsquo;s</a> Firefox extension uses both button styles: the page action is for saving the current page, while the browser action is for showing your saved pages. Similarly for the bookmarks buttons: page action for bookmarking the page, browser action for viewing bookmarks.</p>
-<p>(Markdown Here also has a button in each place, but it&rsquo;s not as compelling a use case, since it&rsquo;s just a convenience to work around the page action affordance opacity. Both buttons toggle Markdown rendering; the page action only shows when focus is in a valid target; you can hide the toolbar button if you&rsquo;re one of the few page-action-savvy users. But, still, I wish I could provide the same flexibility to my Chrome users that I do to my Firefox users.)</p>
-<p>In Chrome, Pocket only has a browser action (which, oddly enough, acts only like its Firefox page action), and bookmarks only have a page action (and a whole toolbar). I can&rsquo;t think of any reason for Chrome to prevent extensions from providing both, and there are certainly good use cases for allowing them.</p>
-<h2 id=so-its-back-to-a-browser-action>So it&rsquo;s back to a browser action</h2>
-<p>I finally switched the Markdown Here toggle button in Chrome to be a browser action. Even though it clearly, spiritually, should be a page action, I just can&rsquo;t ignore the fact that most users will not recognize it as clickable in that form.</p>
-<p>I have had <a href=https://github.com/adam-p/markdown-here/issues/45>one complaint</a> about the button location, but the user seemed satisfied that I made the rational choice after I explained it.</p>
-<hr>
+<p>Above I coyly dropped &ldquo;At least, not yet.&rdquo; There is a trend in UI design toward everything on-screen being interactive unless explicitly disabled-looking. Windows 8 has gone this way, as has Chrome and, to a slightly lesser extent, Firefox. There&rsquo;s very, very little text or window chrome that&rsquo;s non-interactive.</p><p>But even if you accept the &ldquo;everything is interactive&rdquo; ideal, page actions are still different than most other elements, since there&rsquo;s no hover effect. And page actions are further hampered by the minimalistic design aesthetic that Chrome and Firefox seem to have adopted for them &ndash; a monochrome outline icon that can easily be read as disabled.</p><p>Maybe once users have fully embraced/internalized the idea that there are no extraneous UI elements, they won&rsquo;t need hover effects and raised borders. Maybe there&rsquo;ll be a great awakening to the utility of page actions. But until then&mldr;</p><h2 id=how-to-rescue-page-actions>
+<a class=heading-anchor href=#how-to-rescue-page-actions>
+##
+</a>
+How to rescue page actions
+</h2><p>Page actions need to look less like small, monochrome, passive, static icons. They need some standard button cues, both initially and on hover; they should employ one or more of: raisèd-ness, colour, border, more visual strength.</p><p>(I suspect that even the Chrome-style toolbar buttons &ndash; like the three-line settings button &ndash; are also below most laypeople&rsquo;s threshold to recognize the click affordance. I&rsquo;ve seen that in action in my own family-tech-support experience. Those buttons also lack most historical click cues. But let&rsquo;s tilt at one windmill at a time&mldr;)</p><h3 id=tangent-chrome-needs-to-allow-both-page-and-browser-actions>
+<a class=heading-anchor href=#tangent-chrome-needs-to-allow-both-page-and-browser-actions>
+###
+</a>
+Tangent: Chrome needs to allow both page and browser actions
+</h3><p>Finally, Chrome should allow extensions to provide both page actions and browser actions.</p><p>In the screenshot at the top of this post, you see can that <a href=https://getpocket.com/>Pocket&rsquo;s</a> Firefox extension uses both button styles: the page action is for saving the current page, while the browser action is for showing your saved pages. Similarly for the bookmarks buttons: page action for bookmarking the page, browser action for viewing bookmarks.</p><p>(Markdown Here also has a button in each place, but it&rsquo;s not as compelling a use case, since it&rsquo;s just a convenience to work around the page action affordance opacity. Both buttons toggle Markdown rendering; the page action only shows when focus is in a valid target; you can hide the toolbar button if you&rsquo;re one of the few page-action-savvy users. But, still, I wish I could provide the same flexibility to my Chrome users that I do to my Firefox users.)</p><p>In Chrome, Pocket only has a browser action (which, oddly enough, acts only like its Firefox page action), and bookmarks only have a page action (and a whole toolbar). I can&rsquo;t think of any reason for Chrome to prevent extensions from providing both, and there are certainly good use cases for allowing them.</p><h2 id=so-its-back-to-a-browser-action>
+<a class=heading-anchor href=#so-its-back-to-a-browser-action>
+##
+</a>
+So it&rsquo;s back to a browser action
+</h2><p>I finally switched the Markdown Here toggle button in Chrome to be a browser action. Even though it clearly, spiritually, should be a page action, I just can&rsquo;t ignore the fact that most users will not recognize it as clickable in that form.</p><p>I have had <a href=https://github.com/adam-p/markdown-here/issues/45>one complaint</a> about the button location, but the user seemed satisfied that I made the rational choice after I explained it.</p><hr>
 <a name=update-20171028>
-<h2 id=update-2017-10-28>Update 2017-10-28</h2>
-<p>Last year <strong>Chrome turned page actions into browser actions</strong>. The <a href=https://productforums.google.com/d/msg/chrome/wOUFbsKqPg0/K9FBzJh7BAAJ>description of the change</a> suggests that this was a security decision. Evil stealth extensions were being installed, so now all extensions have to have toolbar buttons to expose them to users. (FWIW, I don&rsquo;t think this is a good solution to the problem. I&rsquo;m sure the majority of users don&rsquo;t pay much attention to random toolbar buttons.) It makes little sense for page action-centric extensions to have both a sometimes-visible address bar button and an always-visible toolbar button, so the Chrome team did away with the address bar button.</p>
-<p>Firefox hasn&rsquo;t made a similar change. You&rsquo;d think that if there&rsquo;s solid security rationale for one browser, that it&rsquo;d apply to all browsers.</p>
-<p>This makes the documentation for <code>pageAction</code> pretty confusing. Check out <a href=https://developer.chrome.com/extensions/pageAction>Chrome&rsquo;s</a> versus <a href=https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/pageAction>Mozilla&rsquo;s</a> documentation. Chrome&rsquo;s documentation is kind of incoherent now. There seems to be no reason at all to use page actions, but the doc still suggests that you do.</p>
-<p>I felt that page actions were kind of unusable before, but&mldr; this is worse?</p>
-<p>The reason I was looking at this again is because I created another extension, called <a href=https://github.com/adam-p/breached>Breached</a>, where a page action would, in theory, make the most sense. The button is enabled/shown when the user visits a site that has suffered a breach in the past, exposing user accounts. This is a pretty rare thing (for many people&mldr; who don&rsquo;t use Yahoo Mail), so dedicating a perma-visible toolbar button to it is pretty wasteful. Still, I initially went with a browser action for the reasons given in this post. I even added a notification (shown once per site), so the user could hide the toolbar button and still notice when they visit a breached site.</p>
-<p>Then a <a href=https://addons.mozilla.org/en-US/firefox/addon/breached/reviews/940746/>reviewer</a> requested that it be a page action. I thought about it again and realized that the notification also helps with the &ldquo;no one knows to click on a page action&rdquo; problem by telling the user they can click on it. And the always-visible button still bugged me (and, let&rsquo;s face it, most users won&rsquo;t know how to hide buttons). So I changed it to a page action. And&mldr; discovered that there&rsquo;s no visible difference in Chrome. Except page actions don&rsquo;t support badge text, which I was using to show the number of breaches.</p>
-<p>Anyway, I&rsquo;m leaving Breached as a page action, for the sake of Firefox users.</p>
-<hr>
-<p>Postscript: First blog post ever! Yay! Thanks to <a href=https://caseywatts.github.com/>Casey Watts</a> for suggesting that I write it.</p>
-</article>
-</div>
-</section>
-<hr>
+<h2 id=update-2017-10-28>
+<a class=heading-anchor href=#update-2017-10-28>
+##
+</a>
+Update 2017-10-28
+</h2><p>Last year <strong>Chrome turned page actions into browser actions</strong>. The <a href=https://productforums.google.com/d/msg/chrome/wOUFbsKqPg0/K9FBzJh7BAAJ>description of the change</a> suggests that this was a security decision. Evil stealth extensions were being installed, so now all extensions have to have toolbar buttons to expose them to users. (FWIW, I don&rsquo;t think this is a good solution to the problem. I&rsquo;m sure the majority of users don&rsquo;t pay much attention to random toolbar buttons.) It makes little sense for page action-centric extensions to have both a sometimes-visible address bar button and an always-visible toolbar button, so the Chrome team did away with the address bar button.</p><p>Firefox hasn&rsquo;t made a similar change. You&rsquo;d think that if there&rsquo;s solid security rationale for one browser, that it&rsquo;d apply to all browsers.</p><p>This makes the documentation for <code>pageAction</code> pretty confusing. Check out <a href=https://developer.chrome.com/extensions/pageAction>Chrome&rsquo;s</a> versus <a href=https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/pageAction>Mozilla&rsquo;s</a> documentation. Chrome&rsquo;s documentation is kind of incoherent now. There seems to be no reason at all to use page actions, but the doc still suggests that you do.</p><p>I felt that page actions were kind of unusable before, but&mldr; this is worse?</p><p>The reason I was looking at this again is because I created another extension, called <a href=https://github.com/adam-p/breached>Breached</a>, where a page action would, in theory, make the most sense. The button is enabled/shown when the user visits a site that has suffered a breach in the past, exposing user accounts. This is a pretty rare thing (for many people&mldr; who don&rsquo;t use Yahoo Mail), so dedicating a perma-visible toolbar button to it is pretty wasteful. Still, I initially went with a browser action for the reasons given in this post. I even added a notification (shown once per site), so the user could hide the toolbar button and still notice when they visit a breached site.</p><p>Then a <a href=https://addons.mozilla.org/en-US/firefox/addon/breached/reviews/940746/>reviewer</a> requested that it be a page action. I thought about it again and realized that the notification also helps with the &ldquo;no one knows to click on a page action&rdquo; problem by telling the user they can click on it. And the always-visible button still bugged me (and, let&rsquo;s face it, most users won&rsquo;t know how to hide buttons). So I changed it to a page action. And&mldr; discovered that there&rsquo;s no visible difference in Chrome. Except page actions don&rsquo;t support badge text, which I was using to show the number of breaches.</p><p>Anyway, I&rsquo;m leaving Breached as a page action, for the sake of Firefox users.</p><hr>
+<p>Postscript: First blog post ever! Yay! Thanks to <a href=https://caseywatts.github.com/>Casey Watts</a> for suggesting that I write it.</p></article></div></section><hr>
 <aside>
 <p>
-<h5> 1648 Words </h5>
-</p>
-<p>
-<h5>Tags</h5>
-<ul id=tags>
-<li> <a href=../../../../tags/markdown-here>Markdown Here</a> </li>
-<li> <a href=../../../../tags/code>Code</a> </li>
-</ul>
-</p>
-<p>
+<h5> 1656 Words </h5></p><p>
+<h5>Tags</h5><ul id=tags>
+<li> <a href=../../../../tags/markdown-here>Markdown Here</a> </li><li> <a href=../../../../tags/code>Code</a> </li></ul></p><p>
 <br>
 Next: <a class=next href=../../../../blog/2013/06/safari-extensions-gallery-half-baked/> Safari Extensions Gallery: half-baked</a>
-</p>
-</aside>
-<footer class=text-end>
+</p></aside><footer class=text-end>
 <small>© 2022 Adam Pritchard</small>
-</footer>
-</div>
-<script src=../../../../node_modules/bootstrap/dist/js/bootstrap.js></script>
-</body>
-</html>
+</footer></div><script src=../../../../node_modules/bootstrap/dist/js/bootstrap.js></script>
+</body></html>

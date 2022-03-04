@@ -4,9 +4,7 @@
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=google-site-verification content="WxZdzPANRFpehqogDMcTc9HLGXXDJy5If07MuUZvHho">
 <link rel=icon type=image/png href=../../../../favicon.png><link rel=stylesheet href=../../../../scss/styles.css>
-<title>The short happy life of the Breached extension | adam-p</title>
-</head>
-<body>
+<title>The short happy life of the Breached extension | adam-p</title></head><body>
 <nav class="navbar navbar-expand-md navbar-light bg-light">
 <div class=container-fluid>
 <a class=navbar-brand href=../../../../>
@@ -19,65 +17,31 @@ adam-p
 <ul class=navbar-nav>
 <li class=nav-item>
 <a class=nav-link href=../../../../blog/>Blog</a>
-</li>
-<li class=nav-item>
+</li><li class=nav-item>
 <a class=nav-link href=../../../../inco/>In/Co</a>
-</li>
-<li class=nav-item>
+</li><li class=nav-item>
 <a class=nav-link href=../../../../projects/>Projects</a>
-</li>
-<li class=nav-item>
+</li><li class=nav-item>
 <a class=nav-link href=../../../../cv/>CV</a>
-</li>
-</ul>
-</div>
-</div>
-</nav>
-<div class=container-fluid>
+</li></ul></div></div></nav><div class=container-fluid>
 <section>
-<h1 class=title><a href=../../../../blog/2019/05/breached/>The short happy life of the Breached extension</a></h1>
-<h5 class=text-end> Monday May 27, 2019 </h5>
-<div>
+<h1 class=title><a href=../../../../blog/2019/05/breached/>The short happy life of the Breached extension</a></h1><h5 class=text-end> Monday May 27, 2019 </h5><div>
 <article>
-<p>In October 2017, Troy Hunt of <a href=https://haveibeenpwned.com/>Have I Been Pwned</a> held a <a href=https://www.troyhunt.com/do-something-awesome-with-have-i-been-pwned-and-win-a-lenovo-thinkpad/>contest</a> inviting people to do something cool with the HIBP API. I decided a) that I would kind of like the special edition ThinkPad he was giving away, and b) that I could probably whip something up pretty quickly.</p>
-<p>I decided to create a browser extension that would simply pull HIBP breach information and show a browser notification &ndash; with the ability to view extra info &ndash; when the user visited a site that had been breached. And so was born the <a href=https://github.com/adam-p/breached>Breached extension</a>. (Spoiler: I didn&rsquo;t win.)</p>
-<blockquote>
-<p>For non-technical readers: A &ldquo;breach&rdquo;, in this context, is when a hacker obtains the user database of a website. A breach generally includes email addresses, passwords (in some form), maybe credit cards, and other stuff you don&rsquo;t want a hacker to have. So &ldquo;breach information&rdquo; about a website tells you that a breach occurred, when it happened, what data was stolen, and how much of it. Which is the kind of thing you should know about before using that website!</p>
-</blockquote>
-<p>A month after I released the extension, someone created an issue pointing out that Mozilla <a href=https://github.com/adam-p/breached/issues/5>&ldquo;started working on integrating haveibeenpwned.com warnings into Firefox&rdquo;</a>. (As I promised there I did (nominally) reach out, but it didn&rsquo;t go anywhere.) A year later that project turned into <a href=https://monitor.firefox.com/>Firefox Monitor</a>.</p>
-<p>So, Breached is basically redundant on Firefox. In a sense I&rsquo;m bummed, but I&rsquo;m more flattered &ndash; it was obviously a pretty okay idea!</p>
-<p>Monitor has a different <a href=https://blog.mozilla.org/security/2018/11/14/when-does-firefox-alert-for-breached-sites/>notification policy</a>: They only show alerts for sites that have been breached within the last two months. (If I&rsquo;m reading that right. I think the 12-month part is a one-off and is likely just to increase the number of people that will ever see a notification). Breached&rsquo;s policy is&mldr; just, like, show them all. Because I didn&rsquo;t think about that while coding it. I think Monitor&rsquo;s time-limit is better, since many sites will have sorted themselves out and don&rsquo;t deserve a black mark for all time, so I <a href=https://github.com/adam-p/breached/issues/6>might also add a time limit</a>. (I don&rsquo;t find the notifications noisy, but maybe I just don&rsquo;t visit enough shady sites.)</p>
-<p>In case you&rsquo;re wondering what Monitor notifications look like, here&rsquo;s one:</p>
-<p class=text-center>
+<p>In October 2017, Troy Hunt of <a href=https://haveibeenpwned.com/>Have I Been Pwned</a> held a <a href=https://www.troyhunt.com/do-something-awesome-with-have-i-been-pwned-and-win-a-lenovo-thinkpad/>contest</a> inviting people to do something cool with the HIBP API. I decided a) that I would kind of like the special edition ThinkPad he was giving away, and b) that I could probably whip something up pretty quickly.</p><p>I decided to create a browser extension that would simply pull HIBP breach information and show a browser notification &ndash; with the ability to view extra info &ndash; when the user visited a site that had been breached. And so was born the <a href=https://github.com/adam-p/breached>Breached extension</a>. (Spoiler: I didn&rsquo;t win.)</p><blockquote>
+<p>For non-technical readers: A &ldquo;breach&rdquo;, in this context, is when a hacker obtains the user database of a website. A breach generally includes email addresses, passwords (in some form), maybe credit cards, and other stuff you don&rsquo;t want a hacker to have. So &ldquo;breach information&rdquo; about a website tells you that a breach occurred, when it happened, what data was stolen, and how much of it. Which is the kind of thing you should know about before using that website!</p></blockquote><p>A month after I released the extension, someone created an issue pointing out that Mozilla <a href=https://github.com/adam-p/breached/issues/5>&ldquo;started working on integrating haveibeenpwned.com warnings into Firefox&rdquo;</a>. (As I promised there I did (nominally) reach out, but it didn&rsquo;t go anywhere.) A year later that project turned into <a href=https://monitor.firefox.com/>Firefox Monitor</a>.</p><p>So, Breached is basically redundant on Firefox. In a sense I&rsquo;m bummed, but I&rsquo;m more flattered &ndash; it was obviously a pretty okay idea!</p><p>Monitor has a different <a href=https://blog.mozilla.org/security/2018/11/14/when-does-firefox-alert-for-breached-sites/>notification policy</a>: They only show alerts for sites that have been breached within the last two months. (If I&rsquo;m reading that right. I think the 12-month part is a one-off and is likely just to increase the number of people that will ever see a notification). Breached&rsquo;s policy is&mldr; just, like, show them all. Because I didn&rsquo;t think about that while coding it. I think Monitor&rsquo;s time-limit is better, since many sites will have sorted themselves out and don&rsquo;t deserve a black mark for all time, so I <a href=https://github.com/adam-p/breached/issues/6>might also add a time limit</a>. (I don&rsquo;t find the notifications noisy, but maybe I just don&rsquo;t visit enough shady sites.)</p><p>In case you&rsquo;re wondering what Monitor notifications look like, here&rsquo;s one:</p><p class=text-center>
 <img src=../../../../img/blog/firefox-monitor-breach.png alt="Firefox Monitor breach notification" style=max-width:600px>
-</p>
-<p>And here is Breached&rsquo;s notification:</p>
-<p class=text-center>
+</p><p>And here is Breached&rsquo;s notification:</p><p class=text-center>
 <img src=../../../../img/blog/breached-notification.png alt="Breached's breach notification" style=max-width:400px>
-</p>
-<p>And the additional-detail popup:</p>
-<p class=text-center>
+</p><p>And the additional-detail popup:</p><p class=text-center>
 <img src=../../../../img/blog/breached-popup.png alt="Breached's additional detail popup">
-</p>
-<p>Well, at least Breached is still relevant on Chrome! For now&mldr;</p>
-</article>
-</div>
-</section>
-<hr>
+</p><p>Well, at least Breached is still relevant on Chrome! For now&mldr;</p></article></div></section><hr>
 <aside>
 <p>
-<h5> 394 Words </h5>
-</p>
-<p>
+<h5> 394 Words </h5></p><p>
 Previous: <a class=previous href=../../../../blog/2016/07/mdh-dividing-firefox-and-thunderbird/> Markdown Here: Splitting the Firefox and Thunderbird Extension</a>
 <br>
 Next: <a class=next href=../../../../blog/2021/06/unicode-url-length/> Dev Story: Unicode URL length limit blues</a>
-</p>
-</aside>
-<footer class=text-end>
+</p></aside><footer class=text-end>
 <small>© 2022 Adam Pritchard</small>
-</footer>
-</div>
-<script src=../../../../node_modules/bootstrap/dist/js/bootstrap.js></script>
-</body>
-</html>
+</footer></div><script src=../../../../node_modules/bootstrap/dist/js/bootstrap.js></script>
+</body></html>

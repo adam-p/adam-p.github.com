@@ -4,9 +4,7 @@
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=google-site-verification content="WxZdzPANRFpehqogDMcTc9HLGXXDJy5If07MuUZvHho">
 <link rel=icon type=image/png href=../../../../favicon.png><link rel=stylesheet href=../../../../scss/styles.css>
-<title>Android Non-Vulnerability: Steal a Device and Keep it Unlocked | adam-p</title>
-</head>
-<body>
+<title>Android Non-Vulnerability: Steal a Device and Keep it Unlocked | adam-p</title></head><body>
 <nav class="navbar navbar-expand-md navbar-light bg-light">
 <div class=container-fluid>
 <a class=navbar-brand href=../../../../>
@@ -19,94 +17,67 @@ adam-p
 <ul class=navbar-nav>
 <li class=nav-item>
 <a class=nav-link href=../../../../blog/>Blog</a>
-</li>
-<li class=nav-item>
+</li><li class=nav-item>
 <a class=nav-link href=../../../../inco/>In/Co</a>
-</li>
-<li class=nav-item>
+</li><li class=nav-item>
 <a class=nav-link href=../../../../projects/>Projects</a>
-</li>
-<li class=nav-item>
+</li><li class=nav-item>
 <a class=nav-link href=../../../../cv/>CV</a>
-</li>
-</ul>
-</div>
-</div>
-</nav>
-<div class=container-fluid>
+</li></ul></div></div></nav><div class=container-fluid>
 <section>
-<h1 class=title><a href=../../../../blog/2016/05/smart-lock-mock-location/>Android Non-Vulnerability: Steal a Device and Keep it Unlocked</a></h1>
-<h5 class=text-end> Wednesday May 11, 2016 </h5>
-<div>
+<h1 class=title><a href=../../../../blog/2016/05/smart-lock-mock-location/>Android Non-Vulnerability: Steal a Device and Keep it Unlocked</a></h1><h5 class=text-end> Wednesday May 11, 2016 </h5><div>
 <article>
-<p>While poking around in my Android phone&rsquo;s developer options, I realized that <strong>if you steal a phone that&rsquo;s currently unlocked because it&rsquo;s in a &ldquo;trusted place&rdquo;, then you can force it to remain unlocked forever</strong>. (And then I got schooled about that not being a problem.)</p>
-<h2 id=security-feature-smart-lock-with-trusted-places>Security Feature: Smart Lock with Trusted Places</h2>
-<p><a href="https://support.google.com/nexus/answer/6093922?hl=en">Android&rsquo;s Smart Lock</a> allows users to configure conditions under which to keep the phone unlocked. One of the conditions is location &ndash; you can set trusted locations where your phone shouldn&rsquo;t prompt for a PIN/pattern/password when unlocking.</p>
-<p>This is a pretty great feature. It&rsquo;s difficult to convince people that the security gained by using a PIN outweighs the inconvenience of constantly entering it. Smart Lock helps mitigate the inconvenience by not requiring the user to constantly enter the PIN at home or at the office.</p>
-<h2 id=developer-feature-mock-location>Developer Feature: Mock Location</h2>
-<p>If you&rsquo;re developing a location-aware app, you might want to trick the phone (and your app) into believing that it&rsquo;s somewhere you&rsquo;re not (in a restaurant, near a bus stop, etc.). The Android developer options provide the ability to set a &ldquo;mock location app&rdquo;. This is a separate app that allows you to configure your desired fake location. When the app is set as the mock location app, the phone pretends to be in the location specified by the app.</p>
-<h2 id=trusted-place--mock-location--perma-unlock>Trusted Place + Mock Location = Perma-Unlock</h2>
-<p>So if Eve steals Alice&rsquo;s phone from her desk at work, and wants to keep it unlocked until she has more time to peruse it, she can do this:</p>
-<ol>
+<p>While poking around in my Android phone&rsquo;s developer options, I realized that <strong>if you steal a phone that&rsquo;s currently unlocked because it&rsquo;s in a &ldquo;trusted place&rdquo;, then you can force it to remain unlocked forever</strong>. (And then I got schooled about that not being a problem.)</p><h2 id=security-feature-smart-lock-with-trusted-places>
+<a class=heading-anchor href=#security-feature-smart-lock-with-trusted-places>
+##
+</a>
+Security Feature: Smart Lock with Trusted Places
+</h2><p><a href="https://support.google.com/nexus/answer/6093922?hl=en">Android&rsquo;s Smart Lock</a> allows users to configure conditions under which to keep the phone unlocked. One of the conditions is location &ndash; you can set trusted locations where your phone shouldn&rsquo;t prompt for a PIN/pattern/password when unlocking.</p><p>This is a pretty great feature. It&rsquo;s difficult to convince people that the security gained by using a PIN outweighs the inconvenience of constantly entering it. Smart Lock helps mitigate the inconvenience by not requiring the user to constantly enter the PIN at home or at the office.</p><h2 id=developer-feature-mock-location>
+<a class=heading-anchor href=#developer-feature-mock-location>
+##
+</a>
+Developer Feature: Mock Location
+</h2><p>If you&rsquo;re developing a location-aware app, you might want to trick the phone (and your app) into believing that it&rsquo;s somewhere you&rsquo;re not (in a restaurant, near a bus stop, etc.). The Android developer options provide the ability to set a &ldquo;mock location app&rdquo;. This is a separate app that allows you to configure your desired fake location. When the app is set as the mock location app, the phone pretends to be in the location specified by the app.</p><h2 id=trusted-place--mock-location--perma-unlock>
+<a class=heading-anchor href=#trusted-place--mock-location--perma-unlock>
+##
+</a>
+Trusted Place + Mock Location = Perma-Unlock
+</h2><p>So if Eve steals Alice&rsquo;s phone from her desk at work, and wants to keep it unlocked until she has more time to peruse it, she can do this:</p><ol>
 <li>
-<p>Install a mock location app. Set it to the current location.</p>
-</li>
-<li>
-<p>Enable Developer Options.</p>
-</li>
-<li>
-<p>Select the mock location app in the developer options.</p>
-</li>
-</ol>
-<p>And then Eve walks away, confident that Alice&rsquo;s phone will remain unlocked.</p>
-<p>Note that none of those steps requires Eve to type in the phone&rsquo;s PIN. If any of them did, this attack would be nullified. (Adding a Smart Lock trusted location does require a PIN, but fooling the phone into thinking that it&rsquo;s always in the current trusted location doesn&rsquo;t.)</p>
-<p>My recommended solution to the Android team: Require a PIN at step 3. If Alice is a developer, there might already be a mock location app installed and the phone will probably already have the developer options enabled. Step 3 seems like the best intervention point.</p>
-<p>I also don&rsquo;t like that Smart Lock (and Android Device Manager) respect the mock location. It seems to me that they should be &ldquo;above&rdquo; that.</p>
-<h3 id=bonus-attack-android-device-manager>Bonus attack: Android Device Manager</h3>
-<p>Alice realizes that her phone is gone! She jumps on her computer and checks <a href="https://support.google.com/accounts/answer/3265955?hl=en">Android Device Manager</a>! Except&mldr; it reports that the phone is still at the office, because it also uses the mock location being reported by the phone.</p>
-<p>Hopefully Alice will do a remote lock (or wipe) anyway, or maybe the location confusion slows her down for a while.</p>
-<h2 id=vulnerability-disclosure>Vulnerability Disclosure</h2>
-<p>I filed a security issue with the Android team (<a href="https://code.google.com/p/android/issues/detail?id=204776">#204776</a>, but it&rsquo;s not publicly visible). The response was that it is &ldquo;working as intended&rdquo;.</p>
-<blockquote>
-<p>Once someone has access to an unlocked phone, they are able to do anything with it (attempt to root the device, install other malware, etc).</p>
-<p>We appreciate the report but this is working as intended.</p>
-</blockquote>
-<p>I see what they&rsquo;re saying. In theory, the attacker could enable app side-loading, and then install some kind of data-snarfer service, and then give it sufficient permission to exfiltrate everything it can access. The data-snarfer could run even while the phone is locked.</p>
-<p>Or the attacker could just keep touching the screen to keep it unlocked.</p>
-<p>(Rooting typically requires a bootloader unlock, which wipes the device. But that&rsquo;s irrelevant if rooting isn&rsquo;t necessary to effect an equivalent attack.)</p>
-<p>I&rsquo;d really like to thank the Android team for taking the time to reply to my not-super-exciting bug report.</p>
-<h2 id=grand-conclusion>Grand Conclusion</h2>
-<p>There isn&rsquo;t one. The &ldquo;Trusted Place + Mock Location&rdquo; combo isn&rsquo;t a real problem &ndash; it&rsquo;s just a little distasteful. If someone steals your phone and it&rsquo;s unlocked, you&rsquo;d better hope they&rsquo;re only after the hardware.</p>
-<p>This is especially distressing for tablets. Unlike our phone, most of us don&rsquo;t carry our tablet everywhere, so it&rsquo;s much more likely to be stolen from our home. Entering your PIN on your tablet every time is almost as annoying as on your phone, so Smart Lock seems like a good choice. And that means that it&rsquo;s almost certain that your tablet will be stolen unlocked. (If it gets stolen. I have no idea what the likelihood of that is.)</p>
-<hr>
-<h2 id=update>Update</h2>
-<p>In Android O (a year after I wrote this) Google <a href=https://www.androidpolice.com/2017/06/01/android-o-feature-spotlight-enabling-developer-options-requires-devices-passcode/>added a PIN prompt</a> when enabling developer options. So, that negates this problem.</p>
-<p>Unless you&rsquo;re already a developer&mldr;</p>
-</article>
-</div>
-</section>
-<hr>
+<p>Install a mock location app. Set it to the current location.</p></li><li>
+<p>Enable Developer Options.</p></li><li>
+<p>Select the mock location app in the developer options.</p></li></ol><p>And then Eve walks away, confident that Alice&rsquo;s phone will remain unlocked.</p><p>Note that none of those steps requires Eve to type in the phone&rsquo;s PIN. If any of them did, this attack would be nullified. (Adding a Smart Lock trusted location does require a PIN, but fooling the phone into thinking that it&rsquo;s always in the current trusted location doesn&rsquo;t.)</p><p>My recommended solution to the Android team: Require a PIN at step 3. If Alice is a developer, there might already be a mock location app installed and the phone will probably already have the developer options enabled. Step 3 seems like the best intervention point.</p><p>I also don&rsquo;t like that Smart Lock (and Android Device Manager) respect the mock location. It seems to me that they should be &ldquo;above&rdquo; that.</p><h3 id=bonus-attack-android-device-manager>
+<a class=heading-anchor href=#bonus-attack-android-device-manager>
+###
+</a>
+Bonus attack: Android Device Manager
+</h3><p>Alice realizes that her phone is gone! She jumps on her computer and checks <a href="https://support.google.com/accounts/answer/3265955?hl=en">Android Device Manager</a>! Except&mldr; it reports that the phone is still at the office, because it also uses the mock location being reported by the phone.</p><p>Hopefully Alice will do a remote lock (or wipe) anyway, or maybe the location confusion slows her down for a while.</p><h2 id=vulnerability-disclosure>
+<a class=heading-anchor href=#vulnerability-disclosure>
+##
+</a>
+Vulnerability Disclosure
+</h2><p>I filed a security issue with the Android team (<a href="https://code.google.com/p/android/issues/detail?id=204776">#204776</a>, but it&rsquo;s not publicly visible). The response was that it is &ldquo;working as intended&rdquo;.</p><blockquote>
+<p>Once someone has access to an unlocked phone, they are able to do anything with it (attempt to root the device, install other malware, etc).</p><p>We appreciate the report but this is working as intended.</p></blockquote><p>I see what they&rsquo;re saying. In theory, the attacker could enable app side-loading, and then install some kind of data-snarfer service, and then give it sufficient permission to exfiltrate everything it can access. The data-snarfer could run even while the phone is locked.</p><p>Or the attacker could just keep touching the screen to keep it unlocked.</p><p>(Rooting typically requires a bootloader unlock, which wipes the device. But that&rsquo;s irrelevant if rooting isn&rsquo;t necessary to effect an equivalent attack.)</p><p>I&rsquo;d really like to thank the Android team for taking the time to reply to my not-super-exciting bug report.</p><h2 id=grand-conclusion>
+<a class=heading-anchor href=#grand-conclusion>
+##
+</a>
+Grand Conclusion
+</h2><p>There isn&rsquo;t one. The &ldquo;Trusted Place + Mock Location&rdquo; combo isn&rsquo;t a real problem &ndash; it&rsquo;s just a little distasteful. If someone steals your phone and it&rsquo;s unlocked, you&rsquo;d better hope they&rsquo;re only after the hardware.</p><p>This is especially distressing for tablets. Unlike our phone, most of us don&rsquo;t carry our tablet everywhere, so it&rsquo;s much more likely to be stolen from our home. Entering your PIN on your tablet every time is almost as annoying as on your phone, so Smart Lock seems like a good choice. And that means that it&rsquo;s almost certain that your tablet will be stolen unlocked. (If it gets stolen. I have no idea what the likelihood of that is.)</p><hr>
+<h2 id=update>
+<a class=heading-anchor href=#update>
+##
+</a>
+Update
+</h2><p>In Android O (a year after I wrote this) Google <a href=https://www.androidpolice.com/2017/06/01/android-o-feature-spotlight-enabling-developer-options-requires-devices-passcode/>added a PIN prompt</a> when enabling developer options. So, that negates this problem.</p><p>Unless you&rsquo;re already a developer&mldr;</p></article></div></section><hr>
 <aside>
 <p>
-<h5> 784 Words </h5>
-</p>
-<p>
-<h5>Tags</h5>
-<ul id=tags>
-<li> <a href=../../../../tags/android>Android</a> </li>
-<li> <a href=../../../../tags/security>Security</a> </li>
-</ul>
-</p>
-<p>
+<h5> 791 Words </h5></p><p>
+<h5>Tags</h5><ul id=tags>
+<li> <a href=../../../../tags/android>Android</a> </li><li> <a href=../../../../tags/security>Security</a> </li></ul></p><p>
 Previous: <a class=previous href=../../../../blog/2015/02/contributor-license-agreement/> Why and How to Use a Contributor License Agreement</a>
 <br>
 Next: <a class=next href=../../../../blog/2016/07/mdh-dividing-firefox-and-thunderbird/> Markdown Here: Splitting the Firefox and Thunderbird Extension</a>
-</p>
-</aside>
-<footer class=text-end>
+</p></aside><footer class=text-end>
 <small>© 2022 Adam Pritchard</small>
-</footer>
-</div>
-<script src=../../../../node_modules/bootstrap/dist/js/bootstrap.js></script>
-</body>
-</html>
+</footer></div><script src=../../../../node_modules/bootstrap/dist/js/bootstrap.js></script>
+</body></html>
