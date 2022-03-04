@@ -1,0 +1,7 @@
+{{/* Add anchor links to headings */}}
+<h{{ .Level }} id="{{ .Anchor | safeURL }}">
+    <a class="heading-anchor" href="#{{ .Anchor | safeURL }}">
+        {{ strings.Repeat .Level "#" }}
+    </a>
+    {{ .Text | safeHTML }}
+</h{{ .Level }}>
