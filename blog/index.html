@@ -32,8 +32,8 @@ adam-p
 <div class=row-fluid>
 <div class="span12 post-excerpt">
 <div class=post-specs>
-<h4><a href=../blog/2022/02/x-forwarded-for/>The perils of the “real” client IP</a></h4><div>
-2022-02-26
+<h4><a href=../blog/2022/03/x-forwarded-for/>The perils of the “real” client IP</a></h4><div>
+2022-03-04
 </div><div class=post-body>
 <div>
 <h2 id=summary>
@@ -49,7 +49,7 @@ Summary
 <p>Using special &ldquo;true client IPs&rdquo; set by reverse proxies (like <code>X-Real-IP</code>, <code>True-Client-IP</code>, etc.) <em>can</em> be good, but it depends on the a) how the reverse proxy actually sets it, b) whether the reverse proxy sets it if it&rsquo;s already present/spoofed, and c) how you&rsquo;ve configured the reverse proxy (sometimes).</p></li><li>
 <p>Any header not specifically set by your reverse proxy cannot be trusted. For example, you <em>must not</em> check the <code>X-Real-IP</code> header if you&rsquo;re not behind Nginx or something else that always sets it, because you&rsquo;ll be reading a spoofed value.</p></li><li>
 <p>A lot of rate limiter implementations are using spoofable IPs and are vulnerable to rate limiter escape and memory exhaustion attacks.</p></li></ul><p><em>If you use the &ldquo;real client IP&rdquo; anywhere in your code or infrastructure, you need to go check right now how you&rsquo;re deriving it.</em></p><p>This is all explained in detail below, so keep reading. It&rsquo;s a weird, scary, bumpy ride.</p></div><div class="overflow-fade text-end">
-<h1><a href=../blog/2022/02/x-forwarded-for/>>>></a></h1></div></div></div></div></div><hr>
+<h1><a href=../blog/2022/03/x-forwarded-for/>>>></a></h1></div></div></div></div></div><hr>
 <div class=row-fluid>
 <div class="span12 post-excerpt">
 <div class=post-specs>

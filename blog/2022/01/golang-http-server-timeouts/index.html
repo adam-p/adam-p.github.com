@@ -25,7 +25,7 @@ adam-p
 <a class=nav-link href=../../../../cv/>CV</a>
 </li></ul></div></div></nav><div class=container-fluid>
 <section>
-<h1 class=title><a href=../../../../blog/2022/01/golang-http-server-timeouts/>Diving into Go's HTTP server timeouts</a></h1><h5 class=text-end> Saturday January 15, 2022 </h5><div>
+<h1 class=title><a href=../../../../blog/2022/01/golang-http-server-timeouts/>Diving into Go's HTTP server timeouts</a></h1><h5 class=text-end> January 15, 2022 </h5><div>
 <article>
 <p>Recently, I was adding timeouts to a Go HTTP server and ended up exploring how the different settings and approaches act and interact. I&rsquo;m going to publish my notes here, along with the code I used for testing. Hopefully this will help someone else (or myself) in the future.</p><p>The timeout testing client can be found here: <a href=https://github.com/adam-p/httptimeout>github.com/adam-p/httptimeout</a>. There is a server in the examples directory that you can make requests to.</p><p>I link to it below, but I&rsquo;m going to recommend here that you read Filippo Valsorda&rsquo;s post <a href=https://blog.cloudflare.com/exposing-go-on-the-internet/>&ldquo;So you want to expose Go on the Internet&rdquo;</a>. It&rsquo;s essential, but I didn&rsquo;t find it had enough quite enough detail about timeouts, hence the below examination.</p><hr>
 <p>There are two different, overlapping levels of timeout in our HTTP server:</p><ol>

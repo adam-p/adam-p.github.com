@@ -25,7 +25,7 @@ adam-p
 <a class=nav-link href=../../../../cv/>CV</a>
 </li></ul></div></div></nav><div class=container-fluid>
 <section>
-<h1 class=title><a href=../../../../blog/2021/11/constant-time-network/>Timing attack mitigation must exclude network</a></h1><h5 class=text-end> Saturday November 27, 2021 </h5><div>
+<h1 class=title><a href=../../../../blog/2021/11/constant-time-network/>Timing attack mitigation must exclude network</a></h1><h5 class=text-end> November 27, 2021 </h5><div>
 <article>
 <p>TL;DR: When trying to prevent timing attacks (e.g., against login username enumeration) by making a request take constant time, make sure you exclude the network read and write time. If you don&rsquo;t, an attacker can slow down their request to bypass it.</p><p>I&rsquo;ll be covering some background and contextual information here. If you don&rsquo;t need it, skip to &ldquo;Exclude network time from constant-time limiting&rdquo;.</p><h2 id=what-is-a-timing-attack>
 <a class=heading-anchor href=#what-is-a-timing-attack>
