@@ -14,6 +14,8 @@ This post ended up being incredibly ~~long~~ comprehensive. I'm afraid that many
 
 * The leftmost IP in the XFF header is commonly considered to be "closest to the client" and "most real", but it's trivially spoofable. Don't use it for anything even close to security-related.
 
+* When choosing the rightmost XFF IP, make sure to use the _last_ instance of that header.
+
 * Using special "true client IPs" set by reverse proxies (like `X-Real-IP`, `True-Client-IP`, etc.) _can_ be good, but it depends on the a) how the reverse proxy actually sets it, b) whether the reverse proxy sets it if it's already present/spoofed, and c) how you've configured the reverse proxy (sometimes). 
 
 * Any header not specifically set by your reverse proxy cannot be trusted. For example, you _must not_ check the `X-Real-IP` header if you're not behind Nginx or something else that always sets it, because you'll be reading a spoofed value.
