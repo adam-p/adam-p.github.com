@@ -590,7 +590,7 @@ TODO: Reference implementation
 
 ## Discussion
 
-TODO: Hacker News
+Comment and discuss at [Hacker News](https://news.ycombinator.com/item?id=30558682).
 
 ## Acknowledgements
 
