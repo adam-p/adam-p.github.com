@@ -319,12 +319,12 @@ go-chi/chi
 X-Real-IP: 2.2.2.2
 True-Client-IP: 3.3.3.3
 &lt;/code>&lt;/pre>&lt;p>&lt;code>chi.middleware.RealIP&lt;/code>&amp;rsquo;s logic goes like: &amp;ldquo;use the &lt;code>True-Client-IP&lt;/code>; if that doesn&amp;rsquo;t exist, use the &lt;code>X-Real-IP&lt;/code>; if that doesn&amp;rsquo;t exist, use &lt;code>X-Forwarded-For&lt;/code>&amp;rdquo;. So it falls victim to header spoofing.&lt;/p>
-&lt;p>But, as we&amp;rsquo;ve learned, the &lt;code>chi.middleware.RealIP&lt;/code> warning also isn&amp;rsquo;t good enough when it comes to &lt;code>X-Forwarded-For&lt;/code> &lt;em>because you can never, ever trust all of it&lt;/em>&lt;sup id="fnref:6">&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref">6&lt;/a>&lt;/sup>. In the &lt;code>RealIP&lt;/code> code, the logic I just paraphrased actually ends with &amp;ldquo;use the leftmost XFF IP address&amp;rdquo;. And we&amp;rsquo;re now suitably scared of using the leftmost XFF IP.&lt;/p>
+&lt;p>But, as we&amp;rsquo;ve learned, the &lt;code>chi.middleware.RealIP&lt;/code> warning also isn&amp;rsquo;t good enough when it comes to &lt;code>X-Forwarded-For&lt;/code> &lt;em>because you can never, ever trust all of it&lt;/em>&lt;sup id="fnref:6">&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref">6&lt;/a>&lt;/sup>. In the &lt;code>RealIP&lt;/code> code, the logic I just paraphrased actually ends with &amp;ldquo;use the leftmost XFF IP address&amp;rdquo;. And we&amp;rsquo;re now suitably scared of using the leftmost XFF IP. (It also does not check that the leftmost &amp;ldquo;IP&amp;rdquo; is valid and non-private.)&lt;/p>
 &lt;p>So &lt;code>chi.middleware.RealIP&lt;/code> falls firmly into the &amp;ldquo;only safe for non-security use&amp;rdquo; category. And you &lt;em>must&lt;/em> be aware of its header preference order and what your reverse proxy does or doesn&amp;rsquo;t set and let through. In short, it&amp;rsquo;s hard to recommend it.&lt;/p>
-&lt;p>Chi&amp;rsquo;s rate limiter has identical logic for obtaining the IP address and doesn&amp;rsquo;t have the same warning. So that&amp;rsquo;s bad, for the reasons we&amp;rsquo;ve discussed &amp;ndash; the non-XFF headers could be spoofed, the XFF header could be spoofed, the rate limiter could be bypassed, your memory could be exploded. The best way to use it is to not use its &amp;ldquo;real IP&amp;rdquo; logic and instead write your own &amp;ldquo;GetTrustworthyClientIP(request)&amp;rdquo; and pass that to its &lt;a href="https://github.com/go-chi/httprate/blob/463924d478ea0c19de7265b97371a59a7ebf5fdd/README.md?plain=1#L61">&amp;ldquo;rate limit by arbitrary keys&amp;rdquo;&lt;/a> feature.&lt;/p>
+&lt;p>Chi&amp;rsquo;s rate limiter has identical logic for obtaining the IP address and doesn&amp;rsquo;t have the same warning. So that&amp;rsquo;s bad, for the reasons we&amp;rsquo;ve discussed &amp;ndash; the non-XFF headers could be spoofed, the XFF header could be spoofed, the IP can be garbage, the rate limiter could be bypassed, your memory could be exploded. The best way to use it is to not use its &amp;ldquo;real IP&amp;rdquo; logic and instead write your own &amp;ldquo;GetTrustworthyClientIP(request)&amp;rdquo; and pass that to its &lt;a href="https://github.com/go-chi/httprate/blob/463924d478ea0c19de7265b97371a59a7ebf5fdd/README.md?plain=1#L61">&amp;ldquo;rate limit by arbitrary keys&amp;rdquo;&lt;/a> feature.&lt;/p>
 &lt;p>Both RealIP and httprate are both using Go&amp;rsquo;s &lt;code>http.Header.Get&lt;/code> to get the XFF header. As &lt;a href="#multiple-headers">discussed above&lt;/a>, this means that switching to taking the rightmost-ish IP wouldn&amp;rsquo;t be sufficient, as an attacker could force the wrong header to be used.&lt;/p>
 &lt;p>Chi&amp;rsquo;s rate limiter is also the one instance I found of the XFF list being split by comma-space instead of just comma. I think that&amp;rsquo;s wrong.&lt;/p>
-&lt;p>[Disclosed to maintainer 2022-03-03. Maintainer asked for me to make an issue, so I&amp;rsquo;m publishing this to point to.]&lt;/p>
+&lt;p>[Disclosed to maintainer 2022-03-03. Maintainer requested that I &lt;a href="https://github.com/go-chi/chi/issues/711">make an issue&lt;/a>.]&lt;/p>
 &lt;h3 id="didiptollbooth">
 &lt;a class="heading-anchor" href="#didiptollbooth">
 ###
@@ -344,7 +344,7 @@ If your application is behind a proxy, set &amp;ldquo;X-Forwarded-For&amp;rdquo;
 &lt;p>Speaking of counting from the rightmost&amp;hellip; If Tollbooth is configured to count very far from the right (like, &lt;code>lmt.SetForwardedForIndexFromBehind(1000)&lt;/code>), then it will effectively take the leftmost IP (it &lt;a href="https://github.com/didip/tollbooth/blob/2e5b779d07015e6a4386c6cc1a36612c17d54eb5/libstring/libstring.go#L42-L45">uses a minimum index of zero&lt;/a>). In that case, it should be doing &lt;a href="#leftmost-ish-the-closest-to-the-real-ip-but-utterly-untrustworthy">&amp;ldquo;leftmost-ish&amp;rdquo;&lt;/a> IP validation.&lt;/p>
 &lt;p>There are two more things that bug me about tollbooth&amp;rsquo;s design. The first is that the ostensible default order has Go&amp;rsquo;s &lt;code>http.Request.RemoteAddr&lt;/code> first. My understanding is that that field should never be empty (for an HTTP server, rather than client), so the rest of the list is guaranteed to be ignored. So why have a list? Also, if your server is behind a reverse proxy, &lt;code>RemoteAddr&lt;/code> will be your proxy&amp;rsquo;s IP, which is useless.&lt;/p>
 &lt;p>The second thing that bugs me is going to get its very own section&amp;hellip;&lt;/p>
-&lt;p>[Disclosed to maintainer 2022-03-03. Maintainer &lt;a href="https://github.com/didip/tollbooth/pull/99">created PR&lt;/a> to fix 2022-03-04. Ongoing discussion there.]&lt;/p>
+&lt;p>[2022-03-03: Disclosed to maintainer. 2022-03-04: Maintainer &lt;a href="https://github.com/didip/tollbooth/pull/99">created a PR&lt;/a> to fix it. Ongoing discussion there.]&lt;/p>
 &lt;h3 id="a-default-list-of-places-to-look-for-the-client-ip-makes-no-sense">
 &lt;a class="heading-anchor" href="#a-default-list-of-places-to-look-for-the-client-ip-makes-no-sense">
 ###
@@ -650,6 +650,7 @@ TODO
 &lt;/h2>
 &lt;ul>
 &lt;li>all projects: check for multiple headers weakness&lt;/li>
+&lt;li>all projects: for leftmost, check for valid/non-private&lt;/li>
 &lt;li>Go: create Header.Get issue&lt;/li>
 &lt;li>finish reference implementation&lt;/li>
 &lt;li>probably add some diagrams&lt;/li>
