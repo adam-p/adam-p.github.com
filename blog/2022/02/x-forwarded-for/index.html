@@ -36,6 +36,7 @@ Summary
 <li>
 <p>When deriving the &ldquo;real client IP address&rdquo; from the <code>X-Forwarded-For</code> header, use the rightmost IP in the list.</p></li><li>
 <p>The leftmost IP in the XFF header is commonly considered to be &ldquo;closest to the client&rdquo; and &ldquo;most real&rdquo;, but it&rsquo;s trivially spoofable. Don&rsquo;t use it for anything even close to security-related.</p></li><li>
+<p>When choosing the rightmost XFF IP, make sure to use the <em>last</em> instance of that header.</p></li><li>
 <p>Using special &ldquo;true client IPs&rdquo; set by reverse proxies (like <code>X-Real-IP</code>, <code>True-Client-IP</code>, etc.) <em>can</em> be good, but it depends on the a) how the reverse proxy actually sets it, b) whether the reverse proxy sets it if it&rsquo;s already present/spoofed, and c) how you&rsquo;ve configured the reverse proxy (sometimes).</p></li><li>
 <p>Any header not specifically set by your reverse proxy cannot be trusted. For example, you <em>must not</em> check the <code>X-Real-IP</code> header if you&rsquo;re not behind Nginx or something else that always sets it, because you&rsquo;ll be reading a spoofed value.</p></li><li>
 <p>A lot of rate limiter implementations are using spoofable IPs and are vulnerable to rate limiter escape and memory exhaustion attacks.</p></li></ul><p><em>If you use the &ldquo;real client IP&rdquo; anywhere in your code or infrastructure, you need to go check right now how you&rsquo;re deriving it.</em></p><p>This is all explained in detail below, so keep reading. It&rsquo;s a weird, scary, bumpy ride.</p><h2 id=introduction>
@@ -346,7 +347,7 @@ TODO
 <p>There is one more sentence elsewhere, but it doesn&rsquo;t add anything: &ldquo;With the header field format described in this document, it is possible to know what information belongs together, <em>as long as the proxies are trusted</em>.&rdquo; (Emphasis added.)&#160;<a href=#fnref:9 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li></ol></section></article></div></section><hr>
 <aside>
 <p>
-<h5> 8455 Words </h5></p><p>
+<h5> 8471 Words </h5></p><p>
 Previous: <a class=previous href=../../../../blog/2022/02/ipv6-rate-limiting/> The scary state of IPv6 rate-limiting</a>
 <br>
 </p></aside><footer class=text-end>

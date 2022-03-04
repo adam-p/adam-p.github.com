@@ -13,6 +13,9 @@ Summary
 &lt;p>The leftmost IP in the XFF header is commonly considered to be &amp;ldquo;closest to the client&amp;rdquo; and &amp;ldquo;most real&amp;rdquo;, but it&amp;rsquo;s trivially spoofable. Don&amp;rsquo;t use it for anything even close to security-related.&lt;/p>
 &lt;/li>
 &lt;li>
+&lt;p>When choosing the rightmost XFF IP, make sure to use the &lt;em>last&lt;/em> instance of that header.&lt;/p>
+&lt;/li>
+&lt;li>
 &lt;p>Using special &amp;ldquo;true client IPs&amp;rdquo; set by reverse proxies (like &lt;code>X-Real-IP&lt;/code>, &lt;code>True-Client-IP&lt;/code>, etc.) &lt;em>can&lt;/em> be good, but it depends on the a) how the reverse proxy actually sets it, b) whether the reverse proxy sets it if it&amp;rsquo;s already present/spoofed, and c) how you&amp;rsquo;ve configured the reverse proxy (sometimes).&lt;/p>
 &lt;/li>
 &lt;li>
