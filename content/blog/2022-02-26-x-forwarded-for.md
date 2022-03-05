@@ -125,6 +125,8 @@ The best thing to do is merge all of the XFF headers yourself.
 
 (It is worthwhile asking -- and checking -- to make sure reverse proxies append to the correct header, because appending to the wrong header would wreck the trustworthiness of taking the rightmost. I have only checked AWS ALB and Cloudflare, and they're doing it right. If anyone discovers something doing it wrong, please let me know.)
 
+[2022-03-04: I created a [Go issue](https://github.com/golang/go/issues/51493) arguing for a change to the behaviour of `http.Header.Get`. Not with any real expectation of a change, but we'll see.]
+
 ### Private IPs
 
 Even in completely non-malicious scenarios, any of the XFF IPs -- but especially the leftmost -- may be a [private/internal IP address](https://en.wikipedia.org/wiki/Private_network). If the client first connects to an internal proxy, it may add the private IP of the client to the XFF header. This address is never going to be useful to you.
@@ -212,7 +214,7 @@ And never forget the security implications!
 
 If your server is directly connected to the internet, the XFF header cannot be trusted, period. Use the `RemoteAddr`.
 
-If your server is behind one or more reverse proxies and not directly accessible from the internet, you need to know either the IP addresses of those reverse proxies or the number of them that the request will pass through. We'll call these the "trusted proxy IPs" and "trusted proxy count". (Using "trusted proxy IPs" is preferable, for reasons described below.)
+If your server is behind one or more reverse proxies and not directly accessible from the internet, you need to know either the IP addresses of those reverse proxies or the number of them that the request will pass through. We'll call these the "trusted proxy IPs" and "trusted proxy count". (Using "trusted proxy IPs" is preferable, for reasons described in the ["network architecture changes" section](#network-architecture-changes).)
 
 The trusted proxy IPs or trusted proxy count will tell you how far from the right of the XFF header you need to check before you find the first IP that doesn't belong to one of your reverse proxies. This IP was added by your first trusted proxy and is therefore the only IP you can trust. Use it.
 
@@ -326,7 +328,7 @@ Both RealIP and httprate are both using Go's `http.Header.Get` to get the XFF he
 
 Chi's rate limiter is also the one instance I found of the XFF list being split by comma-space instead of just comma. I think that's wrong.
 
-[Disclosed to maintainer 2022-03-03. Maintainer requested that I [make an issue](https://github.com/go-chi/chi/issues/711).]
+[2022-03-03: Disclosed to maintainer via email. 2022-03-04: Maintainer requested that I [make an issue](https://github.com/go-chi/chi/issues/711).]
 
 ### didip/tollbooth
 
@@ -350,7 +352,7 @@ There are two more things that bug me about tollbooth's design. The first is tha
 
 The second thing that bugs me is going to get its very own section...
 
-[2022-03-03: Disclosed to maintainer. 2022-03-04: Maintainer [created a PR](https://github.com/didip/tollbooth/pull/99) to fix it. Ongoing discussion there.]
+[2022-03-03: Disclosed to maintainer via email. 2022-03-04: Maintainer [created a PR](https://github.com/didip/tollbooth/pull/99) to fix it. Ongoing discussion there.]
 
 ### A default list of places to look for the client IP makes no sense
 
@@ -600,9 +602,7 @@ Thanks to [Psiphon Inc.](https://psiphon.ca) for giving me the time to work on t
 
 ## TODO
 
-* all projects: check for multiple headers weakness
-* all projects: for leftmost, check for valid/non-private
-* Go: create Header.Get issue
+* all projects: if deciding to use leftmost, check for valid/non-private
 * finish reference implementation
 * probably add some diagrams
 * rethink hyphenating rate-limit* (right now I'm not doing it for nouns but am doing it for verbs, and I can't decide what's right)
