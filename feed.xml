@@ -237,7 +237,6 @@ Tentative variation: rightmost non-private IP
 &lt;/h5>
 &lt;p>If all of your reverse proxies are in the same private IP space as your server, I &lt;em>think&lt;/em> it&amp;rsquo;s okay to use the rightmost non-private IP rather than using &amp;ldquo;trusted proxy IPs&amp;rdquo; or &amp;ldquo;trusted proxy count&amp;rdquo;. This is equivalent to adding all private IP ranges to your &amp;ldquo;trusted proxy IPs&amp;rdquo; list.&lt;/p>
 &lt;p>An example where this &lt;em>doesn&amp;rsquo;t&lt;/em> work is if you&amp;rsquo;re behind an external reverse proxy service, like Cloudflare &amp;ndash; it&amp;rsquo;s not in your private address space.&lt;/p>
-&lt;p>TODO: diagram&lt;/p>
 &lt;h2 id="falling-into-those-pits">
 &lt;a class="heading-anchor" href="#falling-into-those-pits">
 ##
@@ -357,27 +356,31 @@ A default list of places to look for the client IP makes no sense
 &lt;p>There&amp;rsquo;s &lt;em>never&lt;/em> a time when you&amp;rsquo;re okay with just falling back across a big list of header values that have nothing to do with your network architecture. That&amp;rsquo;s going to bite you.&lt;/p>
 &lt;p>Even Tollbooth defaulting to using the rightmost XFF IP can be problematic. If your server is behind two layers of reverse proxies, then you&amp;rsquo;ll be looking at the IP of your first proxy instead of the client&amp;rsquo;s IP.&lt;sup id="fnref:7">&lt;a href="#fn:7" class="footnote-ref" role="doc-noteref">7&lt;/a>&lt;/sup> (What will probably happen is that you will rate-limit your proxy almost immediately, nothing gets through, and then you fix your config. But it still would have been better to be forced to think about the correct configuration in the first place.)&lt;/p>
 &lt;p>So, even though I know it&amp;rsquo;s not very user friendly, I don&amp;rsquo;t think that rate-limiting libraries should have any default at all, and instead should &lt;em>require&lt;/em> explicit configuration.&lt;/p>
+&lt;h3 id="ululelimiter">
+&lt;a class="heading-anchor" href="#ululelimiter">
+###
+&lt;/a>
+ulule/limiter
+&lt;/h3>
+&lt;p>Another Go rate limiter middleware. By default it doesn&amp;rsquo;t look at the XFF header, but if enabled it &lt;a href="https://github.com/ulule/limiter/blob/9ba030af6009ca2bc9a285dbd815bc7a76de724a/network.go#L31-L56">uses the leftmost XFF IP&lt;/a>. The option is called &amp;ldquo;TrustForwardHeader&amp;rdquo;, but &lt;em>you can never trust the XFF header&lt;/em>. So it falls victim to rate limit escape, etc.&lt;/p>
+&lt;p>It also uses Go&amp;rsquo;s &lt;code>http.Header.Get&lt;/code>, so if it switches to rightmost-ish it will need to change how it gets the XFF header.&lt;/p>
+&lt;p>When &lt;code>TrustForwardHeader&lt;/code> is true it first looks for XFF and then falls through to &lt;code>X-Real-IP&lt;/code> and finally uses &lt;code>RemoteAddr&lt;/code>. But as we just saw, &amp;ldquo;a default list of places to look for the client IP makes no sense&amp;rdquo;.&lt;/p>
+&lt;p>It returns &lt;code>net.ParseIP(ip)&lt;/code> rather than just the raw string. This seems good at first, but &lt;code>net.ParseIP&lt;/code> &lt;a href="https://pkg.go.dev/net#ParseIP">returns nil&lt;/a> if the parse fails. So in the case of a garbage string, ulule/limiter doesn&amp;rsquo;t check for the failure, returns nil, and then, &lt;a href="https://go.dev/play/p/8bgVfOy4Lkw">as far as I can tell&lt;/a>, uses &lt;code>&amp;quot;&amp;lt;nil&amp;gt;&amp;quot;&lt;/code> as the &amp;ldquo;IP&amp;rdquo; key. (I&amp;rsquo;m surprised that it doesn&amp;rsquo;t panic, but I don&amp;rsquo;t think it does.) The way this logic works makes memory exhaustion more difficult, but it might be achievable using valid IPv6 addresses.&lt;/p>
+&lt;p>[2022-03-04: Disclosed to maintainer via email. 2022-03-05: &lt;a href="https://github.com/ulule/limiter/pull/181">PR&lt;/a> has been created with fixes (mostly documentation warnings). It&amp;rsquo;s public, so I&amp;rsquo;m un-redacting this.]&lt;/p>
+&lt;h3 id="sethvargogo-limiter">
+&lt;a class="heading-anchor" href="#sethvargogo-limiter">
+###
+&lt;/a>
+sethvargo/go-limiter
+&lt;/h3>
+&lt;p>This is yet another Go rate limiter middleware. If its &lt;code>httplimit.IPKeyFunc&lt;/code> is configured to look at the &lt;code>X-Forwarded-For&lt;/code> header (which is given as an example in its comment), it will &lt;a href="https://github.com/sethvargo/go-limiter/blob/d0c1f4df450eb46623c6f3afe9f675d40da52cf9/httplimit/middleware.go#L40-L59">&lt;em>use the whole header&lt;/em>&lt;/a> as the rate limit key. That&amp;rsquo;s almost worse than taking the leftmost IP.&lt;/p>
+&lt;p>The way to work around this would be to avoid its &amp;ldquo;real IP&amp;rdquo; logic and create your own &lt;a href="https://github.com/sethvargo/go-limiter/blob/67fff5ee8978ea6218af4d1354bb842096a5b543/httplimit/middleware.go#L38">&lt;code>KeyFunc&lt;/code>&lt;/a> that extracts the correct IP for your network architecture.&lt;/p>
+&lt;p>If the library can&amp;rsquo;t find the configured header(s), it falls through to &lt;code>RemoteAddr&lt;/code>. But, again, I don&amp;rsquo;t think default fallbacks are good.&lt;/p>
+&lt;p>The library also uses Go&amp;rsquo;s &lt;code>http.Header.Get()&lt;/code>.&lt;/p>
+&lt;p>[2022-03-04: Disclosed to maintainer via email. 2022-03-05: Maintainer indicated by email that I could un-redact this.]&lt;/p>
 &lt;!--redact-start-->
 &lt;h3 id="redacted">
 &lt;a class="heading-anchor" href="#redacted">
-###
-&lt;/a>
-[REDACTED]
-&lt;/h3>
-&lt;p>Pending disclosure&lt;/p>
-&lt;!--redact-end-->
-&lt;!--redact-start-->
-&lt;h3 id="redacted-1">
-&lt;a class="heading-anchor" href="#redacted-1">
-###
-&lt;/a>
-[REDACTED]
-&lt;/h3>
-&lt;p>Pending disclosure&lt;/p>
-&lt;!--redact-end-->
-&lt;!--redact-start-->
-&lt;h3 id="redacted-2">
-&lt;a class="heading-anchor" href="#redacted-2">
 ###
 &lt;/a>
 [REDACTED]
@@ -392,17 +395,8 @@ Let&amp;rsquo;s Encrypt
 &lt;/h3>
 &lt;p>It &lt;a href="https://github.com/letsencrypt/boulder/blob/ab79f96d7bfc94be7d009e2aa2007c51ddf16f31/web/context.go#L95">looks like&lt;/a> Let&amp;rsquo;s Encrypt is using Nginx with &lt;code>X-Real-IP&lt;/code>. If it&amp;rsquo;s configuration is good (I don&amp;rsquo;t think the config files are in GitHub), then it should be using rightmost-ish.&lt;/p>
 &lt;!--redact-start-->
-&lt;h3 id="redacted-3">
-&lt;a class="heading-anchor" href="#redacted-3">
-###
-&lt;/a>
-[REDACTED]
-&lt;/h3>
-&lt;p>Pending disclosure&lt;/p>
-&lt;!--redact-end-->
-&lt;!--redact-start-->
-&lt;h3 id="redacted-4">
-&lt;a class="heading-anchor" href="#redacted-4">
+&lt;h3 id="redacted-1">
+&lt;a class="heading-anchor" href="#redacted-1">
 ###
 &lt;/a>
 [REDACTED]
@@ -467,7 +461,6 @@ Tor
 Advanced and theoretical pitfalls and attacks
 &lt;/h2>
 &lt;p>I&amp;rsquo;ve talked a lot about two attacks on rate limiters: avoiding being limited and exhausting server memory. I&amp;rsquo;ve done this because rate limiters are what led me to this topic and because causing a map of IPs to fill memory was an obvious danger in many implementations.&lt;/p>
-&lt;p>TODO: but the I talk a bunch about rate limiters&lt;/p>
 &lt;p>But rate limiters are only one &amp;ldquo;security-related&amp;rdquo; use of &lt;code>X-Forwarded-For&lt;/code>, and there are more, cooler possibilities for badness! They&amp;rsquo;re harder to find or reproduce, but they should be fun to speculate on&amp;hellip;&lt;/p>
 &lt;h3 id="server-behind-reverse-proxy-_and_-directly-connectable">
 &lt;a class="heading-anchor" href="#server-behind-reverse-proxy-_and_-directly-connectable">
@@ -532,7 +525,6 @@ Even worse: &lt;em>Third-party&lt;/em> network architecture changes
 &lt;p>Take a look at the &lt;a href="https://www.cloudflare.com/ips">Cloudflare IP list&lt;/a>. Notice down at the bottom that there have been two times where Cloudflare removed IPs from the list.&lt;/p>
 &lt;p>Imagine you had those IPs on your trusted list. Imagine you didn&amp;rsquo;t realize they were removed. &lt;em>Now who owns those IPs?&lt;/em> Whoever it is can put whatever they want in the XFF, pass it on to your trusted proxy chain, and you&amp;rsquo;ll use it as the &amp;ldquo;real&amp;rdquo; IP. Rate limit escape and memory exhaustion.&lt;/p>
 &lt;p>&amp;hellip;The answer to that question is that Cloudflare still owns the IPs (I &lt;a href="https://search.arin.net/rdap/?query=104.30.0.1">checked&lt;/a> &lt;a href="https://search.arin.net/rdap/?query=199.27.128.1">ARIN&lt;/a>). But the point isn&amp;rsquo;t about Cloudflare and those particular IP ranges. &lt;em>Any&lt;/em> CDN or reverse proxy service with a trusted IP list could change their list and cause problems.&lt;/p>
-&lt;p>TODO: diagram&lt;/p>
 &lt;h3 id="x-forwarded-for-parser-mismatch">
 &lt;a class="heading-anchor" href="#x-forwarded-for-parser-mismatch">
 ###
@@ -551,7 +543,7 @@ Even worse: &lt;em>Third-party&lt;/em> network architecture changes
 &lt;p>&lt;em>Any&lt;/em> difference in the answers to any of those question marks can result in a mismatch between parsers.&lt;/p>
 &lt;p>I wish I had a slam-dunk example scenario for this, but I don&amp;rsquo;t. Here are some hand-wavy ones:&lt;/p>
 &lt;ul>
-&lt;li>You block access to your service from, say, Antarctica. You have a reverse proxy at one level that grabs an XFF IP and checks that. At another level, you have a reverse proxy that grabs a different XFF IP and collects geolocation statistics. You get confused about why you seem to have users connected from Antarctica. (One of them is doing it wrong, but this isn&amp;rsquo;t enough to tell you which.)&lt;/li>
+&lt;li>You block access to your service to requests from, say, Antarctica. You have a reverse proxy at one level that grabs an XFF IP and checks that. At another level, you have a reverse proxy that grabs a different XFF IP and collects geolocation statistics. You get confused about why you seem to have users connected from Antarctica. (One of them is doing it wrong, but this isn&amp;rsquo;t enough to tell you which.)&lt;/li>
 &lt;li>At one reverse proxy level, you check a user&amp;rsquo;s incoming IP address against your DB to make sure it&amp;rsquo;s acceptable for that user. At another reverse proxy level, you update that DB. If there&amp;rsquo;s a mismatch, you&amp;rsquo;ll end up too permissive, too restrictive, or both.&lt;/li>
 &lt;li>More generally&amp;hellip; At one reverse proxy level you use the XFF header to determine the client&amp;rsquo;s IP. Allowing the request to proceed is an attestation that the client IP is acceptable for further processing. At a later reverse proxy level, the client IP is again derived from the XFF header and treated as trusted data because it is implicitly attested to by the previous level.&lt;sup id="fnref:8">&lt;a href="#fn:8" class="footnote-ref" role="doc-noteref">8&lt;/a>&lt;/sup> A difference between the two levels in XFF parsing introduces a vulnerability.&lt;/li>
 &lt;/ul>
@@ -627,14 +619,48 @@ Conclusions
 &lt;/li>
 &lt;/ol>
 &lt;p>I have avoided saying that you should only use the rightmost-ish XFF IP and never, ever the leftmost. But, seriously, just don&amp;rsquo;t use it.&lt;/p>
-&lt;p>TODO: Reference implementation&lt;/p>
 &lt;h2 id="discussion">
 &lt;a class="heading-anchor" href="#discussion">
 ##
 &lt;/a>
 Discussion
 &lt;/h2>
-&lt;p>Comment and discuss at &lt;a href="https://news.ycombinator.com/item?id=30558682">Hacker News&lt;/a>.&lt;/p>
+&lt;p>Comment and discuss at &lt;a href="https://news.ycombinator.com/item?id=30570053">Hacker News&lt;/a>.&lt;/p>
+&lt;p>There have been some interesting comments on HN and Reddit. I&amp;rsquo;ll share some tidbits here.&lt;/p>
+&lt;h3 id="rusts-headermapget-returns-first">
+&lt;a class="heading-anchor" href="#rusts-headermapget-returns-first">
+###
+&lt;/a>
+Rust&amp;rsquo;s &lt;code>HeaderMap::get&lt;/code> returns first
+&lt;/h3>
+&lt;p>HN commenter scottlamb &lt;a href="https://news.ycombinator.com/item?id=30571412">pointed out&lt;/a> that &lt;a href="https://docs.rs/http/0.2.6/http/header/struct.HeaderMap.html#method.get">Rust&amp;rsquo;s method to return a single header&lt;/a> value also returns the value of the first such header. The commenter checked and discovered that they were using it wrong.&lt;/p>
+&lt;h3 id="aws-elbalb-has-an-option-to-make-xff-even-worse">
+&lt;a class="heading-anchor" href="#aws-elbalb-has-an-option-to-make-xff-even-worse">
+###
+&lt;/a>
+AWS ELB/ALB has an option to make XFF even worse
+&lt;/h3>
+&lt;p>HN commenter nickjj brought the AWS ELB/ALB &lt;a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/x-forwarded-headers.html#x-forwarded-for">&amp;ldquo;client port preservation&amp;rdquo;&lt;/a> option to my attention. If enabled, the client port number is appended to the IP added to XFF. Turning that option on will a) violate the de facto standard form of the header, and b) mess up a lot of IP parsing code.&lt;/p>
+&lt;p>(And if the IP suddenly starts failing, then what? Does the rate limiter logic keep moving to the right until it finds a good IP? If done wrong, that could lead to using untrusted values. Does the rate limiter instead give up? And do what? Fail open? Fail closed? Panic? In a comment on the didip/tollbooth PR for this &lt;a href="https://github.com/didip/tollbooth/pull/99#issuecomment-1059328777">I talk more about this&lt;/a>.)&lt;/p>
+&lt;h3 id="consider-a-custom-single-ip-header-if-you-can">
+&lt;a class="heading-anchor" href="#consider-a-custom-single-ip-header-if-you-can">
+###
+&lt;/a>
+Consider a custom single-IP header, if you can
+&lt;/h3>
+&lt;p>HN commenter terom &lt;a href="https://news.ycombinator.com/item?id=30571542">said&lt;/a>:&lt;/p>
+&lt;blockquote>
+&lt;p>highly recommended to just override the entire XFF header with a single value at the appropriate point in your stack, if at all possible&lt;/p>
+&lt;/blockquote>
+&lt;p>Which is good advice and I didn&amp;rsquo;t really say in the post. If you have the ability to use one of the &amp;ldquo;good&amp;rdquo; single-IP headers, or add your own at your first proxy, that&amp;rsquo;s much better than messing around with XFF.&lt;/p>
+&lt;p>(The reason I didn&amp;rsquo;t really talk about the custom header is like: I was mostly writing for people who are trying to use what&amp;rsquo;s available rather than doing a lot of proxy tinkering. Or something.)&lt;/p>
+&lt;h3 id="envoys-xff-documentation-is-really-something">
+&lt;a class="heading-anchor" href="#envoys-xff-documentation-is-really-something">
+###
+&lt;/a>
+Envoy&amp;rsquo;s XFF documentation is really something
+&lt;/h3>
+&lt;p>HN commenter jrockway &lt;a href="https://news.ycombinator.com/item?id=30571219">pointed me&lt;/a> at the Envoy Proxy &lt;a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#x-forwarded-for">documentation for XFF use&lt;/a>. It&amp;rsquo;s not exactly generally educational, but I think it&amp;rsquo;s a really good effort at making sure that Envoy users don&amp;rsquo;t shoot themselves in the foot.&lt;/p>
 &lt;h2 id="acknowledgements">
 &lt;a class="heading-anchor" href="#acknowledgements">
 ##
@@ -650,6 +676,7 @@ Acknowledgements
 TODO
 &lt;/h2>
 &lt;ul>
+&lt;li>add note about single-value header Get being combined list&lt;/li>
 &lt;li>all projects: if deciding to use leftmost, check for valid/non-private&lt;/li>
 &lt;li>finish reference implementation&lt;/li>
 &lt;li>probably add some diagrams&lt;/li>
