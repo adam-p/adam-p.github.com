@@ -621,6 +621,12 @@ Which is good advice and I didn't really say in the post. If you have the abilit
 
 (The reason I didn't really talk about the custom header is like: I was mostly writing for people who are trying to use what's available rather than doing a lot of proxy tinkering. Or something.)
 
+### Go's `net/http/httputil.ReverseProxy` XFF behaviour being re-examined
+
+Right now, [`httputil.ReverseProxy`](https://pkg.go.dev/net/http/httputil#ReverseProxy) appends the client IP to the XFF header. It looks like [they are considering](https://github.com/golang/go/issues/50465) either replacing the existing XFF header by default or adding options to append to, overwrite, or preserve the existing header. 
+
+My gut feeling is that the initial more-knobs-to-turn suggestion is better than the limited-and-awkward thing it seems to be turning into. (I guess I'll [express my opinion](https://github.com/golang/go/issues/50465#issuecomment-1059987276) there.)
+
 ### Envoy's XFF documentation is really something
 
 HN commenter jrockway [pointed me](https://news.ycombinator.com/item?id=30571219) at the Envoy Proxy [documentation for XFF use](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#x-forwarded-for). It's not exactly generally educational, but I think it's a really good effort at making sure that Envoy users don't shoot themselves in the foot.
