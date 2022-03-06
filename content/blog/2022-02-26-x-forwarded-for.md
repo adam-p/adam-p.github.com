@@ -506,6 +506,8 @@ Imagine you had those IPs on your trusted list. Imagine you didn't realize they 
 
 ...The answer to that question is that Cloudflare still owns the IPs (I [checked](https://search.arin.net/rdap/?query=104.30.0.1) [ARIN](https://search.arin.net/rdap/?query=199.27.128.1)). But the point isn't about Cloudflare and those particular IP ranges. _Any_ CDN or reverse proxy service with a trusted IP list could change their list and cause problems.
 
+(Edit: A reader shared [the email Cloudflare sent](/img/blog/cloudflare-ip-range-removal-email.png) when they most recently changed their IP set. He pointed out that even though Cloudflare still owns the IPs, they should be considered untrusted. The email mentions that there's [an API](https://api.cloudflare.com/#cloudflare-ips-properties) to get Cloudflare's IPs, which is good. Anyway, my original point wasn't just about Cloudflare, so it remains unchanged.)
+
 ### `X-Forwarded-For` parser mismatch
 
 This is inspired by [JSON interoperability vulnerabilities](https://bishopfox.com/blog/json-interoperability-vulnerabilities). These occur when different levels of code or architecture interpret JSON in different ways. So if the JSON parser at one level deals with, say, duplicate object keys by taking the first key and another level deals with it by taking the last key, you can have a problem. (E.g., an attacker passes a `"username"` value along with a matching password, but then also passes another `"username"` value. If your auth check uses the first username and the business logic uses the second, you're going to access the wrong user data.)
