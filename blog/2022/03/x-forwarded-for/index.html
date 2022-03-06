@@ -332,7 +332,12 @@ AWS ELB/ALB has an option to make XFF even worse
 </a>
 Consider a custom single-IP header, if you can
 </h3><p>HN commenter terom <a href="https://news.ycombinator.com/item?id=30571542">said</a>:</p><blockquote>
-<p>highly recommended to just override the entire XFF header with a single value at the appropriate point in your stack, if at all possible</p></blockquote><p>Which is good advice and I didn&rsquo;t really say in the post. If you have the ability to use one of the &ldquo;good&rdquo; single-IP headers, or add your own at your first proxy, that&rsquo;s much better than messing around with XFF.</p><p>(The reason I didn&rsquo;t really talk about the custom header is like: I was mostly writing for people who are trying to use what&rsquo;s available rather than doing a lot of proxy tinkering. Or something.)</p><h3 id=envoys-xff-documentation-is-really-something>
+<p>highly recommended to just override the entire XFF header with a single value at the appropriate point in your stack, if at all possible</p></blockquote><p>Which is good advice and I didn&rsquo;t really say in the post. If you have the ability to use one of the &ldquo;good&rdquo; single-IP headers, or add your own at your first proxy, that&rsquo;s much better than messing around with XFF.</p><p>(The reason I didn&rsquo;t really talk about the custom header is like: I was mostly writing for people who are trying to use what&rsquo;s available rather than doing a lot of proxy tinkering. Or something.)</p><h3 id=gos-nethttphttputilreverseproxy-xff-behaviour-being-re-examined>
+<a class=heading-anchor href=#gos-nethttphttputilreverseproxy-xff-behaviour-being-re-examined>
+###
+</a>
+Go&rsquo;s <code>net/http/httputil.ReverseProxy</code> XFF behaviour being re-examined
+</h3><p>Right now, <a href=https://pkg.go.dev/net/http/httputil#ReverseProxy><code>httputil.ReverseProxy</code></a> appends the client IP to the XFF header. It looks like <a href=https://github.com/golang/go/issues/50465>they are considering</a> either replacing the existing XFF header by default or adding options to append to, overwrite, or preserve the existing header.</p><p>My gut feeling is that the initial more-knobs-to-turn suggestion is better than the limited-and-awkward thing it seems to be turning into. (I guess I&rsquo;ll <a href=https://github.com/golang/go/issues/50465#issuecomment-1059987276>express my opinion</a> there.)</p><h3 id=envoys-xff-documentation-is-really-something>
 <a class=heading-anchor href=#envoys-xff-documentation-is-really-something>
 ###
 </a>
@@ -374,7 +379,7 @@ TODO
 <p>There is one more sentence elsewhere, but it doesn&rsquo;t add anything: &ldquo;With the header field format described in this document, it is possible to know what information belongs together, <em>as long as the proxies are trusted</em>.&rdquo; (Emphasis added.)&#160;<a href=#fnref:10 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li></ol></section></article></div></section><hr>
 <aside>
 <p>
-<h5> 9410 Words </h5></p><p>
+<h5> 9482 Words </h5></p><p>
 Previous: <a class=previous href=../../../../blog/2022/02/ipv6-rate-limiting/> The scary state of IPv6 rate-limiting</a>
 <br>
 </p></aside><footer class=text-end>

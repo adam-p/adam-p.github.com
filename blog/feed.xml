@@ -655,6 +655,14 @@ Consider a custom single-IP header, if you can
 &lt;/blockquote>
 &lt;p>Which is good advice and I didn&amp;rsquo;t really say in the post. If you have the ability to use one of the &amp;ldquo;good&amp;rdquo; single-IP headers, or add your own at your first proxy, that&amp;rsquo;s much better than messing around with XFF.&lt;/p>
 &lt;p>(The reason I didn&amp;rsquo;t really talk about the custom header is like: I was mostly writing for people who are trying to use what&amp;rsquo;s available rather than doing a lot of proxy tinkering. Or something.)&lt;/p>
+&lt;h3 id="gos-nethttphttputilreverseproxy-xff-behaviour-being-re-examined">
+&lt;a class="heading-anchor" href="#gos-nethttphttputilreverseproxy-xff-behaviour-being-re-examined">
+###
+&lt;/a>
+Go&amp;rsquo;s &lt;code>net/http/httputil.ReverseProxy&lt;/code> XFF behaviour being re-examined
+&lt;/h3>
+&lt;p>Right now, &lt;a href="https://pkg.go.dev/net/http/httputil#ReverseProxy">&lt;code>httputil.ReverseProxy&lt;/code>&lt;/a> appends the client IP to the XFF header. It looks like &lt;a href="https://github.com/golang/go/issues/50465">they are considering&lt;/a> either replacing the existing XFF header by default or adding options to append to, overwrite, or preserve the existing header.&lt;/p>
+&lt;p>My gut feeling is that the initial more-knobs-to-turn suggestion is better than the limited-and-awkward thing it seems to be turning into. (I guess I&amp;rsquo;ll &lt;a href="https://github.com/golang/go/issues/50465#issuecomment-1059987276">express my opinion&lt;/a> there.)&lt;/p>
 &lt;h3 id="envoys-xff-documentation-is-really-something">
 &lt;a class="heading-anchor" href="#envoys-xff-documentation-is-really-something">
 ###
