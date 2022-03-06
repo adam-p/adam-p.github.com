@@ -625,6 +625,16 @@ Which is good advice and I didn't really say in the post. If you have the abilit
 
 HN commenter jrockway [pointed me](https://news.ycombinator.com/item?id=30571219) at the Envoy Proxy [documentation for XFF use](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#x-forwarded-for). It's not exactly generally educational, but I think it's a really good effort at making sure that Envoy users don't shoot themselves in the foot.
 
+### Real-world examples of doing it wrong
+
+* ["Flask apps on Heroku susceptible to IP spoofing"](https://esd.io/blog/flask-apps-heroku-real-ip-spoofing.html) (2013-05-12). Via [eli on HN](https://news.ycombinator.com/item?id=30574577). It was using the leftmost.
+
+* "For many years, a very prominent computer science journal used XFF for guarding access --- if you set it to an IP of some well-known universities, you'd be able to download all you want." ([HN](https://news.ycombinator.com/item?id=30572614))
+
+* "I remember the source code for a certain simple web app would check if X-Forwarded-For matched a certain IP as a way of granting admin powers. I spoofed it. It was sort of the first "hack" I ever did." ([Reddit](https://old.reddit.com/r/programming/comments/t7lxeb/the_perils_of_the_real_client_ip_or_all_the_wrong/hzka9ma/))
+
+* "This was really helpful, I feel good after fixing something I didn't know was even a problem 🤗" ([Reddit](https://old.reddit.com/r/programming/comments/t7lxeb/the_perils_of_the_real_client_ip_or_all_the_wrong/hzkmxie/))
+
 ## Acknowledgements
 
 Thanks to [Rod Hynes](https://github.com/rod-hynes) for proofreading and providing feedback. All mistakes are mine, of course.
@@ -633,6 +643,7 @@ Thanks to [Psiphon Inc.](https://psiphon.ca) for giving me the time to work on t
 
 ## TODO
 
+* Nodejs collapses XFF https://nodejs.org/api/http.html#messageheaders https://old.reddit.com/r/programming/comments/t7lxeb/the_perils_of_the_real_client_ip_or_all_the_wrong/hzkg18l/
 * add note about single-value header Get being combined list
 * all projects: if deciding to use leftmost, check for valid/non-private
 * finish reference implementation
