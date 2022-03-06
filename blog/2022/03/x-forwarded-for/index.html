@@ -337,7 +337,17 @@ Consider a custom single-IP header, if you can
 ###
 </a>
 Envoy&rsquo;s XFF documentation is really something
-</h3><p>HN commenter jrockway <a href="https://news.ycombinator.com/item?id=30571219">pointed me</a> at the Envoy Proxy <a href=https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#x-forwarded-for>documentation for XFF use</a>. It&rsquo;s not exactly generally educational, but I think it&rsquo;s a really good effort at making sure that Envoy users don&rsquo;t shoot themselves in the foot.</p><h2 id=acknowledgements>
+</h3><p>HN commenter jrockway <a href="https://news.ycombinator.com/item?id=30571219">pointed me</a> at the Envoy Proxy <a href=https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#x-forwarded-for>documentation for XFF use</a>. It&rsquo;s not exactly generally educational, but I think it&rsquo;s a really good effort at making sure that Envoy users don&rsquo;t shoot themselves in the foot.</p><h3 id=real-world-examples-of-doing-it-wrong>
+<a class=heading-anchor href=#real-world-examples-of-doing-it-wrong>
+###
+</a>
+Real-world examples of doing it wrong
+</h3><ul>
+<li>
+<p><a href=https://esd.io/blog/flask-apps-heroku-real-ip-spoofing.html>&ldquo;Flask apps on Heroku susceptible to IP spoofing&rdquo;</a> (2013-05-12). Via <a href="https://news.ycombinator.com/item?id=30574577">eli on HN</a>. It was using the leftmost.</p></li><li>
+<p>&ldquo;For many years, a very prominent computer science journal used XFF for guarding access &mdash; if you set it to an IP of some well-known universities, you&rsquo;d be able to download all you want.&rdquo; (<a href="https://news.ycombinator.com/item?id=30572614">HN</a>)</p></li><li>
+<p>&ldquo;I remember the source code for a certain simple web app would check if X-Forwarded-For matched a certain IP as a way of granting admin powers. I spoofed it. It was sort of the first &ldquo;hack&rdquo; I ever did.&rdquo; (<a href=https://old.reddit.com/r/programming/comments/t7lxeb/the_perils_of_the_real_client_ip_or_all_the_wrong/hzka9ma/>Reddit</a>)</p></li><li>
+<p>&ldquo;This was really helpful, I feel good after fixing something I didn&rsquo;t know was even a problem 🤗&rdquo; (<a href=https://old.reddit.com/r/programming/comments/t7lxeb/the_perils_of_the_real_client_ip_or_all_the_wrong/hzkmxie/>Reddit</a>)</p></li></ul><h2 id=acknowledgements>
 <a class=heading-anchor href=#acknowledgements>
 ##
 </a>
@@ -348,7 +358,7 @@ Acknowledgements
 </a>
 TODO
 </h2><ul>
-<li>add note about single-value header Get being combined list</li><li>all projects: if deciding to use leftmost, check for valid/non-private</li><li>finish reference implementation</li><li>probably add some diagrams</li><li>rethink hyphenating rate-limit* (right now I&rsquo;m not doing it for nouns but am doing it for verbs, and I can&rsquo;t decide what&rsquo;s right)</li></ul><section class=footnotes role=doc-endnotes>
+<li>Nodejs collapses XFF <a href=https://nodejs.org/api/http.html#messageheaders>https://nodejs.org/api/http.html#messageheaders</a> <a href=https://old.reddit.com/r/programming/comments/t7lxeb/the_perils_of_the_real_client_ip_or_all_the_wrong/hzkg18l/>https://old.reddit.com/r/programming/comments/t7lxeb/the_perils_of_the_real_client_ip_or_all_the_wrong/hzkg18l/</a></li><li>add note about single-value header Get being combined list</li><li>all projects: if deciding to use leftmost, check for valid/non-private</li><li>finish reference implementation</li><li>probably add some diagrams</li><li>rethink hyphenating rate-limit* (right now I&rsquo;m not doing it for nouns but am doing it for verbs, and I can&rsquo;t decide what&rsquo;s right)</li></ul><section class=footnotes role=doc-endnotes>
 <hr>
 <ol>
 <li id=fn:1 role=doc-endnote>
@@ -364,7 +374,7 @@ TODO
 <p>There is one more sentence elsewhere, but it doesn&rsquo;t add anything: &ldquo;With the header field format described in this document, it is possible to know what information belongs together, <em>as long as the proxies are trusted</em>.&rdquo; (Emphasis added.)&#160;<a href=#fnref:10 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li></ol></section></article></div></section><hr>
 <aside>
 <p>
-<h5> 9286 Words </h5></p><p>
+<h5> 9410 Words </h5></p><p>
 Previous: <a class=previous href=../../../../blog/2022/02/ipv6-rate-limiting/> The scary state of IPv6 rate-limiting</a>
 <br>
 </p></aside><footer class=text-end>

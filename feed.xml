@@ -662,6 +662,26 @@ Consider a custom single-IP header, if you can
 Envoy&amp;rsquo;s XFF documentation is really something
 &lt;/h3>
 &lt;p>HN commenter jrockway &lt;a href="https://news.ycombinator.com/item?id=30571219">pointed me&lt;/a> at the Envoy Proxy &lt;a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#x-forwarded-for">documentation for XFF use&lt;/a>. It&amp;rsquo;s not exactly generally educational, but I think it&amp;rsquo;s a really good effort at making sure that Envoy users don&amp;rsquo;t shoot themselves in the foot.&lt;/p>
+&lt;h3 id="real-world-examples-of-doing-it-wrong">
+&lt;a class="heading-anchor" href="#real-world-examples-of-doing-it-wrong">
+###
+&lt;/a>
+Real-world examples of doing it wrong
+&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;a href="https://esd.io/blog/flask-apps-heroku-real-ip-spoofing.html">&amp;ldquo;Flask apps on Heroku susceptible to IP spoofing&amp;rdquo;&lt;/a> (2013-05-12). Via &lt;a href="https://news.ycombinator.com/item?id=30574577">eli on HN&lt;/a>. It was using the leftmost.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&amp;ldquo;For many years, a very prominent computer science journal used XFF for guarding access &amp;mdash; if you set it to an IP of some well-known universities, you&amp;rsquo;d be able to download all you want.&amp;rdquo; (&lt;a href="https://news.ycombinator.com/item?id=30572614">HN&lt;/a>)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&amp;ldquo;I remember the source code for a certain simple web app would check if X-Forwarded-For matched a certain IP as a way of granting admin powers. I spoofed it. It was sort of the first &amp;ldquo;hack&amp;rdquo; I ever did.&amp;rdquo; (&lt;a href="https://old.reddit.com/r/programming/comments/t7lxeb/the_perils_of_the_real_client_ip_or_all_the_wrong/hzka9ma/">Reddit&lt;/a>)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&amp;ldquo;This was really helpful, I feel good after fixing something I didn&amp;rsquo;t know was even a problem 🤗&amp;rdquo; (&lt;a href="https://old.reddit.com/r/programming/comments/t7lxeb/the_perils_of_the_real_client_ip_or_all_the_wrong/hzkmxie/">Reddit&lt;/a>)&lt;/p>
+&lt;/li>
+&lt;/ul>
 &lt;h2 id="acknowledgements">
 &lt;a class="heading-anchor" href="#acknowledgements">
 ##
@@ -677,6 +697,7 @@ Acknowledgements
 TODO
 &lt;/h2>
 &lt;ul>
+&lt;li>Nodejs collapses XFF &lt;a href="https://nodejs.org/api/http.html#messageheaders">https://nodejs.org/api/http.html#messageheaders&lt;/a> &lt;a href="https://old.reddit.com/r/programming/comments/t7lxeb/the_perils_of_the_real_client_ip_or_all_the_wrong/hzkg18l/">https://old.reddit.com/r/programming/comments/t7lxeb/the_perils_of_the_real_client_ip_or_all_the_wrong/hzkg18l/&lt;/a>&lt;/li>
 &lt;li>add note about single-value header Get being combined list&lt;/li>
 &lt;li>all projects: if deciding to use leftmost, check for valid/non-private&lt;/li>
 &lt;li>finish reference implementation&lt;/li>
