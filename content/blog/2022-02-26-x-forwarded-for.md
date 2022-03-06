@@ -158,10 +158,12 @@ Other sources are similarly variable. Some say nothing whatsoever about the poss
 ## Avoiding those pits
 
 Let's make a few baseline statements:
-1. Using an IP in the private address space as the "real" client IP is never the right choice.
+1. Using an IP in the private address space as the "real" client IP is never the right choice[^4].
 2. Using a value that's not actually an IP address is never the right choice.
 3. In the absence of chicanery, the leftmost non-private, non-invalid IP is the closest we can come to the "real" client IP. (Henceforth, "leftmost-ish".)
 4. The only client IP that we can _trust_ is the first one added by a (reverse) proxy that we control. (Henceforth, "rightmost-ish".)
+
+[^4]: A redditor [points out](https://old.reddit.com/r/programming/comments/t7lxeb/the_perils_of_the_real_client_ip_or_all_the_wrong/hzits6h/) that if you're running a server for internal usage, and you want to know the originating internal IP, then you _do_ want an IP in the private address space. Which is true. So if that scenario applies to you, modify the algorithm accordingly (i.e., remove the "non-private" checks).
 
 The leftmost-ish is usually going to be the most "real", while the rightmost-ish is going to be the most trustworthy. So which IP should you use? It depends on what you're going to do with it.
 
@@ -194,9 +196,9 @@ When reading this, remember that the final proxy IP is not in the XFF list -- it
 
 #### First: collect all of the IPs
 
-Make a single list of all the IPs in all of the `X-Forwarded-For` headers.[^4] Also have the `RemoteAddr` available. 
+Make a single list of all the IPs in all of the `X-Forwarded-For` headers.[^5] Also have the `RemoteAddr` available. 
 
-[^4]: In the leftmost-ish approach, the IP you need might not be in the first XFF header. In the rightmost-ish approach, it might not be in the last XFF header.
+[^5]: In the leftmost-ish approach, the IP you need might not be in the first XFF header. In the rightmost-ish approach, it might not be in the last XFF header.
 
 #### Second: decide what your security needs are
 
@@ -242,9 +244,9 @@ Let's start with some good news.
 
 [Cloudflare adds](https://support.cloudflare.com/hc/en-us/articles/206776727-Understanding-the-True-Client-IP-Header) the `CF-Connecting-IP` header to all requests that pass through it; it adds `True-Client-IP` as a synonym for Enterprise users who require backwards compatibility. The value for these headers is a single IP address. The [fullest description](https://developers.cloudflare.com/fundamentals/get-started/http-request-headers/) of these headers that I could find makes it _sound_ like they are just using the leftmost XFF IP, but the example was sufficiently incomplete that I tried it out myself. Happily, it looks like they're actually using the rightmost-ish. 
 
-Nginx offers a not-enabled-by-default module that [adds the `X-Real-IP` header](https://nginx.org/en/docs/http/ngx_http_realip_module.html). This is also a single IP. When properly and fully configured[^5], it also uses the rightmost IP that isn't on the "trusted" list. So, the rightmost-ish IP. Also good.
+Nginx offers a not-enabled-by-default module that [adds the `X-Real-IP` header](https://nginx.org/en/docs/http/ngx_http_realip_module.html). This is also a single IP. When properly and fully configured[^6], it also uses the rightmost IP that isn't on the "trusted" list. So, the rightmost-ish IP. Also good.
 
-[^5]: Seek a guide [elsewhere](https://docs.fastly.com/signalsciences/faq/real-client-ip-addresses/#nginx---http_realip_module).
+[^6]: Seek a guide [elsewhere](https://docs.fastly.com/signalsciences/faq/real-client-ip-addresses/#nginx---http_realip_module).
 
 Similarly, when configured to look at `X-Forwarded-For`, Apache's [mod_remoteip](https://httpd.apache.org/docs/trunk/mod/mod_remoteip.html) picks the rightmost untrusted IP to set into `REMOTE_ADDR`.
 
@@ -314,9 +316,9 @@ True-Client-IP: 3.3.3.3
 
 `chi.middleware.RealIP`'s logic goes like: "use the `True-Client-IP`; if that doesn't exist, use the `X-Real-IP`; if that doesn't exist, use `X-Forwarded-For`". So it falls victim to header spoofing.
 
-But, as we've learned, the `chi.middleware.RealIP` warning also isn't good enough when it comes to `X-Forwarded-For` _because you can never, ever trust all of it_[^6]. In the `RealIP` code, the logic I just paraphrased actually ends with "use the leftmost XFF IP address". And we're now suitably scared of using the leftmost XFF IP. (It also does not check that the leftmost "IP" is valid and non-private.)
+But, as we've learned, the `chi.middleware.RealIP` warning also isn't good enough when it comes to `X-Forwarded-For` _because you can never, ever trust all of it_[^7]. In the `RealIP` code, the logic I just paraphrased actually ends with "use the leftmost XFF IP address". And we're now suitably scared of using the leftmost XFF IP. (It also does not check that the leftmost "IP" is valid and non-private.)
 
-[^6]: Okay, it's _possible_ for your trusted proxy to blow away the existing XFF value and start fresh. But a) that's not how XFF is supposed to work, b) you're losing potentially useful information, and c) you achieve the same thing by using the rightmost-ish algorithm.
+[^7]: Okay, it's _possible_ for your trusted proxy to blow away the existing XFF value and start fresh. But a) that's not how XFF is supposed to work, b) you're losing potentially useful information, and c) you achieve the same thing by using the rightmost-ish algorithm.
 
 So `chi.middleware.RealIP` falls firmly into the "only safe for non-security use" category. And you _must_ be aware of its header preference order and what your reverse proxy does or doesn't set and let through. In short, it's hard to recommend it.
 
@@ -360,9 +362,9 @@ If you're using Cloudflare you want `CF-Connecting-IP`. If you're using `ngx_htt
 
 There's _never_ a time when you're okay with just falling back across a big list of header values that have nothing to do with your network architecture. That's going to bite you.
 
-Even Tollbooth defaulting to using the rightmost XFF IP can be problematic. If your server is behind two layers of reverse proxies, then you'll be looking at the IP of your first proxy instead of the client's IP.[^7] (What will probably happen is that you will rate-limit your proxy almost immediately, nothing gets through, and then you fix your config. But it still would have been better to be forced to think about the correct configuration in the first place.)
+Even Tollbooth defaulting to using the rightmost XFF IP can be problematic. If your server is behind two layers of reverse proxies, then you'll be looking at the IP of your first proxy instead of the client's IP.[^8] (What will probably happen is that you will rate-limit your proxy almost immediately, nothing gets through, and then you fix your config. But it still would have been better to be forced to think about the correct configuration in the first place.)
 
-[^7]: "Rightmost" is not "rightmost-ish".
+[^8]: "Rightmost" is not "rightmost-ish".
 
 So, even though I know it's not very user friendly, I don't think that rate-limiting libraries should have any default at all, and instead should _require_ explicit configuration.
 
@@ -524,9 +526,9 @@ _Any_ difference in the answers to any of those question marks can result in a m
 I wish I had a slam-dunk example scenario for this, but I don't. Here are some hand-wavy ones:
 * You block access to your service to requests from, say, Antarctica. You have a reverse proxy at one level that grabs an XFF IP and checks that. At another level, you have a reverse proxy that grabs a different XFF IP and collects geolocation statistics. You get confused about why you seem to have users connected from Antarctica. (One of them is doing it wrong, but this isn't enough to tell you which.)
 * At one reverse proxy level, you check a user's incoming IP address against your DB to make sure it's acceptable for that user. At another reverse proxy level, you update that DB. If there's a mismatch, you'll end up too permissive, too restrictive, or both.
-* More generally... At one reverse proxy level you use the XFF header to determine the client's IP. Allowing the request to proceed is an attestation that the client IP is acceptable for further processing. At a later reverse proxy level, the client IP is again derived from the XFF header and treated as trusted data because it is implicitly attested to by the previous level.[^8] A difference between the two levels in XFF parsing introduces a vulnerability.
+* More generally... At one reverse proxy level you use the XFF header to determine the client's IP. Allowing the request to proceed is an attestation that the client IP is acceptable for further processing. At a later reverse proxy level, the client IP is again derived from the XFF header and treated as trusted data because it is implicitly attested to by the previous level.[^9] A difference between the two levels in XFF parsing introduces a vulnerability.
 
-[^8]: Of course, the attestation reverse proxy should have set the `X-Client-IP` or otherwise passed on the IP it verified. But it's not hard to imagine such a mistake.
+[^9]: Of course, the attestation reverse proxy should have set the `X-Client-IP` or otherwise passed on the IP it verified. But it's not hard to imagine such a mistake.
 
 ## RFC 7239: Forwarded HTTP Extension, June 2014
 
@@ -546,9 +548,9 @@ Okay, does the RFC at least make clear how it should be used and not be used? We
 > 
 > One approach to ensure that the "Forwarded" HTTP header field is correct is to verify the correctness of proxies and to whitelist them as trusted. This approach has at least two weaknesses. First, the chain of IP addresses listed before the request came to the proxy cannot be trusted. Second, unless the communication between proxies and the endpoint is secured, the data can be modified by an attacker with access to the network.
 
-And that's it.[^9] 
+And that's it.[^10] 
 
-[^9]: There is one more sentence elsewhere, but it doesn't add anything: "With the header field format described in this document, it is possible to know what information belongs together, <em>as long as the proxies are trusted</em>." (Emphasis added.)
+[^10]: There is one more sentence elsewhere, but it doesn't add anything: "With the header field format described in this document, it is possible to know what information belongs together, <em>as long as the proxies are trusted</em>." (Emphasis added.)
 
 That warning is strictly true, but it's not very helpful and could be clearer. Would you read those five sentences and then think, "Now I thoroughly understand the danger! It's perfectly clear to me how to use this header in a secure manner."?  I wouldn't.
 
