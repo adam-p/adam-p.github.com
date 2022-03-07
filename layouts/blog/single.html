@@ -28,12 +28,20 @@
   {{ end }}
 
   <p>
-      {{ with .PrevInSection }}
-        Previous: <a class="previous" href="{{.RelPermalink}}"> {{.Title}}</a>
-      {{ end }}
-      <br>
+    Last Update:
+    <time datetime="{{ .Page.Lastmod.Format "Mon Jan 10 17:13:38 2020 -0700" }}" class="text-muted">
+      {{ $.Page.Lastmod.Format "January 02, 2006" }}
+    </time>
+    <br>
+    <a href="https://github.com/adam-p/adam-p.github.com/commits/master/content/{{ $.Page.GetIdentity.Path }}">See revision history</a>
+  </p>  
+  <p>
     {{ with .NextInSection }}
         Next: <a class="next" href="{{.RelPermalink}}"> {{.Title}}</a>
+    {{ end }}
+    <br>
+    {{ with .PrevInSection }}
+      Previous: <a class="previous" href="{{.RelPermalink}}"> {{.Title}}</a>
     {{ end }}
   </p>
 </aside>

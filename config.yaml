@@ -38,3 +38,6 @@ outputFormats:
   RSS:
     mediatype: "application/rss"
     baseName: "feed"
+
+# Allows last git change date for .Page.Lastmod
+enableGitInfo: True
