@@ -337,7 +337,12 @@ Consider a custom single-IP header, if you can
 ###
 </a>
 Go&rsquo;s <code>net/http/httputil.ReverseProxy</code> XFF behaviour being re-examined
-</h3><p>Right now, <a href=https://pkg.go.dev/net/http/httputil#ReverseProxy><code>httputil.ReverseProxy</code></a> appends the client IP to the XFF header. It looks like <a href=https://github.com/golang/go/issues/50465>they are considering</a> either replacing the existing XFF header by default or adding options to append to, overwrite, or preserve the existing header.</p><p>My gut feeling is that the initial more-knobs-to-turn suggestion is better than the limited-and-awkward thing it seems to be turning into. (I guess I&rsquo;ll <a href=https://github.com/golang/go/issues/50465#issuecomment-1059987276>express my opinion</a> there.)</p><h3 id=envoys-xff-documentation-is-really-something>
+</h3><p>Right now, <a href=https://pkg.go.dev/net/http/httputil#ReverseProxy><code>httputil.ReverseProxy</code></a> appends the client IP to the XFF header. It looks like <a href=https://github.com/golang/go/issues/50465>they are considering</a> either replacing the existing XFF header by default or adding options to append to, overwrite, or preserve the existing header.</p><p>My gut feeling is that the initial more-knobs-to-turn suggestion is better than the limited-and-awkward thing it seems to be turning into. (I guess I&rsquo;ll <a href=https://github.com/golang/go/issues/50465#issuecomment-1059987276>express my opinion</a> there.)</p><h3 id=thoughts-on-overwriting-the-xff-header>
+<a class=heading-anchor href=#thoughts-on-overwriting-the-xff-header>
+###
+</a>
+Thoughts on overwriting the XFF header
+</h3><p>After being prompted to look at <a href=https://github.com/golang/go/issues/50465><code>httputil.ReverseProxy</code></a> and <a href=https://github.com/caddyserver/caddy/pull/4507>Caddy</a>, I started thinking more about overwriting the <code>X-Forwarded-For</code> header (which they both do). I had previously given the idea only a footnote<sup id=fnref:7><a href=#fn:7 class=footnote-ref role=doc-noteref>7</a></sup>, but it deserves more consideration.</p><p>The idea is this: In a multi-reverse-proxy scenario, the first proxy replaces any existing XFF header(s) with one containing only <code>RemoteAddr</code>. All subsequent proxies (configured to trust the previous proxies) then append to the fresh XFF header.</p><p>This approach has an obvious nice property: There are no untrusted values in the XFF list. You can&rsquo;t possibly choose a spoofed value. But there are also aspects that I don&rsquo;t like.</p><p>First of all, I think that it teaches bad XFF hygiene and introduces the possibility of mistake leading to spoofing vulnerability. Because the XFF header is being replaced by the first proxy, the instructions for use become &ldquo;use the leftmost&rdquo;. But what if you then swap out your first proxy that doesn&rsquo;t remove the XFF and instead appends to it? Spoofed!</p><p>Secondly, there&rsquo;s no configuration-simplicity gain with this approach. Trusted proxies still need to be configured for all proxies but the first. If you&rsquo;re doing that, you can use the rightmost-ish approach. And the rightmost-ish approach is more robust: Is your XFF overwritten? It works! Is your XFF list appended to? It works! Is your XFF list mostly spoofed? It works! And you&rsquo;re helping people to understand the right way to think about the XFF header.</p><p>Thirdly, there are still legitimate uses for the leftmost-ish XFF IP (albeit with a lot of warnings attached). If your only mode of operation is to overwrite the XFF header, then you utterly deny those use cases.</p><p>Finally, hand-wavingly, I think this violates the spirit of the headers. XFF is supposed to be a comma-separated list of all the IPs involved. Which overwriting it negates. I think that, instead, <code>X-Real-IP</code> should be used, set by the first proxy. No need to hijack XFF for this effectively-single-IP purpose.</p><p>However, I wouldn&rsquo;t fight to the death against overwriting the XFF. It&rsquo;s still an improvement over the dismal widespread-ness of append-and-use-leftmost.</p><h3 id=envoys-xff-documentation-is-really-something>
 <a class=heading-anchor href=#envoys-xff-documentation-is-really-something>
 ###
 </a>
@@ -379,10 +384,10 @@ TODO
 <p>There is one more sentence elsewhere, but it doesn&rsquo;t add anything: &ldquo;With the header field format described in this document, it is possible to know what information belongs together, <em>as long as the proxies are trusted</em>.&rdquo; (Emphasis added.)&#160;<a href=#fnref:10 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li></ol></section></article></div></section><hr>
 <aside>
 <p>
-<h5> 9476 Words </h5></p><p>
+<h5> 9832 Words </h5></p><p>
 Last Update:
-<time datetime="Sun Mar 30 37:32:28 6060 -0500" class=text-muted>
-March 06, 2022
+<time datetime="Mon Mar 30 37:32:28 7070 -0500" class=text-muted>
+March 07, 2022
 </time>
 <br>
 <a href=https://github.com/adam-p/adam-p.github.com/commits/master/content/blog/2022-02-26-x-forwarded-for.md>See revision history</a>
