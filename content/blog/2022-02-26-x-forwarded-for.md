@@ -627,6 +627,24 @@ Right now, [`httputil.ReverseProxy`](https://pkg.go.dev/net/http/httputil#Revers
 
 My gut feeling is that the initial more-knobs-to-turn suggestion is better than the limited-and-awkward thing it seems to be turning into. (I guess I'll [express my opinion](https://github.com/golang/go/issues/50465#issuecomment-1059987276) there.)
 
+### Thoughts on overwriting the XFF header
+
+After being prompted to look at [`httputil.ReverseProxy`](https://github.com/golang/go/issues/50465) and [Caddy](https://github.com/caddyserver/caddy/pull/4507), I started thinking more about overwriting the `X-Forwarded-For` header (which they both do). I had previously given the idea only a footnote[^7], but it deserves more consideration.
+
+The idea is this: In a multi-reverse-proxy scenario, the first proxy replaces any existing XFF header(s) with one containing only `RemoteAddr`. All subsequent proxies (configured to trust the previous proxies) then append to the fresh XFF header.
+
+This approach has an obvious nice property: There are no untrusted values in the XFF list. You can't possibly choose a spoofed value. But there are also aspects that I don't like.
+
+First of all, I think that it teaches bad XFF hygiene and introduces the possibility of mistake leading to spoofing vulnerability. Because the XFF header is being replaced by the first proxy, the instructions for use become "use the leftmost". But what if you then swap out your first proxy that doesn't remove the XFF and instead appends to it? Spoofed!
+
+Secondly, there's no configuration-simplicity gain with this approach. Trusted proxies still need to be configured for all proxies but the first. If you're doing that, you can use the rightmost-ish approach. And the rightmost-ish approach is more robust: Is your XFF overwritten? It works! Is your XFF list appended to? It works! Is your XFF list mostly spoofed? It works! And you're helping people to understand the right way to think about the XFF header.
+
+Thirdly, there are still legitimate uses for the leftmost-ish XFF IP (albeit with a lot of warnings attached). If your only mode of operation is to overwrite the XFF header, then you utterly deny those use cases.
+
+Finally, hand-wavingly, I think this violates the spirit of the headers. XFF is supposed to be a comma-separated list of all the IPs involved. Which overwriting it negates. I think that, instead, `X-Real-IP` should be used, set by the first proxy. No need to hijack XFF for this effectively-single-IP purpose.
+
+However, I wouldn't fight to the death against overwriting the XFF. It's still an improvement over the dismal widespread-ness of append-and-use-leftmost.
+
 ### Envoy's XFF documentation is really something
 
 HN commenter jrockway [pointed me](https://news.ycombinator.com/item?id=30571219) at the Envoy Proxy [documentation for XFF use](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#x-forwarded-for). It's not exactly generally educational, but I think it's a really good effort at making sure that Envoy users don't shoot themselves in the foot.
