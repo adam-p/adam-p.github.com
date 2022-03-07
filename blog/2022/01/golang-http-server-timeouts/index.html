@@ -75,7 +75,7 @@ AWS observations
 </h3><p>Using an AWS load balancer in front of your Go server muddies the behaviour of some of these timeouts, but doesn&rsquo;t completely obviate them.</p><p>ALB seems to buffer all the incoming headers, so ReadHeaderTimeout does nothing. ALB&rsquo;s timeout for reading headers appears to be 60 seconds.</p><p>ALB doesn&rsquo;t seem to have a body-read timeout (or at least not one shorter than a couple of minutes). It does seem to be buffering some of the incoming body, since the client can still send some data after the backend server has given up the connection. About 30 seconds after the server drops the connection, the load balance responds with 502 Bad Gateway.</p><p>I didn&rsquo;t test the write timeout, but I bet there isn&rsquo;t one.</p><p>The ALB idle timeout seems to be 60 seconds.</p></article></div></section><hr>
 <aside>
 <p>
-<h5> 1862 Words </h5></p><p>
+<h5> 1,862 Words </h5></p><p>
 Last Update:
 <time datetime="Mon Feb 20 27:24:48 14140 -0500" class=text-muted>
 February 14, 2022
