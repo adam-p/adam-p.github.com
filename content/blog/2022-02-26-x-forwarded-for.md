@@ -637,7 +637,7 @@ The idea is this: In a multi-reverse-proxy scenario, the first proxy replaces an
 
 This approach has an obvious nice property: There are no untrusted values in the XFF list. You can't possibly choose a spoofed value. But there are also aspects that I don't like.
 
-First of all, I think that it teaches bad XFF hygiene and introduces the possibility of mistake leading to spoofing vulnerability. Because the XFF header is being replaced by the first proxy, the instructions for use become "use the leftmost". But what if you then swap out your first proxy that doesn't remove the XFF and instead appends to it? Spoofed!
+First of all, I think that it teaches bad XFF hygiene and introduces the possibility of mistakes leading to spoofing vulnerability. Because the XFF header is being replaced by the first proxy, the instructions for use become "use the leftmost". But what if you then swap out your first proxy that doesn't remove the XFF and instead appends to it? Spoofed!
 
 Secondly, there's no configuration-simplicity gain with this approach. Trusted proxies still need to be configured for all proxies but the first. If you're doing that, you can use the rightmost-ish approach. And the rightmost-ish approach is more robust: Is your XFF overwritten? It works! Is your XFF list appended to? It works! Is your XFF list mostly spoofed? It works! And you're helping people to understand the right way to think about the XFF header.
 
