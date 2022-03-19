@@ -158,7 +158,7 @@ Trying to learn about &lt;code>X-Forwarded-For&lt;/code>
 &lt;/h3>
 &lt;p>Trying to educate yourself about XFF is, unfortunately, also difficult.&lt;/p>
 &lt;p>MDN Web Docs are usually the gold standard for stuff like this, but &lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For">the page about XFF&lt;/a> doesn&amp;rsquo;t mention these risks at all; it says &amp;ldquo;the right-most IP address is the IP address of the most recent proxy and the left-most IP address is the IP address of the originating client&amp;rdquo; with no caveat. The &lt;a href="https://en.wikipedia.org/wiki/X-Forwarded-For">Wikipedia entry&lt;/a> is much better: &amp;ldquo;Since it is easy to forge an X-Forwarded-For field the given information should be used with care. The right-most IP address is always the IP address that connects to the last proxy, which means it is the most reliable source of information.&amp;rdquo;&lt;/p>
-&lt;p>[2022-03-09: Created &lt;a href="https://github.com/mdn/content/issues/13703">an issue&lt;/a> for the MDN documentation.]&lt;/p>
+&lt;p>[2022-03-09: Created &lt;a href="https://github.com/mdn/content/issues/13703">an issue&lt;/a> for the MDN documentation. 2022-03-19: I rewrote the page, PR&amp;rsquo;d it, and the change is live now. You can see a PDF of the &lt;a href="../misc/MDN-XFF.pdf">original page here&lt;/a>. Now to fix the &lt;code>Forwarded&lt;/code> page&amp;hellip;]&lt;/p>
 &lt;p>Other sources are similarly variable. Some say nothing whatsoever about the possibility of the header being spoofed or the presence of private addresses (&lt;a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/x-forwarded-headers.html">1&lt;/a>, &lt;a href="https://techcommunity.microsoft.com/t5/iis-support-blog/how-to-use-x-forwarded-for-header-to-log-actual-client-ip/ba-p/873115">2&lt;/a>, &lt;a href="https://www.geeksforgeeks.org/http-headers-x-forwarded-for/">3&lt;/a>, &lt;a href="https://developers.cloudflare.com/fundamentals/get-started/http-request-headers/">4&lt;/a>, &lt;a href="https://www.keycdn.com/blog/x-forwarded-for-cdn">5&lt;/a>). Others do a pretty good job of mentioning the risks (&lt;a href="https://totaluptime.com/kb/prevent-x-forwarded-for-spoofing-or-manipulation/">6&lt;/a>, &lt;a href="https://docs.fastly.com/signalsciences/faq/real-client-ip-addresses/#x-forwarded-for-header-configuration">7&lt;/a>, &lt;a href="https://datatracker.ietf.org/doc/html/rfc7239#section-8.1">8&lt;/a>), but sometimes you have to read pretty deeply to get to the warnings.&lt;/p>
 &lt;h2 id="avoiding-those-pits">
 &lt;a class="heading-anchor" href="#avoiding-those-pits">
@@ -726,6 +726,7 @@ TODO
 &lt;li>finish reference implementation&lt;/li>
 &lt;li>probably add some diagrams&lt;/li>
 &lt;li>rethink hyphenating rate-limit* (right now I&amp;rsquo;m not doing it for nouns but am doing it for verbs, and I can&amp;rsquo;t decide what&amp;rsquo;s right)&lt;/li>
+&lt;li>&lt;a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-troubleshooting.html#http-463-issues">AWS ALB returns 463&lt;/a> if there are more&lt;/li>
 &lt;/ul>
 &lt;section class="footnotes" role="doc-endnotes">
 &lt;hr>
