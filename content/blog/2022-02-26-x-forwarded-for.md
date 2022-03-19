@@ -153,7 +153,7 @@ Trying to educate yourself about XFF is, unfortunately, also difficult.
 
 MDN Web Docs are usually the gold standard for stuff like this, but [the page about XFF](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For) doesn't mention these risks at all; it says "the right-most IP address is the IP address of the most recent proxy and the left-most IP address is the IP address of the originating client" with no caveat. The [Wikipedia entry](https://en.wikipedia.org/wiki/X-Forwarded-For) is much better: "Since it is easy to forge an X-Forwarded-For field the given information should be used with care. The right-most IP address is always the IP address that connects to the last proxy, which means it is the most reliable source of information." 
 
-[2022-03-09: Created [an issue](https://github.com/mdn/content/issues/13703) for the MDN documentation.]
+[2022-03-09: Created [an issue](https://github.com/mdn/content/issues/13703) for the MDN documentation. 2022-03-19: I rewrote the page, PR'd it, and the change is live now. You can see a PDF of the [original page here](/misc/MDN-XFF.pdf). Now to fix the `Forwarded` page...]
 
 Other sources are similarly variable. Some say nothing whatsoever about the possibility of the header being spoofed or the presence of private addresses ([1](https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/x-forwarded-headers.html), [2](https://techcommunity.microsoft.com/t5/iis-support-blog/how-to-use-x-forwarded-for-header-to-log-actual-client-ip/ba-p/873115), [3](https://www.geeksforgeeks.org/http-headers-x-forwarded-for/), [4](https://developers.cloudflare.com/fundamentals/get-started/http-request-headers/), [5](https://www.keycdn.com/blog/x-forwarded-for-cdn)). Others do a pretty good job of mentioning the risks ([6](https://totaluptime.com/kb/prevent-x-forwarded-for-spoofing-or-manipulation/), [7](https://docs.fastly.com/signalsciences/faq/real-client-ip-addresses/#x-forwarded-for-header-configuration), [8](https://datatracker.ietf.org/doc/html/rfc7239#section-8.1)), but sometimes you have to read pretty deeply to get to the warnings. 
 
@@ -675,3 +675,4 @@ Thanks to [Psiphon Inc.](https://psiphon.ca) for giving me the time to work on t
 * finish reference implementation
 * probably add some diagrams
 * rethink hyphenating rate-limit* (right now I'm not doing it for nouns but am doing it for verbs, and I can't decide what's right)
+* [AWS ALB returns 463](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-troubleshooting.html#http-463-issues) if there are more 
