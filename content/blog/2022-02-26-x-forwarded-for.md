@@ -380,7 +380,7 @@ When `TrustForwardHeader` is true it first looks for XFF and then falls through 
 
 It returns `net.ParseIP(ip)` rather than just the raw string. This seems good at first, but `net.ParseIP` [returns nil](https://pkg.go.dev/net#ParseIP) if the parse fails. So in the case of a garbage string, ulule/limiter doesn't check for the failure, returns nil, and then, [as far as I can tell](https://go.dev/play/p/8bgVfOy4Lkw), uses `"<nil>"` as the "IP" key. (I'm surprised that it doesn't panic, but I don't think it does.) The way this logic works makes memory exhaustion more difficult, but it might be achievable using valid IPv6 addresses.
 
-[2022-03-04: Disclosed to maintainer via email. 2022-03-05: [PR](https://github.com/ulule/limiter/pull/181) has been created with fixes (mostly documentation warnings). It's public, so I'm un-redacting this.]
+[2022-03-04: Disclosed to maintainer via email. 2022-03-05: [PR](https://github.com/ulule/limiter/pull/181) has been created with fixes (mostly documentation warnings). It's public, so I'm un-redacting this. 2022-03-17: The PR was merged. [I don't love](https://github.com/ulule/limiter/pull/181#issuecomment-1059827400) the changes, but it sounds like the next major version will address the shortcomings.]
 
 ### sethvargo/go-limiter
 
