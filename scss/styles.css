@@ -12935,12 +12935,13 @@ hr {
   margin-left: auto;
   margin-right: auto; }
 
-pre {
+.highlight > pre {
   padding: 0.5em;
+  border-radius: 5px;
   scrollbar-color: #f0cda6 rgba(0, 0, 0, 0); }
-  pre::-webkit-scrollbar {
+  .highlight > pre::-webkit-scrollbar {
     height: auto; }
-  pre::-webkit-scrollbar-thumb {
+  .highlight > pre::-webkit-scrollbar-thumb {
     border-radius: 5px;
     background: #f0cda6; }
 
