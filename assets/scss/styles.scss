@@ -181,8 +181,9 @@ hr {
   margin-right: auto;
 }
 
-pre {
+.highlight > pre {
   padding: 0.5em;
+  border-radius: 5px;
 
   // I want horizontal code scrollbars to more pronounced, so the reader knows that there is some text not visible
   $code-scroll-color: #f0cda6;
