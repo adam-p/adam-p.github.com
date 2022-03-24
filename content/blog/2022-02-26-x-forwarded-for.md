@@ -465,7 +465,23 @@ With some experimentation, an attacker can craft an XFF header to look exactly l
 
 Now you're using an untrusted XFF IP and don't realize it. Rate limiter escape, memory exhaustion, etc.
 
-One way to mitigate this is to check the `RemoteAddr` to make sure it belongs to your reverse proxy _before_ you try to parse the XFF header.
+One way to mitigate this is to check the `RemoteAddr` to make sure it belongs to your reverse proxy before you try to use the XFF header.
+
+### Re-fronting attack
+
+Thanks to Ryan Gerstenkorn for sending me his [blog post](https://blog.ryanjarv.sh/2022/03/16/bypassing-wafs-with-alternate-domain-routing.html) about this.
+
+If a) your backend is in-house or otherwise externally accessible, and b) it's fronted by a CDN, and c) you trust the IP addresses/ranges of your CDN, then you may be vulnerable to another class of attack. 
+
+With AWS CloudFront, it's possible for an attacker to create a distribution that points to your origin. Now requests are coming to your origin from trusted IPs, but from a distribution not owned by you. But the real beauty/horror of this is that the attacker can use Lambda@Edge to modify the `Host` header so that you can't tell that a different hostname was used to access your origin, and can also modify the `X-Forwarded-For` header to be whatever the attacker wants. 
+
+So your "trusted" reverse proxy IPs become untrusted and can lie to you about the client IP. This can be used to bypass your rate limiter, IP-based access control, etc.
+
+The proper way to address this is to also verify that it's _your_ CDN distribution talking to you. This will usually involve a shared secret or client certificate. 
+
+Note that Gerstenkorn verified that this works for AWS CloudFront. I checked Cloudflare and found that it doesn't work there: Cloudflare's "Transform Rules" won't let you "set" the XFF header, and if you "delete" the header, only the pre-existing header is deleted and a new one is added with the actual IP. And it's similar when attempting to leverage Workers -- the actual client IP is still appended to the XFF header after any other manipulation.
+
+Always do strong verification of your CDN! Maybe there are other Cloudflare headers that are important to you and aren't as protected as XFF. Or maybe you're using some other CDN. And this general class of attacks might apply to third-party WAFs, etc., depending on how they're configured.
 
 ### Many trusted reverse proxy IPs
 
@@ -585,7 +601,7 @@ Let's summarize some of the things we've learned, the wisdom we've gained, and t
 
 6. If you know a function or value is dangerous (spoofable, etc.), put that in your documentation for it in big red letters. Don't just coyly hint at it. (See: Azure, etc.)
 
-7. Good specifications (i.e., RFCs) should tell you how to consume a value, not just how to produce it. And if there are different ways to consume that value that make sense in different situations, it should give you the necessary information -- with sufficient clarity -- to help you make that choice. A reference implementation would also help.
+7. Good specifications (i.e., RFCs) should tell you how to consume a value, not just how to produce it. And if there are different ways to consume that value that make sense in different situations, it should give you the necessary information -- with sufficient clarity -- to help you make that choice. A reference implementation would also help. [2022-03-24: I [wrote a library](https://github.com/realclientip/realclientip-go) that I hope will become that reference implementation.]
 
 8. Inconsistency in security implementations is bad. Pick a tool or cloud service that I didn't cover here to check for XFF behaviour. Can you guess beforehand what you'll find with any certainty? You can't, and that's bad.
 
@@ -627,7 +643,7 @@ Which is good advice and I didn't really say in the post. If you have the abilit
 
 Right now, [`httputil.ReverseProxy`](https://pkg.go.dev/net/http/httputil#ReverseProxy) appends the client IP to the XFF header. It looks like [they are considering](https://github.com/golang/go/issues/50465) either replacing the existing XFF header by default or adding options to append to, overwrite, or preserve the existing header. 
 
-My gut feeling is that the initial more-knobs-to-turn suggestion is better than the limited-and-awkward thing it seems to be turning into. (I guess I'll [express my opinion](https://github.com/golang/go/issues/50465#issuecomment-1059987276) there.)
+My gut feeling is that the initial more-knobs-to-turn suggestion in the issue is better than the limited-and-awkward thing it seems to be turning into. (I guess I'll [express my opinion](https://github.com/golang/go/issues/50465#issuecomment-1059987276) there.)
 
 ### Thoughts on overwriting the XFF header
 
@@ -675,4 +691,4 @@ Thanks to [Psiphon Inc.](https://psiphon.ca) for giving me the time to work on t
 * finish reference implementation
 * probably add some diagrams
 * rethink hyphenating rate-limit* (right now I'm not doing it for nouns but am doing it for verbs, and I can't decide what's right)
-* [AWS ALB returns 463](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-troubleshooting.html#http-463-issues) if there are more 
+* [AWS ALB returns 463](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-troubleshooting.html#http-463-issues) if there are more than 30 XFF IP addresses
