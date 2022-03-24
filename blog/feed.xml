@@ -709,7 +709,20 @@ Server behind reverse proxy &lt;em>and&lt;/em> directly connectable
 &lt;li>Continue until the limit/block unexpectedly disappears.&lt;/li>
 &lt;/ol>
 &lt;p>Now you&amp;rsquo;re using an untrusted XFF IP and don&amp;rsquo;t realize it. Rate limiter escape, memory exhaustion, etc.&lt;/p>
-&lt;p>One way to mitigate this is to check the &lt;code>RemoteAddr&lt;/code> to make sure it belongs to your reverse proxy &lt;em>before&lt;/em> you try to parse the XFF header.&lt;/p>
+&lt;p>One way to mitigate this is to check the &lt;code>RemoteAddr&lt;/code> to make sure it belongs to your reverse proxy before you try to use the XFF header.&lt;/p>
+&lt;h3 id="re-fronting-attack">
+&lt;a class="heading-anchor" href="#re-fronting-attack">
+###
+&lt;/a>
+Re-fronting attack
+&lt;/h3>
+&lt;p>Thanks to Ryan Gerstenkorn for sending me his &lt;a href="https://blog.ryanjarv.sh/2022/03/16/bypassing-wafs-with-alternate-domain-routing.html">blog post&lt;/a> about this.&lt;/p>
+&lt;p>If a) your backend is in-house or otherwise externally accessible, and b) it&amp;rsquo;s fronted by a CDN, and c) you trust the IP addresses/ranges of your CDN, then you may be vulnerable to another class of attack.&lt;/p>
+&lt;p>With AWS CloudFront, it&amp;rsquo;s possible for an attacker to create a distribution that points to your origin. Now requests are coming to your origin from trusted IPs, but from a distribution not owned by you. But the real beauty/horror of this is that the attacker can use Lambda@Edge to modify the &lt;code>Host&lt;/code> header so that you can&amp;rsquo;t tell that a different hostname was used to access your origin, and can also modify the &lt;code>X-Forwarded-For&lt;/code> header to be whatever the attacker wants.&lt;/p>
+&lt;p>So your &amp;ldquo;trusted&amp;rdquo; reverse proxy IPs become untrusted and can lie to you about the client IP. This can be used to bypass your rate limiter, IP-based access control, etc.&lt;/p>
+&lt;p>The proper way to address this is to also verify that it&amp;rsquo;s &lt;em>your&lt;/em> CDN distribution talking to you. This will usually involve a shared secret or client certificate.&lt;/p>
+&lt;p>Note that Gerstenkorn verified that this works for AWS CloudFront. I checked Cloudflare and found that it doesn&amp;rsquo;t work there: Cloudflare&amp;rsquo;s &amp;ldquo;Transform Rules&amp;rdquo; won&amp;rsquo;t let you &amp;ldquo;set&amp;rdquo; the XFF header, and if you &amp;ldquo;delete&amp;rdquo; the header, only the pre-existing header is deleted and a new one is added with the actual IP. And it&amp;rsquo;s similar when attempting to leverage Workers &amp;ndash; the actual client IP is still appended to the XFF header after any other manipulation.&lt;/p>
+&lt;p>Always do strong verification of your CDN! Maybe there are other Cloudflare headers that are important to you and aren&amp;rsquo;t as protected as XFF. Or maybe you&amp;rsquo;re using some other CDN. And this general class of attacks might apply to third-party WAFs, etc., depending on how they&amp;rsquo;re configured.&lt;/p>
 &lt;h3 id="many-trusted-reverse-proxy-ips">
 &lt;a class="heading-anchor" href="#many-trusted-reverse-proxy-ips">
 ###
@@ -836,7 +849,7 @@ Conclusions
 &lt;p>If you know a function or value is dangerous (spoofable, etc.), put that in your documentation for it in big red letters. Don&amp;rsquo;t just coyly hint at it. (See: Azure, etc.)&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>Good specifications (i.e., RFCs) should tell you how to consume a value, not just how to produce it. And if there are different ways to consume that value that make sense in different situations, it should give you the necessary information &amp;ndash; with sufficient clarity &amp;ndash; to help you make that choice. A reference implementation would also help.&lt;/p>
+&lt;p>Good specifications (i.e., RFCs) should tell you how to consume a value, not just how to produce it. And if there are different ways to consume that value that make sense in different situations, it should give you the necessary information &amp;ndash; with sufficient clarity &amp;ndash; to help you make that choice. A reference implementation would also help. [2022-03-24: I &lt;a href="https://github.com/realclientip/realclientip-go">wrote a library&lt;/a> that I hope will become that reference implementation.]&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>Inconsistency in security implementations is bad. Pick a tool or cloud service that I didn&amp;rsquo;t cover here to check for XFF behaviour. Can you guess beforehand what you&amp;rsquo;ll find with any certainty? You can&amp;rsquo;t, and that&amp;rsquo;s bad.&lt;/p>
@@ -894,7 +907,7 @@ Consider a custom single-IP header, if you can
 Go&amp;rsquo;s &lt;code>net/http/httputil.ReverseProxy&lt;/code> XFF behaviour being re-examined
 &lt;/h3>
 &lt;p>Right now, &lt;a href="https://pkg.go.dev/net/http/httputil#ReverseProxy">&lt;code>httputil.ReverseProxy&lt;/code>&lt;/a> appends the client IP to the XFF header. It looks like &lt;a href="https://github.com/golang/go/issues/50465">they are considering&lt;/a> either replacing the existing XFF header by default or adding options to append to, overwrite, or preserve the existing header.&lt;/p>
-&lt;p>My gut feeling is that the initial more-knobs-to-turn suggestion is better than the limited-and-awkward thing it seems to be turning into. (I guess I&amp;rsquo;ll &lt;a href="https://github.com/golang/go/issues/50465#issuecomment-1059987276">express my opinion&lt;/a> there.)&lt;/p>
+&lt;p>My gut feeling is that the initial more-knobs-to-turn suggestion in the issue is better than the limited-and-awkward thing it seems to be turning into. (I guess I&amp;rsquo;ll &lt;a href="https://github.com/golang/go/issues/50465#issuecomment-1059987276">express my opinion&lt;/a> there.)&lt;/p>
 &lt;h3 id="thoughts-on-overwriting-the-xff-header">
 &lt;a class="heading-anchor" href="#thoughts-on-overwriting-the-xff-header">
 ###
@@ -957,7 +970,7 @@ TODO
 &lt;li>finish reference implementation&lt;/li>
 &lt;li>probably add some diagrams&lt;/li>
 &lt;li>rethink hyphenating rate-limit* (right now I&amp;rsquo;m not doing it for nouns but am doing it for verbs, and I can&amp;rsquo;t decide what&amp;rsquo;s right)&lt;/li>
-&lt;li>&lt;a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-troubleshooting.html#http-463-issues">AWS ALB returns 463&lt;/a> if there are more&lt;/li>
+&lt;li>&lt;a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-troubleshooting.html#http-463-issues">AWS ALB returns 463&lt;/a> if there are more than 30 XFF IP addresses&lt;/li>
 &lt;/ul>
 &lt;section class="footnotes" role="doc-endnotes">
 &lt;hr>
