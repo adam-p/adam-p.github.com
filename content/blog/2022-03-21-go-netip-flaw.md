@@ -6,6 +6,10 @@ tags: [golang, ipv6]
 slug: go-netip-flaw
 ---
 
+Update 2022-03-23: Matt Layher [created a Go issue](https://github.com/golang/go/issues/51899) about this. It's not getting a lot of traction.
+
+---
+
 Does this surprise you? (Try it in the [playground](https://go.dev/play/p/4bHXBiBktUH).)
 
 ```golang
