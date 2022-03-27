@@ -688,6 +688,25 @@ Tor
 &lt;/h3>
 &lt;p>Tor is an anonymity network. They have &lt;a href="https://gitlab.torproject.org/tpo/anti-censorship/rdsys/-/issues/80">recently realized&lt;/a> that they have a control server that is both directly connected to the internet &lt;em>and&lt;/em> behind a reverse proxy and are using XFF to give them trustworthy IPs, so they’re vulnerable to spoofing. It looks like they’re working towards limiting the public-ness of the interface, or doing better verification of CDN connections, or both.&lt;/p>
 &lt;p>(Because I looked into it, I’ll mention that it looks like they’re &lt;em>not&lt;/em> falling victim to the &lt;a href="#multiple-headers">“multiple headers”&lt;/a> pitfall. It looks like they use Twisted and call &lt;code>request.getHeader&lt;/code> to get the XFF value. The &lt;a href="https://github.com/twisted/twisted/blob/ebb2d360070e468981377b917e3a728ff4e6c7f6/src/twisted/web/http.py#L1068">Twisted source&lt;/a> for that method indicates that it returns the &lt;em>last&lt;/em> matching header. That could cause problems if you need the Nth-from-the-right header, but I think it’s fine in this case.)&lt;/p>
+&lt;h3 id="gorillahandlersproxyheaders">
+&lt;a class="heading-anchor" href="#gorillahandlersproxyheaders">
+###
+&lt;/a>
+gorilla/handlers.ProxyHeaders
+&lt;/h3>
+&lt;p>[Section added 2022-03-27. u/Genesis2001 &lt;a href="https://old.reddit.com/r/golang/comments/toynmv/rfc_get_the_real_client_ip_the_right_ways/i28ibey/">asked about this&lt;/a> on Reddit, so I looked at the code and figured I should add some comments here.]&lt;/p>
+&lt;p>&lt;a href="https://github.com/gorilla">Gorilla&lt;/a> is a Go web toolkit. It’s most known for its router, &lt;a href="https://github.com/gorilla/mux">gorilla/mux&lt;/a>. It has a &lt;a href="https://pkg.go.dev/github.com/gorilla/handlers#ProxyHeaders">&lt;code>ProxyHeaders&lt;/code> middleware&lt;/a> for handling XFF (that is intended for general consumption, not just for gorilla/mux users).&lt;/p>
+&lt;p>&lt;code>ProxyHeaders&lt;/code> (&lt;a href="https://github.com/gorilla/handlers/blob/v1.5.1/proxy_headers.go#L43">source&lt;/a>) is deficient in a number of ways, but at least it has a warning that the user’s first reverse proxy must strip out the headers being checked before adding them back in. So it’s good that it has that warning, but that requirement means that a) it won’t be usable for a lot of users, and b) it will be misused by a lot of users.&lt;/p>
+&lt;p>Let’s touch on the problems that are legitimately mitigated by stripping the headers:&lt;/p>
+&lt;ul>
+&lt;li>It’s taking the leftmost XFF and &lt;code>Forwarded&lt;/code> values.&lt;/li>
+&lt;li>It’s checking &lt;code>X-Forwarded-For&lt;/code> and then &lt;code>X-Real-IP&lt;/code> and then &lt;code>Forwarded&lt;/code>. So it has the &lt;a href="#a-default-list-of-places-to-look-for-the-client-ip-makes-no-sense">“default list”&lt;/a> problem.&lt;/li>
+&lt;li>It’s using &lt;code>X-Forwarded-Host&lt;/code> to replace &lt;code>r.Host&lt;/code>. So that’s a new spoofable thing.&lt;/li>
+&lt;li>It’s using &lt;code>X-Forwarded-Proto&lt;/code>-then-&lt;code>X-Forwarded-Scheme&lt;/code>-then-&lt;code>Fowarded&lt;/code> to replace &lt;code>r.URL.Scheme&lt;/code>. Another new spoofable thing.&lt;/li>
+&lt;/ul>
+&lt;p>It’s &lt;a href="https://github.com/gorilla/handlers/blob/d453effd20e6817a8acfd9d278dadd21371da0ba/proxy_headers.go#L74">using comma-space&lt;/a> to parse &lt;code>X-Forwarded-For&lt;/code>, contrary to RFC 2616. So it can set &lt;code>r.RemoteAddr&lt;/code> to an IP like “1.1.1.1,10.1.1.1”, etc. It’s also not trimming the result, and I &lt;em>think&lt;/em> the LWS rules of RFC 2616 mean that there can be spaces before the comma, so &lt;code>ProxyHeaders&lt;/code> can also end up with strings like &lt;code>"&lt;space>1.1.1.1&lt;space>"&lt;/code>.&lt;/p>
+&lt;p>It also doesn’t support any single-IP headers besides &lt;code>X-Real-IP&lt;/code>, which limits its general utility.&lt;/p>
+&lt;p>(And I keep wondering why stripping XFF at the first reverse proxy makes sense. If you have that much control – e.g., if you’re using Nginx – you should instead just set &lt;code>X-Real-IP&lt;/code> and let XFF behave the way it’s intended to.)&lt;/p>
 &lt;h2 id="advanced-and-theoretical-pitfalls-and-attacks">
 &lt;a class="heading-anchor" href="#advanced-and-theoretical-pitfalls-and-attacks">
 ##
