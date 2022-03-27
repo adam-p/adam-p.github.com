@@ -707,6 +707,7 @@ gorilla/handlers.ProxyHeaders
 &lt;p>It’s &lt;a href="https://github.com/gorilla/handlers/blob/d453effd20e6817a8acfd9d278dadd21371da0ba/proxy_headers.go#L74">using comma-space&lt;/a> to parse &lt;code>X-Forwarded-For&lt;/code>, contrary to RFC 2616. So it can set &lt;code>r.RemoteAddr&lt;/code> to an IP like “1.1.1.1,10.1.1.1”, etc. It’s also not trimming the result, and I &lt;em>think&lt;/em> the LWS rules of RFC 2616 mean that there can be spaces before the comma, so &lt;code>ProxyHeaders&lt;/code> can also end up with strings like &lt;code>"&lt;space>1.1.1.1&lt;space>"&lt;/code>.&lt;/p>
 &lt;p>It also doesn’t support any single-IP headers besides &lt;code>X-Real-IP&lt;/code>, which limits its general utility.&lt;/p>
 &lt;p>(And I keep wondering why stripping XFF at the first reverse proxy makes sense. If you have that much control – e.g., if you’re using Nginx – you should instead just set &lt;code>X-Real-IP&lt;/code> and let XFF behave the way it’s intended to.)&lt;/p>
+&lt;p>[2022-03-27: Created &lt;a href="https://github.com/gorilla/handlers/issues/227">issue&lt;/a> and &lt;a href="https://github.com/gorilla/handlers/pull/228">pull request&lt;/a>.]&lt;/p>
 &lt;h2 id="advanced-and-theoretical-pitfalls-and-attacks">
 &lt;a class="heading-anchor" href="#advanced-and-theoretical-pitfalls-and-attacks">
 ##
