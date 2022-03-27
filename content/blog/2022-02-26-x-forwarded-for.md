@@ -466,6 +466,8 @@ It also doesn't support any single-IP headers besides `X-Real-IP`, which limits 
 
 (And I keep wondering why stripping XFF at the first reverse proxy makes sense. If you have that much control -- e.g., if you're using Nginx -- you should instead just set `X-Real-IP` and let XFF behave the way it's intended to.)
 
+[2022-03-27: Created [issue](https://github.com/gorilla/handlers/issues/227) and [pull request](https://github.com/gorilla/handlers/pull/228).]
+
 ## Advanced and theoretical pitfalls and attacks
 
 I've talked a lot about two attacks on rate limiters: avoiding being limited and exhausting server memory. I've done this because rate limiters are what led me to this topic and because causing a map of IPs to fill memory was an obvious danger in many implementations.
