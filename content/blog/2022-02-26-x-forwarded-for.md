@@ -446,6 +446,26 @@ Tor is an anonymity network. They have [recently realized](https://gitlab.torpro
 
 (Because I looked into it, I'll mention that it looks like they're _not_ falling victim to the ["multiple headers"](#multiple-headers) pitfall. It looks like they use Twisted and call `request.getHeader` to get the XFF value. The [Twisted source](https://github.com/twisted/twisted/blob/ebb2d360070e468981377b917e3a728ff4e6c7f6/src/twisted/web/http.py#L1068) for that method indicates that it returns the _last_ matching header. That could cause problems if you need the Nth-from-the-right header, but I think it's fine in this case.)
 
+### gorilla/handlers.ProxyHeaders
+
+[Section added 2022-03-27. u/Genesis2001 [asked about this](https://old.reddit.com/r/golang/comments/toynmv/rfc_get_the_real_client_ip_the_right_ways/i28ibey/) on Reddit, so I looked at the code and figured I should add some comments here.]
+
+[Gorilla](https://github.com/gorilla) is a Go web toolkit. It's most known for its router, [gorilla/mux](https://github.com/gorilla/mux). It has a [`ProxyHeaders` middleware](https://pkg.go.dev/github.com/gorilla/handlers#ProxyHeaders) for handling XFF (that is intended for general consumption, not just for gorilla/mux users). 
+
+`ProxyHeaders` ([source](https://github.com/gorilla/handlers/blob/v1.5.1/proxy_headers.go#L43)) is deficient in a number of ways, but at least it has a warning that the user's first reverse proxy must strip out the headers being checked before adding them back in. So it's good that it has that warning, but that requirement means that a) it won't be usable for a lot of users, and b) it will be misused by a lot of users.
+
+Let's touch on the problems that are legitimately mitigated by stripping the headers:
+* It's taking the leftmost XFF and `Forwarded` values.
+* It's checking `X-Forwarded-For` and then `X-Real-IP` and then `Forwarded`. So it has the ["default list"](#a-default-list-of-places-to-look-for-the-client-ip-makes-no-sense) problem.
+* It's using `X-Forwarded-Host` to replace `r.Host`. So that's a new spoofable thing.
+* It's using `X-Forwarded-Proto`-then-`X-Forwarded-Scheme`-then-`Fowarded` to replace `r.URL.Scheme`. Another new spoofable thing.
+
+It's [using comma-space](https://github.com/gorilla/handlers/blob/d453effd20e6817a8acfd9d278dadd21371da0ba/proxy_headers.go#L74) to parse `X-Forwarded-For`, contrary to RFC 2616. So it can set `r.RemoteAddr` to an IP like "1.1.1.1,10.1.1.1", etc. It's also not trimming the result, and I _think_ the LWS rules of RFC 2616 mean that there can be spaces before the comma, so `ProxyHeaders` can also end up with strings like `"<space>1.1.1.1<space>"`.
+
+It also doesn't support any single-IP headers besides `X-Real-IP`, which limits its general utility.
+
+(And I keep wondering why stripping XFF at the first reverse proxy makes sense. If you have that much control -- e.g., if you're using Nginx -- you should instead just set `X-Real-IP` and let XFF behave the way it's intended to.)
+
 ## Advanced and theoretical pitfalls and attacks
 
 I've talked a lot about two attacks on rate limiters: avoiding being limited and exhausting server memory. I've done this because rate limiters are what led me to this topic and because causing a map of IPs to fill memory was an obvious danger in many implementations.
