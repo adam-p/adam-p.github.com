@@ -1,5 +1,5 @@
 ---
-title: "{{ humanize .Title | title }}"
+title: "{{ humanize .Name | title }}"
 date: {{ .Date }}
 draft: true
 ---
