@@ -468,6 +468,17 @@ It also doesn't support any single-IP headers besides `X-Real-IP`, which limits 
 
 [2022-03-27: Created [issue](https://github.com/gorilla/handlers/issues/227) and [pull request](https://github.com/gorilla/handlers/pull/228).]
 
+### Quickies
+
+[2022-03-29: Added this section.]
+
+I keep finding more examples of code making mistakes. They help to drive home the points I'm trying to make, but they would bloat this post if I gave a section to every one. Instead I'm going to write some short bullets.
+
+* [sebest/xff](https://github.com/sebest/xff): Claims to be a `Forwarded` (RFC 7239) parser but is instead an XFF parser. It uses a leftmost-non-private algorithm, but doesn't document the risks (though there is a 6-year-old [issue](https://github.com/sebest/xff/issues/6)). The private IP ranges are incomplete. ([Created](https://github.com/sebest/xff/issues/14) [issues](https://github.com/sebest/xff/issues/15).)
+* [pbojinov/request-ip](https://github.com/pbojinov/request-ip): Falls back between XFF and many single-IP headers. Uses leftmost for XFF. Has no warning about dangers. Claims to support `Forwarded`, but just returns the whole value. Has issues and PRs to address some of this, but project seems abandoned.
+* [mo7zayed/reqip](https://github.com/mo7zayed/reqip): Based on the previous one, with all the same shortcomings.
+* [stanvit/go-forwarded](https://github.com/stanvit/go-forwarded): Takes the absolute rightmost, which is better than leftmost but still not right for all configurations. (Created [an issue](https://github.com/stanvit/go-forwarded/issues/2).)
+
 ## Advanced and theoretical pitfalls and attacks
 
 I've talked a lot about two attacks on rate limiters: avoiding being limited and exhausting server memory. I've done this because rate limiters are what led me to this topic and because causing a map of IPs to fill memory was an obvious danger in many implementations.
