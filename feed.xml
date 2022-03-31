@@ -1,4 +1,98 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Adam Pritchard's blog and miscellany on adam-p</title><link>https://adam-p.ca/</link><description>Recent content in Adam Pritchard's blog and miscellany on adam-p</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://adam-p.ca/feed.xml" rel="self" type="application/rss+xml"/><item><title>Symbol and text labels</title><link>https://adam-p.ca/inco/2022/03/symbol-and-text-labels/</link><pubDate>Mon, 28 Mar 2022 10:54:16 -0400</pubDate><guid>https://adam-p.ca/inco/2022/03/symbol-and-text-labels/</guid><description>&lt;p>When I first saw this machine in the doctor’s office (waiting, bored) I thought the duplication of the labels – especially on the power button – was silly. Then I realized that I was being Anglo-centric and that having both enables use by more people, in more places.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Adam Pritchard's blog and miscellany on adam-p</title><link>https://adam-p.ca/</link><description>Recent content in Adam Pritchard's blog and miscellany on adam-p</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://adam-p.ca/feed.xml" rel="self" type="application/rss+xml"/><item><title>Forwarded Header Sabotage</title><link>https://adam-p.ca/blog/2022/03/forwarded-header-sabotage/</link><pubDate>Wed, 30 Mar 2022 09:37:14 -0400</pubDate><guid>https://adam-p.ca/blog/2022/03/forwarded-header-sabotage/</guid><description>&lt;p>&lt;a href="https://adam-p.ca/blog/2022/03/x-forwarded-for/">We all know by now&lt;/a> that the leftmost values in the &lt;code>X-Forwarded-For&lt;/code> header can be spoofed and only the rightmost IPs – added by your own reverse proxies – can be trusted. The &lt;code>Forwarded&lt;/code> header (&lt;a href="https://datatracker.ietf.org/doc/html/rfc7239">RFC 7239&lt;/a>, 2014) has that same problem, and a new one: If the header is parsed correctly, an attacker can &lt;em>sabotage the whole header&lt;/em>.&lt;/p>
+&lt;p>Let’s take a quick trip to understanding how that can happen and how complicated &lt;code>Forwarded&lt;/code> parsing can get. (Think about how you’d parse the header as we go.)&lt;/p>
+&lt;h2 id="syntax">
+&lt;a class="heading-anchor" href="#syntax">
+##
+&lt;/a>
+Syntax
+&lt;/h2>
+&lt;p>A simple &lt;code>Forwarded&lt;/code> header might look like this:&lt;/p>
+&lt;pre tabindex="0">&lt;code>Forwarded: for=1.1.1.1, For=2.2.2.2
+&lt;/code>&lt;/pre>&lt;p>Here’s what a header looks like with an IPv6 value:&lt;/p>
+&lt;pre tabindex="0">&lt;code>Forwarded: for=1.1.1.1, FOR="[2001:db8:cafe::17]"
+&lt;/code>&lt;/pre>&lt;p>Colons and square brackets are &lt;a href="https://datatracker.ietf.org/doc/html/rfc7230#section-3.2.6">not allowed in a “token”&lt;/a>, so the IPv6 address needs to be quoted. But that means we could have:&lt;/p>
+&lt;pre tabindex="0">&lt;code>Forwarded: host="with,comma=equals;semicolon";for=1.1.1.1
+&lt;/code>&lt;/pre>&lt;p>So now you can’t just split by comma – you need to be aware of quoted strings as well.&lt;/p>
+&lt;p>But characters can also be escaped, so this is also legal:&lt;/p>
+&lt;pre tabindex="0">&lt;code>Forwarded: ext="escaped\"quote";for=1.1.1.1
+&lt;/code>&lt;/pre>&lt;p>The blessed semicolon-separated parameter names in an entry are “for”, “by”, “host”, and “proto” (case-insensitive). There is allowance for “extensions” using other tokens.&lt;/p>
+&lt;p>Some more legal things:&lt;/p>
+&lt;ul>
+&lt;li>Anything can be escaped, including backslashes: &lt;code>\\&lt;/code>. So don’t just delete all them all.&lt;/li>
+&lt;li>Any amount of whitespace around the commas and semicolons.&lt;/li>
+&lt;li>There can be multiple instances of the header, and they must be considered a single list, top to bottom.&lt;/li>
+&lt;/ul>
+&lt;p>And some illegal things:&lt;/p>
+&lt;ul>
+&lt;li>Can’t have whitespace around the equal sign.&lt;/li>
+&lt;li>Can’t have disallowed characters in parameter names (and not quotable).&lt;/li>
+&lt;li>Can’t have disallowed characters in a parameter value, if not quoted. (Which mean, for example, that an unquoted IPv6 address is illegal.)&lt;/li>
+&lt;li>IPv6 addresses must have square brackets.&lt;/li>
+&lt;li>Backslash escaping is only allowed in quoted strings.&lt;/li>
+&lt;/ul>
+&lt;p>There is only one single library I’ve found that actually correctly parses the header: &lt;a href="https://github.com/lpinca/forwarded-parse">github.com/lpinca/forwarded-parse&lt;/a>.&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> Everything else just does what you were probably thinking after the first couple of steps above:&lt;/p>
+&lt;ol>
+&lt;li>Split by comma.&lt;/li>
+&lt;li>Trim whitespace.&lt;/li>
+&lt;li>Split by semicolon.&lt;/li>
+&lt;li>Trim the quotes off the value.&lt;/li>
+&lt;li>Done.&lt;/li>
+&lt;/ol>
+&lt;p>Hilariously, this half-assed, RFC-violating parsing is resistant to sabotage and proper parsing is not.&lt;/p>
+&lt;h2 id="sabotagehttpswwwyoutubecomwatchvz5rrzdiu1ue">
+&lt;a class="heading-anchor" href="#sabotagehttpswwwyoutubecomwatchvz5rrzdiu1ue">
+##
+&lt;/a>
+&lt;a href="https://www.youtube.com/watch?v=z5rRZdiu1UE">Sabotage!&lt;/a>
+&lt;/h2>
+&lt;p>The &lt;code>Forwarded&lt;/code> header is unique. It is the only header that:&lt;/p>
+&lt;ol>
+&lt;li>Has untrusted values at the start and trusted values at the end.&lt;/li>
+&lt;li>Is official and specified.&lt;/li>
+&lt;/ol>
+&lt;p>This combination leads to its susceptibility to sabotage, where the whole header – including the trusted part – needs to be discarded because of chicanery in the untrusted part.&lt;/p>
+&lt;p>The RFC doesn’t (that I can find) provide any special instructions about salvaging the rest of the header if a single entry (“forwarded-element”) has a syntax error. So, in theory, the whole header needs to be thrown if a spoofer adds, say, &lt;code>f*r=&lt;/code> instead of &lt;code>for=&lt;/code>.&lt;/p>
+&lt;p>The sabotage is even more fun with an unclosed double-quote:&lt;/p>
+&lt;pre tabindex="0">&lt;code>Forwarded: for="1.1.1.1, for=2.2.2.2, for=3.3.3.3
+&lt;/code>&lt;/pre>&lt;p>It’s illegal to have an unclosed quote, so the whole thing is immediately garbage. But even if you wanted to salvage the header… Where do you close the quote? What do you salvage and discard?&lt;/p>
+&lt;h2 id="why-is-x-forwarded-for-not-sabotage-able">
+&lt;a class="heading-anchor" href="#why-is-x-forwarded-for-not-sabotage-able">
+##
+&lt;/a>
+Why is &lt;code>X-Forwarded-For&lt;/code> not sabotage-able?
+&lt;/h2>
+&lt;p>Because there’s no spec! People just split by comma, trim, and that’s it. Your trusted reverse proxy will add &lt;code>", 1.1.1.1"&lt;/code> and you don’t really need to care about what comes before that. (Unless you want the leftmost-ish value, but then you’re in the danger zone regardless.)&lt;/p>
+&lt;h2 id="mitigations">
+&lt;a class="heading-anchor" href="#mitigations">
+##
+&lt;/a>
+Mitigations
+&lt;/h2>
+&lt;p>“Half-assed, RFC-violating parsing” is the most obvious. If you’re using a rightmost-ish value, you should know if your reverse proxies are going to be quoting things, escaping, etc. – and they probably aren’t. So do a simple comma-splitting and throw away the stuff on the left.&lt;/p>
+&lt;p>Doing simple splitting means that you could end up with total garbage in your leftmost values – from spoofing or from valid-but-complicated values. You could probably make your parser more-complex-but-still-not-RFC-compliant by trying to handle quotes and escaping, without discarding everything in the case of bad data. Perhaps your deviation rule could be “no commas allowed in quotes or escaped; they always signal a new entry”. Or just don’t use a leftmost value.&lt;/p>
+&lt;p>(Note that differences in parsing at different points – reverse proxies, server, etc. – could result in &lt;a href="https://adam-p.ca/blog/2022/03/x-forwarded-for/">parser mismatch vulnerabilities&lt;/a>.)&lt;/p>
+&lt;p>At the reverse proxy level, the obvious mitigation is to discard any existing &lt;code>Forwarded&lt;/code> headers and start fresh, so there are only trusted, well-formed values. If you don’t like the idea of discarding potentially valuable forensic information, maybe your reverse proxy could move the previous header value into some new &lt;code>X-&lt;/code> header before starting fresh.&lt;/p>
+&lt;p>A variation on unconditionally discarding the &lt;code>Forwarded&lt;/code> is to check for validity and, if it fails, discard or replace with &lt;code>for=unknown&lt;/code> (which is also per spec). (I &lt;a href="https://github.com/lpinca/forwarded-parse/issues/6">asked lpinca&lt;/a> and this is what he prefers.)&lt;/p>
+&lt;p>Another possibility is to have your reverse proxy not discard the existing &lt;code>Forwarded&lt;/code> headers but to add a new one. &lt;em>Maybe&lt;/em> the separate headers could be sanely interpreted separately. But this violates &lt;a href="https://datatracker.ietf.org/doc/html/rfc2616#section-4.2">RFC 2616&lt;/a>, which says “It MUST be possible to combine the multiple header fields into one “field-name: field-value” pair, without changing the semantics of the message”.&lt;/p>
+&lt;p>So, I can’t see how it’s possible to adhere to the spec &lt;em>and&lt;/em> retain the existing header value without falling victim to sabotage.&lt;/p>
+&lt;h2 id="conclusion">
+&lt;a class="heading-anchor" href="#conclusion">
+##
+&lt;/a>
+Conclusion
+&lt;/h2>
+&lt;p>I wrote a half-assed, RFC-violating &lt;code>Forwarded&lt;/code> parser. Then I decided I wanted it to be “correct” and started looking for better implementations.&lt;/p>
+&lt;p>Along the way I found an &lt;a href="https://forum.nginx.org/read.php?29,275880">Nginx forum conversation&lt;/a> from 2017 about adding &lt;code>Forwarded&lt;/code> support. That conversation is interesting and brought the sabotage potential to my attention, but there’s no resolution. It just kind of trails off into hopelessness. (Interestingly, there was strong resistance to discarding the header and thereby losing information.)&lt;/p>
+&lt;p>Because my &lt;code>Forwarded&lt;/code> parser is in &lt;a href="https://github.com/realclientip/realclientip-go">a project&lt;/a> that I am hoping will be a reference implementation for getting the “real” client IP, I really wanted the parser itself to be a reference implementation. But, as disappointing as it is, it seems like being spec-compliant is the wrong move. I also can’t assume that a user of the library has the ability to tweak their reverse proxy handling of &lt;code>Forwarded&lt;/code> (I mean, I could state it as a requirement for use of the library, but that’s limiting and error-prone). Documenting the shortcomings seems about as good as it gets.&lt;/p>
+&lt;p>(Now I have to figure out how to summarize this in the MDN &lt;code>Forwarded&lt;/code> page update that &lt;a href="https://github.com/mdn/content/pull/13838#issuecomment-1071933350">I’m on the hook for&lt;/a>…)&lt;/p>
+&lt;section class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1" role="doc-endnote">
+&lt;p>Seriously, big kudos to lpinca. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/section></description></item><item><title>Symbol and text labels</title><link>https://adam-p.ca/inco/2022/03/symbol-and-text-labels/</link><pubDate>Mon, 28 Mar 2022 10:54:16 -0400</pubDate><guid>https://adam-p.ca/inco/2022/03/symbol-and-text-labels/</guid><description>&lt;p>When I first saw this machine in the doctor’s office (waiting, bored) I thought the duplication of the labels – especially on the power button – was silly. Then I realized that I was being Anglo-centric and that having both enables use by more people, in more places.&lt;/p>
 &lt;p>&lt;img src="https://adam-p.ca/img/inco/duplicate-labels.jpg" alt="machine with symbol and text labels">&lt;/p></description></item><item><title>Should you strip the IPv6 zone?</title><link>https://adam-p.ca/blog/2022/03/strip-ipv6-zone/</link><pubDate>Tue, 22 Mar 2022 18:32:38 -0400</pubDate><guid>https://adam-p.ca/blog/2022/03/strip-ipv6-zone/</guid><description>&lt;p>There have recently been three different (but related) contexts where I have asked or been asked that question:&lt;/p>
 &lt;ol>
 &lt;li>When a reverse proxy is adding the client IP to the &lt;code>X-Forwarded-For&lt;/code> header.&lt;/li>
@@ -709,6 +803,20 @@ gorilla/handlers.ProxyHeaders
 &lt;p>It also doesn’t support any single-IP headers besides &lt;code>X-Real-IP&lt;/code>, which limits its general utility.&lt;/p>
 &lt;p>(And I keep wondering why stripping XFF at the first reverse proxy makes sense. If you have that much control – e.g., if you’re using Nginx – you should instead just set &lt;code>X-Real-IP&lt;/code> and let XFF behave the way it’s intended to.)&lt;/p>
 &lt;p>[2022-03-27: Created &lt;a href="https://github.com/gorilla/handlers/issues/227">issue&lt;/a> and &lt;a href="https://github.com/gorilla/handlers/pull/228">pull request&lt;/a>.]&lt;/p>
+&lt;h3 id="quickies">
+&lt;a class="heading-anchor" href="#quickies">
+###
+&lt;/a>
+Quickies
+&lt;/h3>
+&lt;p>[2022-03-29: Added this section.]&lt;/p>
+&lt;p>I keep finding more examples of code making mistakes. They help to drive home the points I’m trying to make, but they would bloat this post if I gave a section to every one. Instead I’m going to write some short bullets.&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://github.com/sebest/xff">sebest/xff&lt;/a>: Claims to be a &lt;code>Forwarded&lt;/code> (RFC 7239) parser but is instead an XFF parser. It uses a leftmost-non-private algorithm, but doesn’t document the risks (though there is a 6-year-old &lt;a href="https://github.com/sebest/xff/issues/6">issue&lt;/a>). The private IP ranges are incomplete. (&lt;a href="https://github.com/sebest/xff/issues/14">Created&lt;/a> &lt;a href="https://github.com/sebest/xff/issues/15">issues&lt;/a>.)&lt;/li>
+&lt;li>&lt;a href="https://github.com/pbojinov/request-ip">pbojinov/request-ip&lt;/a>: Falls back between XFF and many single-IP headers. Uses leftmost for XFF. Has no warning about dangers. Claims to support &lt;code>Forwarded&lt;/code>, but just returns the whole value. Has issues and PRs to address some of this, but project seems abandoned.&lt;/li>
+&lt;li>&lt;a href="https://github.com/mo7zayed/reqip">mo7zayed/reqip&lt;/a>: Based on the previous one, with all the same shortcomings.&lt;/li>
+&lt;li>&lt;a href="https://github.com/stanvit/go-forwarded">stanvit/go-forwarded&lt;/a>: Takes the absolute rightmost, which is better than leftmost but still not right for all configurations. (Created &lt;a href="https://github.com/stanvit/go-forwarded/issues/2">an issue&lt;/a>.)&lt;/li>
+&lt;/ul>
 &lt;h2 id="advanced-and-theoretical-pitfalls-and-attacks">
 &lt;a class="heading-anchor" href="#advanced-and-theoretical-pitfalls-and-attacks">
 ##
