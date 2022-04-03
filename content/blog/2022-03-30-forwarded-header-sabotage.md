@@ -107,3 +107,17 @@ Along the way I found an [Nginx forum conversation](https://forum.nginx.org/read
 Because my `Forwarded` parser is in [a project](https://github.com/realclientip/realclientip-go) that I am hoping will be a reference implementation for getting the "real" client IP, I really wanted the parser itself to be a reference implementation. But, as disappointing as it is, it seems like being spec-compliant is the wrong move. I also can't assume that a user of the library has the ability to tweak their reverse proxy handling of `Forwarded` (I mean, I could state it as a requirement for use of the library, but that's limiting and error-prone). Documenting the shortcomings seems about as good as it gets.
 
 (Now I have to figure out how to summarize this in the MDN `Forwarded` page update that [I'm on the hook for](https://github.com/mdn/content/pull/13838#issuecomment-1071933350)...)
+
+## Addendum
+
+[2022-04-03: Added this section.]
+
+[David Moles](https://github.com/dmolesUC) [pointed out][dmolesUC comment] that Nginx [has instructions][nginx instructions] for enabling `Fowarded` handling. Part of that is this amazing regex that should be used for validation:
+```no-highlight
+^(,[ \t]*)*([!#$%&'*+.^_`|~0-9A-Za-z-]+=([!#$%&'*+.^_`|~0-9A-Za-z-]+|"([\t \x21\x23-\x5B\x5D-\x7E\x80-\xFF]|\\[\t \x21-\x7E\x80-\xFF])*"))?(;([!#$%&'*+.^_`|~0-9A-Za-z-]+=([!#$%&'*+.^_`|~0-9A-Za-z-]+|"([\t \x21\x23-\x5B\x5D-\x7E\x80-\xFF]|\\[\t \x21-\x7E\x80-\xFF])*"))?)*([ \t]*,([ \t]*([!#$%&'*+.^_`|~0-9A-Za-z-]+=([!#$%&'*+.^_`|~0-9A-Za-z-]+|"([\t \x21\x23-\x5B\x5D-\x7E\x80-\xFF]|\\[\t \x21-\x7E\x80-\xFF])*"))?(;([!#$%&'*+.^_`|~0-9A-Za-z-]+=([!#$%&'*+.^_`|~0-9A-Za-z-]+|"([\t \x21\x23-\x5B\x5D-\x7E\x80-\xFF]|\\[\t \x21-\x7E\x80-\xFF])*"))?)*)?)*$
+```
+
+[dmolesUC comment]: https://github.com/golang/go/issues/30963#issuecomment-1085057745
+[nginx instructions]: https://www.nginx.com/resources/wiki/start/topics/examples/forwarded/
+
+David and Tim McCormack (via email) both suggested that maybe the `Forwarded` header could be parsed backwards. I initially didn't think that would be much better that just splitting by comma an parsing each pice, but I've come around to the idea. It allows stricter RFC adherence (quoted commas) while still allowing salvaging of rightmost good values.
