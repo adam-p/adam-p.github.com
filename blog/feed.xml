@@ -85,6 +85,16 @@ Conclusion
 &lt;p>Along the way I found an &lt;a href="https://forum.nginx.org/read.php?29,275880">Nginx forum conversation&lt;/a> from 2017 about adding &lt;code>Forwarded&lt;/code> support. That conversation is interesting and brought the sabotage potential to my attention, but there’s no resolution. It just kind of trails off into hopelessness. (Interestingly, there was strong resistance to discarding the header and thereby losing information.)&lt;/p>
 &lt;p>Because my &lt;code>Forwarded&lt;/code> parser is in &lt;a href="https://github.com/realclientip/realclientip-go">a project&lt;/a> that I am hoping will be a reference implementation for getting the “real” client IP, I really wanted the parser itself to be a reference implementation. But, as disappointing as it is, it seems like being spec-compliant is the wrong move. I also can’t assume that a user of the library has the ability to tweak their reverse proxy handling of &lt;code>Forwarded&lt;/code> (I mean, I could state it as a requirement for use of the library, but that’s limiting and error-prone). Documenting the shortcomings seems about as good as it gets.&lt;/p>
 &lt;p>(Now I have to figure out how to summarize this in the MDN &lt;code>Forwarded&lt;/code> page update that &lt;a href="https://github.com/mdn/content/pull/13838#issuecomment-1071933350">I’m on the hook for&lt;/a>…)&lt;/p>
+&lt;h2 id="addendum">
+&lt;a class="heading-anchor" href="#addendum">
+##
+&lt;/a>
+Addendum
+&lt;/h2>
+&lt;p>[2022-04-03: Added this section.]&lt;/p>
+&lt;p>&lt;a href="https://github.com/dmolesUC">David Moles&lt;/a> &lt;a href="https://github.com/golang/go/issues/30963#issuecomment-1085057745">pointed out&lt;/a> that Nginx &lt;a href="https://www.nginx.com/resources/wiki/start/topics/examples/forwarded/">has instructions&lt;/a> for enabling &lt;code>Fowarded&lt;/code> handling. Part of that is this amazing regex that should be used for validation:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-no-highlight" data-lang="no-highlight">&lt;span style="display:flex;">&lt;span>^(,[ \t]*)*([!#$%&amp;'*+.^_`|~0-9A-Za-z-]+=([!#$%&amp;'*+.^_`|~0-9A-Za-z-]+|"([\t \x21\x23-\x5B\x5D-\x7E\x80-\xFF]|\\[\t \x21-\x7E\x80-\xFF])*"))?(;([!#$%&amp;'*+.^_`|~0-9A-Za-z-]+=([!#$%&amp;'*+.^_`|~0-9A-Za-z-]+|"([\t \x21\x23-\x5B\x5D-\x7E\x80-\xFF]|\\[\t \x21-\x7E\x80-\xFF])*"))?)*([ \t]*,([ \t]*([!#$%&amp;'*+.^_`|~0-9A-Za-z-]+=([!#$%&amp;'*+.^_`|~0-9A-Za-z-]+|"([\t \x21\x23-\x5B\x5D-\x7E\x80-\xFF]|\\[\t \x21-\x7E\x80-\xFF])*"))?(;([!#$%&amp;'*+.^_`|~0-9A-Za-z-]+=([!#$%&amp;'*+.^_`|~0-9A-Za-z-]+|"([\t \x21\x23-\x5B\x5D-\x7E\x80-\xFF]|\\[\t \x21-\x7E\x80-\xFF])*"))?)*)?)*$
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>David and Tim McCormack (via email) both suggested that maybe the &lt;code>Forwarded&lt;/code> header could be parsed backwards. I initially didn’t think that would be much better that just splitting by comma an parsing each pice, but I’ve come around to the idea. It allows stricter RFC adherence (quoted commas) while still allowing salvaging of rightmost good values.&lt;/p>
 &lt;section class="footnotes" role="doc-endnotes">
 &lt;hr>
 &lt;ol>
