@@ -225,6 +225,7 @@ Bonus: IPv4-mapped IPv6 handling has also changed
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>(Try it in the &lt;a href="https://go.dev/play/p/ANR5tJEDohN">playground&lt;/a>.)&lt;/p>
 &lt;p>The older &lt;code>net&lt;/code> code would convert IPv4-mapped IPv6 addresses to IPv4 addresses, with the result that they would be contained by IPv4 CIDRs. The new &lt;code>netip&lt;/code> code does &lt;em>not&lt;/em> convert to IPv4, and the resulting address is &lt;em>not&lt;/em> contained by an IPv4 prefix.&lt;/p>
 &lt;p>I haven’t yet thought about this enough to form a strong opinion, but it’s good to know.&lt;/p>
+&lt;p>Update 2022-04-14: I &lt;a href="https://github.com/golang/go/issues/51906">created an issue&lt;/a> about this a few weeks ago. (I also &lt;a href="https://github.com/golang/go/pull/51950">PR’d some documentation fixes&lt;/a> regarding the consistent use of “IPv4-mapped IPv6”. It’s been merged.)&lt;/p>
 &lt;section class="footnotes" role="doc-endnotes">
 &lt;hr>
 &lt;ol>
