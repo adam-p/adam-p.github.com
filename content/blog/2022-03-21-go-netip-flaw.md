@@ -6,7 +6,9 @@ tags: [golang, ipv6]
 slug: go-netip-flaw
 ---
 
-Update 2022-03-23: Matt Layher [created a Go issue](https://github.com/golang/go/issues/51899) about this. It's not getting a lot of traction.
+Update 2022-03-23: Matt Layher [created a Go issue](https://github.com/golang/go/issues/51899) about this.
+
+Update 2022-04-14: In response to that issue, two weeks ago a change [was committed](https://github.com/golang/go/commit/ae9ce822ff4015fbbe7aa4303e6f3c160f2c53af) to Go that makes `netip.ParsePrefix` behave like `net.ParseCIDR`: they both return an error when a zone is present. It wasn't released in 1.18.1, but I'm guessing it'll be in 1.18.2. So that's great!
 
 ---
 
@@ -28,7 +30,7 @@ If you pass a prefix with a zone to the older `net.ParseCIDR` it returns an erro
 
 I learned about this from [a Reddit comment](https://old.reddit.com/r/ipv6/comments/thyhcn/does_it_make_sense_and_is_it_legal_to_have_a_zone/i1by8n5/) by [Matt Layher](https://github.com/mdlayher)[^1] who worked on `netip` (or the original `inet.af/netaddr`):
 
-> For what it's worth, I helped work on the library that ultimately became Go's net/netip and we decided we would remove zones in our CIDR prefix parser because we didn't find any documented usage of a a CIDR like "fe80::%eth0/64" in the wild. 
+> For what it's worth, I helped work on the library that ultimately became Go's net/netip and we decided we would remove zones in our CIDR prefix parser because we didn't find any documented usage of a a CIDR like "fe80::%eth0/64" in the wild.
 
 [^1]: Who super helpfully answered my Reddit question and I'm totally not taking a swipe at him. To be clear, I still think `netip` is great and will be using it wherever I can make 1.18 the minimum Go version.
 
@@ -39,7 +41,7 @@ Which is fair, but I don't think the resulting behaviour is ideal.
 The [documentation](https://pkg.go.dev/net/netip@go1.18#Prefix.Contains) for `netip.Prefix.Contains` does make clear the behaviour (emphasis added):
 
 > Contains reports whether the network p includes ip.
-> 
+>
 > An IPv4 address will not match an IPv6 prefix. A v6-mapped IPv6 address will not match an IPv4 prefix. A zero-value IP will not match any prefix. **If ip has an IPv6 zone, Contains returns false, because Prefixes strip zones.**
 
 It's good that it's documented, but... how many people are going to read the doc for that method? Most people who use it are going to know what it means for a prefix (or CIDR) to "contain" an IP address. And many of us will already be familiar with the older `net.IPMask.Contains`, which has the one-sentence [documentation](https://pkg.go.dev/net@go1.18#IPNet.Contains): "Contains reports whether the network includes ip." And the [doc](https://pkg.go.dev/net/netip@go1.18#ParsePrefix) for `netip.ParsePrefix` says nothing about discarding the zone.
@@ -82,3 +84,5 @@ fmt.Println(cidr.Contains(ip)) // ==> true!
 The older `net` code would convert IPv4-mapped IPv6 addresses to IPv4 addresses, with the result that they would be contained by IPv4 CIDRs. The new `netip` code does _not_ convert to IPv4, and the resulting address is _not_ contained by an IPv4 prefix.
 
 I haven't yet thought about this enough to form a strong opinion, but it's good to know.
+
+Update 2022-04-14: I [created an issue](https://github.com/golang/go/issues/51906) about this a few weeks ago. (I also [PR'd some documentation fixes](https://github.com/golang/go/pull/51950) regarding the consistent use of "IPv4-mapped IPv6". It's been merged.)
