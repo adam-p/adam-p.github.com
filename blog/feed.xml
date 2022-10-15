@@ -1,4 +1,122 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on adam-p</title><link>https://adam-p.ca/blog/</link><description>Recent content in Blog on adam-p</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://adam-p.ca/blog/feed.xml" rel="self" type="application/rss+xml"/><item><title>Forwarded Header Sabotage</title><link>https://adam-p.ca/blog/2022/03/forwarded-header-sabotage/</link><pubDate>Wed, 30 Mar 2022 09:37:14 -0400</pubDate><guid>https://adam-p.ca/blog/2022/03/forwarded-header-sabotage/</guid><description>&lt;p>&lt;a href="https://adam-p.ca/blog/2022/03/x-forwarded-for/">We all know by now&lt;/a> that the leftmost values in the &lt;code>X-Forwarded-For&lt;/code> header can be spoofed and only the rightmost IPs – added by your own reverse proxies – can be trusted. The &lt;code>Forwarded&lt;/code> header (&lt;a href="https://datatracker.ietf.org/doc/html/rfc7239">RFC 7239&lt;/a>, 2014) has that same problem, and a new one: If the header is parsed correctly, an attacker can &lt;em>sabotage the whole header&lt;/em>.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on adam-p</title><link>https://adam-p.ca/blog/</link><description>Recent content in Blog on adam-p</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://adam-p.ca/blog/feed.xml" rel="self" type="application/rss+xml"/><item><title>More Than a Password</title><link>https://adam-p.ca/blog/2022/10/password-plus-plus/</link><pubDate>Fri, 14 Oct 2022 16:31:07 -0400</pubDate><guid>https://adam-p.ca/blog/2022/10/password-plus-plus/</guid><description>&lt;p>Here’s a quick-and-dirty explanation of why two-factor authentication is good, and why U2F/WebAuthn keys (like YubiKeys) are better than the alternatives. (So I have something to point friends and family at.)&lt;/p>
+&lt;p>Note that when I use the word “attacker”, I don’t necessarily mean someone that’s specifically out to get you. In fact, it’s usually someone trying to crack thousands of accounts at once. This isn’t about you being special or not special. You have an identity and some amount of money, so you’re a target.&lt;/p>
+&lt;p>(I use the word “attacker” out of habit – it’s what we use in software/security engineering.)&lt;/p>
+&lt;h2 id="why-memorized-passwords-by-themselves-are-super-bad">
+&lt;a class="heading-anchor" href="#why-memorized-passwords-by-themselves-are-super-bad">
+##
+&lt;/a>
+Why memorized passwords (by themselves) are super bad
+&lt;/h2>
+&lt;p>You can’t memorize strong passwords, and you certainly can’t memorize many of them. So you’re going to pick weak passwords and you’re going to reuse them between sites.&lt;/p>
+&lt;h2 id="why-weak-passwords-are-bad">
+&lt;a class="heading-anchor" href="#why-weak-passwords-are-bad">
+##
+&lt;/a>
+Why weak passwords are bad
+&lt;/h2>
+&lt;p>Attackers are very good at (automated) password guessing. They know the patterns people use (l33tSp34k, book passages, etc.), so it’s unlikely that some little trick you use will be effective. They also have the contents of database breaches (see below), so they use common real-word passwords in their attacks (e.g., “password spraying” attacks).&lt;/p>
+&lt;p>Maybe some of the services you use will be good at limiting the number of guesses at your password that an attacker gets. But others won’t be. And an attacker will guess your password on a weak service and then try it on all the others.&lt;/p>
+&lt;h2 id="why-reusing-passwords-is-bad">
+&lt;a class="heading-anchor" href="#why-reusing-passwords-is-bad">
+##
+&lt;/a>
+Why reusing passwords is bad
+&lt;/h2>
+&lt;p>Websites and services get breached all the time. &lt;a href="https://haveibeenpwned.com/">Go see&lt;/a> if you’ve already been caught in a breach – you probably have. And those are just the &lt;em>known&lt;/em> breaches, and where the contents of the stolen data was made public. (Sign up for the service provided by that site – getting notified when you appear in a breached database.)&lt;/p>
+&lt;p>When such a breach occurs and the accounts database is stolen, often the passwords are stored incorrectly and can be extracted. That enables an extremely effective attack: credential stuffing. The attacker – or anyone else who gets access to the database – starts using the email or username plus password on every &lt;em>other&lt;/em> site of interest.&lt;/p>
+&lt;p>That means that if you use the same password for Gmail and for the Flyfishing Fan Club site and the latter is breached, your email account will likely be compromised shortly after. And then every account that uses that email address for forgot-my-password recovery.&lt;/p>
+&lt;h2 id="entering-passwords-by-hand-is-pretty-bad">
+&lt;a class="heading-anchor" href="#entering-passwords-by-hand-is-pretty-bad">
+##
+&lt;/a>
+Entering passwords by hand is pretty bad
+&lt;/h2>
+&lt;p>The vast majority of people can’t tell the difference between a well-crafted phishing site and the site it’s copying. Indeed, usually the site is copied directly and looks identical. Additionally, there are many ways to make a domain name look like another, or just obfuscate it.&lt;/p>
+&lt;p>Every time you enter a password by hand, you’re betting on your ability to correctly guess whether a site is legit or not. There are certainly ways to mitigate this – visit via a search, browser history, etc. – but the general danger remains.&lt;/p>
+&lt;p>If you get phished when trying to log into your email, bank, Facebook, etc., it can be pretty bad, but also keep in mind that even if it happens on an “unimportant” site, you have instantly opened yourself up to credential stuffing attacks everywhere else.&lt;/p>
+&lt;h2 id="use-a-password-manager">
+&lt;a class="heading-anchor" href="#use-a-password-manager">
+##
+&lt;/a>
+Use a password manager
+&lt;/h2>
+&lt;p>Password managers (BitWarden, Lastpass, 1Password, etc.) are great and everyone should use them. They solve the “password memorization” and “password reuse” problems, and partly mitigate “entered by hand” phishing attacks.&lt;/p>
+&lt;p>The way they generally work is that you memorize (or even write down) one strong password that gets you into the manager… and that’s the only password you ever memorize again. You then generate random passwords using the manager, and it stores them. When you need to log in, you get the password from the manager.&lt;/p>
+&lt;p>Only one password, so no inhuman memorization. A different password for each site, so no more reuse.&lt;/p>
+&lt;p>The phishing (partial) mitigation comes from the password manager browser extension (I think they all have one). When you’re on a site with a properly matching domain then, then the auto-fill option is given. And when you’re &lt;em>not&lt;/em> on a site with a matching domain name, auto-fill isn’t presented. So it’s basically doing an exact-match check for you. However… the browser extensions aren’t perfect, and it’s possible for them to not always show the auto-fill, which means users will get into the (bad) habit of sometimes having to copy from the manager and into the password field, even on legit sites.&lt;/p>
+&lt;p>(And then there are logins embedded in other sites. That can really mess up password managers &lt;em>and&lt;/em> users.)&lt;/p>
+&lt;p>So, we’re in a pretty good place when using a password manager. We just shrug when Have I Been Pwned tells us that the Flyfishing Fan Club site is compromised, because we know that we haven’t used the password anywhere else (i.e., nowhere important). And since we’re having our password manager generate strong random passwords for us, we’re not concerned about guessing attacks on our passwords. (Like, it’ll take longer than the age of the universe to guess a 10-random-character password.)&lt;/p>
+&lt;p>But we’re still somewhat vulnerable to phishing attacks. So let’s address that.&lt;/p>
+&lt;h2 id="we-need-a-second-factor">
+&lt;a class="heading-anchor" href="#we-need-a-second-factor">
+##
+&lt;/a>
+We need a second factor
+&lt;/h2>
+&lt;p>We need another tool to help us close the phishing hole. We need a second factor.&lt;/p>
+&lt;p>“Two factor authentication” typically refers to “something you know” – the password – and either “something you have”, like a hardware token, or “something you are”, like your fingerprint.&lt;/p>
+&lt;h3 id="sms">
+&lt;a class="heading-anchor" href="#sms">
+###
+&lt;/a>
+SMS
+&lt;/h3>
+&lt;p>Probably the most common “something you have” second factor is in the form of SMS text messages with codes that you need to enter into a site or service after providing your username and password. This is better than literally nothing, but it’s not great.&lt;/p>
+&lt;p>One problem with it is that attackers have become proficient at “SIM hijacking”. This allows them to take over your phone number and receive your text messages. Because they’re getting the prompt to “enter the code we just texted to you”, they know they have the correct username and password, so the extra effort is worthwhile.&lt;/p>
+&lt;p>But note that it &lt;em>is&lt;/em> extra effort for the attacker, and therefore does provide some protection.&lt;/p>
+&lt;p>The other major shortcoming is that an attacker that creates an effective phishing site can capture your username, password, &lt;em>and&lt;/em> the SMS code. Then they’ll pass on all three to the target site/service and have access to your account. (There are even open source tools that make doing exactly this very easy.)&lt;/p>
+&lt;p>So that’s not great.&lt;/p>
+&lt;h3 id="time-based-codes">
+&lt;a class="heading-anchor" href="#time-based-codes">
+###
+&lt;/a>
+Time-based codes
+&lt;/h3>
+&lt;p>Another common form of “something you have” is an authenticator app that spits out time-based codes for a site or service. Cool kids call this TOTP: “time-based one-time password”.&lt;/p>
+&lt;p>This is similar to the SMS approach but better in two ways:&lt;/p>
+&lt;ol>
+&lt;li>No SIM hijacking problem.&lt;/li>
+&lt;li>The time window in which the code can be used is typically smaller, so it again increases the effort. Somewhat.&lt;/li>
+&lt;/ol>
+&lt;p>But… It’s still not a full phishing mitigation.&lt;/p>
+&lt;h3 id="hardware-keys">
+&lt;a class="heading-anchor" href="#hardware-keys">
+###
+&lt;/a>
+Hardware keys
+&lt;/h3>
+&lt;p>U2F (universal second factor), and its successor WebAuthn, is a standard for second factors that actually does completely negate the phishing threat. The implementation of the standard is usually in the form of a slim USB key that has a button on it, but it can vary. The most well-known brand of them is YubiKey.&lt;/p>
+&lt;p>Let’s see if I can describe how it works concisely and coherently…&lt;/p>
+&lt;p>With U2F enabled, after you log in to, say, Gmail, you are prompted to enter your key and touch the button on it. The browser then sends the domain name of the site you’re on to the key, which combines it with some cryptographic junk it stores to produce a code to send back to the Gmail server. Based on information you gave when you registered the key with them, Gmail can figure out if the code is good.&lt;/p>
+&lt;p>Because a phishing site won’t literally be at &lt;code>gmail.com&lt;/code>, it won’t get a code that works for &lt;code>gmail.com&lt;/code>. So it just cannot get what it needs to complete the login on your behalf, even if it knows your username and email.&lt;/p>
+&lt;p>(Technical sidebar caveat: An attacker subverts DNS and/or BGP &lt;em>and&lt;/em> somehow gets a TLS cert for &lt;code>gmail.com&lt;/code>, then they can fool your browser and U2F token. But that’s catastrophic for everyone, for lots of reasons, and is exceedingly rare. But not impossible.)&lt;/p>
+&lt;p>These keys even work if you leave them plugged into your computer. (YubiKey even makes ones that are &lt;a href="https://www.yubico.com/ca/product/yubikey-5c-nano/">stubby little things&lt;/a>, designed to be left in.) The only loss in security is if the key is physically stolen &lt;em>and&lt;/em> the thief also has your username and password. But this kind of in-person attack is much rarer than the huge dragnet attacks that occur across the internet. (And most physical thiefs probably just want to sell your hardware.)&lt;/p>
+&lt;h2 id="what-about-passkeys">
+&lt;a class="heading-anchor" href="#what-about-passkeys">
+##
+&lt;/a>
+What about “passkeys”
+&lt;/h2>
+&lt;p>There are also some password-less authentication methods in the WebAuthn standard. Google, Apple, and Microsoft support (or soon will) “passkeys” that adhere to this standard. Which is cool. I bet they’re great and security-strong. But: a) I don’t know enough about them yet to say anything useful, and b) until they’re supported more widely it’s hard to be too excited.&lt;/p>
+&lt;h2 id="why-should-you-care">
+&lt;a class="heading-anchor" href="#why-should-you-care">
+##
+&lt;/a>
+Why should you care?
+&lt;/h2>
+&lt;p>Answering the question of &lt;em>why&lt;/em> you should care about protecting your accounts seems too tedious to tackle, but at the very least consider: Your email is the skeleton key to your online life, and a lot of “online” life spills over into the rest of your life.&lt;/p>
+&lt;p>Email is used to recover almost every other kind of account. So if someone hijacks your email, they have the ability to control almost every other account you have. This can cost you &lt;em>a lot&lt;/em> – money, time, etc.&lt;/p>
+&lt;p>You can probably think of some other services that would be bad to lose control over: Facebook, your bank, anything your business depends on, etc.&lt;/p>
+&lt;h2 id="get-a-password-manager-and-two-yubikeys">
+&lt;a class="heading-anchor" href="#get-a-password-manager-and-two-yubikeys">
+##
+&lt;/a>
+Get a password manager and two YubiKeys
+&lt;/h2>
+&lt;p>Run – don’t walk – to get a password manager. Memorized passwords are a ticking time bomb.&lt;/p>
+&lt;p>The case for second factors isn’t quite as convincing, but phishing is still a real and potentially devastating threat. So get two YubiKeys.&lt;/p>
+&lt;p>Why two? One on your keychain and one where you keep your passports. Maybe one more if you’re going to leave it plugged into your computer. Because eventually you’ll lose or wreck (&lt;a href="https://adam-p.ca/blog/2021/06/backup-yubikey/">like I did&lt;/a>) the one in your pocket, and want it to be easy to recover.&lt;/p>
+&lt;p>Why YubiKey? Because they’re well-respected and “Made in USA or Sweden”. It maybe seems tinfoil-hat-y to worry about where your U2F token is made, but… You don’t want an adversarial country to have a copy of the cryptographic keys stored on it.&lt;/p></description></item><item><title>Forwarded Header Sabotage</title><link>https://adam-p.ca/blog/2022/03/forwarded-header-sabotage/</link><pubDate>Wed, 30 Mar 2022 09:37:14 -0400</pubDate><guid>https://adam-p.ca/blog/2022/03/forwarded-header-sabotage/</guid><description>&lt;p>&lt;a href="https://adam-p.ca/blog/2022/03/x-forwarded-for/">We all know by now&lt;/a> that the leftmost values in the &lt;code>X-Forwarded-For&lt;/code> header can be spoofed and only the rightmost IPs – added by your own reverse proxies – can be trusted. The &lt;code>Forwarded&lt;/code> header (&lt;a href="https://datatracker.ietf.org/doc/html/rfc7239">RFC 7239&lt;/a>, 2014) has that same problem, and a new one: If the header is parsed correctly, an attacker can &lt;em>sabotage the whole header&lt;/em>.&lt;/p>
 &lt;p>Let’s take a quick trip to understanding how that can happen and how complicated &lt;code>Forwarded&lt;/code> parsing can get. (Think about how you’d parse the header as we go.)&lt;/p>
 &lt;h2 id="syntax">
 &lt;a class="heading-anchor" href="#syntax">
@@ -95,14 +213,14 @@ Addendum
 &lt;p>&lt;a href="https://github.com/dmolesUC">David Moles&lt;/a> &lt;a href="https://github.com/golang/go/issues/30963#issuecomment-1085057745">pointed out&lt;/a> that Nginx &lt;a href="https://www.nginx.com/resources/wiki/start/topics/examples/forwarded/">has instructions&lt;/a> for enabling &lt;code>Fowarded&lt;/code> handling. Part of that is this amazing regex that should be used for validation:&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-no-highlight" data-lang="no-highlight">&lt;span style="display:flex;">&lt;span>^(,[ \t]*)*([!#$%&amp;'*+.^_`|~0-9A-Za-z-]+=([!#$%&amp;'*+.^_`|~0-9A-Za-z-]+|"([\t \x21\x23-\x5B\x5D-\x7E\x80-\xFF]|\\[\t \x21-\x7E\x80-\xFF])*"))?(;([!#$%&amp;'*+.^_`|~0-9A-Za-z-]+=([!#$%&amp;'*+.^_`|~0-9A-Za-z-]+|"([\t \x21\x23-\x5B\x5D-\x7E\x80-\xFF]|\\[\t \x21-\x7E\x80-\xFF])*"))?)*([ \t]*,([ \t]*([!#$%&amp;'*+.^_`|~0-9A-Za-z-]+=([!#$%&amp;'*+.^_`|~0-9A-Za-z-]+|"([\t \x21\x23-\x5B\x5D-\x7E\x80-\xFF]|\\[\t \x21-\x7E\x80-\xFF])*"))?(;([!#$%&amp;'*+.^_`|~0-9A-Za-z-]+=([!#$%&amp;'*+.^_`|~0-9A-Za-z-]+|"([\t \x21\x23-\x5B\x5D-\x7E\x80-\xFF]|\\[\t \x21-\x7E\x80-\xFF])*"))?)*)?)*$
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>David and Tim McCormack (via email) both suggested that maybe the &lt;code>Forwarded&lt;/code> header could be parsed backwards. I initially didn’t think that would be much better that just splitting by comma an parsing each pice, but I’ve come around to the idea. It allows stricter RFC adherence (quoted commas) while still allowing salvaging of rightmost good values.&lt;/p>
-&lt;section class="footnotes" role="doc-endnotes">
+&lt;div class="footnotes" role="doc-endnotes">
 &lt;hr>
 &lt;ol>
-&lt;li id="fn:1" role="doc-endnote">
+&lt;li id="fn:1">
 &lt;p>Seriously, big kudos to lpinca. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/section></description></item><item><title>Should you strip the IPv6 zone?</title><link>https://adam-p.ca/blog/2022/03/strip-ipv6-zone/</link><pubDate>Tue, 22 Mar 2022 18:32:38 -0400</pubDate><guid>https://adam-p.ca/blog/2022/03/strip-ipv6-zone/</guid><description>&lt;p>There have recently been three different (but related) contexts where I have asked or been asked that question:&lt;/p>
+&lt;/div></description></item><item><title>Should you strip the IPv6 zone?</title><link>https://adam-p.ca/blog/2022/03/strip-ipv6-zone/</link><pubDate>Tue, 22 Mar 2022 18:32:38 -0400</pubDate><guid>https://adam-p.ca/blog/2022/03/strip-ipv6-zone/</guid><description>&lt;p>There have recently been three different (but related) contexts where I have asked or been asked that question:&lt;/p>
 &lt;ol>
 &lt;li>When a reverse proxy is adding the client IP to the &lt;code>X-Forwarded-For&lt;/code> header.&lt;/li>
 &lt;li>When the client IP is being used for rate limiting.&lt;/li>
@@ -251,17 +369,17 @@ Appendix: Checking your own link-local addresses and zones
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>$ ping fe80::2934:e0a2:73b1:80da%nope
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>ping: fe80::2934:e0a2:73b1:80da%nope: Name or service not known
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;section class="footnotes" role="doc-endnotes">
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="footnotes" role="doc-endnotes">
 &lt;hr>
 &lt;ol>
-&lt;li id="fn:1" role="doc-endnote">
+&lt;li id="fn:1">
 &lt;p>This is not entirely true. Site-local addresses also used zone identifiers, but they were &lt;a href="https://en.wikipedia.org/wiki/Unique_local_address#History">deprecated and went out of use&lt;/a> about 15 years ago. Also, the “zone identifier” is &lt;a href="https://en.wikipedia.org/wiki/IPv6_address#zone_index">sometimes called&lt;/a> a “zone index”. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:2" role="doc-endnote">
+&lt;li id="fn:2">
 &lt;p>Well, one of the definitions. There’s also &lt;a href="https://en.wikipedia.org/wiki/Link-local_address">a whole entry&lt;/a> devoted to link-local addresses. &lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/section></description></item><item><title>A tiny flaw in Go's netip design</title><link>https://adam-p.ca/blog/2022/03/go-netip-flaw/</link><pubDate>Mon, 21 Mar 2022 18:30:38 -0400</pubDate><guid>https://adam-p.ca/blog/2022/03/go-netip-flaw/</guid><description>&lt;p>Update 2022-03-23: Matt Layher &lt;a href="https://github.com/golang/go/issues/51899">created a Go issue&lt;/a> about this.&lt;/p>
+&lt;/div></description></item><item><title>A tiny flaw in Go's netip design</title><link>https://adam-p.ca/blog/2022/03/go-netip-flaw/</link><pubDate>Mon, 21 Mar 2022 18:30:38 -0400</pubDate><guid>https://adam-p.ca/blog/2022/03/go-netip-flaw/</guid><description>&lt;p>Update 2022-03-23: Matt Layher &lt;a href="https://github.com/golang/go/issues/51899">created a Go issue&lt;/a> about this.&lt;/p>
 &lt;p>Update 2022-04-14: In response to that issue, two weeks ago a change &lt;a href="https://github.com/golang/go/commit/ae9ce822ff4015fbbe7aa4303e6f3c160f2c53af">was committed&lt;/a> to Go that makes &lt;code>netip.ParsePrefix&lt;/code> behave like &lt;code>net.ParseCIDR&lt;/code>: they both return an error when a zone is present. It wasn’t released in 1.18.1, but I’m guessing it’ll be in 1.18.2. So that’s great!&lt;/p>
 &lt;hr>
 &lt;p>Does this surprise you? (Try it in the &lt;a href="https://go.dev/play/p/4bHXBiBktUH">playground&lt;/a>.)&lt;/p>
@@ -330,14 +448,14 @@ Bonus: IPv4-mapped IPv6 handling has also changed
 &lt;p>The older &lt;code>net&lt;/code> code would convert IPv4-mapped IPv6 addresses to IPv4 addresses, with the result that they would be contained by IPv4 CIDRs. The new &lt;code>netip&lt;/code> code does &lt;em>not&lt;/em> convert to IPv4, and the resulting address is &lt;em>not&lt;/em> contained by an IPv4 prefix.&lt;/p>
 &lt;p>I haven’t yet thought about this enough to form a strong opinion, but it’s good to know.&lt;/p>
 &lt;p>Update 2022-04-14: I &lt;a href="https://github.com/golang/go/issues/51906">created an issue&lt;/a> about this a few weeks ago. (I also &lt;a href="https://github.com/golang/go/pull/51950">PR’d some documentation fixes&lt;/a> regarding the consistent use of “IPv4-mapped IPv6”. It’s been merged.)&lt;/p>
-&lt;section class="footnotes" role="doc-endnotes">
+&lt;div class="footnotes" role="doc-endnotes">
 &lt;hr>
 &lt;ol>
-&lt;li id="fn:1" role="doc-endnote">
+&lt;li id="fn:1">
 &lt;p>Who super helpfully answered my Reddit question and I’m totally not taking a swipe at him. To be clear, I still think &lt;code>netip&lt;/code> is great and will be using it wherever I can make 1.18 the minimum Go version. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/section></description></item><item><title>The perils of the “real” client IP</title><link>https://adam-p.ca/blog/2022/03/x-forwarded-for/</link><pubDate>Fri, 04 Mar 2022 13:20:10 -0500</pubDate><guid>https://adam-p.ca/blog/2022/03/x-forwarded-for/</guid><description>&lt;h2 id="summary">
+&lt;/div></description></item><item><title>The perils of the “real” client IP</title><link>https://adam-p.ca/blog/2022/03/x-forwarded-for/</link><pubDate>Fri, 04 Mar 2022 13:20:10 -0500</pubDate><guid>https://adam-p.ca/blog/2022/03/x-forwarded-for/</guid><description>&lt;h2 id="summary">
 &lt;a class="heading-anchor" href="#summary">
 ##
 &lt;/a>
@@ -1056,7 +1174,7 @@ Go’s &lt;code>net/http/httputil.ReverseProxy&lt;/code> XFF behaviour being re-
 &lt;/a>
 Thoughts on overwriting the XFF header
 &lt;/h3>
-&lt;p>After being prompted to look at &lt;a href="https://github.com/golang/go/issues/50465">&lt;code>httputil.ReverseProxy&lt;/code>&lt;/a> and &lt;a href="https://github.com/caddyserver/caddy/pull/4507">Caddy&lt;/a>, I started thinking more about overwriting the &lt;code>X-Forwarded-For&lt;/code> header (which they both do). I had previously given the idea only a footnote&lt;sup id="fnref:7">&lt;a href="#fn:7" class="footnote-ref" role="doc-noteref">7&lt;/a>&lt;/sup>, but it deserves more consideration.&lt;/p>
+&lt;p>After being prompted to look at &lt;a href="https://github.com/golang/go/issues/50465">&lt;code>httputil.ReverseProxy&lt;/code>&lt;/a> and &lt;a href="https://github.com/caddyserver/caddy/pull/4507">Caddy&lt;/a>, I started thinking more about overwriting the &lt;code>X-Forwarded-For&lt;/code> header (which they both do). I had previously given the idea only a footnote&lt;sup id="fnref1:7">&lt;a href="#fn:7" class="footnote-ref" role="doc-noteref">7&lt;/a>&lt;/sup>, but it deserves more consideration.&lt;/p>
 &lt;p>The idea is this: In a multi-reverse-proxy scenario, the first proxy replaces any existing XFF header(s) with one containing only &lt;code>RemoteAddr&lt;/code>. All subsequent proxies (configured to trust the previous proxies) then append to the fresh XFF header.&lt;/p>
 &lt;p>This approach has an obvious nice property: There are no untrusted values in the XFF list. You can’t possibly choose a spoofed value. But there are also aspects that I don’t like.&lt;/p>
 &lt;p>First of all, I think that it teaches bad XFF hygiene and introduces the possibility of mistakes leading to spoofing vulnerability. Because the XFF header is being replaced by the first proxy, the instructions for use become “use the leftmost”. But what if you then swap out your first proxy that doesn’t remove the XFF and instead appends to it? Spoofed!&lt;/p>
@@ -1114,41 +1232,41 @@ TODO
 &lt;li>rethink hyphenating rate-limit* (right now I’m not doing it for nouns but am doing it for verbs, and I can’t decide what’s right)&lt;/li>
 &lt;li>&lt;a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-troubleshooting.html#http-463-issues">AWS ALB returns 463&lt;/a> if there are more than 30 XFF IP addresses&lt;/li>
 &lt;/ul>
-&lt;section class="footnotes" role="doc-endnotes">
+&lt;div class="footnotes" role="doc-endnotes">
 &lt;hr>
 &lt;ol>
-&lt;li id="fn:1" role="doc-endnote">
+&lt;li id="fn:1">
 &lt;p>…Except for anonymizing proxies that specifically hide the client IP. But that’s not an important difference for us here. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:2" role="doc-endnote">
+&lt;li id="fn:2">
 &lt;p>I’m picking on AWS ALB mostly because that’s what I’m testing with. It’s also pretty popular and probably not unusual. But please append this caveat every time I mention it: “This is AWS ALB’s behaviour by default, or as I understand it.” &lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:3" role="doc-endnote">
+&lt;li id="fn:3">
 &lt;p>I believe this is inherited unchanged into &lt;a href="https://datatracker.ietf.org/doc/html/rfc7540">HTTP/2&lt;/a>. &lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:4" role="doc-endnote">
+&lt;li id="fn:4">
 &lt;p>A redditor &lt;a href="https://old.reddit.com/r/programming/comments/t7lxeb/the_perils_of_the_real_client_ip_or_all_the_wrong/hzits6h/">points out&lt;/a> that if you’re running a server for internal usage, and you want to know the originating internal IP, then you &lt;em>do&lt;/em> want an IP in the private address space. Which is true. So if that scenario applies to you, modify the algorithm accordingly (i.e., remove the “non-private” checks). &lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:5" role="doc-endnote">
+&lt;li id="fn:5">
 &lt;p>In the leftmost-ish approach, the IP you need might not be in the first XFF header. In the rightmost-ish approach, it might not be in the last XFF header. &lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:6" role="doc-endnote">
+&lt;li id="fn:6">
 &lt;p>Seek a guide &lt;a href="https://docs.fastly.com/signalsciences/faq/real-client-ip-addresses/#nginx---http_realip_module">elsewhere&lt;/a>. &lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:7" role="doc-endnote">
-&lt;p>Okay, it’s &lt;em>possible&lt;/em> for your trusted proxy to blow away the existing XFF value and start fresh. But a) that’s not how XFF is supposed to work, b) you’re losing potentially useful information, and c) you achieve the same thing by using the rightmost-ish algorithm. &lt;a href="#fnref:7" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
+&lt;li id="fn:7">
+&lt;p>Okay, it’s &lt;em>possible&lt;/em> for your trusted proxy to blow away the existing XFF value and start fresh. But a) that’s not how XFF is supposed to work, b) you’re losing potentially useful information, and c) you achieve the same thing by using the rightmost-ish algorithm. &lt;a href="#fnref:7" class="footnote-backref" role="doc-backlink">↩︎&lt;/a> &lt;a href="#fnref1:7" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:8" role="doc-endnote">
+&lt;li id="fn:8">
 &lt;p>“Rightmost” is not “rightmost-ish”. &lt;a href="#fnref:8" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:9" role="doc-endnote">
+&lt;li id="fn:9">
 &lt;p>Of course, the attestation reverse proxy should have set the &lt;code>X-Client-IP&lt;/code> or otherwise passed on the IP it verified. But it’s not hard to imagine such a mistake. &lt;a href="#fnref:9" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:10" role="doc-endnote">
+&lt;li id="fn:10">
 &lt;p>There is one more sentence elsewhere, but it doesn’t add anything: “With the header field format described in this document, it is possible to know what information belongs together, &lt;em>as long as the proxies are trusted&lt;/em>.” (Emphasis added.) &lt;a href="#fnref:10" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/section></description></item><item><title>The scary state of IPv6 rate-limiting</title><link>https://adam-p.ca/blog/2022/02/ipv6-rate-limiting/</link><pubDate>Sun, 20 Feb 2022 13:44:57 -0500</pubDate><guid>https://adam-p.ca/blog/2022/02/ipv6-rate-limiting/</guid><description>&lt;p>IPv6 rate-limiting is scarily half-baked right now. If you run a server that does any kind of IP-based rate-limiting, consider not enabling IPv6 if possible. If you do use IPv6, check how your rate-limiter actually handles it.&lt;/p>
+&lt;/div></description></item><item><title>The scary state of IPv6 rate-limiting</title><link>https://adam-p.ca/blog/2022/02/ipv6-rate-limiting/</link><pubDate>Sun, 20 Feb 2022 13:44:57 -0500</pubDate><guid>https://adam-p.ca/blog/2022/02/ipv6-rate-limiting/</guid><description>&lt;p>IPv6 rate-limiting is scarily half-baked right now. If you run a server that does any kind of IP-based rate-limiting, consider not enabling IPv6 if possible. If you do use IPv6, check how your rate-limiter actually handles it.&lt;/p>
 &lt;h2 id="four-billion-is-a-pretty-small-number">
 &lt;a class="heading-anchor" href="#four-billion-is-a-pretty-small-number">
 ##
@@ -1240,20 +1358,20 @@ Postscript
 &lt;p>A coworker pointed out that the way I did the prefixed-IP-canonicalization in my PRs was overly complicated and can be achieved with the stdlib like &lt;code>ipv6.Mask(net.CIDRMask(56, 128)).String()&lt;/code>. I had tried various approaches with the stdlib and didn’t come up with one that worked, but I guess I missed that one. Embarrassing.&lt;/p>
 &lt;p>I did some searching for fail2ban+ipv6. Their &lt;a href="https://github.com/fail2ban/fail2ban/issues/1123">IPv6 support master plan&lt;/a> is interesting and relevant. &lt;a href="https://github.com/fail2ban/fail2ban/issues/1123#issuecomment-123746872">For example&lt;/a>: “I am not sure we will land/release 1 [per-IP blocking] alone since, as was stated, it could immediately be exploited by an attacker to cause resources exhaustion/DoS. May be only if treatment of IPv6 addresses would be made optional with a big fat warning on possible ramifications.” Even though it looks like &lt;a href="https://github.com/fail2ban/fail2ban/pull/1374">per-IP IPv6 support&lt;/a> was &lt;a href="https://www.ctrl.blog/entry/fail2ban-ipv6.html">added in 0.10&lt;/a>.&lt;/p>
 &lt;p>Reading through all of the comments on that issues suggests that fail2ban still only uses a per-IP strategy to block IPv6. And are aware it’s insufficient. And stopped discussing it a year and a half ago.&lt;/p>
-&lt;section class="footnotes" role="doc-endnotes">
+&lt;div class="footnotes" role="doc-endnotes">
 &lt;hr>
 &lt;ol>
-&lt;li id="fn:1" role="doc-endnote">
+&lt;li id="fn:1">
 &lt;p>Some ISPs also give a small multiple of /64s. But I feel like that case isn’t significantly different from a single /64 for our purposes. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:2" role="doc-endnote">
+&lt;li id="fn:2">
 &lt;p>After writing this I realized that I’d better be part of the change I want to see, so I submitted PRs to &lt;a href="https://github.com/didip/tollbooth/pull/98">tollbooth&lt;/a> and &lt;a href="https://github.com/go-chi/httprate/pull/10">httprate&lt;/a>. Both have been accepted. But it’s unlikely that the only two rate-limiting libraries I checked are the only two with this problem, so I don’t think this changes the overall point of this post. &lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:3" role="doc-endnote">
+&lt;li id="fn:3">
 &lt;p>To be clear, I’m making this term up for convenience of discussion. &lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/section></description></item><item><title>Git Submodule vs Subtree</title><link>https://adam-p.ca/blog/2022/02/git-submodule-subtree/</link><pubDate>Thu, 17 Feb 2022 21:35:37 -0500</pubDate><guid>https://adam-p.ca/blog/2022/02/git-submodule-subtree/</guid><description>&lt;p>Every now and then I need to make a choice between using git submodules or subtrees (or nothing), or I get asked about them by coworkers. This is infrequent enough that I forget some of the details each time and need to refresh my memory. So I wrote up these notes to share with my coworkers and to help my future self. Hopefully they’re of some use to others as well.&lt;/p>
+&lt;/div></description></item><item><title>Git Submodule vs Subtree</title><link>https://adam-p.ca/blog/2022/02/git-submodule-subtree/</link><pubDate>Thu, 17 Feb 2022 21:35:37 -0500</pubDate><guid>https://adam-p.ca/blog/2022/02/git-submodule-subtree/</guid><description>&lt;p>Every now and then I need to make a choice between using git submodules or subtrees (or nothing), or I get asked about them by coworkers. This is infrequent enough that I forget some of the details each time and need to refresh my memory. So I wrote up these notes to share with my coworkers and to help my future self. Hopefully they’re of some use to others as well.&lt;/p>
 &lt;p>Disclaimer: My experience still isn’t large. I’ve only used each once or twice. And this isn’t a manual for using those commands/tools – it’s just a concise aid for choosing between them.&lt;/p>
 &lt;p>TL;DR: Subtree is better if you basically want to forget you have external code, or only infrequently update it; submodule is better if you &lt;em>don’t&lt;/em> want to forget that the code is external, and/or if you maybe want to edit and push it.&lt;/p>
 &lt;p>I’d seen a lot of complaining about submodule during research, and had the vague idea that subtree was “better”, but I’ve come to realize that submodule has its place.&lt;/p>
@@ -1267,14 +1385,14 @@ Postscript
 &lt;li>Use &lt;strong>subtree&lt;/strong> when you just want to copy code from an external repo once, or maybe with occasional pulls.&lt;/li>
 &lt;li>Use &lt;strong>submodule&lt;/strong> when you want to make your relationship to the external repo really explicit, or if you intend to make changes to the submodule code from within the context of your repo and push to the external repo.&lt;/li>
 &lt;/ul>
-&lt;section class="footnotes" role="doc-endnotes">
+&lt;div class="footnotes" role="doc-endnotes">
 &lt;hr>
 &lt;ol>
-&lt;li id="fn:1" role="doc-endnote">
+&lt;li id="fn:1">
 &lt;p>Depending on your vendoring policy and the dependency management system. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/section></description></item><item><title>Diving into Go's HTTP server timeouts</title><link>https://adam-p.ca/blog/2022/01/golang-http-server-timeouts/</link><pubDate>Sat, 15 Jan 2022 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2022/01/golang-http-server-timeouts/</guid><description>&lt;p>Recently, I was adding timeouts to a Go HTTP server and ended up exploring how the different settings and approaches act and interact. I’m going to publish my notes here, along with the code I used for testing. Hopefully this will help someone else (or myself) in the future.&lt;/p>
+&lt;/div></description></item><item><title>Diving into Go's HTTP server timeouts</title><link>https://adam-p.ca/blog/2022/01/golang-http-server-timeouts/</link><pubDate>Sat, 15 Jan 2022 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2022/01/golang-http-server-timeouts/</guid><description>&lt;p>Recently, I was adding timeouts to a Go HTTP server and ended up exploring how the different settings and approaches act and interact. I’m going to publish my notes here, along with the code I used for testing. Hopefully this will help someone else (or myself) in the future.&lt;/p>
 &lt;p>The timeout testing client can be found here: &lt;a href="https://github.com/adam-p/httptimeout">github.com/adam-p/httptimeout&lt;/a>. There is a server in the examples directory that you can make requests to.&lt;/p>
 &lt;p>I link to it below, but I’m going to recommend here that you read Filippo Valsorda’s post &lt;a href="https://blog.cloudflare.com/exposing-go-on-the-internet/">“So you want to expose Go on the Internet”&lt;/a>. It’s essential, but I didn’t find it had enough quite enough detail about timeouts, hence the below examination.&lt;/p>
 &lt;hr>
@@ -1427,20 +1545,20 @@ AWS observations
 &lt;p>Even seemingly mundane automated systems can have ethical impacts. As consumers of such systems we need to be cognizant of what behaviours such systems are pushing us towards (and away from), and we should get in the habit of consciously and explicitly asking ourselves how we’re being influenced.&lt;/p>
 &lt;p>For those of us who are developers of such systems, we need to make a habit of consciously stepping back and thinking about the impact of our design decisions on our users. What’s optimal might not always be what’s ethical. And for any non-trivial ethical question, it should be discussed with others. It’s difficult to see the ethical traps in one’s own design and even harder to find better ways out of them – the perspective of others is invaluable.&lt;/p>
 &lt;p>Disclaimer: As I said above, I have no domain knowledge here. I did some googling to see if there was discussion or papers about this and found nothing, but it’s entirely likely I wasn’t searching for the right words.&lt;/p>
-&lt;section class="footnotes" role="doc-endnotes">
+&lt;div class="footnotes" role="doc-endnotes">
 &lt;hr>
 &lt;ol>
-&lt;li id="fn:1" role="doc-endnote">
+&lt;li id="fn:1">
 &lt;p>This might not be true everywhere, but it sure is where I live. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:2" role="doc-endnote">
+&lt;li id="fn:2">
 &lt;p>There’s also a conversation worth having about the immorality of breaking the law to speed. And if the moral violation is lesser or greater depending on how badly you exceed the limit, or if being in sin is a binary state. Not a conversation I particularly want to have here, with myself, though. &lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:3" role="doc-endnote">
+&lt;li id="fn:3">
 &lt;p>Using a &lt;a href="https://www.google.ca/maps/dir/43.8049634,-79.133491/43.8671479,-78.9525895/@43.7902468,-79.1002391,12.33z/data=!4m2!4m1!3e0">longer link&lt;/a> in case that shortened one breaks. &lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/section></description></item><item><title>Timing attack mitigation must exclude network</title><link>https://adam-p.ca/blog/2021/11/constant-time-network/</link><pubDate>Sat, 27 Nov 2021 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2021/11/constant-time-network/</guid><description>&lt;p>TL;DR: When trying to prevent timing attacks (e.g., against login username enumeration) by making a request take constant time, make sure you exclude the network read and write time. If you don’t, an attacker can slow down their request to bypass it.&lt;/p>
+&lt;/div></description></item><item><title>Timing attack mitigation must exclude network</title><link>https://adam-p.ca/blog/2021/11/constant-time-network/</link><pubDate>Sat, 27 Nov 2021 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2021/11/constant-time-network/</guid><description>&lt;p>TL;DR: When trying to prevent timing attacks (e.g., against login username enumeration) by making a request take constant time, make sure you exclude the network read and write time. If you don’t, an attacker can slow down their request to bypass it.&lt;/p>
 &lt;p>I’ll be covering some background and contextual information here. If you don’t need it, skip to “Exclude network time from constant-time limiting”.&lt;/p>
 &lt;h2 id="what-is-a-timing-attack">
 &lt;a class="heading-anchor" href="#what-is-a-timing-attack">
@@ -1609,14 +1727,14 @@ Not just HTTP
 Final words
 &lt;/h2>
 &lt;p>I’m writing this because when I was implementing this I screwed up by including the network transfer in the constant-time limit – it felt cleanest to implement it as middleware, but that was at the wrong level. I only realized the problem while re-reading some tangentially-related code. Hopefully this helps someone else not make the same mistake.&lt;/p>
-&lt;section class="footnotes" role="doc-endnotes">
+&lt;div class="footnotes" role="doc-endnotes">
 &lt;hr>
 &lt;ol>
-&lt;li id="fn:1" role="doc-endnote">
+&lt;li id="fn:1">
 &lt;p>Hashed using something appropriate, like argon2, scrypt, or bcrypt. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/section></description></item><item><title>Make sure you have a backup Yubikey</title><link>https://adam-p.ca/blog/2021/06/backup-yubikey/</link><pubDate>Fri, 25 Jun 2021 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2021/06/backup-yubikey/</guid><description>&lt;p>For four years I carried a &lt;a href="https://support.yubico.com/hc/en-us/articles/360013714579-YubiKey-NEO">Yubikey NEO&lt;/a> (USB Type-A) in my pocket, on my keychain. And then it died (would no longer be recognized by any computer).&lt;/p>
+&lt;/div></description></item><item><title>Make sure you have a backup Yubikey</title><link>https://adam-p.ca/blog/2021/06/backup-yubikey/</link><pubDate>Fri, 25 Jun 2021 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2021/06/backup-yubikey/</guid><description>&lt;p>For four years I carried a &lt;a href="https://support.yubico.com/hc/en-us/articles/360013714579-YubiKey-NEO">Yubikey NEO&lt;/a> (USB Type-A) in my pocket, on my keychain. And then it died (would no longer be recognized by any computer).&lt;/p>
 &lt;p>&lt;a href="https://web.archive.org/web/20170212170854/https://www.yubico.com/products/yubikey-hardware/yubikey-neo">Yubikey’s durability claim&lt;/a> was:&lt;/p>
 &lt;blockquote>
 &lt;p>Crush-resistant and waterproof, YubiKey NEO is practically indestructible during normal use, weighs only 3g, and attaches to your keychain alongside your house and car keys&lt;/p>

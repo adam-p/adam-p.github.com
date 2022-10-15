@@ -67,11 +67,11 @@ Bonus: IPv4-mapped IPv6 handling has also changed
 &lt;p>The older &lt;code>net&lt;/code> code would convert IPv4-mapped IPv6 addresses to IPv4 addresses, with the result that they would be contained by IPv4 CIDRs. The new &lt;code>netip&lt;/code> code does &lt;em>not&lt;/em> convert to IPv4, and the resulting address is &lt;em>not&lt;/em> contained by an IPv4 prefix.&lt;/p>
 &lt;p>I haven’t yet thought about this enough to form a strong opinion, but it’s good to know.&lt;/p>
 &lt;p>Update 2022-04-14: I &lt;a href="https://github.com/golang/go/issues/51906">created an issue&lt;/a> about this a few weeks ago. (I also &lt;a href="https://github.com/golang/go/pull/51950">PR’d some documentation fixes&lt;/a> regarding the consistent use of “IPv4-mapped IPv6”. It’s been merged.)&lt;/p>
-&lt;section class="footnotes" role="doc-endnotes">
+&lt;div class="footnotes" role="doc-endnotes">
 &lt;hr>
 &lt;ol>
-&lt;li id="fn:1" role="doc-endnote">
+&lt;li id="fn:1">
 &lt;p>Who super helpfully answered my Reddit question and I’m totally not taking a swipe at him. To be clear, I still think &lt;code>netip&lt;/code> is great and will be using it wherever I can make 1.18 the minimum Go version. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/section></description></item></channel></rss>
+&lt;/div></description></item></channel></rss>

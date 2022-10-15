@@ -147,17 +147,17 @@ Appendix: Checking your own link-local addresses and zones
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>$ ping fe80::2934:e0a2:73b1:80da%nope
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>ping: fe80::2934:e0a2:73b1:80da%nope: Name or service not known
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;section class="footnotes" role="doc-endnotes">
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="footnotes" role="doc-endnotes">
 &lt;hr>
 &lt;ol>
-&lt;li id="fn:1" role="doc-endnote">
+&lt;li id="fn:1">
 &lt;p>This is not entirely true. Site-local addresses also used zone identifiers, but they were &lt;a href="https://en.wikipedia.org/wiki/Unique_local_address#History">deprecated and went out of use&lt;/a> about 15 years ago. Also, the “zone identifier” is &lt;a href="https://en.wikipedia.org/wiki/IPv6_address#zone_index">sometimes called&lt;/a> a “zone index”. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:2" role="doc-endnote">
+&lt;li id="fn:2">
 &lt;p>Well, one of the definitions. There’s also &lt;a href="https://en.wikipedia.org/wiki/Link-local_address">a whole entry&lt;/a> devoted to link-local addresses. &lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/section></description></item><item><title>A tiny flaw in Go's netip design</title><link>https://adam-p.ca/blog/2022/03/go-netip-flaw/</link><pubDate>Mon, 21 Mar 2022 18:30:38 -0400</pubDate><guid>https://adam-p.ca/blog/2022/03/go-netip-flaw/</guid><description>&lt;p>Update 2022-03-23: Matt Layher &lt;a href="https://github.com/golang/go/issues/51899">created a Go issue&lt;/a> about this.&lt;/p>
+&lt;/div></description></item><item><title>A tiny flaw in Go's netip design</title><link>https://adam-p.ca/blog/2022/03/go-netip-flaw/</link><pubDate>Mon, 21 Mar 2022 18:30:38 -0400</pubDate><guid>https://adam-p.ca/blog/2022/03/go-netip-flaw/</guid><description>&lt;p>Update 2022-03-23: Matt Layher &lt;a href="https://github.com/golang/go/issues/51899">created a Go issue&lt;/a> about this.&lt;/p>
 &lt;p>Update 2022-04-14: In response to that issue, two weeks ago a change &lt;a href="https://github.com/golang/go/commit/ae9ce822ff4015fbbe7aa4303e6f3c160f2c53af">was committed&lt;/a> to Go that makes &lt;code>netip.ParsePrefix&lt;/code> behave like &lt;code>net.ParseCIDR&lt;/code>: they both return an error when a zone is present. It wasn’t released in 1.18.1, but I’m guessing it’ll be in 1.18.2. So that’s great!&lt;/p>
 &lt;hr>
 &lt;p>Does this surprise you? (Try it in the &lt;a href="https://go.dev/play/p/4bHXBiBktUH">playground&lt;/a>.)&lt;/p>
@@ -226,11 +226,11 @@ Bonus: IPv4-mapped IPv6 handling has also changed
 &lt;p>The older &lt;code>net&lt;/code> code would convert IPv4-mapped IPv6 addresses to IPv4 addresses, with the result that they would be contained by IPv4 CIDRs. The new &lt;code>netip&lt;/code> code does &lt;em>not&lt;/em> convert to IPv4, and the resulting address is &lt;em>not&lt;/em> contained by an IPv4 prefix.&lt;/p>
 &lt;p>I haven’t yet thought about this enough to form a strong opinion, but it’s good to know.&lt;/p>
 &lt;p>Update 2022-04-14: I &lt;a href="https://github.com/golang/go/issues/51906">created an issue&lt;/a> about this a few weeks ago. (I also &lt;a href="https://github.com/golang/go/pull/51950">PR’d some documentation fixes&lt;/a> regarding the consistent use of “IPv4-mapped IPv6”. It’s been merged.)&lt;/p>
-&lt;section class="footnotes" role="doc-endnotes">
+&lt;div class="footnotes" role="doc-endnotes">
 &lt;hr>
 &lt;ol>
-&lt;li id="fn:1" role="doc-endnote">
+&lt;li id="fn:1">
 &lt;p>Who super helpfully answered my Reddit question and I’m totally not taking a swipe at him. To be clear, I still think &lt;code>netip&lt;/code> is great and will be using it wherever I can make 1.18 the minimum Go version. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/section></description></item></channel></rss>
+&lt;/div></description></item></channel></rss>
