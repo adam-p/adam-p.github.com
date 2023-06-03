@@ -23,6 +23,7 @@ languages:
 permalinks:
   blog: 'blog/:year/:month/:slug/'
   inco: 'inco/:year/:month/:slug/'
+  unpub: 'unpub/:year/:month/:slug/'
 
 markup:
   goldmark:

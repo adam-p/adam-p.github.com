@@ -1,7 +1,7 @@
 ---
 comments: false
 date: "2021-07-14T00:00:00Z"
-published: false
+published: true
 tags: null
 title: My Baby Advice for Fathers
 slug: baby-advice

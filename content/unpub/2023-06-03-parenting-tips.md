@@ -1,18 +1,18 @@
 ---
 title: "Inexpert Parenting Tips"
 date: 2023-06-03T06:17:56-04:00
-draft: true
+draft: false
 tags: []
 slug: parenting-tips
 ---
 
 These are some parenting tips/tricks/techniques that I'm capturing for a friend. I'm not pretending that the ideas are good or unique or will help anyone other that me, but... maybe?
 
-My frame of reference: I have one, healthy 8-year-old son. He's basically well-behaved now, but we had a _lot_ of behavioural troubles (hitting other kids, etc.) until recently. I'll probably be using "he" a lot, as this is basically a personal account.
+<!--more-->
+
+My frame of reference: I have one 8-year-old son, healthy and neurotypical. He's basically well-behaved now, but we had a _lot_ of behavioural troubles (hitting other kids, etc.) until recently. I'll probably be using "he" a lot, as this is basically a personal account.
 
 Much of this stuff is based on books or articles I have read along the way. I'm going to make zero effort to figure out the sources, or else I'll never write any of it.
-
-<!--more-->
 
 ## Carve your brain (and your child's): _Do_ what you want to _be_
 
@@ -20,7 +20,7 @@ Much of this stuff is based on books or articles I have read along the way. I'm 
 
 This is a pretty abstract "tip", but it's going up top because it applies to so many of the tips below. Even if a particular repeated parental behaviour is ostensibly about guiding or providing something to the child, it will still result in carving paths in your own brain. And often this is part of the point.
 
-A concrete example: My first year or so of being a father was very hard for me. I didn't know that paternal post partum depression was a thing (affecting 10-25% of fathers!), but I'm quite sure I suffered from it (I wrote a bit more [here](https://github.com/adam-p/adam-p.github.com/blob/master/content/blog/2021-07-14-baby-advice.md#the-most-important-thing-i-have-to-tell-you)). During that time I read some advice about "fake it till you make it" and I decided to take that to heart. One way I did that was to say "You're my special little guy and I love you" to my son often -- at every nap time, at least. It felt false (I was in a bad place), but I wanted it to be true. I tried to say it as convincingly as possible (I also wanted him to believe it), I said it regularly, and I said it repeatedly. And eventually it became the most true thing I've ever uttered.
+A concrete example: My first year or so of being a father was very hard for me. I didn't know that paternal post-partum depression was a thing (affecting 10-25% of fathers!), but I'm quite sure I suffered from it (I wrote a bit more [here](https://github.com/adam-p/adam-p.github.com/blob/master/content/blog/2021-07-14-baby-advice.md#the-most-important-thing-i-have-to-tell-you)). During that time I read some advice about "fake it till you make it" and I decided to take that to heart. One way I did that was to say "You're my special little guy and I love you" to my son often -- at every nap time, at least. It felt false (I was in a bad place), but I wanted it to be true. I tried to say it as convincingly as possible (I also wanted him to believe it), I said it regularly, and I said it repeatedly. And eventually it became the most true thing I've ever uttered.
 
 Yes, this is some N=1 sample size bullshit. Maybe I was already on the way out of the depression and this did literally nothing. I believe that it helped.
 
@@ -139,6 +139,22 @@ Sometimes this can mean directly opposing your spouse in defense of your kid, in
 If you kid needs a hug (or other comfort), give it to them until they pull away first. Let them drink as much comfort from you as they need, and give them no sense that you're pulling away while they need more.
 
 This is harder than it sounds, and is sometimes beyond our emotional reserves and time. Remind yourself that it'll be very rare after about age 6.
+
+## Be wary of your intoxicated self
+
+I quickly realized that I couldn't have even one drink until after my son was asleep. When I drink even a little my patience drops like a rock, and that makes even the smallest difficulty bad.
+
+It's not like that for everyone, though. Know thy tipsy self. If, like me, you realize that you just can't drink at all during the day, make peace with it and know that you won't need to do it forever.
+
+## Mindfulness helps
+
+Shortly after becoming a parent I started practicing mindfulness meditation. (For related reasons.) I read [_10% Happier_](https://www.goodreads.com/book/show/18505796-10-happier) and started using meditation apps (10% Happier, Headspace, Waking Up). And... it has helped me a lot. I'm not going to blab on about it, but I'll mention a few key things.
+
+First, mindfulness meditation focuses strongly on teaching you to be aware of your physical and emotional state. You pay a lot of attention to how various emotions make your body feel (tight in the chest, knot in the stomach, etc.), and you get _much_ better at recognizing those manifestations of stress, anger, etc. _before_ they take you over (or not too long after they do). This is incredibly valuable when parenting.
+
+Secondly, the act of being mindful helps wonderfully with appreciating the joys of parenthood as they happen. Mindfulness meditation intentionally carves your mind in such a way as to make it easier (or even possible) to fully focus and appreciate the current moment. And when you have a child who is changing all the time -- and will never return to the way they are this moment -- it's wonderful to appreciate as many moments as possible. (And, yeah, it helps some with coping with the daily annoying behaviours that it seems they'll never grow out of.)
+
+Thirdly, via mindfulness you come to the Buddhist understanding of "suffering", which is something like "undue fretting over things that have already passed or may never come to pass". Focusing on your actual experience, right now, helps reduce the fears that your kid is a psychopath, or will never read, or will forever be wearing diapers to bed.
 
 ## Do your best; be compassionate with yourself
 
