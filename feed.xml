@@ -1,4 +1,161 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Adam Pritchard's blog and miscellany on adam-p</title><link>https://adam-p.ca/</link><description>Recent content in Adam Pritchard's blog and miscellany on adam-p</description><generator>Hugo -- gohugo.io</generator><language>en</language><atom:link href="https://adam-p.ca/feed.xml" rel="self" type="application/rss+xml"/><item><title>More Than a Password</title><link>https://adam-p.ca/blog/2022/10/password-plus-plus/</link><pubDate>Fri, 14 Oct 2022 16:31:07 -0400</pubDate><guid>https://adam-p.ca/blog/2022/10/password-plus-plus/</guid><description>&lt;p>Here’s a quick-and-dirty explanation of why two-factor authentication is good, and why U2F/WebAuthn keys (like YubiKeys) are better than the alternatives. (So I have something to point friends and family at.)&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Adam Pritchard's blog and miscellany on adam-p</title><link>https://adam-p.ca/</link><description>Recent content in Adam Pritchard's blog and miscellany on adam-p</description><generator>Hugo -- gohugo.io</generator><language>en</language><atom:link href="https://adam-p.ca/feed.xml" rel="self" type="application/rss+xml"/><item><title>Inexpert Parenting Tips</title><link>https://adam-p.ca/unpub/2023/06/parenting-tips/</link><pubDate>Sat, 03 Jun 2023 06:17:56 -0400</pubDate><guid>https://adam-p.ca/unpub/2023/06/parenting-tips/</guid><description>&lt;p>These are some parenting tips/tricks/techniques that I’m capturing for a friend. I’m not pretending that the ideas are good or unique or will help anyone other that me, but… maybe?&lt;/p>
+&lt;p>My frame of reference: I have one 8-year-old son, healthy and neurotypical. He’s basically well-behaved now, but we had a &lt;em>lot&lt;/em> of behavioural troubles (hitting other kids, etc.) until recently. I’ll probably be using “he” a lot, as this is basically a personal account.&lt;/p>
+&lt;p>Much of this stuff is based on books or articles I have read along the way. I’m going to make zero effort to figure out the sources, or else I’ll never write any of it.&lt;/p>
+&lt;h2 id="carve-your-brain-and-your-childs-_do_-what-you-want-to-_be_">
+&lt;a class="heading-anchor" href="#carve-your-brain-and-your-childs-_do_-what-you-want-to-_be_">
+##
+&lt;/a>
+Carve your brain (and your child’s): &lt;em>Do&lt;/em> what you want to &lt;em>be&lt;/em>
+&lt;/h2>
+&lt;p>“You are what you do”, for good or ill. Repeated actions or thoughts build pathways and structures in your brain that enable or ease those actions. This is unfortunately most often true with negative behaviours (like constant cell phone checking), but can be used with intentional effort to propel yourself along the path you’d like to be traveling.&lt;/p>
+&lt;p>This is a pretty abstract “tip”, but it’s going up top because it applies to so many of the tips below. Even if a particular repeated parental behaviour is ostensibly about guiding or providing something to the child, it will still result in carving paths in your own brain. And often this is part of the point.&lt;/p>
+&lt;p>A concrete example: My first year or so of being a father was very hard for me. I didn’t know that paternal post-partum depression was a thing (affecting 10-25% of fathers!), but I’m quite sure I suffered from it (I wrote a bit more &lt;a href="https://github.com/adam-p/adam-p.github.com/blob/master/content/blog/2021-07-14-baby-advice.md#the-most-important-thing-i-have-to-tell-you">here&lt;/a>). During that time I read some advice about “fake it till you make it” and I decided to take that to heart. One way I did that was to say “You’re my special little guy and I love you” to my son often – at every nap time, at least. It felt false (I was in a bad place), but I wanted it to be true. I tried to say it as convincingly as possible (I also wanted him to believe it), I said it regularly, and I said it repeatedly. And eventually it became the most true thing I’ve ever uttered.&lt;/p>
+&lt;p>Yes, this is some N=1 sample size bullshit. Maybe I was already on the way out of the depression and this did literally nothing. I believe that it helped.&lt;/p>
+&lt;p>Say the words that you want to be true. Act the way you know you should be acting. Force yourself until it becomes natural.&lt;/p>
+&lt;h2 id="always-offer-low-friction-reconciliation">
+&lt;a class="heading-anchor" href="#always-offer-low-friction-reconciliation">
+##
+&lt;/a>
+Always offer low-friction reconciliation
+&lt;/h2>
+&lt;p>The time I have most clearly felt “oh, this is a parenting win” was when my (pretty little) kid was angry and hitting, and I was angry, and then I dropped to my knees and opened my arms and he just fell in, curled into a ball, instantly calmed down, and started crying a bit.&lt;/p>
+&lt;p>This didn’t work every time, but for years it allowed us to defuse a lot of bad situations, and in a way that plainly felt like a gain in love and attachment.&lt;/p>
+&lt;p>I decided that the lesson from the success of this tactic is that my child was often desperate for a low-friction path to reconciliation and that I should always offer it. By “low-friction” I mean not requiring an admission of guilt or an apology or any other loss of face – just zero steps from “angry” to “unconditional love”.&lt;/p>
+&lt;p>I’m also using the word “reconciliation” somewhat carefully. The behaviour that led to the conflict might be unacceptable (e.g., hitting other kids) and still need to be addressed – this isn’t necessarily “forgive and forget”. But nothing can be “addressed” while everyone is freaking out, so it’s essential to re-establish love and acceptance.&lt;/p>
+&lt;p>Brain-carving: It will be very hard to offer this reconciliation when you’re angry, but the more you do it, the easier and more automatic it will become. Just as importantly, you will be carving your child’s brain at the same time – you’ll be teaching them to look for the opportunity for reconciliation, and to take it. This will serve them well forever.&lt;/p>
+&lt;p>Bonus tip: I found kneeling was often effective in many situations. I think there’s a psychological effect on the kid when the parent is at their level – I think I felt more accessible to him. It’s also a nicer position for hugging a little guy.&lt;/p>
+&lt;p>Another bonus tip: When my son started hitting, I often found it effective to really obviously not defend myself. If I put my arms up to absorb the blows, I think he took that as meaning that it was more okay to hit me, because I wouldn’t really get hurt. But if I kneeled and opened my arms and offered him my face (i.e., offered him my throat), then he wouldn’t be as easily able to hit me without hurting me and often would stop. &lt;em>But not always&lt;/em>. If he hadn’t completely lost his shit, then great, but if he was absolutely out of his mind then I’d have to realize that really quickly. (And then do a “safety hold” right on the busy sidewalk and oh god those were some bad days.)&lt;/p>
+&lt;p>Relationship tip: “Always offer low-friction reconciliation” is just obviously a good idea in all settings, with everyone, but especially your spouse. I’m pretty bad for holding grudges, and this is something I’m still working on.&lt;/p>
+&lt;h2 id="emotional-bookending-and-bridging">
+&lt;a class="heading-anchor" href="#emotional-bookending-and-bridging">
+##
+&lt;/a>
+Emotional bookending and bridging
+&lt;/h2>
+&lt;p>(To be clear, I’m making up bullshit terms that vaguely evoke what I’m trying to get at. I need some kind of section header, right?)&lt;/p>
+&lt;p>Every night the last thing I say to my son is, “I love you, monkey. I’ll see you in the morning.” Both parts are intentional: the first is pretty obvious (and was part of my own brain-carving, back when I needed it at that level), and the second is to reassure him that I’ll be there the next day. I want that to give him comfort as he falls asleep and if he wakes up in the night.&lt;/p>
+&lt;p>Every morning as soon as I seem him I beeline to him and give him a kiss. This is the fulfillment of the previous night’s promise. For many hundreds of nights, I have communicated as clearly as I can: Our separation is temporary and my love is always with you.&lt;/p>
+&lt;p>I do this with almost all our separations, especially school. I always say, “I love you, buddy. I’ll see you after [school or whatever activity].” And then make sure I clearly communicate that I’m happy to see him afterwards. (For a long time I would explicitly say “I’m happy to see you.”)&lt;/p>
+&lt;p>This isn’t &lt;em>just&lt;/em> about trying to be a loving parent. I want him to not call for us during the night. I wanted him to not feel anxious at daycare or school, because I suspected that it was contributing to behaviour problems. But, yeah, also for his own sake I want him to feel absolutely sure that he’s loved and that his parents will return to him, even when we’re separated.&lt;/p>
+&lt;p>(Personal psychological insight: I always dreaded my dad coming home from work. I really, &lt;em>REALLY&lt;/em> never want my son to feel like that. I want to be a goddamn beacon of love and comfort. “Don’t be like my father” is not the healthiest guiding principle, but we all just work with what we got.)&lt;/p>
+&lt;h2 id="turn-towards">
+&lt;a class="heading-anchor" href="#turn-towards">
+##
+&lt;/a>
+Turn towards
+&lt;/h2>
+&lt;p>I got the term from a relationship article, but it applies equally to parenting. The idea is that when your partner wants or needs your attention (or affection, or help, or whatever), you “turn towards” them, literally and figuratively. Physically turn towards them and give them your full focus and attention. You don’t keep looking at your phone or the TV or whatever. This is a clear act &lt;em>and&lt;/em> message of love and respect and commitment.&lt;/p>
+&lt;p>This idea applies equally to your child, but is much harder. Kids want so much attention, and they talk so much, and they are so fucking &lt;em>boring&lt;/em>. It is &lt;em>impossible&lt;/em> to turn towards them as much as they want. But that doesn’t mean we shouldn’t try.&lt;/p>
+&lt;p>When my son wants my attention, I try to turn toward him immediately. If I can’t, I’ll communicate to him why I can’t and give him the option of talking anyway or waiting until I’m free. When I lose time or patience in this attention-giving I’ll say, “Monkey, I can’t keep paying attention right now, but you can keep talking if you want.”&lt;/p>
+&lt;p>So, I treat him with respect (attention, truth, etc.) and give him what he needs for as long as I can. This might seem obvious, but, like many of the things here, I think it’s good to do it deliberately and with intention.&lt;/p>
+&lt;p>For lots of us, this kind of attention isn’t easy to do, and especially not for any amount of time. Again, kids are tedious. But, as with everything, you are what you do – the more you do it, the more you can do it.&lt;/p>
+&lt;p>Also, yeah, do this with your spouse.&lt;/p>
+&lt;h2 id="ambient-affection">
+&lt;a class="heading-anchor" href="#ambient-affection">
+##
+&lt;/a>
+Ambient affection
+&lt;/h2>
+&lt;p>For a long time (less lately), I would lightly and briefly touch my son almost every time I walked by – hand-on-head, hand-on-shoulder, that kind of thing. I intended it as a non-intrusive reminder of the proximity of love and affection. (And, as always, carving my own brain.)&lt;/p>
+&lt;p>I sometimes think in terms of physical stress factors: hormones, heart rate, etc. I want to keep those factors low in my son, and I think of any show of affection as bringing them down. (It’s also why I try to get him into nature often, as there’s actual &lt;a href="https://www.dec.ny.gov/lands/90720.html">evidence of efficacy&lt;/a>.)&lt;/p>
+&lt;h2 id="tell-them-when-youre-cranky">
+&lt;a class="heading-anchor" href="#tell-them-when-youre-cranky">
+##
+&lt;/a>
+Tell them when you’re cranky
+&lt;/h2>
+&lt;p>I always tell my son when I’m in a bad mood (usually due to poor sleep). I tell him that I might be short-tempered and cranky, but that it isn’t – and won’t be – his fault, and that I don’t love him any less.&lt;/p>
+&lt;p>I’m not sure that the information actually changes his pain-in-the-ass behaviour, but that’s not the point. I only want him to feel… well, exactly what I said – that it’s not his fault and I don’t love him any less. And, really, kids are (or some are, or sometimes, or something) capable of empathy, even towards their parents.&lt;/p>
+&lt;p>Saying these words is also a reminder to myself to try to not be an jerk to my son just because I had a shit sleep.&lt;/p>
+&lt;h2 id="show-resolution-after-a-fight">
+&lt;a class="heading-anchor" href="#show-resolution-after-a-fight">
+##
+&lt;/a>
+Show resolution after a fight
+&lt;/h2>
+&lt;p>If (ha!) you get into a fight with your spouse in front of your kid, try your very best to model good behaviour during and after. It can be very hard to stay respectful during a bad fight, but try. Also try to let your kid see the resolution of the fight – partly so that they can see it is resolved, and partly so that they learn a bit about resolving the fights that they themselves inevitably have and will have.&lt;/p>
+&lt;p>This is so much harder than it sounds.&lt;/p>
+&lt;h2 id="dont-lie">
+&lt;a class="heading-anchor" href="#dont-lie">
+##
+&lt;/a>
+Don’t lie
+&lt;/h2>
+&lt;p>Don’t lie to your kid. Ever. You can certainly omit things, but don’t lie to them. And remind them explicitly that you’ll never lie to them. You want them to believe you as quickly and with as little doubt as possible.&lt;/p>
+&lt;p>(I take this to include not making my son believe in Santa or the Easter Bunny. It’s up to you if you want to follow me that far, but I haven’t regretted it even a little.)&lt;/p>
+&lt;p>Besides being fundamentally respectful, this is also very much about laying the groundwork for your future relationship. Even if there aren’t times right now when you desperately need your child to believe you utterly and implicitly, you can bet your ass there will be important times in the future.&lt;/p>
+&lt;p>Which leads us to…&lt;/p>
+&lt;h2 id="lay-the-groundwork-for-the-teenage-years">
+&lt;a class="heading-anchor" href="#lay-the-groundwork-for-the-teenage-years">
+##
+&lt;/a>
+Lay the groundwork for the teenage years
+&lt;/h2>
+&lt;p>Being a teenager is &lt;em>hard&lt;/em>. It was hard for us and it’ll be hard for our kids. They’ll be faced with risky decisions and bad situations, and the probability of not getting pregnant or dropping out or dying is much, &lt;em>much&lt;/em> better if your kid knows deeply that you are on their side. They need to be able to trust you to love them no matter what, help the best you can, forgive them, not freak out on them, and so on.&lt;/p>
+&lt;p>Honestly, I think this is the big goal that we should be working towards. Doing your best for your kid at 5 is excellent and necessary, but setting your relationship up for success at 15 is the real goal. Luckily, the former serves the latter.&lt;/p>
+&lt;h2 id="think-hard-about-saying-no">
+&lt;a class="heading-anchor" href="#think-hard-about-saying-no">
+##
+&lt;/a>
+Think hard about saying “no”
+&lt;/h2>
+&lt;p>My knee-jerk reaction is – or was? – to say “no” to a lot of stuff. Silly stuff, irresponsible stuff, stuff we don’t have time for. Also, I’m just kind of a dick sometimes. But I don’t like being like that, and I don’t think it’s good for the kid or our relationship.&lt;/p>
+&lt;p>One reason is that you don’t want your child to come to think of you as someone who says “no” all the time. You want them to keep talking to you (see the “teenage years” section) and asking you for and about iffy things. You want them to know that you’re on their side and that you generally want them to have what they want to have. Of course, that doesn’t mean that you can always acquiesce, but you’ll always seriously consider it, give them reasons why not (if you’re still going to say no), and work with them to find some kind of compromise when possible.&lt;/p>
+&lt;p>Another reason is that allowing them the feeling of autonomy is important. Everyone wants to feel like they are the masters of themselves, even very little kids. The feeling of powerlessness can be terrible, cause bad backlash, and carve their brains in ways you don’t want. Saying “no” takes autonomy away from them. Obviously, you can’t let them be autonomous always (they’re dumbasses and won’t survive a day), but you can try hard to give them as much as you can when you can, to balance when you can’t.&lt;/p>
+&lt;p>Another big reason to avoid saying “no” quickly is so that we don’t allow ourselves to be beaten down by our child and then give in. I think it’s much better to say “yes” (or something like it) immediately than it is to teach the child that if they wheedle and cajole us hard enough they’ll get their way. None of us wants to incentivize that kind of shit.&lt;/p>
+&lt;p>Related to this, I think we should try to avoid asking for the child’s opinion when the only answer we intend to accept is compliance. So, don’t say “do you want to go to the library?” (or “how do you feel about going to the library?”) when you intend to make the kid go no matter what. Saying “we’re going to the library” might not be giving the child autonomy, but at least it’s not pretending to give them some and then ripping it away from. That’s much worse, and disrespectful. It’s not really free will if you only have one choice.&lt;/p>
+&lt;h2 id="give-your-parenting-partner-a-break">
+&lt;a class="heading-anchor" href="#give-your-parenting-partner-a-break">
+##
+&lt;/a>
+Give your parenting partner a break
+&lt;/h2>
+&lt;p>This is probably too obvious to mention, but: Parenting is hard and we all get tired. Take your kid away from your spouse sometimes, and pretty often.&lt;/p>
+&lt;p>You don’t need to come up with some heroic activity – it doesn’t need to be long or elaborate. I mean, if it is, great, but it’s more important that you do &lt;em>something&lt;/em>, anything. Make it as easy on yourself as possible, so you don’t burn out while trying to prevent your partner from burning out.&lt;/p>
+&lt;h2 id="dont-get-carried-away-by-your-spouses-emotions">
+&lt;a class="heading-anchor" href="#dont-get-carried-away-by-your-spouses-emotions">
+##
+&lt;/a>
+Don’t get carried away by your spouse’s emotions
+&lt;/h2>
+&lt;p>When my partner gets angry at our son, my gut reaction is usually to lose my shit. I hate seeing her upset. Which is the very wrong response.&lt;/p>
+&lt;p>The emotional onslaught of two parents is too much. Even from one parent it’s really a lot. You need to try to defuse the situation. Help your spouse regain composure. Let your child know that they are still loved and supported.&lt;/p>
+&lt;p>Sometimes this can mean directly opposing your spouse in defense of your kid, in front of your kid. I don’t know if this is great or not, but it usually feels okay and helps to calm things down. Be respectful and gentle to your spouse and the child will learn the right lesson.&lt;/p>
+&lt;h2 id="emotional-satiation">
+&lt;a class="heading-anchor" href="#emotional-satiation">
+##
+&lt;/a>
+Emotional satiation
+&lt;/h2>
+&lt;p>If you kid needs a hug (or other comfort), give it to them until they pull away first. Let them drink as much comfort from you as they need, and give them no sense that you’re pulling away while they need more.&lt;/p>
+&lt;p>This is harder than it sounds, and is sometimes beyond our emotional reserves and time. Remind yourself that it’ll be very rare after about age 6.&lt;/p>
+&lt;h2 id="be-wary-of-your-intoxicated-self">
+&lt;a class="heading-anchor" href="#be-wary-of-your-intoxicated-self">
+##
+&lt;/a>
+Be wary of your intoxicated self
+&lt;/h2>
+&lt;p>I quickly realized that I couldn’t have even one drink until after my son was asleep. When I drink even a little my patience drops like a rock, and that makes even the smallest difficulty bad.&lt;/p>
+&lt;p>It’s not like that for everyone, though. Know thy tipsy self. If, like me, you realize that you just can’t drink at all during the day, make peace with it and know that you won’t need to do it forever.&lt;/p>
+&lt;h2 id="mindfulness-helps">
+&lt;a class="heading-anchor" href="#mindfulness-helps">
+##
+&lt;/a>
+Mindfulness helps
+&lt;/h2>
+&lt;p>Shortly after becoming a parent I started practicing mindfulness meditation. (For related reasons.) I read &lt;a href="https://www.goodreads.com/book/show/18505796-10-happier">&lt;em>10% Happier&lt;/em>&lt;/a> and started using meditation apps (10% Happier, Headspace, Waking Up). And… it has helped me a lot. I’m not going to blab on about it, but I’ll mention a few key things.&lt;/p>
+&lt;p>First, mindfulness meditation focuses strongly on teaching you to be aware of your physical and emotional state. You pay a lot of attention to how various emotions make your body feel (tight in the chest, knot in the stomach, etc.), and you get &lt;em>much&lt;/em> better at recognizing those manifestations of stress, anger, etc. &lt;em>before&lt;/em> they take you over (or not too long after they do). This is incredibly valuable when parenting.&lt;/p>
+&lt;p>Secondly, the act of being mindful helps wonderfully with appreciating the joys of parenthood as they happen. Mindfulness meditation intentionally carves your mind in such a way as to make it easier (or even possible) to fully focus and appreciate the current moment. And when you have a child who is changing all the time – and will never return to the way they are this moment – it’s wonderful to appreciate as many moments as possible. (And, yeah, it helps some with coping with the daily annoying behaviours that it seems they’ll never grow out of.)&lt;/p>
+&lt;p>Thirdly, via mindfulness you come to the Buddhist understanding of “suffering”, which is something like “undue fretting over things that have already passed or may never come to pass”. Focusing on your actual experience, right now, helps reduce the fears that your kid is a psychopath, or will never read, or will forever be wearing diapers to bed.&lt;/p>
+&lt;h2 id="do-your-best-be-compassionate-with-yourself">
+&lt;a class="heading-anchor" href="#do-your-best-be-compassionate-with-yourself">
+##
+&lt;/a>
+Do your best; be compassionate with yourself
+&lt;/h2>
+&lt;p>A lot of the stuff I’ve written here can be &lt;em>very&lt;/em> taxing as a parent. It is utterly impossible to do all of it all the time. As you do it, it will get somewhat easier to do it more of the time – as you carve your brain, and your child’s. But, again, it is not ever going to be possible to do it all the time. And that’s okay.&lt;/p>
+&lt;p>We do our best. We fuck up. We are kind to ourselves and we don’t beat ourselves up. We let go and begin again.&lt;/p>
+&lt;p>❤️&lt;/p></description></item><item><title>More Than a Password</title><link>https://adam-p.ca/blog/2022/10/password-plus-plus/</link><pubDate>Fri, 14 Oct 2022 16:31:07 -0400</pubDate><guid>https://adam-p.ca/blog/2022/10/password-plus-plus/</guid><description>&lt;p>Here’s a quick-and-dirty explanation of why two-factor authentication is good, and why U2F/WebAuthn keys (like YubiKeys) are better than the alternatives. (So I have something to point friends and family at.)&lt;/p>
 &lt;p>Note that when I use the word “attacker”, I don’t necessarily mean someone that’s specifically out to get you. In fact, it’s usually someone trying to crack thousands of accounts at once. This isn’t about you being special or not special. You have an identity and some amount of money, so you’re a target.&lt;/p>
 &lt;p>(I use the word “attacker” out of habit – it’s what we use in software/security engineering.)&lt;/p>
 &lt;h2 id="why-memorized-passwords-by-themselves-are-super-bad">
@@ -1736,7 +1893,140 @@ Final words
 &lt;p>Hashed using something appropriate, like argon2, scrypt, or bcrypt. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/div></description></item><item><title>Make sure you have a backup Yubikey</title><link>https://adam-p.ca/blog/2021/06/backup-yubikey/</link><pubDate>Fri, 25 Jun 2021 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2021/06/backup-yubikey/</guid><description>&lt;p>For four years I carried a &lt;a href="https://support.yubico.com/hc/en-us/articles/360013714579-YubiKey-NEO">Yubikey NEO&lt;/a> (USB Type-A) in my pocket, on my keychain. And then it died (would no longer be recognized by any computer).&lt;/p>
+&lt;/div></description></item><item><title>My Baby Advice for Fathers</title><link>https://adam-p.ca/unpub/2021/07/baby-advice/</link><pubDate>Wed, 14 Jul 2021 00:00:00 +0000</pubDate><guid>https://adam-p.ca/unpub/2021/07/baby-advice/</guid><description>&lt;p>There’s a ton of “what to expect when you’re expecting” stuff out there that I have no intention of repeating. I found there was a lot of stuff I wasn’t prepared for – mentally or logistically – that I want to call out here.&lt;/p>
+&lt;p>A lot of what I’m going to say is negative. I feel like the negative experience for (some) fathers isn’t discussed very much and that that’s a major disservice to us – and a dangerous one, frankly.&lt;/p>
+&lt;p>(I’ll be saying “he” a fair bit, since my only child is a boy.)&lt;/p>
+&lt;h2 id="the-most-important-thing-i-have-to-tell-you">
+&lt;a class="heading-anchor" href="#the-most-important-thing-i-have-to-tell-you">
+##
+&lt;/a>
+The most important thing I have to tell you
+&lt;/h2>
+&lt;p>…that probably – and hopefully – won’t affect you.&lt;/p>
+&lt;p>Paternal post-partum depression is a thing. It affects 10%-25% of fathers, and it doesn’t get talked about very much. It can start a month or two before birth, or can start after. It’s fucking horrible.&lt;/p>
+&lt;p>If you find yourself sinking into a pit of despair and regret, seek outside help. Your partner is (probably) going to be the absolute worst person to seek help from – she’s going to be high on birth hormones and think that everything is wonderful. If you tell her that you wish a meteor would hit the city to erase everything, she’s going to call you a monster and you’ll feel worse.&lt;/p>
+&lt;p>I’m not saying you need to pre-arrange a shrink, but you do need to:&lt;/p>
+&lt;p>&lt;strong>Monitor yourself for signs of depression&lt;/strong>. This will be harder than it sounds, because you’ll be sleep-deprived and harried a lot of time. It’ll be difficult to accurately gauge your own state. But try to check in with yourself periodically and see if you’ve been feeling real dark and regretful.&lt;/p>
+&lt;p>&lt;strong>Figure out who you will talk to if you need it&lt;/strong>. The ideal person to talk to is probably a mental health professional, but it might not need to be, depending on how bad your depression is†. The person needs to be someone who won’t be emotionally tied up in (or in love with) your new baby. They need to be able to listen and not judge. They’ll need to remind you that what you’re feeling is normal (or not abnormal – see above percentages) and that what you’re in now is a phase and will pass. It’s hard to believe that a year (let’s say) isn’t a long time, but you will get out the other side.&lt;/p>
+&lt;p>But before this freaks you out too much, remember that it &lt;em>doesn’t happen to most people&lt;/em>. It’s just that the probability is high enough that it’s worth being aware of and making some amount of (mental) preparation for.&lt;/p>
+&lt;small>
+†: Disclaimer: You should always consult a professional and not listen to amateur hacks -- like me -- who suggest otherwise.
+&lt;/small>
+&lt;h2 id="t-8-months">
+&lt;a class="heading-anchor" href="#t-8-months">
+##
+&lt;/a>
+T-8 months
+&lt;/h2>
+&lt;p>We think that going with a midwife plus a hospital birth is better than obstetrician+hospital or midwife+home birth. You get much more personal care, but the full medical establishment is available if you need it.&lt;/p>
+&lt;p>When you have an obstetrician, you only see them during their shift at the hospital. Nurses also flit in and out, changing shifts. So there’s very little sense of continuity, and that’s not a great feeling when you’re teetering on the edge of panic after hour 12.&lt;/p>
+&lt;p>With midwives, you’ll meet the two or three who will be your team at your appointments. As you get into labour at home, they will come to your house to check you out. They’ll be around a fair bit at the hospital as well. &lt;em>And&lt;/em> they’ll visit you at home afterwards. (And they’re covered by OHIP.)&lt;/p>
+&lt;p>I also recommend hiring a doula. I’ll say right now that they’re not cheap – around $1000. They’ll visit you at home before and after and do some training, but they’re basically experienced delivery room support. They’ll stay there as long as you do, and can fetch you food or water or take over for you for a while to help your partner push. They’ll also take photos for you, which I kind of recommend. Erin doesn’t think it was worth it, but I think the doula is a bigger help to the father than the mother.&lt;/p>
+&lt;p>Sign up for a prenatal course. Your midwife clinic might offer one.&lt;/p>
+&lt;h2 id="t-6-months">
+&lt;a class="heading-anchor" href="#t-6-months">
+##
+&lt;/a>
+T-6 months
+&lt;/h2>
+&lt;p>Everyone has an opinion about names and most of those opinions will conflict with yours. You probably spent a long time agonizing over the name choice, so it’ll piss you off to have people denigrate it. Even worse, it might make you start second-guessing the choice.&lt;/p>
+&lt;p>So don’t tell anyone what name you’ve chosen. Pick one that you and your partner are satisfied with, and then let everyone cope when you announce it after the birth. (And try your best to ignore the post facto criticisms as well.)&lt;/p>
+&lt;p>Figure out what daycares you’re interested in and get on their waiting lists. Maybe you’ll get in super early and you won’t understand why I’m saying this, or maybe this isn’t even early enough.&lt;/p>
+&lt;p>Start meditating. Get a mindfulness meditation app like Headspace or 10% Happier and do it every day. It gives (or helps with) a lot of super powers that you’re going to need and want:&lt;/p>
+&lt;ul>
+&lt;li>Self-awareness. Knowing what state you’re in because more difficult and more important.&lt;/li>
+&lt;li>Reduced anxiety and depression. (&lt;a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3500142/">Probably&lt;/a>. The research is still in its infancy.)&lt;/li>
+&lt;li>Appreciation of the current moment. This might not sound like much, but it’s gold.&lt;/li>
+&lt;li>Calming down quickly from being angry. This sort of falls out of “self-awareness”, but it’s incredibly important as your kid gets older and more infuriating. Also good for your spousal relationship.&lt;/li>
+&lt;li>Compassion. (Eventually you’ll get to metta meditation, which teaches exactly this.)&lt;/li>
+&lt;li>Generally better mental and emotional resiliency.&lt;/li>
+&lt;/ul>
+&lt;h2 id="t-4-months">
+&lt;a class="heading-anchor" href="#t-4-months">
+##
+&lt;/a>
+T-4 months
+&lt;/h2>
+&lt;p>Join some Facebook parenting groups. They’re surprisingly good and useful.&lt;/p>
+&lt;p>Here’s the &lt;a href="https://www.facebook.com/groups/etyoungfathers">East Toronto Young Fathers group&lt;/a>. Feel free to post questions, requests, or just vent. Everyone is pretty chill and helpful.&lt;/p>
+&lt;p>And the equivalent &lt;a href="https://www.facebook.com/groups/276266972460921">mothers group&lt;/a>. &lt;em>However&lt;/em>, tell your partner stay out of the politics. It gets incredibly bad. The utility is well worth it, though (I’m told). It’ll give links to other buy/sell/trade groups which are also great.&lt;/p>
+&lt;p>Get an Audible subscription, so you can build up some credits. And/or get acquainted with the Libby app, and put some holds on a bunch of books (you can defer checking them out if they become available before you need them). You’re probably going to spend a lot of time pushing a stroller for hours so the kid can sleep. And doing other boring stuff that doesn’t allow you to have free hands, but does allow you to listen to something. Podcasts are okay too, but nothing too heavy – you won’t be in the mood.&lt;/p>
+&lt;p>And get headphones to listen to them on.&lt;/p>
+&lt;p>Get earplugs. I like &lt;a href="https://www.amazon.ca/dp/B000RMFGGY/">these ones&lt;/a>. And a sleep eye mask. I like &lt;a href="https://www.amazon.ca/dp/B000WNX21Y/">this one&lt;/a>.&lt;/p>
+&lt;h2 id="t-3-months">
+&lt;a class="heading-anchor" href="#t-3-months">
+##
+&lt;/a>
+T-3 months
+&lt;/h2>
+&lt;p>Get your partner to start researching postnatal physiotherapy. Whole important swathes of her body (like her pelvic floor) are probably going to be in bad shape after delivery. Maybe this isn’t so important for caesarean births? I don’t know.&lt;/p>
+&lt;p>Start dropping hints to everyone who idly offers assistance that they should bring you food after the baby is born. And only food. You will never want to cook and will always be hungry.&lt;/p>
+&lt;p>Order a bunch of Soylent. Seriously. Sometimes you just need some reasonably healthy calories to keep you alive and going. (Don’t order too much of the chocolate, so you’re less tempted to drink more than you need just because it’s sweet and delicious. Also be careful about overdoing the caffeinated ones.)&lt;/p>
+&lt;p>Get familiar with ordering groceries for delivery. Find some not-super-unhealthy, not-super-challenging delivery restaurants.&lt;/p>
+&lt;p>Make sure you have infant disposable diapers at home. Even if you’re going with a cloth diaper (service) later, you’re going to want fast-and-easy to start with.&lt;/p>
+&lt;p>If you’re a light sleeper, consider getting an inflatable bed or something to set up in the basement.&lt;/p>
+&lt;h2 id="t-2-months">
+&lt;a class="heading-anchor" href="#t-2-months">
+##
+&lt;/a>
+T-2 months
+&lt;/h2>
+&lt;p>Think about T-2 months as T-1, because you might get an early surprise. Don’t leave delivery-room prep to the last minute.&lt;/p>
+&lt;p>In your oh-shit-labor-time go-bag, pack some pre-mixed formula. The staff Michael Garron hospital are zealously against formula, and other places might be as well. (Which seems to be a pendulum-too-far-the-other-way response to previous formula-pushing, and is misguided.) But when your partner is anemic from birth-bleeding and can’t get the milk going and the kid is losing weight and the nurses are basically threatening to keep you there forever until the milk flows… you’ll want the goddamn formula.&lt;/p>
+&lt;p>Prearrange with some trusted people to be on speed-dial for bringing stuff to you in the hospital. Grandparents are okay, but not ideal – they can get emotional and irrational and become their own kind of problem for you.&lt;/p>
+&lt;p>Pack a notebook, and consider installing a voice recorder on your phone. You’re going to need to record events and their times post-recovery and it’s likely your brain will be absolute garbage and not be able to remember anything. Nurses can be weirdly terrible about recording things on the chart or checking the chart or something. Like, “When did you take your last iron pill?”… “Why are you asking me? Didn’t someone write it down? I don’t even know what day it is!” Plus feedings and everything else.&lt;/p>
+&lt;p>Seriously, you might not have slept in 24+ hours and just gone through the most stressful time of your life. Things that you normally rely on your brain for should be supplemented where possible.&lt;/p>
+&lt;p>Install your car seat now. If you don’t have a car (like us, at the time), practice installing and uninstalling it in someone else’s car. When you need to rush to the hospital or when you need to bring baby home are not the times to be struggling with it.&lt;/p>
+&lt;p>Arrange more than 2 weeks leave. I don’t know how much, since I only took 2, but it wasn’t enough. And don’t tell work that you’ll be “available”. Treat it as if you’re going away with just a cell phone and mediocre wi-fi. Prepare accordingly.&lt;/p>
+&lt;h2 id="t-0-delivery">
+&lt;a class="heading-anchor" href="#t-0-delivery">
+##
+&lt;/a>
+T-0: delivery
+&lt;/h2>
+&lt;p>The range of possible experiences is absolutely huge, and you can read about them anywhere, so I’m not going to try to “prepare” you. Power through.&lt;/p>
+&lt;p>Your kid will come out ugly. They all do. No one else in the room will seem to notice, but they’re either tired and high on mothering hormones or they’ve seen a million ugly babies and are too polite to mention it. Later on you’ll both look back at newborn pictures and say “man, that kid was ugly”. Don’t worry: how they look when they first get squeezed out has nothing to do with how they’ll look later.&lt;/p>
+&lt;p>In that moment you might find yourself… not overjoyed. You’re deadly tired and your wife is bleeding too much and you have your shirt off holding your ugly kid watching the doctors patch her up (hopefully). And you realize that you don’t instantly feel anything for the lump of now-well-differentiated cells in your arms. You just want your wife to be okay and you want to sleep, and you don’t particularly care about this baby thing anymore. This is to be expected. Again, you don’t have the same hormones that the mother has and you’re in physical and mental collapse. Play the role you need to in that moment and you will get through it.&lt;/p>
+&lt;h2 id="t2-days-back-at-home">
+&lt;a class="heading-anchor" href="#t2-days-back-at-home">
+##
+&lt;/a>
+T+2 days: back at home
+&lt;/h2>
+&lt;p>Hang a &lt;a href="https://medtegrity.us/blog/history-of-baby-blankets/">baby blanket&lt;/a> or a diaper in your window or on your front porch. This is a somewhat-recognized signal that you’re home. Maybe people will start bringing you food.&lt;/p>
+&lt;p>Having (useful) friends or (useful) relatives around can be good at this point. Your partner will need help with a million things. And since she has to feed every three hours, she’ll need help &lt;em>day and night&lt;/em>. If someone other than you can handle some of that, great.&lt;/p>
+&lt;p>But beware of friends or family who are going to sit on your couch and expect tea and biscuits and a lovely chat. They can fuck off for a few months.&lt;/p>
+&lt;p>Get sleep whenever you can, for as long as you can. If someone is around to help your partner, put in earplugs and sleep in the basement, any change you get, any time of the day. You’re probably starting out sleep-deprived and it’ll get worse.&lt;/p>
+&lt;p>At some point you will stop feeling so tired-shitty. It’s important to remember that this is just a feeling and that you’re still sleep-deprived – your cognitive and physical function is no less impaired. (There is research demonstrating this.) You haven’t evolved beyond sleep. You still need it. You need it more than anything.&lt;/p>
+&lt;p>Start doing laundry pretty immediately. Your partner probably doesn’t have multiple days worth of what she needs. You’re going to be doing laundry every day. That’s fine – it’ll be the easiest job you have.&lt;/p>
+&lt;h2 id="t2-weeks----1-year">
+&lt;a class="heading-anchor" href="#t2-weeks----1-year">
+##
+&lt;/a>
+T+2 weeks –> 1 year
+&lt;/h2>
+&lt;p>I have talked to some fathers who just instantly love being a parent. They immediately know that it’s the best thing they’ve ever done, they love their kid and their role and their new lifestyle and everything. Maybe that’ll be you, too!&lt;/p>
+&lt;p>Or maybe not.&lt;/p>
+&lt;p>Maybe you feel (and by “feel” I mean “realize the actuality”) that your baby is a barely human lump. That you love your cats more than the baby. That you’ve never been so interminably bored in your whole life (once the hectic phase is over). That you deeply mourn the hobbies you used to enjoy and might not get back for &lt;em>years&lt;/em>.&lt;/p>
+&lt;p>Maybe that counts as “postpartum depression”, but it also seems like a fairly rational response to the whole thing. Either way, it’s hard to get through.&lt;/p>
+&lt;p>One important tip that I (thankfully) read somewhere was to fake-it-till-you-make-it love for your child. Say the words, go through the motions of affection. Maybe it won’t look or feel entirely natural, but: a) it’s better than nothing, and, most importantly, b) it will lead you to feel it properly. It will also serve you very well for years to come, when you’re super angry with your kid, but you know that showing love and support is the right move.&lt;/p>
+&lt;p>It might take a long time before you fully care about your child. For me it was probably 10 months before he felt like an actual human, with a personality, who could be interacted with something other than boredom.&lt;/p>
+&lt;p>That’s a long time!&lt;/p>
+&lt;p>But the time will pass. Eventually a day will come that you realize you legitimately love the kid, and that you’re happy to see him, and to interact with him (up to a point – your kid’s capacity for dumb, boring crap will be higher than yours for a long, long time). And that you’d rescue him before the cat if the house was on fire.&lt;/p>
+&lt;h2 id="t1-year----">
+&lt;a class="heading-anchor" href="#t1-year----">
+##
+&lt;/a>
+T+1 year –> ∞
+&lt;/h2>
+&lt;p>One thing that’s always hard to keep in mind is how undeveloped your kid’s brain is. At his best moments, he’ll seem intelligent and mature and self-possessed, but: &lt;em>you can’t demand his best behaviour to be the norm&lt;/em>. You may wish it, but you can’t expect it, and you certainly can’t enforce it.&lt;/p>
+&lt;p>The brain’s prefrontal cortex is the seat of self-control and executive function. It doesn’t fully develop until you’re &lt;a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2892678/">&lt;em>in your 20s&lt;/em>&lt;/a>. You can count your kid’s prefrontal neurons on one hand (whatever, science). You just &lt;em>cannot&lt;/em> expect them to behave rationally most of the time.&lt;/p>
+&lt;p>You know how sometimes you’re tired and in a bad mood and you snap at people, especially your partner? Now imagine you had way, way less brain-matter to help you keep that shit in check most of the time. Imagine it didn’t require “tired and bad mood” to make you snappy and shitty. Imagine didn’t just snap at your spouse (with whom you naturally let your guard down), but did around everyone. This is what it’s like to be a kid! Plus, they don’t know how the world works! Plus, they have very little autonomy and it grates them! Plus, they’re tired and hungry a lot!&lt;/p>
+&lt;p>Being a little kid is super hard. When you see them behaving really well, try to only interpret it as a wonderful blip – maybe as a preview of the future. The rest of the time, try to be really patient and loving even when they’re being absolutely shitty.&lt;/p>
+&lt;p>When I look back on pictures of my son at age 3 (say), I can have trouble understanding how I could have expected so much and gotten so angry. He’s so little! But I did. In the moment you don’t have that hindsight. Try your best.&lt;/p>
+&lt;p>A couple books I recommend are &lt;a href="https://www.goodreads.com/book/show/111209.Unconditional_Parenting">&lt;em>Unconditional Parenting&lt;/em>&lt;/a> by Alfie Kohn and, if you have a boy, &lt;a href="https://www.goodreads.com/book/show/1227371.It_s_a_Boy_Understanding_Your_Son_s_Development_from_Birth_to_Age_18">&lt;em>It’s a Boy! Understanding Your Son’s Development from Birth to Age 18&lt;/em>&lt;/a> by Michael Thompson. I would say they’re basically essential reading to get some outside direction in compassion and understanding. There’s a lot of good stuff in those books that relieves me of having to write it here.&lt;/p>
+&lt;p>Consider Montessori schools. Most/many start at about age 3 (“casa”, they call it at that age), and they can be &lt;em>very&lt;/em> hard to get into later, so start applying. I’m finding the public school system to be basically garbage, and I wish we had gone that route (or gone that route earlier – every year I call to stay on a waiting list, and still nothing). Who knows if it would actually make a difference, though.&lt;/p>
+&lt;p>Last thing, maybe: Remember that (almost) everything is a phase. Just because your kid is hitting and kicking a lot (or whatever) – for months! – doesn’t mean that he’s a psychopath or otherwise permanently broken. Try to be patient and loving. Your child will grow up and get through each phase and the only lasting harm that can be done is by &lt;em>you&lt;/em> and your reaction to it. And then the next shitty phase will come along. (This is also true for nice phases, sadly.)&lt;/p></description></item><item><title>Make sure you have a backup Yubikey</title><link>https://adam-p.ca/blog/2021/06/backup-yubikey/</link><pubDate>Fri, 25 Jun 2021 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2021/06/backup-yubikey/</guid><description>&lt;p>For four years I carried a &lt;a href="https://support.yubico.com/hc/en-us/articles/360013714579-YubiKey-NEO">Yubikey NEO&lt;/a> (USB Type-A) in my pocket, on my keychain. And then it died (would no longer be recognized by any computer).&lt;/p>
 &lt;p>&lt;a href="https://web.archive.org/web/20170212170854/https://www.yubico.com/products/yubikey-hardware/yubikey-neo">Yubikey’s durability claim&lt;/a> was:&lt;/p>
 &lt;blockquote>
 &lt;p>Crush-resistant and waterproof, YubiKey NEO is practically indestructible during normal use, weighs only 3g, and attaches to your keychain alongside your house and car keys&lt;/p>
