@@ -154,7 +154,9 @@ First, mindfulness meditation focuses strongly on teaching you to be aware of yo
 
 Secondly, the act of being mindful helps wonderfully with appreciating the joys of parenthood as they happen. Mindfulness meditation intentionally carves your mind in such a way as to make it easier (or even possible) to fully focus and appreciate the current moment. And when you have a child who is changing all the time -- and will never return to the way they are this moment -- it's wonderful to appreciate as many moments as possible. (And, yeah, it helps some with coping with the daily annoying behaviours that it seems they'll never grow out of.)
 
-Thirdly, via mindfulness you come to the Buddhist understanding of "suffering", which is something like "undue fretting over things that have already passed or may never come to pass". Focusing on your actual experience, right now, helps reduce the fears that your kid is a psychopath, or will never read, or will forever be wearing diapers to bed.
+Thirdly, via mindfulness you come to the Buddhist understanding of "suffering", which is something like "undue fretting over things that have already passed or may never come to pass"[^^]. Focusing on your actual experience, right now, helps reduce the fears that your kid is a psychopath, or will never read, or will forever be wearing diapers to bed.
+
+[^^]: I don't know shit about shit, so take that Buddhism lesson with a big grain of salt. I am avoiding the word "skilful".
 
 ## Do your best; be compassionate with yourself
 
