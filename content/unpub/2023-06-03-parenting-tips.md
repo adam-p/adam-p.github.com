@@ -20,7 +20,7 @@ Much of this stuff is based on books or articles I have read along the way. I'm 
 
 This is a pretty abstract "tip", but it's going up top because it applies to so many of the tips below. Even if a particular repeated parental behaviour is ostensibly about guiding or providing something to the child, it will still result in carving paths in your own brain. And often this is part of the point.
 
-A concrete example: My first year or so of being a father was very hard for me. I didn't know that paternal post-partum depression was a thing (affecting 10-25% of fathers!), but I'm quite sure I suffered from it (I wrote a bit more [here](https://github.com/adam-p/adam-p.github.com/blob/master/content/blog/2021-07-14-baby-advice.md#the-most-important-thing-i-have-to-tell-you)). During that time I read some advice about "fake it till you make it" and I decided to take that to heart. One way I did that was to say "You're my special little guy and I love you" to my son often -- at every nap time, at least. It felt false (I was in a bad place), but I wanted it to be true. I tried to say it as convincingly as possible (I also wanted him to believe it), I said it regularly, and I said it repeatedly. And eventually it became the most true thing I've ever uttered.
+A concrete example: My first year or so of being a father was very hard for me. I didn't know that paternal post-partum depression was a thing (affecting 10-25% of fathers!), but I'm quite sure I suffered from it (I wrote a bit more [here](/unpub/2021/07/baby-advice/#the-most-important-thing-i-have-to-tell-you)). During that time I read some advice about "fake it till you make it" and I decided to take that to heart. One way I did that was to say "You're my special little guy and I love you" to my son often -- at every nap time, at least. It felt false (I was in a bad place), but I wanted it to be true. I tried to say it as convincingly as possible (I also wanted him to believe it), I said it regularly, and I said it repeatedly. And eventually it became the most true thing I've ever uttered.
 
 Yes, this is some N=1 sample size bullshit. Maybe I was already on the way out of the depression and this did literally nothing. I believe that it helped.
 
@@ -162,6 +162,6 @@ Thirdly, via mindfulness you come to the Buddhist understanding of "suffering", 
 
 A lot of the stuff I've written here can be _very_ taxing as a parent. It is utterly impossible to do all of it all the time. As you do it, it will get somewhat easier to do it more of the time -- as you carve your brain, and your child's. But, again, it is not ever going to be possible to do it all the time. And that's okay.
 
-We do our best. We fuck up. We are kind to ourselves and we don't beat ourselves up. We let go and begin again.
+We do our best. We fuck up. We are kind to ourselves and we don't beat ourselves up too much. We let go and begin again.
 
 ❤️
