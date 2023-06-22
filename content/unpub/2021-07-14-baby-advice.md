@@ -81,19 +81,19 @@ Get your partner to start researching postnatal physiotherapy. Whole important s
 
 Start dropping hints to everyone who idly offers assistance that they should bring you food after the baby is born. And only food. You will never want to cook and will always be hungry.
 
-Order a bunch of Soylent. Seriously. Sometimes you just need some reasonably healthy calories to keep you alive and going. (Don't order too much of the chocolate, so you're less tempted to drink more than you need just because it's sweet and delicious. Also be careful about overdoing the caffeinated ones.)
+Order a bunch of Soylent. Seriously. Sometimes you just need some reasonably healthy calories to keep you alive and going. (Don't order too much of the chocolate, so you're less tempted to drink more than you need just because it's sweet and delicious. Also be careful about overdoing the caffeinated ones.) [Edit: Start with buying a small amount of Soylent. Some people don't seem to get along with it. If you live near me, I'll give you a couple bottles to try.]
 
 Get familiar with ordering groceries for delivery. Find some not-super-unhealthy, not-super-challenging delivery restaurants.
 
 Make sure you have infant disposable diapers at home. Even if you're going with a cloth diaper (service) later, you're going to want fast-and-easy to start with.
 
-If you're a light sleeper, consider getting an inflatable bed or something to set up in the basement.
+If you're a light sleeper, consider getting an inflatable bed or something to set up in the basement. If you're not on baby duty, you need get decent rest.
 
 ## T-2 months
 
 Think about T-2 months as T-1, because you might get an early surprise. Don't leave delivery-room prep to the last minute.
 
-In your oh-shit-labor-time go-bag, pack some pre-mixed formula. The staff Michael Garron hospital are zealously against formula, and other places might be as well. (Which seems to be a pendulum-too-far-the-other-way response to previous formula-pushing, and is misguided.) But when your partner is anemic from birth-bleeding and can't get the milk going and the kid is losing weight and the nurses are basically threatening to keep you there forever until the milk flows... you'll want the goddamn formula.
+In your oh-shit-labor-time go-bag, pack some pre-mixed formula. The staff Michael Garron Hospital (in 2014) are zealously against formula, and other places might be as well. (Which seems to be a pendulum-too-far-the-other-way response to previous formula-pushing, and is misguided.) But when your partner is anemic from birth-bleeding and can't get the milk going and the kid is losing weight and the nurses are basically threatening to keep you there forever until the milk flows... you'll want the goddamn formula.
 
 Prearrange with some trusted people to be on speed-dial for bringing stuff to you in the hospital. Grandparents are okay, but not ideal -- they can get emotional and irrational and become their own kind of problem for you.
 
