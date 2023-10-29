@@ -65,3 +65,5 @@ https://news.ycombinator.com/item?id=29850665
 https://arstechnica.com/gadgets/2022/01/google-tells-free-g-suite-users-pay-up-or-lose-your-account/
 
 Goodreads social login
+
+"I got hacked and Facebook banned me" - https://news.ycombinator.com/item?id=31577325

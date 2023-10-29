@@ -136,7 +136,7 @@ Sometimes this can mean directly opposing your spouse in defense of your kid, in
 
 ## Emotional satiation
 
-If you kid needs a hug (or other comfort), give it to them until they pull away first. Let them drink as much comfort from you as they need, and give them no sense that you're pulling away while they need more.
+If your kid needs a hug (or other comfort), give it to them until they pull away first. Let them drink as much comfort from you as they need, and give them no sense that you're pulling away while they need more.
 
 This is harder than it sounds, and is sometimes beyond our emotional reserves and time. Remind yourself that it'll be very rare after about age 6.
 
@@ -145,6 +145,85 @@ This is harder than it sounds, and is sometimes beyond our emotional reserves an
 I quickly realized that I couldn't have even one drink until after my son was asleep. When I drink even a little my patience drops like a rock, and that makes even the smallest difficulty bad.
 
 It's not like that for everyone, though. Know thy tipsy self. If, like me, you realize that you just can't drink at all during the day, make peace with it and know that you won't need to do it forever.
+
+## Pay attention to your tone; keep it neutral
+
+It's very easy to convey more than you mean to in your tone of voice and even facial expressions. Even if what might be conveyed is still "true", it's often not the message that you actually want to send.
+
+The obvious case for this is when you're providing negative feedback -- when your kid did something wrong and you're telling them so. What you _want_ to do is have them understand that what they did was undesirable, why, how they should improve in the future, and maybe how they should make amends now. What you _don't want_ to convey is anything like this:
+
+* You're hurt
+* You're whining
+* Your happiness is dependent on their better behaviour
+* You're flying off the handle
+* Or anything that generally indicates that your love has been partially withdrawn
+
+Those kinds of things freak kids right out, make it hard for them to take a positive lesson from what just happened, and over time can make them hesitant to come to you for emotional safety.
+
+But it's really hard to not convey that extra information! We do it all the time! And we're also often in a state where independent shitty factors -- being tired, frustration with work, etc. -- amplify and exacerbate everything. No matter how much you really do love your child, you're going to have a really hard time communicating that in bad moments.
+
+The less obvious times when tone neutrality is important is when giving _positive_ feedback. There's a risk that you overdo it and your kid starts behaving just to get that effusive praise reward from you. Now the reward is [problematically extrinsic](https://www.jstor.org/stable/1128110).
+
+I recommend the _Hidden Brain_ [podcast episode](https://www.npr.org/2020/02/03/802422904/when-things-click-the-power-of-judgment-free-learning) about clicker training for dogs, dolphins, and... humans. I didn't actually do it with my son, but I sure thought about it.
+
+So, try to make a habit of paying attention to what your secondary communication channels -- tone of voice, facial expressions, body posture -- are communicating, and how strong that communication is. Think about how it might be making your child feel and how they'll respond to it. Think about what sort of patterns might be getting established by repeated exposure to it.
+
+And consider keeping your tone generally more moderate. Avoid sending your child on an emotional rollercoaster.
+
+## Never make your child responsible for your emotions
+
+(This is somewhat related to the previous point, but deserves calling out separately.)
+
+Your child cannot handle the responsibility for your happiness; do not put it upon them. You're their parent -- their emotional foundation, their bedrock, their safety. Additionally, they need to be allowed to be little and silly and tempestuous, and to grow up naturally, as they are neurologically and endocrinologically able to. Putting the weight of your happiness on them screws up both of those things.
+
+Sometimes you might reverse this responsibility implicitly -- tone of voice, etc. Sometimes you'll do it explicitly -- "you're scaring me", "you're making me sad", etc.
+
+Be aware and beware of this power and responsibility reversal.
+
+## Do the opposite of being angry
+
+Your child is fooling around and knocks over a plant. You are, quite reasonably, some combination of displeased, disappointed, and angry. That suggests some obvious negative responses.
+
+_But_. Your child knows they've done something wrong. They're probably also upset. Yelling at them will achieve nothing positive. Saying, "Be more careful next time!" communicates and teaches nothing useful (I say that all the time, and it is _garbage_). Your child is already in a state of emotional distress -- piling more on top will only ensure that they are lost in a haze of fear and shame and sadness, beyond the possibility of taking away any possible positive lesson.
+
+So, your knee-jerk negative responses aren't great. Then what?
+
+Give them a hug. Say nothing for a bit. Hug until you feel your anger start to bleed away, which will also be around when they start to calm down. If there's something constructive to say, you'll think of it and be able to say it then. You'll be able to say it in a voice that can be heard, and they will have the ability to hear it.
+
+If you can't think of any words of wisdom or guidance that aren't just "be more careful next time", then that's okay -- they have already learned something about the physics of mayhem. Just say "let's clean this up together".
+
+You just turned a potentially really bad thing into a bunch of good things:
+
+* Your child trusts you to be calm and loving and helpful when things are tough. They won't feel the need to hide such things for you. (Refer to the section on planning for teenagerhood.)
+* Your child did not have their brain bathed in stress hormones for an extended period. (Which, if it happens regularly, can have longer-term effects.)
+* You didn't have your brain bathed in stress hormones for an extended period.
+* You don't have to lay in bed awake because you know you fucked up and were pointlessly shitty to your little kid whom you love more than anything.
+
+It's so hard to do this, but so satisfying. You feel the rage coming on, you keep your mouth shut and hug.
+
+## Hold but don't grasp
+
+Have your hand that's on the side where your child is walking available for holding. Switch your bag to the other hand. When they decide to take your hand, be thankful and mindful, but don't comment on it. Hold their hand as tightly or as loosely as they hold yours. When they decide to release your hand, let them go. Be thankful for the time you had holding it, but don't comment on it (do _not_ manipulate them into holding more or longer). Continue to keep your hand available long after they need to take it, feeling the loss but being pleased that your child is strong and independent.
+
+Generalize and metaphorize.
+
+## Give credit when it's due
+
+It's easy for little achievements -- chores completed, thoughtful acts, good behaviour, effort on little tasks that aren't inherently fun -- to go unremarked upon. Especially when they're more frequent, they'll just slip by.
+
+I think it's important, at least every now and then, to let your child know that you see the effort they're making and that you appreciate it. As argued above, I think the tone of the praise should be neutral, and nothing about it needs to be overly effusive -- just an acknowledgement. Like, "I know that dinner last night with a bunch of adults you don't know must have been pretty boring, but I saw that you stayed patient and polite and I appreciate it." Or, "I noticed that this morning you opened your blinds and turned off your light and I appreciate it."
+
+These are little things that are -- or will become -- just "expected" behaviours, but never forget that your child has a weensy little prefrontal cortex and anything without flashing lights requires a bunch of effort. You don't need to give this kind of praise all the time, but take reasonable opportunities.
+
+Do this with your spouse as well. We all like our daily little efforts to be appreciated and acknowledged. It communicates love as strongly as anything else.
+
+## Be mealy-mouthed, get ignored
+
+Kids don't hear sentences that begin with "I think" or "I don't think". If you say "I think it's time to go", your child immediately discards it and continues to play unabated. And, really, who can blame them? What does it even mean? It sounds like some kind of indeterminate interior rumination. It's barely actionable for yourself, and certainly not for another person. And _definitely_ not for a zero-self-control little kid who just wants to play.
+
+Kids also don't know what "minutes" are. They know it has something to do with time and is less than a day, but that's it. If you say "we're leaving in 5 minutes", it will mean nothing to your child and they will ignore you. (Hell, even as an adult, "we're leaving in 5 minutes" means only something like "we're leaving in less than an hour, probably".)
+
+So how are we supposed to make "transitions" smoother for our fragile little babies if "I think" and "minutes" are pointless? Well: A) I don't know, good luck; and B) try to use fixed counts of activities, like "5 more times down the slide and then we leave", and then count down. It's still not going to work great (and they'll cheat like crazy), but at least it's an objective measure.
 
 ## Mindfulness helps
 
