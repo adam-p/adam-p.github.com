@@ -146,7 +146,7 @@ I quickly realized that I couldn't have even one drink until after my son was as
 
 It's not like that for everyone, though. Know thy tipsy self. If, like me, you realize that you just can't drink at all during the day, make peace with it and know that you won't need to do it forever.
 
-## Pay attention to your tone; keep it neutral
+## Pay attention to your tone; aim for neutrality
 
 It's very easy to convey more than you mean to in your tone of voice and even facial expressions. Even if what might be conveyed is still "true", it's often not the message that you actually want to send.
 
@@ -172,9 +172,9 @@ And consider keeping your tone generally more moderate. Avoid sending your child
 
 ## Never make your child responsible for your emotions
 
-(This is somewhat related to the previous point, but deserves calling out separately.)
+(This point ties into the previous one but deserves its own spotlight.)
 
-Your child cannot handle the responsibility for your happiness; do not put it upon them. You're their parent -- their emotional foundation, their bedrock, their safety. Additionally, they need to be allowed to be little and silly and tempestuous, and to grow up naturally, as they are neurologically and endocrinologically able to. Putting the weight of your happiness on them screws up both of those things.
+Your child cannot handle the responsibility for your happiness; do not put it upon them. You're their parent -- their emotional foundation, their bedrock, their safety. Additionally, they need to be allowed to be little and silly and tempestuous, and to grow up naturally, as they are neurologically and endocrinologically able to. Putting the weight of your happiness on them compromises both of those things.
 
 Sometimes you might reverse this responsibility implicitly -- tone of voice, etc. Sometimes you'll do it explicitly -- "you're scaring me", "you're making me sad", etc.
 
