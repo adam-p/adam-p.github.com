@@ -1,7 +1,7 @@
 ---
 title: "Bug story: Sorting by timestamp"
 date: 2023-12-23T10:22:41-05:00
-draft: true
+draft: false
 tags: []
 slug: sort-by-timestamp
 ---
