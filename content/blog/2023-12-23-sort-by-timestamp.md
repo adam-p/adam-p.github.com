@@ -40,7 +40,9 @@ This approach would be fine if these properties were true (per user):
 
 When writing the code I unthinkingly took those to be the case. But when I took the time to think about it a few days ago, I quickly realized that they're bad assumptions. Let's look at some problems with them...
 
-PostgreSQL's [timestamp type](https://www.postgresql.org/docs/current/datatype-datetime.html#DATATYPE-DATETIME-TABLE) has microsecond resolution. That's really small, but not infinitely so. It is surely theoretically possible to create more than one record with the same timestamp, even for the same user with cross-transaction serialization constraints. (It probably requires a transaction to begin and commit within a millisecond, but that's not enough to discount it.) This becomes trivially true if your DB operations don't have cross-transaction constraints.
+PostgreSQL's [timestamp type](https://www.postgresql.org/docs/current/datatype-datetime.html#DATATYPE-DATETIME-TABLE) has microsecond resolution[^timeprovider]. That's really small, but not infinitely so. It is surely theoretically possible to create more than one record with the same timestamp, even for the same user with cross-transaction serialization constraints. (It probably requires a transaction to begin and commit within a millisecond, but that's not enough to discount it.) This becomes trivially true if your DB operations don't have cross-transaction constraints.
+
+[^timeprovider]: A [commenter on HN](https://news.ycombinator.com/item?id=38747686) pointed out that the resolution of the timestamp might be coarser than microsecond if the resolution of the service providing time to Postgres is coarser. _Probably_ it's not coarser, but it's another thing to not take for granted.
 
 From what I can find, Postgres does not provide a guarantee of stable sort for identical values. Based on what (little) I know about b-tree indexes, I think it's probably true for indexed values (unless some other index type gets used? unless the index gets rebuilt or shuffled?), but it's still not something that should be (sanely) relied on.
 
@@ -67,3 +69,7 @@ There are a few takeaways here:
 1. Thinking about time [is hard](https://gist.github.com/timvisee/fcda9bbdff88d45cc9061606b4b923ca).
 2. Try your best to recognize your bedrock, implicit assumptions about things. Which is also hard, since they're mostly subconscious.
 3. Review other people's code (and have your own reviewed, of course). It forces you to think broader, deeper, and different, and can help you with your own code.
+
+---
+
+There is discussion of this post on Hacker News [here](https://news.ycombinator.com/item?id=38745637).
