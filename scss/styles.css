@@ -12947,3 +12947,9 @@ hr {
 
 .repo .repo__popular {
   font-weight: bold; }
+
+a.footnote-ref::before {
+  content: '['; }
+
+a.footnote-ref::after {
+  content: ']'; }
