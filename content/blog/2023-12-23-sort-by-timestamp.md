@@ -52,7 +52,9 @@ What happens to `now()` if the OS clock gets adjusted backwards (perhaps due to 
 
 If our DB server is in a (single writer, many readers) cluster, the same thing can happen if we fail over to a server that is behind the previous writer. `now()` again ends up in the past, until the time difference is caught up with.
 
-So, our timestamp is not unique, not monotonically increasing, and we can't even trust that identical values will sort stably. This means that our clients could miss items when paging.
+So, our timestamp is not unique, not monotonically increasing, and we can't even trust that identical values will sort stably[^secondarysort]. This means that our clients could miss items when paging.
+
+[^secondarysort]: An [HN commenter said](https://news.ycombinator.com/item?id=38759601): "I found it to be a generally useful rule to never `ORDER BY created` but instead `ORDER BY created,id` instead to achieve stable sorting." Which, yeah, is great advice. It's probably great advice for any "sort by timestamp" scenario -- you just need a another unique value to use as the secondary sort, even if it's not itself usefully sortable.
 
 **Monotonicity Failure Scenario**: If the user has pulled down items to timestamp X and they manage to create a new item at timestamp X-1, they will never get it (at least until a full re-sync).
 
