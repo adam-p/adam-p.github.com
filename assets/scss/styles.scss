@@ -202,3 +202,11 @@ hr {
     font-weight: bold;
   }
 }
+
+// Add square brackets around footnote references
+a.footnote-ref::before {
+  content: '[';
+}
+a.footnote-ref::after {
+  content: ']';
+}
