@@ -50,7 +50,7 @@ Relationship tip: "Always offer low-friction reconciliation" is just obviously a
 
 Every night the last thing I say to my son is, "I love you, monkey. I'll see you in the morning." Both parts are intentional: the first is pretty obvious (and was part of my own brain-carving, back when I needed it at that level), and the second is to reassure him that I'll be there the next day. I want that to give him comfort as he falls asleep and if he wakes up in the night.
 
-Every morning as soon as I seem him I beeline to him and give him a kiss. This is the fulfillment of the previous night's promise. For many hundreds of nights, I have communicated as clearly as I can: Our separation is temporary and my love is always with you.
+Every morning as soon as I see him I beeline to him and give him a kiss. This is the fulfillment of the previous night's promise. For many hundreds of nights, I have communicated as clearly as I can: Our separation is temporary and my love is always with you.
 
 I do this with almost all our separations, especially school. I always say, "I love you, buddy. I'll see you after [school or whatever activity]." And then make sure I clearly communicate that I'm happy to see him afterwards. (For a long time I would explicitly say "I'm happy to see you.")
 
@@ -86,7 +86,7 @@ I'm not sure that the information actually changes his pain-in-the-ass behaviour
 
 Saying these words is also a reminder to myself to try to not be an jerk to my son just because I had a shit sleep.
 
-## Show resolution after a fight
+## Show resolution after a spousal fight
 
 If (ha!) you get into a fight with your spouse in front of your kid, try your very best to model good behaviour during and after. It can be very hard to stay respectful during a bad fight, but try. Also try to let your kid see the resolution of the fight -- partly so that they can see it is resolved, and partly so that they learn a bit about resolving the fights that they themselves inevitably have and will have.
 
