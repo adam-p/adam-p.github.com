@@ -1,7 +1,7 @@
 ---
 comments: false
 date: "2020-11-15T00:00:00Z"
-published: false
+draft: true
 tags: null
 title: Social Login Considered Harmful
 slug: social-login-harmful

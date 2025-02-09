@@ -1,7 +1,7 @@
 ---
 comments: false
 date: "2021-06-25T00:00:00Z"
-published: true
+draft: false
 tags: null
 title: Make sure you have a backup Yubikey
 slug: backup-yubikey

@@ -16,7 +16,7 @@
     <meta name="google-site-verification" content="WxZdzPANRFpehqogDMcTc9HLGXXDJy5If07MuUZvHho" />
     <link rel="icon" type="image/png" href="/favicon.png" />
 
-    {{- $stylesCSS := resources.Get "scss/styles.scss" | resources.ToCSS -}}
+    {{- $stylesCSS := resources.Get "scss/styles.scss" | css.Sass -}}
     <link rel="stylesheet" href="{{ $stylesCSS.RelPermalink }}">
 
     <!-- Blocks may include default content. -->

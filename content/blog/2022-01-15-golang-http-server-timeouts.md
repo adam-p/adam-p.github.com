@@ -1,7 +1,7 @@
 ---
 comments: false
 date: "2022-01-15T00:00:00Z"
-published: true
+draft: false
 tags: null
 title: Diving into Go's HTTP server timeouts
 slug: golang-http-server-timeouts

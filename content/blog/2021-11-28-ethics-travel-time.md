@@ -1,7 +1,7 @@
 ---
 comments: false
 date: "2021-11-28T00:00:00Z"
-published: true
+draft: false
 tags: null
 title: The Ethics of Driving Speed in Travel Time Estimation
 slug: ethics-travel-time

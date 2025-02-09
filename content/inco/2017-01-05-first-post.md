@@ -1,6 +1,6 @@
 ---
 date: "2017-01-05T00:00:00Z"
-published: true
+draft: false
 tags: null
 title: "First Post: someone's last post"
 slug: first-post

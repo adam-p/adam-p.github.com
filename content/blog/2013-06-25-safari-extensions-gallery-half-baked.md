@@ -1,7 +1,7 @@
 ---
 comments: false
 date: "2013-06-25T00:00:00Z"
-published: true
+draft: false
 tags:
 - Markdown Here
 title: 'Safari Extensions Gallery: half-baked'

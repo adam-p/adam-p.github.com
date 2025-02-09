@@ -1,7 +1,7 @@
 ---
 comments: true
 date: "2013-10-18T00:00:00Z"
-published: true
+draft: false
 tags: []
 title: 'Test post: Markdown Here in Disqus'
 slug: mdh-disqus-test
