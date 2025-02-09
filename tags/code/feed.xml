@@ -62,12 +62,11 @@ Page Action vs. Browser Action
 &lt;dt>Browser actions...&lt;/dt>
 &lt;dd>are buttons on the browser toolbar. (&lt;a href="https://developer.chrome.com/extensions/browserAction.html">See &lt;code>browserAction&lt;/code> API info&lt;/a>.)&lt;/dd>
 &lt;/dl>
-&lt;p>&lt;img alt="Firefox page and browser buttons" src="https://adam-p.ca/img/blog/firefox-button.png">&lt;/p>
+&lt;p>&lt;img src="https://adam-p.ca/img/blog/firefox-button.png" alt="Firefox page and browser buttons">&lt;/p>
 &lt;p>In the screenshot above you can see the two styles co-existing in Firefox, which suggests there’s no real implementation decision to make – just provide both, and let the user decide which style they like. That’s true in Firefox (although there’s still the lesser decision of whether or not to add the toolbar button by default), but in Chrome you can either have a page action &lt;em>or&lt;/em> a browser action, not both.&lt;/p>
 &lt;p>The choice initially seemed pretty obvious: use a page action. From Chrome’s &lt;a href="https://developer.chrome.com/extensions/browserAction.html#tips">documentation for browser actions&lt;/a>:&lt;/p>
 &lt;blockquote>
-&lt;p>Don’t use browser actions for features that make sense for only a few pages. Use page actions instead.&lt;/p>
-&lt;/blockquote>
+&lt;p>Don’t use browser actions for features that make sense for only a few pages. Use page actions instead.&lt;/p>&lt;/blockquote>
 &lt;p>Markdown Here’s button is only applicable to some rich-edit compose elements (email, mostly), so that admonition seems to apply pretty directly. Like many people, I don’t like occasional-use buttons cluttering up my toolbar, so I initially implemented the button as a page action.&lt;/p>
 &lt;h2 id="apparently-imperceptible-affordance">
 &lt;a class="heading-anchor" href="#apparently-imperceptible-affordance">

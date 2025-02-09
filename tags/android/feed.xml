@@ -53,8 +53,7 @@ Vulnerability Disclosure
 &lt;p>I filed a security issue with the Android team (&lt;a href="https://code.google.com/p/android/issues/detail?id=204776">#204776&lt;/a>, but it’s not publicly visible). The response was that it is “working as intended”.&lt;/p>
 &lt;blockquote>
 &lt;p>Once someone has access to an unlocked phone, they are able to do anything with it (attempt to root the device, install other malware, etc).&lt;/p>
-&lt;p>We appreciate the report but this is working as intended.&lt;/p>
-&lt;/blockquote>
+&lt;p>We appreciate the report but this is working as intended.&lt;/p>&lt;/blockquote>
 &lt;p>I see what they’re saying. In theory, the attacker could enable app side-loading, and then install some kind of data-snarfer service, and then give it sufficient permission to exfiltrate everything it can access. The data-snarfer could run even while the phone is locked.&lt;/p>
 &lt;p>Or the attacker could just keep touching the screen to keep it unlocked.&lt;/p>
 &lt;p>(Rooting typically requires a bootloader unlock, which wipes the device. But that’s irrelevant if rooting isn’t necessary to effect an equivalent attack.)&lt;/p>

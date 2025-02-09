@@ -533,8 +533,7 @@ What are IPv6 zones?
 &lt;/h2>
 &lt;p>Only link-local addresses have zone identifiers&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>. The &lt;a href="https://en.wikipedia.org/wiki/IPv6#Link-local_address">Wikipedia definition&lt;/a>&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup> of IPv6 link-local address assignment will get us started:&lt;/p>
 &lt;blockquote>
-&lt;p>All interfaces of IPv6 hosts require a link-local address, which have the prefix fe80::/10. This prefix is combined with a 64-bit suffix, which the host can compute and assign by itself without the presence or cooperation of an external network component like a DHCP server, in a process called &lt;em>link-local address autoconfiguration&lt;/em>.&lt;/p>
-&lt;/blockquote>
+&lt;p>All interfaces of IPv6 hosts require a link-local address, which have the prefix fe80::/10. This prefix is combined with a 64-bit suffix, which the host can compute and assign by itself without the presence or cooperation of an external network component like a DHCP server, in a process called &lt;em>link-local address autoconfiguration&lt;/em>.&lt;/p>&lt;/blockquote>
 &lt;p>Link-local addresses are guaranteed to be unique within a “link” – the subnet or network segment the interface is connected to. They have no uniqueness guarantees beyond that, and are not routed beyond the link they belong to.&lt;/p>
 &lt;p>Because a single machine might have multiple interfaces on separate links, there might be peers on those separate links with the same link-local address as each other. In order to correctly address those peers, there needs to be an additional qualifier – the zone identifier.&lt;/p>
 &lt;p>In addition to a link-local address, each interface gets a zone identifier. If you list the interfaces on your machine, you’ll see link-local addresses like &lt;code>fe80::2934:e0a2:73b1:80da%21&lt;/code> or &lt;code>fe80::9105:d0ed:bbda:9935%eth0&lt;/code> – the part after the percent sign is the zone.&lt;/p>
@@ -550,8 +549,7 @@ So should zones be stripped?
 &lt;/h2>
 &lt;p>As &lt;a href="https://datatracker.ietf.org/doc/html/rfc6874#section-1">RFC 6874&lt;/a> says:&lt;/p>
 &lt;blockquote>
-&lt;p>It should be noted that zone identifiers have purely local meaning within the node in which they are defined, often being the same as IPv6 interface names. They are completely meaningless for any other node.&lt;/p>
-&lt;/blockquote>
+&lt;p>It should be noted that zone identifiers have purely local meaning within the node in which they are defined, often being the same as IPv6 interface names. They are completely meaningless for any other node.&lt;/p>&lt;/blockquote>
 &lt;p>That suggests that we should be discarding the zone from addresses that are destined for use anywhere other than the machine that added the zone. But, as we’ve seen, link-local IP addresses are meaningless without the associated zone. So… what’s the right answer?&lt;/p>
 &lt;p>Let’s examine the individual contexts I mentioned at the top.&lt;/p>
 &lt;h3 id="adding-to-the-x-forwarded-for-header">
@@ -603,8 +601,7 @@ Additional concerns
 &lt;p>An example of such constraints limiting design is the &lt;a href="https://github.com/caddyserver/caddy/blob/79cbe7bfd06565d0e7ab0717119f78960ed54c08/modules/caddyhttp/reverseproxy/reverseproxy.go#L622-L626">Caddy reverse proxy&lt;/a> stripping the zone &lt;a href="https://github.com/caddyserver/caddy/pull/4507#issuecomment-1075475379">because of&lt;/a> the Go zone-handling limitations.&lt;/p>
 &lt;p>Finally, another quote from &lt;a href="https://datatracker.ietf.org/doc/html/rfc6874#section-1">RFC 6874&lt;/a>:&lt;/p>
 &lt;blockquote>
-&lt;p>Today, [zone identifiers] are meaningful only when attached to addresses with less than global scope, but it is possible that other uses might be defined in the future.&lt;/p>
-&lt;/blockquote>
+&lt;p>Today, [zone identifiers] are meaningful only when attached to addresses with less than global scope, but it is possible that other uses might be defined in the future.&lt;/p>&lt;/blockquote>
 &lt;p>So even if link-local addresses aren’t important to you now, it doesn’t mean that zones won’t be important to you later. (But, yeah, that’s hand-wavy and not very compelling.)&lt;/p>
 &lt;h3 id="conclusions">
 &lt;a class="heading-anchor" href="#conclusions">
@@ -683,8 +680,8 @@ Appendix: Checking your own link-local addresses and zones
 &lt;p>Does this surprise you? (Try it in the &lt;a href="https://go.dev/play/p/4bHXBiBktUH">playground&lt;/a>.)&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-golang" data-lang="golang">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">prefix&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">netip&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">MustParsePrefix&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"fe80::%zone/10"&lt;/span>&lt;span style="color:#111">)&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">addr&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">netip&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">MustParseAddr&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"fe80::1%zone"&lt;/span>&lt;span style="color:#111">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">prefix&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Contains&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">addr&lt;/span>&lt;span style="color:#111">))&lt;/span> &lt;span style="color:#75715e">// ==> false
-&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Go’s new-as-of-1.18 &lt;a href="https://pkg.go.dev/net/netip">&lt;code>netip&lt;/code> package&lt;/a> is better in every way than the previous &lt;code>net.IP&lt;/code>, etc., but this one design decision will probably burn someone, somewhere, sometime.&lt;/p>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">prefix&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Contains&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">addr&lt;/span>&lt;span style="color:#111">))&lt;/span> &lt;span style="color:#75715e">// ==> false&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Go’s new-as-of-1.18 &lt;a href="https://pkg.go.dev/net/netip">&lt;code>netip&lt;/code> package&lt;/a> is better in every way than the previous &lt;code>net.IP&lt;/code>, etc., but this one design decision will probably burn someone, somewhere, sometime.&lt;/p>
 &lt;p>If you pass a prefix with a zone to the older &lt;code>net.ParseCIDR&lt;/code> it returns an error. If you pass a prefix with a zone to the newer &lt;code>netip.ParsePrefix&lt;/code>, it succeeds but silently discards the zone. If you then pass an IP address that is clearly contained by the original prefix – &lt;em>including the zone&lt;/em> – to &lt;code>netip.Prefix.Contains&lt;/code>… it returns false!&lt;/p>
 &lt;h2 id="why-is-it-like-this">
 &lt;a class="heading-anchor" href="#why-is-it-like-this">
@@ -694,8 +691,7 @@ Why is it like this?
 &lt;/h2>
 &lt;p>I learned about this from &lt;a href="https://old.reddit.com/r/ipv6/comments/thyhcn/does_it_make_sense_and_is_it_legal_to_have_a_zone/i1by8n5/">a Reddit comment&lt;/a> by &lt;a href="https://github.com/mdlayher">Matt Layher&lt;/a>&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> who worked on &lt;code>netip&lt;/code> (or the original &lt;code>inet.af/netaddr&lt;/code>):&lt;/p>
 &lt;blockquote>
-&lt;p>For what it’s worth, I helped work on the library that ultimately became Go’s net/netip and we decided we would remove zones in our CIDR prefix parser because we didn’t find any documented usage of a a CIDR like “fe80::%eth0/64” in the wild.&lt;/p>
-&lt;/blockquote>
+&lt;p>For what it’s worth, I helped work on the library that ultimately became Go’s net/netip and we decided we would remove zones in our CIDR prefix parser because we didn’t find any documented usage of a a CIDR like “fe80::%eth0/64” in the wild.&lt;/p>&lt;/blockquote>
 &lt;p>Which is fair, but I don’t think the resulting behaviour is ideal.&lt;/p>
 &lt;h2 id="what-do-the-docs-say">
 &lt;a class="heading-anchor" href="#what-do-the-docs-say">
@@ -706,8 +702,7 @@ What do the docs say?
 &lt;p>The &lt;a href="https://pkg.go.dev/net/netip@go1.18#Prefix.Contains">documentation&lt;/a> for &lt;code>netip.Prefix.Contains&lt;/code> does make clear the behaviour (emphasis added):&lt;/p>
 &lt;blockquote>
 &lt;p>Contains reports whether the network p includes ip.&lt;/p>
-&lt;p>An IPv4 address will not match an IPv6 prefix. A v6-mapped IPv6 address will not match an IPv4 prefix. A zero-value IP will not match any prefix. &lt;strong>If ip has an IPv6 zone, Contains returns false, because Prefixes strip zones.&lt;/strong>&lt;/p>
-&lt;/blockquote>
+&lt;p>An IPv4 address will not match an IPv6 prefix. A v6-mapped IPv6 address will not match an IPv4 prefix. A zero-value IP will not match any prefix. &lt;strong>If ip has an IPv6 zone, Contains returns false, because Prefixes strip zones.&lt;/strong>&lt;/p>&lt;/blockquote>
 &lt;p>It’s good that it’s documented, but… how many people are going to read the doc for that method? Most people who use it are going to know what it means for a prefix (or CIDR) to “contain” an IP address. And many of us will already be familiar with the older &lt;code>net.IPMask.Contains&lt;/code>, which has the one-sentence &lt;a href="https://pkg.go.dev/net@go1.18#IPNet.Contains">documentation&lt;/a>: “Contains reports whether the network includes ip.” And the &lt;a href="https://pkg.go.dev/net/netip@go1.18#ParsePrefix">doc&lt;/a> for &lt;code>netip.ParsePrefix&lt;/code> says nothing about discarding the zone.&lt;/p>
 &lt;h2 id="why-do-i-care-about-this-fringe-thing-that-no-one-uses">
 &lt;a class="heading-anchor" href="#why-do-i-care-about-this-fringe-thing-that-no-one-uses">
@@ -728,21 +723,21 @@ Bonus: IPv4-mapped IPv6 handling has also changed
 &lt;p>As hinted at in the &lt;code>netip.Prefix.Contains&lt;/code> doc I quoted above…&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-golang" data-lang="golang">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">prefix&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">netip&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">MustParsePrefix&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"1.0.0.0/8"&lt;/span>&lt;span style="color:#111">)&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// Let's check that it's working as expected
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75af00">addr&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">netip&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">MustParseAddr&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"1.1.1.1"&lt;/span>&lt;span style="color:#111">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">prefix&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Contains&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">addr&lt;/span>&lt;span style="color:#111">))&lt;/span> &lt;span style="color:#75715e">// ==> true
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// Now let's try the "IPv4-mapped IPv6" representation of the same address
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75af00">addr&lt;/span> &lt;span style="color:#111">=&lt;/span> &lt;span style="color:#75af00">netip&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">MustParseAddr&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"::ffff:1.1.1.1"&lt;/span>&lt;span style="color:#111">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">addr&lt;/span>&lt;span style="color:#111">)&lt;/span> &lt;span style="color:#75715e">// ==> "::ffff:1.1.1.1"
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">prefix&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Contains&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">addr&lt;/span>&lt;span style="color:#111">))&lt;/span> &lt;span style="color:#75715e">// ==> false!
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// But with the older net.IP and net.NetIP...
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75af00">_&lt;/span>&lt;span style="color:#111">,&lt;/span> &lt;span style="color:#75af00">cidr&lt;/span>&lt;span style="color:#111">,&lt;/span> &lt;span style="color:#75af00">_&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">net&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">ParseCIDR&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"1.0.0.0/8"&lt;/span>&lt;span style="color:#111">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// Let's check that it's working as expected&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">addr&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">netip&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">MustParseAddr&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"1.1.1.1"&lt;/span>&lt;span style="color:#111">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">prefix&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Contains&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">addr&lt;/span>&lt;span style="color:#111">))&lt;/span> &lt;span style="color:#75715e">// ==> true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// Now let's try the "IPv4-mapped IPv6" representation of the same address&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">addr&lt;/span> &lt;span style="color:#111">=&lt;/span> &lt;span style="color:#75af00">netip&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">MustParseAddr&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"::ffff:1.1.1.1"&lt;/span>&lt;span style="color:#111">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">addr&lt;/span>&lt;span style="color:#111">)&lt;/span> &lt;span style="color:#75715e">// ==> "::ffff:1.1.1.1"&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">prefix&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Contains&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">addr&lt;/span>&lt;span style="color:#111">))&lt;/span> &lt;span style="color:#75715e">// ==> false!&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// But with the older net.IP and net.NetIP...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">_&lt;/span>&lt;span style="color:#111">,&lt;/span> &lt;span style="color:#75af00">cidr&lt;/span>&lt;span style="color:#111">,&lt;/span> &lt;span style="color:#75af00">_&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">net&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">ParseCIDR&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"1.0.0.0/8"&lt;/span>&lt;span style="color:#111">)&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">ip&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">net&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">ParseIP&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"::ffff:1.1.1.1"&lt;/span>&lt;span style="color:#111">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">ip&lt;/span>&lt;span style="color:#111">)&lt;/span> &lt;span style="color:#75715e">// ==> "1.1.1.1"
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">cidr&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Contains&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">ip&lt;/span>&lt;span style="color:#111">))&lt;/span> &lt;span style="color:#75715e">// ==> true!
-&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>(Try it in the &lt;a href="https://go.dev/play/p/ANR5tJEDohN">playground&lt;/a>.)&lt;/p>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">ip&lt;/span>&lt;span style="color:#111">)&lt;/span> &lt;span style="color:#75715e">// ==> "1.1.1.1"&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">cidr&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Contains&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">ip&lt;/span>&lt;span style="color:#111">))&lt;/span> &lt;span style="color:#75715e">// ==> true!&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>(Try it in the &lt;a href="https://go.dev/play/p/ANR5tJEDohN">playground&lt;/a>.)&lt;/p>
 &lt;p>The older &lt;code>net&lt;/code> code would convert IPv4-mapped IPv6 addresses to IPv4 addresses, with the result that they would be contained by IPv4 CIDRs. The new &lt;code>netip&lt;/code> code does &lt;em>not&lt;/em> convert to IPv4, and the resulting address is &lt;em>not&lt;/em> contained by an IPv4 prefix.&lt;/p>
 &lt;p>I haven’t yet thought about this enough to form a strong opinion, but it’s good to know.&lt;/p>
 &lt;p>Update 2022-04-14: I &lt;a href="https://github.com/golang/go/issues/51906">created an issue&lt;/a> about this a few weeks ago. (I also &lt;a href="https://github.com/golang/go/pull/51950">PR’d some documentation fixes&lt;/a> regarding the consistent use of “IPv4-mapped IPv6”. It’s been merged.)&lt;/p>
@@ -771,10 +766,10 @@ Summary
 &lt;p>When choosing the rightmost XFF IP, make sure to use the &lt;em>last&lt;/em> instance of that header.&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>Using special “true client IPs” set by reverse proxies (like &lt;code>X-Real-IP&lt;/code>, &lt;code>True-Client-IP&lt;/code>, etc.) &lt;em>can&lt;/em> be good, but it depends on the a) how the reverse proxy actually sets it, b) whether the reverse proxy sets it if it’s already present/spoofed, and c) how you’ve configured the reverse proxy (sometimes).&lt;/p>
+&lt;p>Using special “true client IPs” set by reverse proxies (like &lt;code>X-Real-IP&lt;/code>, &lt;code>True-Client-IP&lt;/code>, etc.) &lt;em>can&lt;/em> be good, but it depends on a) how the reverse proxy actually sets it, b) whether the reverse proxy sets it if it’s already present/spoofed, and c) how you’ve configured the reverse proxy (sometimes).&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>Any header not specifically set by your reverse proxy cannot be trusted. For example, you &lt;em>must not&lt;/em> check the &lt;code>X-Real-IP&lt;/code> header if you’re not behind Nginx or something else that always sets it, because you’ll be reading a spoofed value.&lt;/p>
+&lt;p>Any header not specifically set by your reverse proxy cannot be trusted. For example, you &lt;em>must not&lt;/em> check the &lt;code>X-Real-IP&lt;/code> header if you’re not behind Nginx or something else that &lt;em>always&lt;/em> sets it, because you’ll be reading a spoofed value.&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>A lot of rate limiter implementations are using spoofable IPs and are vulnerable to rate limiter escape and memory exhaustion attacks.&lt;/p>
@@ -799,7 +794,7 @@ Introduction
 It can’t be that hard to get the real client IP, right?
 &lt;/h2>
 &lt;p>There are many reasons why web services are interested in the IP address of their clients: geographical stats, geo-targeting, auditing, rate-limiting, abuse-blocking, session history, etc.&lt;/p>
-&lt;p>When a client directly connects to a server, the server can see the IP address of the client. If the client connects through one or more proxies (of any kind: forward, reverse, load balancer, API gateway, TLS offloading, IP access control, etc.), then the server only directly sees the IP address of the final proxy used by the client connection.&lt;/p>
+&lt;p>When a client directly connects to a server, the server can see the client IP address of the immediate socket. If the client connects through one or more proxies (of any kind: forward, reverse, load balancer, API gateway, TLS offloading, IP access control, etc.), then the server only directly sees the IP address of the final proxy used by the client connection.&lt;/p>
 &lt;p>In order to pass the original IP address on to the server, there are several headers in common use:&lt;/p>
 &lt;ul>
 &lt;li>
@@ -843,8 +838,7 @@ Multiple headers
 &lt;/h3>
 &lt;p>According to the &lt;a href="https://datatracker.ietf.org/doc/html/rfc2616#section-4.2">HTTP/1.1 RFC (2616)&lt;/a>&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>:&lt;/p>
 &lt;blockquote>
-&lt;p>Multiple message-header fields with the same field-name MAY be present in a message if and only if the entire field-value for that header field is defined as a comma-separated list [i.e., #(values)]. It MUST be possible to combine the multiple header fields into one “field-name: field-value” pair, without changing the semantics of the message, by appending each subsequent field-value to the first, each separated by a comma. The order in which header fields with the same field-name are received is therefore significant to the interpretation of the combined field value, and thus a proxy MUST NOT change the order of these field values when a message is forwarded.&lt;/p>
-&lt;/blockquote>
+&lt;p>Multiple message-header fields with the same field-name MAY be present in a message if and only if the entire field-value for that header field is defined as a comma-separated list [i.e., #(values)]. It MUST be possible to combine the multiple header fields into one “field-name: field-value” pair, without changing the semantics of the message, by appending each subsequent field-value to the first, each separated by a comma. The order in which header fields with the same field-name are received is therefore significant to the interpretation of the combined field value, and thus a proxy MUST NOT change the order of these field values when a message is forwarded.&lt;/p>&lt;/blockquote>
 &lt;p>That applies to XFF, as it is a comma-separated list. This can make getting the rightmost (or even leftmost) IP error-prone.&lt;/p>
 &lt;p>For example, Go has three ways to get a header value:&lt;/p>
 &lt;ul>
@@ -950,7 +944,7 @@ Avoiding those pits
 &lt;/a>
 Algorithms
 &lt;/h3>
-&lt;p>When reading this, remember that the final proxy IP is not in the XFF list – it’s the &lt;code>RemoteAddr&lt;/code>. Also note that &lt;code>RemoteAddr&lt;/code> might have the form &lt;code>ip:port&lt;/code>, depending on your platform (like it does in Go) – sure sure to only use the IP part.&lt;/p>
+&lt;p>When reading this, remember that the final proxy IP is not in the XFF list – it’s the &lt;code>RemoteAddr&lt;/code>. Also note that &lt;code>RemoteAddr&lt;/code> might have the form &lt;code>ip:port&lt;/code>, depending on your platform (like it does in Go) – be sure to only use the IP part.&lt;/p>
 &lt;h4 id="first-collect-all-of-the-ips">
 &lt;a class="heading-anchor" href="#first-collect-all-of-the-ips">
 ####
@@ -1024,8 +1018,7 @@ Akamai
 &lt;p>The &lt;code>True-Client-IP&lt;/code> header sent by Akamai does not get overwritten by proxy or Akamai servers and will contain the IP of the client when sending the request to the origin.&lt;/p>
 &lt;p>&lt;code>True-Client-IP&lt;/code> is a self provisioned feature enabled in the Property Manager.&lt;/p>
 &lt;p>&lt;em>Note that if the &lt;code>True-Client-IP&lt;/code> header is already present in the request from the client it will not be overwritten or sent twice. It is not a security feature.&lt;/em>&lt;/p>
-&lt;p>The connecting IP is appended to &lt;code>X-Forwarded-For&lt;/code> header by proxy server and thus it can contain multiple IPs in the list with comma as separator. &lt;code>True-Client-IP&lt;/code> contains only one IP. If the the end user uses proxy server to connect to Akamai edge server, &lt;code>True-Client-IP&lt;/code> is the first IP from in &lt;code>X-Forwarded-For&lt;/code> header. If the end user connects to Akamai edge server directly, &lt;code>True-Client-IP&lt;/code> is the connecting public IP seen by Akamai.&lt;/p>
-&lt;/blockquote>
+&lt;p>The connecting IP is appended to &lt;code>X-Forwarded-For&lt;/code> header by proxy server and thus it can contain multiple IPs in the list with comma as separator. &lt;code>True-Client-IP&lt;/code> contains only one IP. If the the end user uses proxy server to connect to Akamai edge server, &lt;code>True-Client-IP&lt;/code> is the first IP from in &lt;code>X-Forwarded-For&lt;/code> header. If the end user connects to Akamai edge server directly, &lt;code>True-Client-IP&lt;/code> is the connecting public IP seen by Akamai.&lt;/p>&lt;/blockquote>
 &lt;p>The relevant bits are “&lt;code>True-Client-IP&lt;/code> is the first IP from in &lt;code>X-Forwarded-For&lt;/code> header” and “if the True-Client-IP header is already present in the request from the client it will not be overwritten”. So &lt;code>True-Client-IP&lt;/code> is either the leftmost XFF IP or keeps the original value spoofed by the client. Just the worst possible thing.&lt;/p>
 &lt;p>However, there is also the sentence “It is not a security feature.” Well, that’s certainly true. Does that warning make it okay? What’s the chance that there aren’t a ton of Akamai users out using &lt;code>True-Client-IP&lt;/code> for security-related purposes?&lt;/p>
 &lt;p>(I’m not sure how to interpret the above when it says that the XFF header is “overwritten by Akamai parent servers”. Does it mean “appended to” when it says “overwritten”? Or is Akamai actually blowing away the existing header value? That would be against the spirit of XFF.)&lt;/p>
@@ -1037,12 +1030,10 @@ Fastly
 &lt;/h3>
 &lt;p>Fastly adds the &lt;a href="https://developer.fastly.com/reference/http/http-headers/Fastly-Client-IP/">&lt;code>Fastly-Client-IP&lt;/code>&lt;/a> header with a single IP value. I &lt;em>think&lt;/em> it’s using the rightmost-ish XFF IP:&lt;/p>
 &lt;blockquote>
-&lt;p>Essentially, &lt;code>Fastly-Client-IP&lt;/code> is the non-Fastly thing that is making the request to Fastly.&lt;/p>
-&lt;/blockquote>
+&lt;p>Essentially, &lt;code>Fastly-Client-IP&lt;/code> is the non-Fastly thing that is making the request to Fastly.&lt;/p>&lt;/blockquote>
 &lt;p>&lt;em>However&lt;/em>:&lt;/p>
 &lt;blockquote>
-&lt;p>The value is not protected from modification at the edge of the Fastly network, so if a client sets this header themselves, we will use it. If you want to prevent this [you need to do some additional configuration].&lt;/p>
-&lt;/blockquote>
+&lt;p>The value is not protected from modification at the edge of the Fastly network, so if a client sets this header themselves, we will use it. If you want to prevent this [you need to do some additional configuration].&lt;/p>&lt;/blockquote>
 &lt;p>So, by default &lt;code>Fastly-Client-IP&lt;/code> is trivially spoofable. Again, it seems highly likely that there are a lot of people using its default behaviour for security-related purposes and making themselves vulnerable to attack.&lt;/p>
 &lt;h3 id="azure">
 &lt;a class="heading-anchor" href="#azure">
@@ -1053,8 +1044,7 @@ Azure
 &lt;p>Azure Front Door adds the &lt;code>X-Azure-ClientIP&lt;/code> and &lt;code>X-Azure-SocketIP&lt;/code> headers. They are &lt;a href="https://docs.microsoft.com/en-us/azure/frontdoor/front-door-http-headers-protocol">described like so&lt;/a>:&lt;/p>
 &lt;blockquote>
 &lt;p>&lt;code>X-Azure-ClientIP&lt;/code>: Represents the client IP address associated with the request being processed. For example, a request coming from a proxy might add the &lt;code>X-Forwarded-For&lt;/code> header to indicate the IP address of the original caller.&lt;/p>
-&lt;p>&lt;code>X-Azure-SocketIP&lt;/code>: Represents the socket IP address associated with the TCP connection that the current request originated from. A request’s client IP address might not be equal to its socket IP address because the client IP can be arbitrarily overwritten by a user.&lt;/p>
-&lt;/blockquote>
+&lt;p>&lt;code>X-Azure-SocketIP&lt;/code>: Represents the socket IP address associated with the TCP connection that the current request originated from. A request’s client IP address might not be equal to its socket IP address because the client IP can be arbitrarily overwritten by a user.&lt;/p>&lt;/blockquote>
 &lt;p>So, &lt;code>X-Azure-ClientIP&lt;/code> is the leftmost-ish XFF IP and &lt;code>X-Azure-SocketIP&lt;/code> is the rightmost-ish.&lt;/p>
 &lt;p>That’s reasonably good, but I think it could be a lot clearer. The only warning about &lt;code>X-Azure-ClientIP&lt;/code> is a subtle hint in the description of the &lt;em>other&lt;/em> header. I also hand-wavingly feel that the name of the less-secure header is more appealing than the more-secure one, and is probably leading many people into the wrong choice.&lt;/p>
 &lt;h3 id="go-chichi">
@@ -1065,8 +1055,7 @@ go-chi/chi
 &lt;/h3>
 &lt;p>Chi is a Go HTTP router and provides a &lt;a href="https://github.com/go-chi/chi/blob/c97bc988430d623a14f50b7019fb40529036a35a/middleware/realip.go#L42-L55">RealIP middleware&lt;/a> and a &lt;a href="https://github.com/go-chi/httprate/blob/463924d478ea0c19de7265b97371a59a7ebf5fdd/httprate.go#L28-L37">rate limiter&lt;/a>. The RealIP middleware has this comment:&lt;/p>
 &lt;blockquote>
-&lt;p>You should only use this middleware if you can trust the headers passed to you (in particular, the two [three, actually] headers this middleware uses), for example because you have placed a reverse proxy like HAProxy or nginx in front of Chi. If your reverse proxies are configured to pass along arbitrary header values from the client, or if you use this middleware without a reverse proxy, malicious clients will be able to make you very sad (or, depending on how you’re using RemoteAddr, vulnerable to an attack of some sort).&lt;/p>
-&lt;/blockquote>
+&lt;p>You should only use this middleware if you can trust the headers passed to you (in particular, the two [three, actually] headers this middleware uses), for example because you have placed a reverse proxy like HAProxy or nginx in front of Chi. If your reverse proxies are configured to pass along arbitrary header values from the client, or if you use this middleware without a reverse proxy, malicious clients will be able to make you very sad (or, depending on how you’re using RemoteAddr, vulnerable to an attack of some sort).&lt;/p>&lt;/blockquote>
 &lt;p>Which is a pretty good warning, right? Almost.&lt;/p>
 &lt;p>Let’s take this opportunity to talk about abusing &lt;code>X-Real-IP&lt;/code>, &lt;code>True-Client-IP&lt;/code>, etc. For example, AWS ALB “[passes] along arbitrary header values from the client” and, indeed, if you don’t realize that you will end up “very sad”. Because a request like this…&lt;/p>
 &lt;pre tabindex="0">&lt;code>curl -X POST https://my.load.balanced.domain/login -H "X-Forwarded-For:1.1.1.1" -H "X-Real-IP:2.2.2.2" -H "True-Client-IP:3.3.3.3"
@@ -1090,9 +1079,8 @@ didip/tollbooth
 &lt;p>The &lt;a href="https://github.com/didip/tollbooth">Tollbooth HTTP rate limiter&lt;/a> is better, but you still need to be aware of what it’s doing in order to use it properly.&lt;/p>
 &lt;p>Its &lt;a href="https://github.com/didip/tollbooth/blob/d2340101f440011dd593e8b6787f5b1a437c2516/README.md#L68-L70">README&lt;/a> says the order in which it looks for the “real” client IP address is…&lt;/p>
 &lt;blockquote>
-&lt;p>By default it’s: “RemoteAddr”, “X-Forwarded-For”, “X-Real-IP”&lt;br>
-If your application is behind a proxy, set “X-Forwarded-For” first.&lt;/p>
-&lt;/blockquote>
+&lt;p>By default it’s: “RemoteAddr”, “X-Forwarded-For”, “X-Real-IP”
+If your application is behind a proxy, set “X-Forwarded-For” first.&lt;/p>&lt;/blockquote>
 &lt;p>Strangely, that default order isn’t actually the default everywhere. If you call &lt;a href="https://github.com/didip/tollbooth/blob/e1a6b41b35e95810a7dce638996b15f136424ed2/limiter/limiter.go#L21">&lt;code>limiter.New()&lt;/code>&lt;/a> that &lt;em>is&lt;/em> the default. But if you call &lt;a href="https://github.com/didip/tollbooth/blob/2e5b779d07015e6a4386c6cc1a36612c17d54eb5/tollbooth.go#L33">&lt;code>tollbooth.NewLimiter()&lt;/code>&lt;/a> – “a convenience function to limiter.New” – the order is &lt;code>"X-Forwarded-For", "X-Real-IP", "RemoteAddr"&lt;/code>. Which is an important difference!&lt;/p>
 &lt;p>It doesn’t make clear that it doesn’t support &lt;code>CF-Connecting-IP&lt;/code>, &lt;code>True-Client-IP&lt;/code>, or any other arbitrary header – &lt;a href="https://github.com/didip/tollbooth/blob/2e5b779d07015e6a4386c6cc1a36612c17d54eb5/libstring/libstring.go#L20-L56">it just silently skips them&lt;/a> if you add them (returning empty string, leading to over-limiting).&lt;/p>
 &lt;p>This is a general problem with Tollbooth – it “fails open”: if it can’t find an IP to use &lt;a href="https://github.com/didip/tollbooth/blob/2e5b779d07015e6a4386c6cc1a36612c17d54eb5/tollbooth.go#L51-L55">it doesn’t rate limit&lt;/a>. So if the user of the library misconfigures it (by trying to use an unsupported header, or even making a letter-case mistake in a supported on), it won’t rate limit at all and will give no indication of this. In a &lt;a href="https://github.com/didip/tollbooth/pull/99#issuecomment-1059328777">comment on the PR to fix this&lt;/a> I give my opinion on how it should be have, but this is a pretty tricky problem.&lt;/p>
@@ -1149,7 +1137,7 @@ sethvargo/go-limiter
 &lt;/a>
 Let’s Encrypt
 &lt;/h3>
-&lt;p>It &lt;a href="https://github.com/letsencrypt/boulder/blob/ab79f96d7bfc94be7d009e2aa2007c51ddf16f31/web/context.go#L95">looks like&lt;/a> Let’s Encrypt is using Nginx with &lt;code>X-Real-IP&lt;/code>. If it’s configuration is good (I don’t think the config files are in GitHub), then it should be using rightmost-ish.&lt;/p>
+&lt;p>It &lt;a href="https://github.com/letsencrypt/boulder/blob/ab79f96d7bfc94be7d009e2aa2007c51ddf16f31/web/context.go#L95">looks like&lt;/a> Let’s Encrypt is using Nginx with &lt;code>X-Real-IP&lt;/code>. If its configuration is good (I don’t think the config files are in GitHub), then it should be using rightmost-ish.&lt;/p>
 &lt;!--redact-start-->
 &lt;h3 id="redacted-1">
 &lt;a class="heading-anchor" href="#redacted-1">
@@ -1174,8 +1162,7 @@ Express
 &lt;/h3>
 &lt;p>Express is a NodeJS web framework. The default configuration ignores the XFF header, but it’s possible to &lt;a href="https://expressjs.com/en/guide/behind-proxies.html">configure it&lt;/a> to use the leftmost or a rightmost-ish XFF IP. The setting that uses the leftmost has this warning:&lt;/p>
 &lt;blockquote>
-&lt;p>When setting to true, it is important to ensure that the last reverse proxy trusted is removing/overwriting all of the following HTTP headers: X-Forwarded-For, X-Forwarded-Host, and X-Forwarded-Proto otherwise it may be possible for the client to provide any value.&lt;/p>
-&lt;/blockquote>
+&lt;p>When setting to true, it is important to ensure that the last reverse proxy trusted is removing/overwriting all of the following HTTP headers: X-Forwarded-For, X-Forwarded-Host, and X-Forwarded-Proto otherwise it may be possible for the client to provide any value.&lt;/p>&lt;/blockquote>
 &lt;p>So that’s pretty good. (But still a footgun that I’m sure someone will fall victim to.)&lt;/p>
 &lt;h3 id="traefik">
 &lt;a class="heading-anchor" href="#traefik">
@@ -1199,8 +1186,7 @@ IIS
 &lt;/h3>
 &lt;p>I could find anything to suggest that Microsoft IIS processes the XFF header, but an official support blog post entitled &lt;a href="https://techcommunity.microsoft.com/t5/iis-support-blog/how-to-use-x-forwarded-for-header-to-log-actual-client-ip/ba-p/873115">“How to use X-Forwarded-For header to log actual client IP address?”&lt;/a> says:&lt;/p>
 &lt;blockquote>
-&lt;p>If you see multiple IP addresses in X-Forwarded-For column, it means the client went through more than one network device. Each network device adds their own IP to the end of the value. The left-most IP address is the actual client IP address. Others belong to network devices the client go through.&lt;/p>
-&lt;/blockquote>
+&lt;p>If you see multiple IP addresses in X-Forwarded-For column, it means the client went through more than one network device. Each network device adds their own IP to the end of the value. The left-most IP address is the actual client IP address. Others belong to network devices the client go through.&lt;/p>&lt;/blockquote>
 &lt;p>Which is a &lt;em>woefully incomplete&lt;/em> statement. I fear for the 97,641 people who read that post.&lt;/p>
 &lt;h3 id="tor">
 &lt;a class="heading-anchor" href="#tor">
@@ -1208,7 +1194,7 @@ IIS
 &lt;/a>
 Tor
 &lt;/h3>
-&lt;p>Tor is an anonymity network. They have &lt;a href="https://gitlab.torproject.org/tpo/anti-censorship/rdsys/-/issues/80">recently realized&lt;/a> that they have a control server that is both directly connected to the internet &lt;em>and&lt;/em> behind a reverse proxy and are using XFF to give them trustworthy IPs, so they’re vulnerable to spoofing. It looks like they’re working towards limiting the public-ness of the interface, or doing better verification of CDN connections, or both.&lt;/p>
+&lt;p>Tor is an anonymity network. They have &lt;a href="https://gitlab.torproject.org/tpo/anti-censorship/rdsys/-/issues/80">recently realized&lt;/a> that they have a control server that is both directly connected to the internet &lt;em>and&lt;/em> behind a reverse proxy and they are using XFF to give them trustworthy IPs, so they’re vulnerable to spoofing. It looks like they’re working towards limiting the public-ness of the interface, or doing better verification of CDN connections, or both.&lt;/p>
 &lt;p>(Because I looked into it, I’ll mention that it looks like they’re &lt;em>not&lt;/em> falling victim to the &lt;a href="https://adam-p.ca/blog/2022/03/x-forwarded-for/#multiple-headers">“multiple headers”&lt;/a> pitfall. It looks like they use Twisted and call &lt;code>request.getHeader&lt;/code> to get the XFF value. The &lt;a href="https://github.com/twisted/twisted/blob/ebb2d360070e468981377b917e3a728ff4e6c7f6/src/twisted/web/http.py#L1068">Twisted source&lt;/a> for that method indicates that it returns the &lt;em>last&lt;/em> matching header. That could cause problems if you need the Nth-from-the-right header, but I think it’s fine in this case.)&lt;/p>
 &lt;h3 id="gorillahandlersproxyheaders">
 &lt;a class="heading-anchor" href="#gorillahandlersproxyheaders">
@@ -1275,7 +1261,7 @@ Server behind reverse proxy &lt;em>and&lt;/em> directly connectable
 Re-fronting attack
 &lt;/h3>
 &lt;p>Thanks to Ryan Gerstenkorn for sending me his &lt;a href="https://blog.ryanjarv.sh/2022/03/16/bypassing-wafs-with-alternate-domain-routing.html">blog post&lt;/a> about this.&lt;/p>
-&lt;p>If a) your backend is in-house or otherwise externally accessible, and b) it’s fronted by a CDN, and c) you trust the IP addresses/ranges of your CDN, then you may be vulnerable to another class of attack.&lt;/p>
+&lt;p>If a) your backend is in-house or otherwise not directly externally accessible, and b) it’s fronted by a CDN, and c) you trust the IP addresses/ranges of your CDN, then you may be vulnerable to another class of attack.&lt;/p>
 &lt;p>With AWS CloudFront, it’s possible for an attacker to create a distribution that points to your origin. Now requests are coming to your origin from trusted IPs, but from a distribution not owned by you. But the real beauty/horror of this is that the attacker can use Lambda@Edge to modify the &lt;code>Host&lt;/code> header so that you can’t tell that a different hostname was used to access your origin, and can also modify the &lt;code>X-Forwarded-For&lt;/code> header to be whatever the attacker wants.&lt;/p>
 &lt;p>So your “trusted” reverse proxy IPs become untrusted and can lie to you about the client IP. This can be used to bypass your rate limiter, IP-based access control, etc.&lt;/p>
 &lt;p>The proper way to address this is to also verify that it’s &lt;em>your&lt;/em> CDN distribution talking to you. This will usually involve a shared secret or client certificate.&lt;/p>
@@ -1370,8 +1356,7 @@ RFC 7239: Forwarded HTTP Extension, June 2014
 8.1. Header Validity and Integrity
 &lt;/h5>
 &lt;p>The “Forwarded” HTTP header field cannot be relied upon to be correct, as it may be modified, whether mistakenly or for malicious reasons, by every node on the way to the server, including the client making the request.&lt;/p>
-&lt;p>One approach to ensure that the “Forwarded” HTTP header field is correct is to verify the correctness of proxies and to whitelist them as trusted. This approach has at least two weaknesses. First, the chain of IP addresses listed before the request came to the proxy cannot be trusted. Second, unless the communication between proxies and the endpoint is secured, the data can be modified by an attacker with access to the network.&lt;/p>
-&lt;/blockquote>
+&lt;p>One approach to ensure that the “Forwarded” HTTP header field is correct is to verify the correctness of proxies and to whitelist them as trusted. This approach has at least two weaknesses. First, the chain of IP addresses listed before the request came to the proxy cannot be trusted. Second, unless the communication between proxies and the endpoint is secured, the data can be modified by an attacker with access to the network.&lt;/p>&lt;/blockquote>
 &lt;p>And that’s it.&lt;sup id="fnref:10">&lt;a href="#fn:10" class="footnote-ref" role="doc-noteref">10&lt;/a>&lt;/sup>&lt;/p>
 &lt;p>That warning is strictly true, but it’s not very helpful and could be clearer. Would you read those five sentences and then think, “Now I thoroughly understand the danger! It’s perfectly clear to me how to use this header in a secure manner.”? I wouldn’t.&lt;/p>
 &lt;p>I feel like it should be the responsibility of this RFC not only to specify how to &lt;em>create&lt;/em> the header but also how to correctly &lt;em>consume&lt;/em> it.&lt;/p>
@@ -1445,7 +1430,7 @@ Rust’s &lt;code>HeaderMap::get&lt;/code> returns first
 AWS ELB/ALB has an option to make XFF even worse
 &lt;/h3>
 &lt;p>HN commenter nickjj brought the AWS ELB/ALB &lt;a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/x-forwarded-headers.html#x-forwarded-for">“client port preservation”&lt;/a> option to my attention. If enabled, the client port number is appended to the IP added to XFF. Turning that option on will a) violate the de facto standard form of the header, and b) mess up a lot of IP parsing code.&lt;/p>
-&lt;p>(And if the IP suddenly starts failing, then what? Does the rate limiter logic keep moving to the right until it finds a good IP? If done wrong, that could lead to using untrusted values. Does the rate limiter instead give up? And do what? Fail open? Fail closed? Panic? In a comment on the didip/tollbooth PR for this &lt;a href="https://github.com/didip/tollbooth/pull/99#issuecomment-1059328777">I talk more about this&lt;/a>.)&lt;/p>
+&lt;p>(And if the IP suddenly starts failing, then what? Does the rate limiter logic keep moving to the left until it finds a good IP? If done wrong, that could lead to using untrusted values. Does the rate limiter instead give up? And do what? Fail open? Fail closed? Panic? In a comment on the didip/tollbooth PR for this &lt;a href="https://github.com/didip/tollbooth/pull/99#issuecomment-1059328777">I talk more about this&lt;/a>.)&lt;/p>
 &lt;h3 id="consider-a-custom-single-ip-header-if-you-can">
 &lt;a class="heading-anchor" href="#consider-a-custom-single-ip-header-if-you-can">
 ###
@@ -1454,8 +1439,7 @@ Consider a custom single-IP header, if you can
 &lt;/h3>
 &lt;p>HN commenter terom &lt;a href="https://news.ycombinator.com/item?id=30571542">said&lt;/a>:&lt;/p>
 &lt;blockquote>
-&lt;p>highly recommended to just override the entire XFF header with a single value at the appropriate point in your stack, if at all possible&lt;/p>
-&lt;/blockquote>
+&lt;p>highly recommended to just override the entire XFF header with a single value at the appropriate point in your stack, if at all possible&lt;/p>&lt;/blockquote>
 &lt;p>Which is good advice and I didn’t really say in the post. If you have the ability to use one of the “good” single-IP headers, or add your own at your first proxy, that’s much better than messing around with XFF.&lt;/p>
 &lt;p>(The reason I didn’t really talk about the custom header is like: I was mostly writing for people who are trying to use what’s available rather than doing a lot of proxy tinkering. Or something.)&lt;/p>
 &lt;h3 id="gos-nethttphttputilreverseproxy-xff-behaviour-being-re-examined">
@@ -1592,12 +1576,10 @@ What’s the right way to rate-limit a gazillion IPs?
 &lt;blockquote>
 &lt;p>The best algorithm is to start blocking separate addresses. Then when multiple addresses are blocked in the same /64 you block the whole /64. Repeat that for bigger aggregates.&lt;/p>
 &lt;p>Prefixes are usually given out on nibble boundaries (multiples of 4, or one hexadecimal digit). So you might want to scale from /64 to /60, /56, /52, and /48. A /48 is usually the largest prefix given to a single site.&lt;/p>
-&lt;p>Depending how careful you want to be you can skip from /64 straight to /56 and /48.&lt;/p>
-&lt;/blockquote>
+&lt;p>Depending how careful you want to be you can skip from /64 straight to /56 and /48.&lt;/p>&lt;/blockquote>
 &lt;p>A comment on that answer has a useful addition:&lt;/p>
 &lt;blockquote>
-&lt;p>You can implement this gradual aggregation approach in a fairly simple way. Track separate rate limits at the /64, /56, and /48 level all the time. Use higher limits for higher levels. That way there is no aggregation logic at all. It’s just three separate limits based on different keys.&lt;/p>
-&lt;/blockquote>
+&lt;p>You can implement this gradual aggregation approach in a fairly simple way. Track separate rate limits at the /64, /56, and /48 level all the time. Use higher limits for higher levels. That way there is no aggregation logic at all. It’s just three separate limits based on different keys.&lt;/p>&lt;/blockquote>
 &lt;p>(Fun fact: If I google for &lt;a href="https://www.google.com/search?q=ipv6+rate+limiting">“ipv6 rate limiting”&lt;/a> (in a private browsing window), the “featured snippet” at the top is a link to the “rate limiting evasion tool” that I mentioned above. The first normal result is to that SO question. And note that it has only 6 votes and a single answer with only 10 votes. Are people just not thinking/talking about the problem? Or am I searching for the wrong thing?)&lt;/p>
 &lt;h2 id="how-are-real-rate-limiters-actually-doing-it">
 &lt;a class="heading-anchor" href="#how-are-real-rate-limiters-actually-doing-it">
@@ -1607,8 +1589,7 @@ How are real rate limiters actually doing it?
 &lt;/h2>
 &lt;p>Let’s start with &lt;a href="https://support.cloudflare.com/hc/en-us/articles/115001635128-Configuring-Cloudflare-Rate-Limiting">Cloudflare&lt;/a>, since it’s nice and clear:&lt;/p>
 &lt;blockquote>
-&lt;p>Once an individual IPv4 address or IPv6 /64 IP range exceeds a rule threshold, further requests to the origin web server are blocked&lt;/p>
-&lt;/blockquote>
+&lt;p>Once an individual IPv4 address or IPv6 /64 IP range exceeds a rule threshold, further requests to the origin web server are blocked&lt;/p>&lt;/blockquote>
 &lt;p>That’s pretty good, though it’s missing some of the nuance of the algorithm above. If there’s a large non-malicious site (apartment complex, school, business, etc.) behind the /64, the blocking might be over-aggressive. If an attacker has an assignment larger than /64, they might have between 256 and 65,536 /64s at their disposal. The large end of that range is getting big.&lt;/p>
 &lt;p>AWS WAF supports IPv6 for rules, inspection, and reporting, but doesn’t specify how it implements rate-limiting for IPv6. Concerningly, it has a &lt;a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based.html">really small limit&lt;/a> on the number of IPs it can rate-limit at once: “AWS WAF can block up to 10,000 IP addresses. If more than 10,000 IP addresses send high rates of requests at the same time, AWS WAF will only block 10,000 of them.” Unless their IPv6-limiting algorithm is smart, it would be easy for an attacker to ensure they have more blockable units (IPs or /64s) than the limiter can hold. And that means that it would effectively be completely unlimited.&lt;/p>
 &lt;p>(This raises the question of what the limit on the number of blocked IPs is for other services. I found no such limit mentioned for anything else.)&lt;/p>
@@ -1837,7 +1818,7 @@ AWS observations
 &lt;p>This is a very nice approach. It results in the most accurate predictions for the most users. And it largely allows the app developers/ethicists (probably one and the same) to wash their hands of the charge that they’re requiring people to break the law to avoid being late. If the user was law-abiding, they’d get law-abiding directions!&lt;/p>
 &lt;p>(For the brief amount of time before there’s any data about the user… probably keep it clean by giving a speed-limit estimate.)&lt;/p>
 &lt;p>I don’t know what apps really do. After messing around with Google Maps for a while I managed to &lt;a href="https://goo.gl/maps/8bjzqbrAkTg1QXh56">find a route&lt;/a>&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup> that seems to encourage breaking the speed limit.&lt;/p>
-&lt;p>&lt;img alt="Google maps travel time estimate showing 9 minutes for 16.4 kilometers" src="https://adam-p.ca/img/blog/401-travel-time.png">&lt;/p>
+&lt;p>&lt;img src="https://adam-p.ca/img/blog/401-travel-time.png" alt="Google maps travel time estimate showing 9 minutes for 16.4 kilometers">&lt;/p>
 &lt;p>16.4 kilometers in 9 minutes is 109 kilometers per hour, and the speed limit on highway 401 is 100 km/h. But… if that 9 minutes is rounded down from 9.9 minutes, then the speed drops to 99.4 km/h. And it did take me about 10 tries to find a route that exceeded the limit. (I hunted in the Toronto area because I know the speed limits, but there are probably much better, longer, traffic-free stretches elsewhere that would be better experiments. Except now it’s snowy everywhere that I know, and that will also surely factor into estimates.)&lt;/p>
 &lt;p>Is it okay for a maps app to encourage us to ever break the legal speed limit, even if our previous behaviour – or the behaviour of others on the same stretch of road – indicates that we likely will anyway?&lt;/p>
 &lt;p>Even seemingly mundane automated systems can have ethical impacts. As consumers of such systems we need to be cognizant of what behaviours such systems are pushing us towards (and away from), and we should get in the habit of consciously and explicitly asking ourselves how we’re being influenced.&lt;/p>
@@ -2168,13 +2149,11 @@ T+1 year –> ∞
 &lt;p>Last thing, maybe: Remember that (almost) everything is a phase. Just because your kid is hitting and kicking a lot (or whatever) – for months! – doesn’t mean that he’s a psychopath or otherwise permanently broken. Try to be patient and loving. Your child will grow up and get through each phase and the only lasting harm that can be done is by &lt;em>you&lt;/em> and your reaction to it. And then the next shitty phase will come along. (This is also true for nice phases, sadly.)&lt;/p></description></item><item><title>Make sure you have a backup Yubikey</title><link>https://adam-p.ca/blog/2021/06/backup-yubikey/</link><pubDate>Fri, 25 Jun 2021 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2021/06/backup-yubikey/</guid><description>&lt;p>For four years I carried a &lt;a href="https://support.yubico.com/hc/en-us/articles/360013714579-YubiKey-NEO">Yubikey NEO&lt;/a> (USB Type-A) in my pocket, on my keychain. And then it died (would no longer be recognized by any computer).&lt;/p>
 &lt;p>&lt;a href="https://web.archive.org/web/20170212170854/https://www.yubico.com/products/yubikey-hardware/yubikey-neo">Yubikey’s durability claim&lt;/a> was:&lt;/p>
 &lt;blockquote>
-&lt;p>Crush-resistant and waterproof, YubiKey NEO is practically indestructible during normal use, weighs only 3g, and attaches to your keychain alongside your house and car keys&lt;/p>
-&lt;/blockquote>
+&lt;p>Crush-resistant and waterproof, YubiKey NEO is practically indestructible during normal use, weighs only 3g, and attaches to your keychain alongside your house and car keys&lt;/p>&lt;/blockquote>
 &lt;p>So, they didn’t explicitly say “carrying it on your keychain won’t kill it”, but they sure did imply it.&lt;/p>
 &lt;p>The wording for their &lt;a href="https://www.yubico.com/ca/product/yubikey-5-nfc/">new USB Type-A products&lt;/a> is much more tepid:&lt;/p>
 &lt;blockquote>
-&lt;p>Design &amp; Durability: Water Resistant, Crush Resistant&lt;/p>
-&lt;/blockquote>
+&lt;p>Design &amp; Durability: Water Resistant, Crush Resistant&lt;/p>&lt;/blockquote>
 &lt;p>Luckily, a few months after I bought the first one I bought a backup that I stored safely, so I wasn’t much put out. Here are the two keys side-by-side – click to see more detail than you need:&lt;/p>
 &lt;a href="https://adam-p.ca/img/blog/yubikeys.jpg">
 &lt;img src="https://adam-p.ca/img/blog/yubikeys.jpg" alt="two Yubikeys, one more worn than the other">
@@ -2343,8 +2322,7 @@ Do you see the mistake I made?
 &lt;/h2>
 &lt;p>And later I decide that maybe this story would be amusing or educational for someone, so I should write up a blog post. And as I’m writing this blog post I realize that I got something wrong. This:&lt;/p>
 &lt;blockquote>
-&lt;p>it looks like IE8 is automatically encoding “𪘀” as &lt;code>\ud869\ude00&lt;/code>.&lt;/p>
-&lt;/blockquote>
+&lt;p>it looks like IE8 is automatically encoding “𪘀” as &lt;code>\ud869\ude00&lt;/code>.&lt;/p>&lt;/blockquote>
 &lt;p>Nope. It was JSON doing that, not “automatic encoding”. Having encountered the space–>&lt;code>%20&lt;/code> automatic encoding, I think I was primed to lazily attribute more unexpected behaviour to magic.&lt;/p>
 &lt;p>Now, with the JSON polyfill replacement, I could go back to just percent-encoding-percent and regain even more code point space in the URL.&lt;/p>
 &lt;p>I don’t think I will, though. I can’t shake the question: “Is there anything besides percent-encoding that &lt;code>InternetCanonicalizeUrl(ICU_DECODE)&lt;/code> (the win32 URL decode function) will try to decode?” If there is, then some user’s password will be unusable, and it’ll be super hard to diagnose. At the bottom of every email we say, “Psiphon will never ask you for your password”, so we can’t possibly figure out what’s wrong with it!&lt;/p>
@@ -2386,8 +2364,7 @@ Appendix: Unicode stuff, as I know it
 &lt;p>But JavaScript and Windows use UTF-16. It uses one or two 16-bit code units to encode a code point. Some quick &lt;a href="https://en.wikipedia.org/wiki/UTF-16#History">Wikipedia reading&lt;/a> suggests that, once upon a time, 16 bits were thought to be enough for Unicode code points. JavaScript and Windows probably adopted that early (UCS2) spec, and then were stuck with it for legacy reasons. UTF-16 is compatible with that old spec, and here we are.&lt;/p></description></item><item><title>The short happy life of the Breached extension</title><link>https://adam-p.ca/blog/2019/05/breached/</link><pubDate>Mon, 27 May 2019 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2019/05/breached/</guid><description>&lt;p>In October 2017, Troy Hunt of &lt;a href="https://haveibeenpwned.com/">Have I Been Pwned&lt;/a> held a &lt;a href="https://www.troyhunt.com/do-something-awesome-with-have-i-been-pwned-and-win-a-lenovo-thinkpad/">contest&lt;/a> inviting people to do something cool with the HIBP API. I decided a) that I would kind of like the special edition ThinkPad he was giving away, and b) that I could probably whip something up pretty quickly.&lt;/p>
 &lt;p>I decided to create a browser extension that would simply pull HIBP breach information and show a browser notification – with the ability to view extra info – when the user visited a site that had been breached. And so was born the &lt;a href="https://github.com/adam-p/breached">Breached extension&lt;/a>. (Spoiler: I didn’t win.)&lt;/p>
 &lt;blockquote>
-&lt;p>For non-technical readers: A “breach”, in this context, is when a hacker obtains the user database of a website. A breach generally includes email addresses, passwords (in some form), maybe credit cards, and other stuff you don’t want a hacker to have. So “breach information” about a website tells you that a breach occurred, when it happened, what data was stolen, and how much of it. Which is the kind of thing you should know about before using that website!&lt;/p>
-&lt;/blockquote>
+&lt;p>For non-technical readers: A “breach”, in this context, is when a hacker obtains the user database of a website. A breach generally includes email addresses, passwords (in some form), maybe credit cards, and other stuff you don’t want a hacker to have. So “breach information” about a website tells you that a breach occurred, when it happened, what data was stolen, and how much of it. Which is the kind of thing you should know about before using that website!&lt;/p>&lt;/blockquote>
 &lt;p>A month after I released the extension, someone created an issue pointing out that Mozilla &lt;a href="https://github.com/adam-p/breached/issues/5">“started working on integrating haveibeenpwned.com warnings into Firefox”&lt;/a>. (As I promised there I did (nominally) reach out, but it didn’t go anywhere.) A year later that project turned into &lt;a href="https://monitor.firefox.com/">Firefox Monitor&lt;/a>.&lt;/p>
 &lt;p>So, Breached is basically redundant on Firefox. In a sense I’m bummed, but I’m more flattered – it was obviously a pretty okay idea!&lt;/p>
 &lt;p>Monitor has a different &lt;a href="https://blog.mozilla.org/security/2018/11/14/when-does-firefox-alert-for-breached-sites/">notification policy&lt;/a>: They only show alerts for sites that have been breached within the last two months. (If I’m reading that right. I think the 12-month part is a one-off and is likely just to increase the number of people that will ever see a notification). Breached’s policy is… just, like, show them all. Because I didn’t think about that while coding it. I think Monitor’s time-limit is better, since many sites will have sorted themselves out and don’t deserve a black mark for all time, so I &lt;a href="https://github.com/adam-p/breached/issues/6">might also add a time limit&lt;/a>. (I don’t find the notifications noisy, but maybe I just don’t visit enough shady sites.)&lt;/p>
@@ -2510,8 +2487,7 @@ Vulnerability Disclosure
 &lt;p>I filed a security issue with the Android team (&lt;a href="https://code.google.com/p/android/issues/detail?id=204776">#204776&lt;/a>, but it’s not publicly visible). The response was that it is “working as intended”.&lt;/p>
 &lt;blockquote>
 &lt;p>Once someone has access to an unlocked phone, they are able to do anything with it (attempt to root the device, install other malware, etc).&lt;/p>
-&lt;p>We appreciate the report but this is working as intended.&lt;/p>
-&lt;/blockquote>
+&lt;p>We appreciate the report but this is working as intended.&lt;/p>&lt;/blockquote>
 &lt;p>I see what they’re saying. In theory, the attacker could enable app side-loading, and then install some kind of data-snarfer service, and then give it sufficient permission to exfiltrate everything it can access. The data-snarfer could run even while the phone is locked.&lt;/p>
 &lt;p>Or the attacker could just keep touching the screen to keep it unlocked.&lt;/p>
 &lt;p>(Rooting typically requires a bootloader unlock, which wipes the device. But that’s irrelevant if rooting isn’t necessary to effect an equivalent attack.)&lt;/p>
@@ -2607,8 +2583,7 @@ Thank you for submitting your Safari Extension.
 Apple reviews all submissions and reserves the right to omit, edit, or reject any submission. Please note you will not receive any further notifications.
 We appreciate your interest in Safari.
 Sincerely,
-Apple Developer&lt;/p>
-&lt;/blockquote>
+Apple Developer&lt;/p>&lt;/blockquote>
 &lt;p>(From &lt;a href="mailto:noreply@adc.apple.com">noreply@adc.apple.com&lt;/a>)&lt;/p>
 &lt;p>So… You’re going to review my extension, and I’ll never know if it’s been accepted or rejected or what? And there’s no mechanism for me to get an update?&lt;/p>
 &lt;p>Sure enough, 5 weeks has gone by now. There’ve been no status update emails, and there’s no review status info anywhere on the developer website (that I can find). And I’m not the only one – there are &lt;a href="https://devforums.apple.com/thread/182373?tstart=0">other people&lt;/a> on the forums in the &lt;a href="https://devforums.apple.com/thread/187144?tstart=0">same boat&lt;/a>.&lt;/p>
@@ -2622,7 +2597,7 @@ No search
 &lt;p>To top it off, the Safari Extensions Gallery itself… has no search?!? Let’s pick a not-front-page extension at random… how about the “Entertainment” category and then the Turboglue extension. (Sorry, there’s no way to give you a link to that!). Now try to find it some other way. The search box in the upper-right of that page? “No results were found.” And… I can’t find another search box. (Unlike Firefox, there’s no in-browser extension search.) How about a Google site search? That wouldn’t really be an acceptable work-around even if it worked… but &lt;a href="https://www.google.com/search?q=site%3Aextensions.apple.com+Turboglue">it doesn’t anwyay&lt;/a>.&lt;/p>
 &lt;p>(Maybe related: Here’s a &lt;a href="https://devforums.apple.com/thread/179972">forum post&lt;/a> by a dev who has had his/her extension approved, but can’t actually find it in the Gallery.)&lt;/p>
 &lt;p>I’m not sure how this could be worse. Unfriendly to developers &lt;em>and&lt;/em> unfriendly to users. And it’s not like Safari extensions are &lt;em>new&lt;/em> – they’ve been around about the &lt;a href="https://en.wikipedia.org/wiki/Safari_%28web_browser%29#Safari_5">same amount of time&lt;/a> &lt;a href="https://en.wikipedia.org/wiki/Google_Chrome#Chrome_Web_Store">as Chrome extensions&lt;/a>.&lt;/p>
-&lt;p>&lt;img alt="Safari Extensions Gallery still marked as new" src="https://adam-p.ca/img/blog/safari-gallery-new.png" title="Safari Extensions Gallery still marked as new">&lt;/p>
+&lt;p>&lt;img src="https://adam-p.ca/img/blog/safari-gallery-new.png" alt="Safari Extensions Gallery still marked as new" title="Safari Extensions Gallery still marked as new">&lt;/p>
 &lt;p>(Screen-grabbed from the bottom of &lt;a href="https://developer.apple.com/programs/safari/">this page&lt;/a>. Age of the Gallery derived from &lt;a href="https://lifehacker.com/5598524/whats-useful-in-the-safari-extensions-gallery">this article&lt;/a>.)&lt;/p>
 &lt;h2 id="sweet-lemons">
 &lt;a class="heading-anchor" href="#sweet-lemons">
@@ -2640,7 +2615,7 @@ Bonus whinging
 &lt;/h2>
 &lt;p>It’s necessary to generate and register a signing certificate before you can even start to develop a Safari extension (IIRC – but definitely before publishing). There’s no such stumbling block in Firefox and Chrome. Maybe this is due to the absence of hosting? I’m not entirely sure how painful it’s going to be to set up a new OS X development machine.&lt;/p>
 &lt;p>Check out the ghetto method of opening the Markdown Here options page in Safari. It’s probably not &lt;em>just&lt;/em> my dumbness, since I stole the approach from AdBlock.&lt;/p>
-&lt;p>&lt;img alt="Markdown Here prefs in Safari" src="https://adam-p.ca/img/blog/safari-mdh-prefs-checkbox.png">&lt;/p>
+&lt;p>&lt;img src="https://adam-p.ca/img/blog/safari-mdh-prefs-checkbox.png" alt="Markdown Here prefs in Safari">&lt;/p>
 &lt;hr>
 &lt;h2 id="update-accepted-6-months-later">
 &lt;a class="heading-anchor" href="#update-accepted-6-months-later">
@@ -2666,12 +2641,11 @@ Page Action vs. Browser Action
 &lt;dt>Browser actions...&lt;/dt>
 &lt;dd>are buttons on the browser toolbar. (&lt;a href="https://developer.chrome.com/extensions/browserAction.html">See &lt;code>browserAction&lt;/code> API info&lt;/a>.)&lt;/dd>
 &lt;/dl>
-&lt;p>&lt;img alt="Firefox page and browser buttons" src="https://adam-p.ca/img/blog/firefox-button.png">&lt;/p>
+&lt;p>&lt;img src="https://adam-p.ca/img/blog/firefox-button.png" alt="Firefox page and browser buttons">&lt;/p>
 &lt;p>In the screenshot above you can see the two styles co-existing in Firefox, which suggests there’s no real implementation decision to make – just provide both, and let the user decide which style they like. That’s true in Firefox (although there’s still the lesser decision of whether or not to add the toolbar button by default), but in Chrome you can either have a page action &lt;em>or&lt;/em> a browser action, not both.&lt;/p>
 &lt;p>The choice initially seemed pretty obvious: use a page action. From Chrome’s &lt;a href="https://developer.chrome.com/extensions/browserAction.html#tips">documentation for browser actions&lt;/a>:&lt;/p>
 &lt;blockquote>
-&lt;p>Don’t use browser actions for features that make sense for only a few pages. Use page actions instead.&lt;/p>
-&lt;/blockquote>
+&lt;p>Don’t use browser actions for features that make sense for only a few pages. Use page actions instead.&lt;/p>&lt;/blockquote>
 &lt;p>Markdown Here’s button is only applicable to some rich-edit compose elements (email, mostly), so that admonition seems to apply pretty directly. Like many people, I don’t like occasional-use buttons cluttering up my toolbar, so I initially implemented the button as a page action.&lt;/p>
 &lt;h2 id="apparently-imperceptible-affordance">
 &lt;a class="heading-anchor" href="#apparently-imperceptible-affordance">

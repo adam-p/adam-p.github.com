@@ -120,8 +120,7 @@ Thank you for submitting your Safari Extension.
 Apple reviews all submissions and reserves the right to omit, edit, or reject any submission. Please note you will not receive any further notifications.
 We appreciate your interest in Safari.
 Sincerely,
-Apple Developer&lt;/p>
-&lt;/blockquote>
+Apple Developer&lt;/p>&lt;/blockquote>
 &lt;p>(From &lt;a href="mailto:noreply@adc.apple.com">noreply@adc.apple.com&lt;/a>)&lt;/p>
 &lt;p>So… You’re going to review my extension, and I’ll never know if it’s been accepted or rejected or what? And there’s no mechanism for me to get an update?&lt;/p>
 &lt;p>Sure enough, 5 weeks has gone by now. There’ve been no status update emails, and there’s no review status info anywhere on the developer website (that I can find). And I’m not the only one – there are &lt;a href="https://devforums.apple.com/thread/182373?tstart=0">other people&lt;/a> on the forums in the &lt;a href="https://devforums.apple.com/thread/187144?tstart=0">same boat&lt;/a>.&lt;/p>
@@ -135,7 +134,7 @@ No search
 &lt;p>To top it off, the Safari Extensions Gallery itself… has no search?!? Let’s pick a not-front-page extension at random… how about the “Entertainment” category and then the Turboglue extension. (Sorry, there’s no way to give you a link to that!). Now try to find it some other way. The search box in the upper-right of that page? “No results were found.” And… I can’t find another search box. (Unlike Firefox, there’s no in-browser extension search.) How about a Google site search? That wouldn’t really be an acceptable work-around even if it worked… but &lt;a href="https://www.google.com/search?q=site%3Aextensions.apple.com+Turboglue">it doesn’t anwyay&lt;/a>.&lt;/p>
 &lt;p>(Maybe related: Here’s a &lt;a href="https://devforums.apple.com/thread/179972">forum post&lt;/a> by a dev who has had his/her extension approved, but can’t actually find it in the Gallery.)&lt;/p>
 &lt;p>I’m not sure how this could be worse. Unfriendly to developers &lt;em>and&lt;/em> unfriendly to users. And it’s not like Safari extensions are &lt;em>new&lt;/em> – they’ve been around about the &lt;a href="https://en.wikipedia.org/wiki/Safari_%28web_browser%29#Safari_5">same amount of time&lt;/a> &lt;a href="https://en.wikipedia.org/wiki/Google_Chrome#Chrome_Web_Store">as Chrome extensions&lt;/a>.&lt;/p>
-&lt;p>&lt;img alt="Safari Extensions Gallery still marked as new" src="https://adam-p.ca/img/blog/safari-gallery-new.png" title="Safari Extensions Gallery still marked as new">&lt;/p>
+&lt;p>&lt;img src="https://adam-p.ca/img/blog/safari-gallery-new.png" alt="Safari Extensions Gallery still marked as new" title="Safari Extensions Gallery still marked as new">&lt;/p>
 &lt;p>(Screen-grabbed from the bottom of &lt;a href="https://developer.apple.com/programs/safari/">this page&lt;/a>. Age of the Gallery derived from &lt;a href="https://lifehacker.com/5598524/whats-useful-in-the-safari-extensions-gallery">this article&lt;/a>.)&lt;/p>
 &lt;h2 id="sweet-lemons">
 &lt;a class="heading-anchor" href="#sweet-lemons">
@@ -153,7 +152,7 @@ Bonus whinging
 &lt;/h2>
 &lt;p>It’s necessary to generate and register a signing certificate before you can even start to develop a Safari extension (IIRC – but definitely before publishing). There’s no such stumbling block in Firefox and Chrome. Maybe this is due to the absence of hosting? I’m not entirely sure how painful it’s going to be to set up a new OS X development machine.&lt;/p>
 &lt;p>Check out the ghetto method of opening the Markdown Here options page in Safari. It’s probably not &lt;em>just&lt;/em> my dumbness, since I stole the approach from AdBlock.&lt;/p>
-&lt;p>&lt;img alt="Markdown Here prefs in Safari" src="https://adam-p.ca/img/blog/safari-mdh-prefs-checkbox.png">&lt;/p>
+&lt;p>&lt;img src="https://adam-p.ca/img/blog/safari-mdh-prefs-checkbox.png" alt="Markdown Here prefs in Safari">&lt;/p>
 &lt;hr>
 &lt;h2 id="update-accepted-6-months-later">
 &lt;a class="heading-anchor" href="#update-accepted-6-months-later">
@@ -179,12 +178,11 @@ Page Action vs. Browser Action
 &lt;dt>Browser actions...&lt;/dt>
 &lt;dd>are buttons on the browser toolbar. (&lt;a href="https://developer.chrome.com/extensions/browserAction.html">See &lt;code>browserAction&lt;/code> API info&lt;/a>.)&lt;/dd>
 &lt;/dl>
-&lt;p>&lt;img alt="Firefox page and browser buttons" src="https://adam-p.ca/img/blog/firefox-button.png">&lt;/p>
+&lt;p>&lt;img src="https://adam-p.ca/img/blog/firefox-button.png" alt="Firefox page and browser buttons">&lt;/p>
 &lt;p>In the screenshot above you can see the two styles co-existing in Firefox, which suggests there’s no real implementation decision to make – just provide both, and let the user decide which style they like. That’s true in Firefox (although there’s still the lesser decision of whether or not to add the toolbar button by default), but in Chrome you can either have a page action &lt;em>or&lt;/em> a browser action, not both.&lt;/p>
 &lt;p>The choice initially seemed pretty obvious: use a page action. From Chrome’s &lt;a href="https://developer.chrome.com/extensions/browserAction.html#tips">documentation for browser actions&lt;/a>:&lt;/p>
 &lt;blockquote>
-&lt;p>Don’t use browser actions for features that make sense for only a few pages. Use page actions instead.&lt;/p>
-&lt;/blockquote>
+&lt;p>Don’t use browser actions for features that make sense for only a few pages. Use page actions instead.&lt;/p>&lt;/blockquote>
 &lt;p>Markdown Here’s button is only applicable to some rich-edit compose elements (email, mostly), so that admonition seems to apply pretty directly. Like many people, I don’t like occasional-use buttons cluttering up my toolbar, so I initially implemented the button as a page action.&lt;/p>
 &lt;h2 id="apparently-imperceptible-affordance">
 &lt;a class="heading-anchor" href="#apparently-imperceptible-affordance">
