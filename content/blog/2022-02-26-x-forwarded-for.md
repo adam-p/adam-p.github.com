@@ -16,9 +16,9 @@ This post ended up being incredibly ~~long~~ comprehensive. I'm afraid that many
 
 * When choosing the rightmost XFF IP, make sure to use the _last_ instance of that header.
 
-* Using special "true client IPs" set by reverse proxies (like `X-Real-IP`, `True-Client-IP`, etc.) _can_ be good, but it depends on the a) how the reverse proxy actually sets it, b) whether the reverse proxy sets it if it's already present/spoofed, and c) how you've configured the reverse proxy (sometimes). 
+* Using special "true client IPs" set by reverse proxies (like `X-Real-IP`, `True-Client-IP`, etc.) _can_ be good, but it depends on a) how the reverse proxy actually sets it, b) whether the reverse proxy sets it if it's already present/spoofed, and c) how you've configured the reverse proxy (sometimes).
 
-* Any header not specifically set by your reverse proxy cannot be trusted. For example, you _must not_ check the `X-Real-IP` header if you're not behind Nginx or something else that always sets it, because you'll be reading a spoofed value.
+* Any header not specifically set by your reverse proxy cannot be trusted. For example, you _must not_ check the `X-Real-IP` header if you're not behind Nginx or something else that _always_ sets it, because you'll be reading a spoofed value.
 
 * A lot of rate limiter implementations are using spoofable IPs and are vulnerable to rate limiter escape and memory exhaustion attacks.
 
@@ -42,9 +42,9 @@ But this isn't just about rate limiters. If you ever touch code that looks at th
 
 There are many reasons why web services are interested in the IP address of their clients: geographical stats, geo-targeting, auditing, rate-limiting, abuse-blocking, session history, etc.
 
-When a client directly connects to a server, the server can see the IP address of the client. If the client connects through one or more proxies (of any kind: forward, reverse, load balancer, API gateway, TLS offloading, IP access control, etc.), then the server only directly sees the IP address of the final proxy used by the client connection.
+When a client directly connects to a server, the server can see the client IP address of the immediate socket. If the client connects through one or more proxies (of any kind: forward, reverse, load balancer, API gateway, TLS offloading, IP access control, etc.), then the server only directly sees the IP address of the final proxy used by the client connection.
 
-In order to pass the original IP address on to the server, there are several headers in common use: 
+In order to pass the original IP address on to the server, there are several headers in common use:
 
 * [`X-Forwarded-For`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For) is a list of comma-separated IPs that gets appended to by each traversed proxy[^1]. The idea is that the first IP (added by the first proxy) is the true client IP. Each subsequent IP is another proxy along the path. The last proxy's IP is _not_ present (because proxies don't add their own IPs, and because it connects directly to the server so its IP will be directly available anyway). We're going to talk about this a lot, so it'll be abbreviated to "XFF".
 
@@ -90,26 +90,26 @@ As you can see, everything already present is just passed through, unchanged and
 
 According to the [HTTP/1.1 RFC (2616)](https://datatracker.ietf.org/doc/html/rfc2616#section-4.2)[^3]:
 
-> Multiple message-header fields with the same field-name MAY be present in a message if and only if the entire field-value for that header field is defined as a comma-separated list \[i.e., #(values)]. It MUST be possible to combine the multiple header fields into one "field-name: field-value" pair, without changing the semantics of the message, by appending each subsequent field-value to the first, each separated by a comma. The order in which header fields with the same field-name are received is therefore significant to the interpretation of the combined field value, and thus a proxy MUST NOT change the order of these field values when a message is forwarded. 
+> Multiple message-header fields with the same field-name MAY be present in a message if and only if the entire field-value for that header field is defined as a comma-separated list \[i.e., #(values)]. It MUST be possible to combine the multiple header fields into one "field-name: field-value" pair, without changing the semantics of the message, by appending each subsequent field-value to the first, each separated by a comma. The order in which header fields with the same field-name are received is therefore significant to the interpretation of the combined field value, and thus a proxy MUST NOT change the order of these field values when a message is forwarded.
 
 [^3]: I believe this is inherited unchanged into [HTTP/2](https://datatracker.ietf.org/doc/html/rfc7540).
 
 That applies to XFF, as it is a comma-separated list. This can make getting the rightmost (or even leftmost) IP error-prone.
 
-For example, Go has three ways to get a header value: 
+For example, Go has three ways to get a header value:
 * [`http.Header.Get(headerName)`](https://pkg.go.dev/net/http#Header.Get) returns the first header value as a string.
 * [`http.Header.Values(headerName)`](https://pkg.go.dev/net/http#Header.Values) returns a slice (array) of strings with the values of all instances of the header `headerName`. (`headerName` is canonicalized before lookup.)
 * `http.Header` is a `map[string][]string` and can be accessed directly. (The map keys are canonicalized header names.) This is similar to using `Values`.
 
 So here's the attack:
-1. Eve makes a request with _two_ spoofed XFF headers. 
+1. Eve makes a request with _two_ spoofed XFF headers.
 2. Your reverse proxy adds Eve's true IP to the end of the _second_ XFF header, per the RFC requirements.
 3. You call `req.Header.Get("X-Forwarded-For")` and get the first header. You split it up and take the rightmost.
 4. You have chosen a spoofed IP. You treat it as trustworthy. Bad things result.
 
 Unlike Go, Twisted's method for getting a single header value [returns the _last_ value](https://github.com/twisted/twisted/blob/ebb2d360070e468981377b917e3a728ff4e6c7f6/src/twisted/web/http.py#L1068). (Why is there no standard, common, accepted behaviour for this?) This avoids the above attack, but it can cause a different (less likely) problem: If you're using the rightmost-ish algorithm (described [below](#algorithms)), you need to go backwards from the right looking for the first untrusted IP. But what if one of your reverse proxies has added a new header instead of appending (a valid thing to do, per the RFC)? Now the IP that you want is nowhere to be found in the last header -- it's full of trusted reverse proxy IPs and the real IP is in a previous instance of the XFF header.
 
-There might be a subtle, hypothetical attack possible here: 
+There might be a subtle, hypothetical attack possible here:
 1. You have (at least) two reverse proxies that you trust.
 2. The second of those reverse proxies doesn't like super long headers, so it creates a new one rather than appending if the XFF header is too long.
 3. Eve knows this. And she wants to hide her IP from you.
@@ -119,7 +119,7 @@ There might be a subtle, hypothetical attack possible here:
 7. Your server software gets the last header and it has only a single IP, belonging to your first reverse proxy.
 8. What does your logic do? Use that IP? Treat it as special because it's private/trusted? Panic because it's impossible that this IP should be trusted?
 
-Note that when I tested with a server behind AWS ALB I found that ALB had already concatenated the XFF headers. So that's good. I have no idea if other reverse proxies do the same, but I bet there's no real consistency. 
+Note that when I tested with a server behind AWS ALB I found that ALB had already concatenated the XFF headers. So that's good. I have no idea if other reverse proxies do the same, but I bet there's no real consistency.
 
 The best thing to do is merge all of the XFF headers yourself.
 
@@ -151,11 +151,11 @@ Some reverse proxies remove any unexpected or unwanted headers, but some (like A
 
 Trying to educate yourself about XFF is, unfortunately, also difficult.
 
-MDN Web Docs are usually the gold standard for stuff like this, but [the page about XFF](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For) doesn't mention these risks at all; it says "the right-most IP address is the IP address of the most recent proxy and the left-most IP address is the IP address of the originating client" with no caveat. The [Wikipedia entry](https://en.wikipedia.org/wiki/X-Forwarded-For) is much better: "Since it is easy to forge an X-Forwarded-For field the given information should be used with care. The right-most IP address is always the IP address that connects to the last proxy, which means it is the most reliable source of information." 
+MDN Web Docs are usually the gold standard for stuff like this, but [the page about XFF](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For) doesn't mention these risks at all; it says "the right-most IP address is the IP address of the most recent proxy and the left-most IP address is the IP address of the originating client" with no caveat. The [Wikipedia entry](https://en.wikipedia.org/wiki/X-Forwarded-For) is much better: "Since it is easy to forge an X-Forwarded-For field the given information should be used with care. The right-most IP address is always the IP address that connects to the last proxy, which means it is the most reliable source of information."
 
 [2022-03-09: Created [an issue](https://github.com/mdn/content/issues/13703) for the MDN documentation. 2022-03-19: I rewrote the page, PR'd it, and the change is live now. You can see a PDF of the [original page here](/misc/MDN-XFF.pdf). Now to fix the `Forwarded` page...]
 
-Other sources are similarly variable. Some say nothing whatsoever about the possibility of the header being spoofed or the presence of private addresses ([1](https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/x-forwarded-headers.html), [2](https://techcommunity.microsoft.com/t5/iis-support-blog/how-to-use-x-forwarded-for-header-to-log-actual-client-ip/ba-p/873115), [3](https://www.geeksforgeeks.org/http-headers-x-forwarded-for/), [4](https://developers.cloudflare.com/fundamentals/get-started/http-request-headers/), [5](https://www.keycdn.com/blog/x-forwarded-for-cdn)). Others do a pretty good job of mentioning the risks ([6](https://totaluptime.com/kb/prevent-x-forwarded-for-spoofing-or-manipulation/), [7](https://docs.fastly.com/signalsciences/faq/real-client-ip-addresses/#x-forwarded-for-header-configuration), [8](https://datatracker.ietf.org/doc/html/rfc7239#section-8.1)), but sometimes you have to read pretty deeply to get to the warnings. 
+Other sources are similarly variable. Some say nothing whatsoever about the possibility of the header being spoofed or the presence of private addresses ([1](https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/x-forwarded-headers.html), [2](https://techcommunity.microsoft.com/t5/iis-support-blog/how-to-use-x-forwarded-for-header-to-log-actual-client-ip/ba-p/873115), [3](https://www.geeksforgeeks.org/http-headers-x-forwarded-for/), [4](https://developers.cloudflare.com/fundamentals/get-started/http-request-headers/), [5](https://www.keycdn.com/blog/x-forwarded-for-cdn)). Others do a pretty good job of mentioning the risks ([6](https://totaluptime.com/kb/prevent-x-forwarded-for-spoofing-or-manipulation/), [7](https://docs.fastly.com/signalsciences/faq/real-client-ip-addresses/#x-forwarded-for-header-configuration), [8](https://datatracker.ietf.org/doc/html/rfc7239#section-8.1)), but sometimes you have to read pretty deeply to get to the warnings.
 
 ## Avoiding those pits
 
@@ -169,11 +169,11 @@ Let's make a few baseline statements:
 
 The leftmost-ish is usually going to be the most "real", while the rightmost-ish is going to be the most trustworthy. So which IP should you use? It depends on what you're going to do with it.
 
-If you're going to do something security-related, you need to use the IP you trust -- the rightmost-ish. The obvious example here is rate-limiting. If you use the leftmost-ish IP for this, an attacker can just spoof a different XFF prefix value with each request and _completely avoid being limited_. 
+If you're going to do something security-related, you need to use the IP you trust -- the rightmost-ish. The obvious example here is rate-limiting. If you use the leftmost-ish IP for this, an attacker can just spoof a different XFF prefix value with each request and _completely avoid being limited_.
 
 Additionally, they might be able to exhaust your server memory by forcing you to store too many individual entries -- one for each fake IP. It may seem hard to believe that storing IP addresses in memory could lead to exhaustion -- especially if they're stored in a cache with finite time-to-live, but keep in mind:
-* The attacker won't be limited to the 4 billion IPv4 addresses. They can use all the bazillion IPv6 addresses, if the limiter isn't [smart about prefixes](/blog/2022/02/ipv6-rate-limiting/). 
-* Since many limiters don't check for valid IPs, an attacker can use any random string it wants. 
+* The attacker won't be limited to the 4 billion IPv4 addresses. They can use all the bazillion IPv6 addresses, if the limiter isn't [smart about prefixes](/blog/2022/02/ipv6-rate-limiting/).
+* Since many limiters don't check for valid IPs, an attacker can use any random string it wants.
 * Also note that these strings can be _big_; for example, Go's [default header block size limit](https://pkg.go.dev/net/http#pkg-constants) is 1MB. That means a single random-string "IP" can be almost 1MB. That means adding 1MB of memory usage _per request_.
 
 It still won't be feasible for all attackers and configurations, but it shouldn't be dismissed without consideration.
@@ -182,7 +182,7 @@ Or an attacker can force you to rate-limit/block the IP addresses of other users
 
 The downside to using the rightmost-ish IP for rate-limiting is that you might block a proxy IP that's not actually a source of abuse but is just used by a bunch of different clients and you would have realized that if you'd just used the leftmost-ish instead. Yeah, well. That doesn't seem super likely, and it's still infinitely more acceptable than allowing attackers to trivially bypass your rate limiter and crash your server.
 
-If you're doing something not obviously security-related... Think hard about your use case. Let's say you just want to do an [IP-geolocation](https://en.wikipedia.org/wiki/Internet_geolocation) lookup for your stats. _Probably_ the leftmost-ish IP is what you want. The vast majority of your users won't be doing any header spoofing, and the geolocation of random internet proxies are no good to you, so you'll _probably_ get the best results with the IP closest to the user. 
+If you're doing something not obviously security-related... Think hard about your use case. Let's say you just want to do an [IP-geolocation](https://en.wikipedia.org/wiki/Internet_geolocation) lookup for your stats. _Probably_ the leftmost-ish IP is what you want. The vast majority of your users won't be doing any header spoofing, and the geolocation of random internet proxies are no good to you, so you'll _probably_ get the best results with the IP closest to the user.
 
 On the other hand, you might want to consider how many internet-proxy-using users you expect to have. Probably few enough that it won't hurt your stats if you geolocate the wrong thing. And is there a way an attacker could hurt you by purposely skewing your geo stats? Probably not, but take a moment to really think about it.
 
@@ -194,11 +194,11 @@ And remember that the final proxy IP -- or the address of the client if it's con
 
 ### Algorithms
 
-When reading this, remember that the final proxy IP is not in the XFF list -- it's the `RemoteAddr`. Also note that `RemoteAddr` might have the form `ip:port`, depending on your platform (like it does in Go) -- sure sure to only use the IP part.
+When reading this, remember that the final proxy IP is not in the XFF list -- it's the `RemoteAddr`. Also note that `RemoteAddr` might have the form `ip:port`, depending on your platform (like it does in Go) -- be sure to only use the IP part.
 
 #### First: collect all of the IPs
 
-Make a single list of all the IPs in all of the `X-Forwarded-For` headers.[^5] Also have the `RemoteAddr` available. 
+Make a single list of all the IPs in all of the `X-Forwarded-For` headers.[^5] Also have the `RemoteAddr` available.
 
 [^5]: In the leftmost-ish approach, the IP you need might not be in the first XFF header. In the rightmost-ish approach, it might not be in the last XFF header.
 
@@ -244,7 +244,7 @@ Warning: I got a little carried away here. I was only intending to look at a cou
 
 Let's start with some good news.
 
-[Cloudflare adds](https://support.cloudflare.com/hc/en-us/articles/206776727-Understanding-the-True-Client-IP-Header) the `CF-Connecting-IP` header to all requests that pass through it; it adds `True-Client-IP` as a synonym for Enterprise users who require backwards compatibility. The value for these headers is a single IP address. The [fullest description](https://developers.cloudflare.com/fundamentals/get-started/http-request-headers/) of these headers that I could find makes it _sound_ like they are just using the leftmost XFF IP, but the example was sufficiently incomplete that I tried it out myself. Happily, it looks like they're actually using the rightmost-ish. 
+[Cloudflare adds](https://support.cloudflare.com/hc/en-us/articles/206776727-Understanding-the-True-Client-IP-Header) the `CF-Connecting-IP` header to all requests that pass through it; it adds `True-Client-IP` as a synonym for Enterprise users who require backwards compatibility. The value for these headers is a single IP address. The [fullest description](https://developers.cloudflare.com/fundamentals/get-started/http-request-headers/) of these headers that I could find makes it _sound_ like they are just using the leftmost XFF IP, but the example was sufficiently incomplete that I tried it out myself. Happily, it looks like they're actually using the rightmost-ish.
 
 Nginx offers a not-enabled-by-default module that [adds the `X-Real-IP` header](https://nginx.org/en/docs/http/ngx_http_realip_module.html). This is also a single IP. When properly and fully configured[^6], it also uses the rightmost IP that isn't on the "trusted" list. So, the rightmost-ish IP. Also good.
 
@@ -259,11 +259,11 @@ Akamai does very wrong things, but at least warns about it. Here is [the documen
 > `X-Forwarded-For` header is the default header proxies use to report the end user IP that is requesting the content. However, this header is often overwritten by other proxies and is also overwritten by Akamai parent servers and thus are not very reliable.
 >
 > The `True-Client-IP` header sent by Akamai does not get overwritten by proxy or Akamai servers and will contain the IP of the client when sending the request to the origin.
-> 
+>
 > `True-Client-IP` is a self provisioned feature enabled in the Property Manager.
-> 
+>
 > _Note that if the `True-Client-IP` header is already present in the request from the client it will not be overwritten or sent twice. It is not a security feature._
-> 
+>
 > The connecting IP is appended to `X-Forwarded-For` header by proxy server and thus it can contain multiple IPs in the list with comma as separator. `True-Client-IP` contains only one IP. If the the end user uses proxy server to connect to Akamai edge server, `True-Client-IP` is the first IP from in `X-Forwarded-For` header. If the end user connects to Akamai edge server directly, `True-Client-IP` is the connecting public IP seen by Akamai.
 
 The relevant bits are "`True-Client-IP` is the first IP from in `X-Forwarded-For` header" and "if the True-Client-IP header is already present in the request from the client it will not be overwritten". So `True-Client-IP` is either the leftmost XFF IP or keeps the original value spoofed by the client. Just the worst possible thing.
@@ -289,12 +289,12 @@ So, by default `Fastly-Client-IP` is trivially spoofable. Again, it seems highly
 Azure Front Door adds the `X-Azure-ClientIP` and `X-Azure-SocketIP` headers. They are [described like so](https://docs.microsoft.com/en-us/azure/frontdoor/front-door-http-headers-protocol):
 
 > `X-Azure-ClientIP`: Represents the client IP address associated with the request being processed. For example, a request coming from a proxy might add the `X-Forwarded-For` header to indicate the IP address of the original caller.
-> 
+>
 > `X-Azure-SocketIP`: Represents the socket IP address associated with the TCP connection that the current request originated from. A request's client IP address might not be equal to its socket IP address because the client IP can be arbitrarily overwritten by a user.
 
 So, `X-Azure-ClientIP` is the leftmost-ish XFF IP and `X-Azure-SocketIP` is the rightmost-ish.
 
-That's reasonably good, but I think it could be a lot clearer. The only warning about `X-Azure-ClientIP` is a subtle hint in the description of the _other_ header. I also hand-wavingly feel that the name of the less-secure header is more appealing than the more-secure one, and is probably leading many people into the wrong choice. 
+That's reasonably good, but I think it could be a lot clearer. The only warning about `X-Azure-ClientIP` is a subtle hint in the description of the _other_ header. I also hand-wavingly feel that the name of the less-secure header is more appealing than the more-secure one, and is probably leading many people into the wrong choice.
 
 ### go-chi/chi
 
@@ -302,7 +302,7 @@ Chi is a Go HTTP router and provides a [RealIP middleware](https://github.com/go
 
 > You should only use this middleware if you can trust the headers passed to you (in particular, the two [three, actually] headers this middleware uses), for example because you have placed a reverse proxy like HAProxy or nginx in front of Chi. If your reverse proxies are configured to pass along arbitrary header values from the client, or if you use this middleware without a reverse proxy, malicious clients will be able to make you very sad (or, depending on how you're using RemoteAddr, vulnerable to an attack of some sort).
 
-Which is a pretty good warning, right? Almost. 
+Which is a pretty good warning, right? Almost.
 
 Let's take this opportunity to talk about abusing `X-Real-IP`, `True-Client-IP`, etc. For example, AWS ALB "[passes] along arbitrary header values from the client" and, indeed, if you don't realize that you will end up "very sad". Because a request like this...
 ```
@@ -337,7 +337,7 @@ Chi's rate limiter is also the one instance I found of the XFF list being split 
 The [Tollbooth HTTP rate limiter](https://github.com/didip/tollbooth) is better, but you still need to be aware of what it's doing in order to use it properly.
 
 Its [README](https://github.com/didip/tollbooth/blob/d2340101f440011dd593e8b6787f5b1a437c2516/README.md#L68-L70) says the order in which it looks for the "real" client IP address is...
-> By default it's: "RemoteAddr", "X-Forwarded-For", "X-Real-IP"  
+> By default it's: "RemoteAddr", "X-Forwarded-For", "X-Real-IP"
 > If your application is behind a proxy, set "X-Forwarded-For" first.
 
 Strangely, that default order isn't actually the default everywhere. If you call [`limiter.New()`](https://github.com/didip/tollbooth/blob/e1a6b41b35e95810a7dce638996b15f136424ed2/limiter/limiter.go#L21) that _is_ the default. But if you call [`tollbooth.NewLimiter()`](https://github.com/didip/tollbooth/blob/2e5b779d07015e6a4386c6cc1a36612c17d54eb5/tollbooth.go#L33) -- "a convenience function to limiter.New" -- the order is `"X-Forwarded-For", "X-Real-IP", "RemoteAddr"`. Which is an important difference!
@@ -404,7 +404,7 @@ Pending disclosure
 
 ### Let's Encrypt
 
-It [looks like](https://github.com/letsencrypt/boulder/blob/ab79f96d7bfc94be7d009e2aa2007c51ddf16f31/web/context.go#L95) Let's Encrypt is using Nginx with `X-Real-IP`. If it's configuration is good (I don't think the config files are in GitHub), then it should be using rightmost-ish.
+It [looks like](https://github.com/letsencrypt/boulder/blob/ab79f96d7bfc94be7d009e2aa2007c51ddf16f31/web/context.go#L95) Let's Encrypt is using Nginx with `X-Real-IP`. If its configuration is good (I don't think the config files are in GitHub), then it should be using rightmost-ish.
 
 <!--redact-start-->
 ### [REDACTED]
@@ -436,13 +436,13 @@ phpList is an "open source newsletter and email marketing software". It [uses th
 ### IIS
 
 I could find anything to suggest that Microsoft IIS processes the XFF header, but an official support blog post entitled ["How to use X-Forwarded-For header to log actual client IP address?"](https://techcommunity.microsoft.com/t5/iis-support-blog/how-to-use-x-forwarded-for-header-to-log-actual-client-ip/ba-p/873115) says:
-> If you see multiple IP addresses in X-Forwarded-For column, it means the client went through more than one network device. Each network device adds their own IP to the end of the value. The left-most IP address is the actual client IP address. Others belong to network devices the client go through. 
+> If you see multiple IP addresses in X-Forwarded-For column, it means the client went through more than one network device. Each network device adds their own IP to the end of the value. The left-most IP address is the actual client IP address. Others belong to network devices the client go through.
 
 Which is a _woefully incomplete_ statement. I fear for the 97,641 people who read that post.
 
 ### Tor
 
-Tor is an anonymity network. They have [recently realized](https://gitlab.torproject.org/tpo/anti-censorship/rdsys/-/issues/80) that they have a control server that is both directly connected to the internet _and_ behind a reverse proxy and are using XFF to give them trustworthy IPs, so they're vulnerable to spoofing. It looks like they're working towards limiting the public-ness of the interface, or doing better verification of CDN connections, or both.
+Tor is an anonymity network. They have [recently realized](https://gitlab.torproject.org/tpo/anti-censorship/rdsys/-/issues/80) that they have a control server that is both directly connected to the internet _and_ behind a reverse proxy and they are using XFF to give them trustworthy IPs, so they're vulnerable to spoofing. It looks like they're working towards limiting the public-ness of the interface, or doing better verification of CDN connections, or both.
 
 (Because I looked into it, I'll mention that it looks like they're _not_ falling victim to the ["multiple headers"](#multiple-headers) pitfall. It looks like they use Twisted and call `request.getHeader` to get the XFF value. The [Twisted source](https://github.com/twisted/twisted/blob/ebb2d360070e468981377b917e3a728ff4e6c7f6/src/twisted/web/http.py#L1068) for that method indicates that it returns the _last_ matching header. That could cause problems if you need the Nth-from-the-right header, but I think it's fine in this case.)
 
@@ -450,7 +450,7 @@ Tor is an anonymity network. They have [recently realized](https://gitlab.torpro
 
 [Section added 2022-03-27. u/Genesis2001 [asked about this](https://old.reddit.com/r/golang/comments/toynmv/rfc_get_the_real_client_ip_the_right_ways/i28ibey/) on Reddit, so I looked at the code and figured I should add some comments here.]
 
-[Gorilla](https://github.com/gorilla) is a Go web toolkit. It's most known for its router, [gorilla/mux](https://github.com/gorilla/mux). It has a [`ProxyHeaders` middleware](https://pkg.go.dev/github.com/gorilla/handlers#ProxyHeaders) for handling XFF (that is intended for general consumption, not just for gorilla/mux users). 
+[Gorilla](https://github.com/gorilla) is a Go web toolkit. It's most known for its router, [gorilla/mux](https://github.com/gorilla/mux). It has a [`ProxyHeaders` middleware](https://pkg.go.dev/github.com/gorilla/handlers#ProxyHeaders) for handling XFF (that is intended for general consumption, not just for gorilla/mux users).
 
 `ProxyHeaders` ([source](https://github.com/gorilla/handlers/blob/v1.5.1/proxy_headers.go#L43)) is deficient in a number of ways, but at least it has a warning that the user's first reverse proxy must strip out the headers being checked before adding them back in. So it's good that it has that warning, but that requirement means that a) it won't be usable for a lot of users, and b) it will be misused by a lot of users.
 
@@ -487,13 +487,13 @@ But rate limiters are only one "security-related" use of `X-Forwarded-For`, and 
 
 ### Server behind reverse proxy _and_ directly connectable
 
-This was briefly mentioned in the "algorithms" section, but is worth repeating. 
+This was briefly mentioned in the "algorithms" section, but is worth repeating.
 
 Generally speaking, if your server is behind one or more reverse proxies, there are one or more rightmost IPs in the XFF header that you can trust. The "rightmost-ish" algorithm is predicated on that. But if your server can _also_ be connected to directly from the internet, that is no longer true.
 
-With some experimentation, an attacker can craft an XFF header to look exactly like the one you expect from your reverse proxy: 
-1. Attacker gets her IP limited/blocked by your server. 
-2. Attacker crafts XFF header so that the rightmost of it has different IPs in the private space, and different counts of those IPs. 
+With some experimentation, an attacker can craft an XFF header to look exactly like the one you expect from your reverse proxy:
+1. Attacker gets her IP limited/blocked by your server.
+2. Attacker crafts XFF header so that the rightmost of it has different IPs in the private space, and different counts of those IPs.
 3. Continue until the limit/block unexpectedly disappears.
 
 Now you're using an untrusted XFF IP and don't realize it. Rate limiter escape, memory exhaustion, etc.
@@ -504,13 +504,13 @@ One way to mitigate this is to check the `RemoteAddr` to make sure it belongs to
 
 Thanks to Ryan Gerstenkorn for sending me his [blog post](https://blog.ryanjarv.sh/2022/03/16/bypassing-wafs-with-alternate-domain-routing.html) about this.
 
-If a) your backend is in-house or otherwise externally accessible, and b) it's fronted by a CDN, and c) you trust the IP addresses/ranges of your CDN, then you may be vulnerable to another class of attack. 
+If a) your backend is in-house or otherwise not directly externally accessible, and b) it's fronted by a CDN, and c) you trust the IP addresses/ranges of your CDN, then you may be vulnerable to another class of attack.
 
-With AWS CloudFront, it's possible for an attacker to create a distribution that points to your origin. Now requests are coming to your origin from trusted IPs, but from a distribution not owned by you. But the real beauty/horror of this is that the attacker can use Lambda@Edge to modify the `Host` header so that you can't tell that a different hostname was used to access your origin, and can also modify the `X-Forwarded-For` header to be whatever the attacker wants. 
+With AWS CloudFront, it's possible for an attacker to create a distribution that points to your origin. Now requests are coming to your origin from trusted IPs, but from a distribution not owned by you. But the real beauty/horror of this is that the attacker can use Lambda@Edge to modify the `Host` header so that you can't tell that a different hostname was used to access your origin, and can also modify the `X-Forwarded-For` header to be whatever the attacker wants.
 
 So your "trusted" reverse proxy IPs become untrusted and can lie to you about the client IP. This can be used to bypass your rate limiter, IP-based access control, etc.
 
-The proper way to address this is to also verify that it's _your_ CDN distribution talking to you. This will usually involve a shared secret or client certificate. 
+The proper way to address this is to also verify that it's _your_ CDN distribution talking to you. This will usually involve a shared secret or client certificate.
 
 Note that Gerstenkorn verified that this works for AWS CloudFront. I checked Cloudflare and found that it doesn't work there: Cloudflare's "Transform Rules" won't let you "set" the XFF header, and if you "delete" the header, only the pre-existing header is deleted and a new one is added with the actual IP. And it's similar when attempting to leverage Workers -- the actual client IP is still appended to the XFF header after any other manipulation.
 
@@ -533,12 +533,12 @@ So, you've set everything up perfectly. Your configuration is exactly right and 
 
 And then you change your network architecture.
 
-The scenarios with the less-bad result are when you're using the rightmost-ish approach and you add a new level of reverse proxy. 
+The scenarios with the less-bad result are when you're using the rightmost-ish approach and you add a new level of reverse proxy.
 * You were accepting connections directly from the internet, so you were using `RemoteAddr` for rate-limiting. Then you added a load balancer. Now you're rate-limiting your load balancer.
 * You were using a single reverse proxy. You were using the rightmost XFF IP -- the one that gets added by that proxy -- for rate-limiting. Then you added another level of reverse proxy. Now you're rate-limiting one of your reverse proxies (whichever is first in the chain).
 * You had a complex setup of internal reverse proxies. You were rate-limiting by rightmost-ish XFF IP, with your whole internal IP range on the "trusted proxy" list. Then you added Cloudflare in front of it all. Now you're rate-limiting Cloudflare.
 
-Those are "less bad" because they don't introduce security flaws, but they're still going to result in a near-complete inability to process requests. 
+Those are "less bad" because they don't introduce security flaws, but they're still going to result in a near-complete inability to process requests.
 
 The "much more bad" scenarios tend to occur when removing reverse proxy levels, and introduce vulnerabilities that you won't notice.
 * You were using a single reverse proxy. You were using the rightmost XFF IP -- the one that gets added by that proxy -- for rate-limiting. Then you decide that you don't need that extra proxy level and instead you connect your server directly to the internet. But now no part of the XFF is trustworthy and you're vulnerable to spoofing.
@@ -553,7 +553,7 @@ The "trusted proxy count" variation of the rightmost-ish algorithm is especially
 
 #### Even worse: _Third-party_ network architecture changes
 
-Take a look at the [Cloudflare IP list](https://www.cloudflare.com/ips). Notice down at the bottom that there have been two times where Cloudflare removed IPs from the list. 
+Take a look at the [Cloudflare IP list](https://www.cloudflare.com/ips). Notice down at the bottom that there have been two times where Cloudflare removed IPs from the list.
 
 Imagine you had those IPs on your trusted list. Imagine you didn't realize they were removed. _Now who owns those IPs?_ Whoever it is can put whatever they want in the XFF, pass it on to your trusted proxy chain, and you'll use it as the "real" IP. Rate limit escape and memory exhaustion.
 
@@ -594,18 +594,18 @@ Does it have wide adoption? Not that I can see. It gets mentioned in documentati
 Okay, does the RFC at least make clear how it should be used and not be used? Well, there is [this section](https://datatracker.ietf.org/doc/html/rfc7239#section-8.1):
 
 > ##### 8.1.  Header Validity and Integrity
-> 
+>
 > The "Forwarded" HTTP header field cannot be relied upon to be correct, as it may be modified, whether mistakenly or for malicious reasons, by every node on the way to the server, including the client making the request.
-> 
+>
 > One approach to ensure that the "Forwarded" HTTP header field is correct is to verify the correctness of proxies and to whitelist them as trusted. This approach has at least two weaknesses. First, the chain of IP addresses listed before the request came to the proxy cannot be trusted. Second, unless the communication between proxies and the endpoint is secured, the data can be modified by an attacker with access to the network.
 
-And that's it.[^10] 
+And that's it.[^10]
 
 [^10]: There is one more sentence elsewhere, but it doesn't add anything: "With the header field format described in this document, it is possible to know what information belongs together, <em>as long as the proxies are trusted</em>." (Emphasis added.)
 
 That warning is strictly true, but it's not very helpful and could be clearer. Would you read those five sentences and then think, "Now I thoroughly understand the danger! It's perfectly clear to me how to use this header in a secure manner."?  I wouldn't.
 
-I feel like it should be the responsibility of this RFC not only to specify how to _create_ the header but also how to correctly _consume_ it. 
+I feel like it should be the responsibility of this RFC not only to specify how to _create_ the header but also how to correctly _consume_ it.
 
 (Bonus: The RFC adds a variation on IPv6 parsing -- quotation marks: "Note that as ":" and "[]" are not valid characters in "token", IPv6 addresses are written as "quoted-string"." E.g., `"[2001:db8:cafe::17]:4711"`.)
 
@@ -618,7 +618,7 @@ I have avoided giving [this definition](https://developer.mozilla.org/en-US/docs
 X-Forwarded-For: <client>, <proxy1>, <proxy2>
 ```
 
-That's what you'll see on basically every page that describes the header. Is it any wonder that misuse of `X-Forwarded-For` is so prevalent? 
+That's what you'll see on basically every page that describes the header. Is it any wonder that misuse of `X-Forwarded-For` is so prevalent?
 
 Let's summarize some of the things we've learned, the wisdom we've gained, and the opinions we've formed:
 
@@ -644,7 +644,7 @@ Let's summarize some of the things we've learned, the wisdom we've gained, and t
 
 11. Whenever possible, read the code for your dependencies. It's hard and a ton of work, but bad security surprises can be worse.
 
-I have avoided saying that you should only use the rightmost-ish XFF IP and never, ever the leftmost. But, seriously, just don't use it. 
+I have avoided saying that you should only use the rightmost-ish XFF IP and never, ever the leftmost. But, seriously, just don't use it.
 
 ## Discussion
 
@@ -658,9 +658,9 @@ HN commenter scottlamb [pointed out](https://news.ycombinator.com/item?id=305714
 
 ### AWS ELB/ALB has an option to make XFF even worse
 
-HN commenter nickjj brought the AWS ELB/ALB ["client port preservation"](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/x-forwarded-headers.html#x-forwarded-for) option to my attention. If enabled, the client port number is appended to the IP added to XFF. Turning that option on will a) violate the de facto standard form of the header, and b) mess up a lot of IP parsing code. 
+HN commenter nickjj brought the AWS ELB/ALB ["client port preservation"](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/x-forwarded-headers.html#x-forwarded-for) option to my attention. If enabled, the client port number is appended to the IP added to XFF. Turning that option on will a) violate the de facto standard form of the header, and b) mess up a lot of IP parsing code.
 
-(And if the IP suddenly starts failing, then what? Does the rate limiter logic keep moving to the right until it finds a good IP? If done wrong, that could lead to using untrusted values. Does the rate limiter instead give up? And do what? Fail open? Fail closed? Panic? In a comment on the didip/tollbooth PR for this [I talk more about this](https://github.com/didip/tollbooth/pull/99#issuecomment-1059328777).)
+(And if the IP suddenly starts failing, then what? Does the rate limiter logic keep moving to the left until it finds a good IP? If done wrong, that could lead to using untrusted values. Does the rate limiter instead give up? And do what? Fail open? Fail closed? Panic? In a comment on the didip/tollbooth PR for this [I talk more about this](https://github.com/didip/tollbooth/pull/99#issuecomment-1059328777).)
 
 ### Consider a custom single-IP header, if you can
 
@@ -674,7 +674,7 @@ Which is good advice and I didn't really say in the post. If you have the abilit
 
 ### Go's `net/http/httputil.ReverseProxy` XFF behaviour being re-examined
 
-Right now, [`httputil.ReverseProxy`](https://pkg.go.dev/net/http/httputil#ReverseProxy) appends the client IP to the XFF header. It looks like [they are considering](https://github.com/golang/go/issues/50465) either replacing the existing XFF header by default or adding options to append to, overwrite, or preserve the existing header. 
+Right now, [`httputil.ReverseProxy`](https://pkg.go.dev/net/http/httputil#ReverseProxy) appends the client IP to the XFF header. It looks like [they are considering](https://github.com/golang/go/issues/50465) either replacing the existing XFF header by default or adding options to append to, overwrite, or preserve the existing header.
 
 My gut feeling is that the initial more-knobs-to-turn suggestion in the issue is better than the limited-and-awkward thing it seems to be turning into. (I guess I'll [express my opinion](https://github.com/golang/go/issues/50465#issuecomment-1059987276) there.)
 
