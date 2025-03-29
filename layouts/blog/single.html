@@ -30,7 +30,7 @@
       {{ $.Page.Lastmod.Format "January 02, 2006" }}
     </time>
     <br>
-    <a href="https://github.com/adam-p/adam-p.github.com/commits/master/content/{{ $.Page.GetIdentity.Path }}">See revision history</a>
+    <a href="https://github.com/adam-p/adam-p.github.com/commits/master/content{{ $.Page.GetIdentity.Path }}.{{ $.Page.File.Ext }}">See revision history</a>
   </p>
 
   {{ if .Params.tags }}
