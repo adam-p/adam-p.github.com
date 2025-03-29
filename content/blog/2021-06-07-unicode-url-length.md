@@ -73,7 +73,7 @@ I hadn't been limiting the username and password input fields because it didn't 
 
 But allowing the user to hit the >2020 bytes error is unacceptable, so I needed to add input limiting. The `<input>` element's [`maxlength` attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/maxlength) seemed like an easy-and-sufficient way to do that.
 
-`maxlength` is supposed to limit by UTF-16 code _unit_, and does so in modern browsers, which is kind of weird. That means that "🍕" and "𪘀" count as _two_ towards the length. Probably not coincidentally, that's how JS's `String.length` works: `"🍕".length === 2`. There's no mention on MDN or CanIUse of IE deviating from this (that I can find), but it does -- `maxlength` counts code _points_, not code _units_. Which is great! It means I can set `maxlength=50` and get the expected username limiting -- no custom validators required.
+`maxlength` is supposed to limit by UTF-16 code _units_, and does so in modern browsers, which is kind of weird. That means that "🍕" and "𪘀" count as _two_ towards the length. Probably not coincidentally, that's how JS's `String.length` works: `"🍕".length === 2`. There's no mention on MDN or CanIUse of IE deviating from this (that I can find), but it does -- `maxlength` counts code _points_, not code _units_. Which is great! It means I can set `maxlength=50` and get the expected username limiting -- no custom validators required.
 
 But it would still be nice to provide more space for input, because of the reasons I had for not limiting in the first place. So let's do a little math:
 ```js
