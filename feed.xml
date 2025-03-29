@@ -57,8 +57,8 @@
 &lt;/div></description></item><item><title>Inexpert Parenting Tips</title><link>https://adam-p.ca/blog/2023/06/parenting-tips/</link><pubDate>Sat, 03 Jun 2023 06:17:56 -0400</pubDate><guid>https://adam-p.ca/blog/2023/06/parenting-tips/</guid><description>&lt;p>These are some parenting tips/tricks/techniques that I’m capturing for a friend. I’m not pretending that the ideas are good or unique or will help anyone other that me, but… maybe?&lt;/p>
 &lt;p>My frame of reference: I have one 8-year-old son, healthy and neurotypical. He’s basically well-behaved now, but we had a &lt;em>lot&lt;/em> of behavioural troubles (hitting other kids, etc.) until recently. I’ll probably be using “he” a lot, as this is basically a personal account.&lt;/p>
 &lt;p>Much of this stuff is based on books or articles I have read along the way. I’m going to make zero effort to figure out the sources, or else I’ll never write any of it.&lt;/p>
-&lt;h2 id="carve-your-brain-and-your-childs-_do_-what-you-want-to-_be_">
-&lt;a class="heading-anchor" href="#carve-your-brain-and-your-childs-_do_-what-you-want-to-_be_">
+&lt;h2 id="carve-your-brain-and-your-childs-do-what-you-want-to-be">
+&lt;a class="heading-anchor" href="#carve-your-brain-and-your-childs-do-what-you-want-to-be">
 ##
 &lt;/a>
 Carve your brain (and your child’s): &lt;em>Do&lt;/em> what you want to &lt;em>be&lt;/em>
@@ -455,8 +455,8 @@ Syntax
 &lt;li>Done.&lt;/li>
 &lt;/ol>
 &lt;p>Hilariously, this half-assed, RFC-violating parsing is resistant to sabotage and proper parsing is not.&lt;/p>
-&lt;h2 id="sabotagehttpswwwyoutubecomwatchvz5rrzdiu1ue">
-&lt;a class="heading-anchor" href="#sabotagehttpswwwyoutubecomwatchvz5rrzdiu1ue">
+&lt;h2 id="sabotage">
+&lt;a class="heading-anchor" href="#sabotage">
 ##
 &lt;/a>
 &lt;a href="https://www.youtube.com/watch?v=z5rRZdiu1UE">Sabotage!&lt;/a>
@@ -1239,8 +1239,8 @@ Advanced and theoretical pitfalls and attacks
 &lt;/h2>
 &lt;p>I’ve talked a lot about two attacks on rate limiters: avoiding being limited and exhausting server memory. I’ve done this because rate limiters are what led me to this topic and because causing a map of IPs to fill memory was an obvious danger in many implementations.&lt;/p>
 &lt;p>But rate limiters are only one “security-related” use of &lt;code>X-Forwarded-For&lt;/code>, and there are more, cooler possibilities for badness! They’re harder to find or reproduce, but they should be fun to speculate on…&lt;/p>
-&lt;h3 id="server-behind-reverse-proxy-_and_-directly-connectable">
-&lt;a class="heading-anchor" href="#server-behind-reverse-proxy-_and_-directly-connectable">
+&lt;h3 id="server-behind-reverse-proxy-and-directly-connectable">
+&lt;a class="heading-anchor" href="#server-behind-reverse-proxy-and-directly-connectable">
 ###
 &lt;/a>
 Server behind reverse proxy &lt;em>and&lt;/em> directly connectable
@@ -1306,8 +1306,8 @@ Network architecture changes
 &lt;p>Depending on your logic, it might take an attack before you notice that you’re vulnerable.&lt;/p>
 &lt;p>The takeaway here is pretty obvious – “when network architecture changes, configuration that depends on that architecture also needs to change” – but it can be very difficult to remember to update every dependent config file when you tweak something that “should” work and does appear to work. (Maybe there are fancy network-management tools that automatically push config changes in response to architecture changes? Would be cool.)&lt;/p>
 &lt;p>The “trusted proxy count” variation of the rightmost-ish algorithm is especially brittle to adding or removing reverse proxies. The “trusted proxy count” (especially with a big internal range) or “rightmost non-private IP” variations can better cope with changing the number of internal proxies (as long as you’re not going to zero).&lt;/p>
-&lt;h4 id="even-worse-_third-party_-network-architecture-changes">
-&lt;a class="heading-anchor" href="#even-worse-_third-party_-network-architecture-changes">
+&lt;h4 id="even-worse-third-party-network-architecture-changes">
+&lt;a class="heading-anchor" href="#even-worse-third-party-network-architecture-changes">
 ####
 &lt;/a>
 Even worse: &lt;em>Third-party&lt;/em> network architecture changes
@@ -2121,8 +2121,8 @@ T+2 days: back at home
 &lt;p>Get sleep whenever you can, for as long as you can. If someone is around to help your partner, put in earplugs and sleep in the basement, any change you get, any time of the day. You’re probably starting out sleep-deprived and it’ll get worse.&lt;/p>
 &lt;p>At some point you will stop feeling so tired-shitty. It’s important to remember that this is just a feeling and that you’re still sleep-deprived – your cognitive and physical function is no less impaired. (There is research demonstrating this.) You haven’t evolved beyond sleep. You still need it. You need it more than anything.&lt;/p>
 &lt;p>Start doing laundry pretty immediately. Your partner probably doesn’t have multiple days worth of what she needs. You’re going to be doing laundry every day. That’s fine – it’ll be the easiest job you have.&lt;/p>
-&lt;h2 id="t2-weeks----1-year">
-&lt;a class="heading-anchor" href="#t2-weeks----1-year">
+&lt;h2 id="t2-weeks--1-year">
+&lt;a class="heading-anchor" href="#t2-weeks--1-year">
 ##
 &lt;/a>
 T+2 weeks –> 1 year
@@ -2135,8 +2135,8 @@ T+2 weeks –> 1 year
 &lt;p>It might take a long time before you fully care about your child. For me it was probably 10 months before he felt like an actual human, with a personality, who could be interacted with something other than boredom.&lt;/p>
 &lt;p>That’s a long time!&lt;/p>
 &lt;p>But the time will pass. Eventually a day will come that you realize you legitimately love the kid, and that you’re happy to see him, and to interact with him (up to a point – your kid’s capacity for dumb, boring crap will be higher than yours for a long, long time). And that you’d rescue him before the cat if the house was on fire.&lt;/p>
-&lt;h2 id="t1-year----">
-&lt;a class="heading-anchor" href="#t1-year----">
+&lt;h2 id="t1-year--">
+&lt;a class="heading-anchor" href="#t1-year--">
 ##
 &lt;/a>
 T+1 year –> ∞
@@ -2236,7 +2236,7 @@ Limit the input
 &lt;li>If the user enters too many characters… Then they’re entering bad credentials, and that’s really up to them.&lt;/li>
 &lt;/ul>
 &lt;p>But allowing the user to hit the >2020 bytes error is unacceptable, so I needed to add input limiting. The &lt;code>&lt;input>&lt;/code> element’s &lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/maxlength">&lt;code>maxlength&lt;/code> attribute&lt;/a> seemed like an easy-and-sufficient way to do that.&lt;/p>
-&lt;p>&lt;code>maxlength&lt;/code> is supposed to limit by UTF-16 code &lt;em>unit&lt;/em>, and does so in modern browsers, which is kind of weird. That means that “🍕” and “𪘀” count as &lt;em>two&lt;/em> towards the length. Probably not coincidentally, that’s how JS’s &lt;code>String.length&lt;/code> works: &lt;code>"🍕".length === 2&lt;/code>. There’s no mention on MDN or CanIUse of IE deviating from this (that I can find), but it does – &lt;code>maxlength&lt;/code> counts code &lt;em>points&lt;/em>, not code &lt;em>units&lt;/em>. Which is great! It means I can set &lt;code>maxlength=50&lt;/code> and get the expected username limiting – no custom validators required.&lt;/p>
+&lt;p>&lt;code>maxlength&lt;/code> is supposed to limit by UTF-16 code &lt;em>units&lt;/em>, and does so in modern browsers, which is kind of weird. That means that “🍕” and “𪘀” count as &lt;em>two&lt;/em> towards the length. Probably not coincidentally, that’s how JS’s &lt;code>String.length&lt;/code> works: &lt;code>"🍕".length === 2&lt;/code>. There’s no mention on MDN or CanIUse of IE deviating from this (that I can find), but it does – &lt;code>maxlength&lt;/code> counts code &lt;em>points&lt;/em>, not code &lt;em>units&lt;/em>. Which is great! It means I can set &lt;code>maxlength=50&lt;/code> and get the expected username limiting – no custom validators required.&lt;/p>
 &lt;p>But it would still be nice to provide more space for input, because of the reasons I had for not limiting in the first place. So let’s do a little math:&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-js" data-lang="js">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// We want to be sure we don't hit the ~2020 limit. Let's say 1900 is a safe maximum.
 &lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75af00">absolute_byte_limit&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">1900&lt;/span>
