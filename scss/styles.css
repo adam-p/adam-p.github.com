@@ -12953,3 +12953,32 @@ a.footnote-ref::before {
 
 a.footnote-ref::after {
   content: ']'; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 1.5rem 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  overflow: hidden; }
+  table thead {
+    background-color: #e3e0de; }
+    table thead th {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid #d8d3d0;
+      white-space: nowrap; }
+  table tbody tr {
+    border-bottom: 1px solid #d8d3d0; }
+    table tbody tr:last-child {
+      border-bottom: none; }
+    table tbody tr:hover {
+      background-color: #f4f2f2; }
+  table tbody td {
+    padding: 0.75rem 1rem; }
+  @media (max-width: 768px) {
+    table {
+      display: block;
+      overflow-x: auto; } }
