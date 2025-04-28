@@ -31,6 +31,10 @@ markup:
       unsafe: True
   highlight:
     style: monokailight
+  tableOfContents:
+    startLevel: 2
+    endLevel: 5
+    ordered: false
 
 relativeURLs: True
 
