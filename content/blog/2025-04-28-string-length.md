@@ -565,3 +565,7 @@ There's a mismatch between frontend and backend encoding used for limiting. This
 So a mundane user wouldn't be able to get into a bad state. And if someone F12-removes the submit-button-disabled state on the frontend, they can create a username/password beyond 50/200 code points, but they will still be able to log in with them. So that's okay-ish.
 
 What's less good is that a user with a too-long username won't be able to _edit_ their account -- adding an email address, say -- without changing the username, because the UI will flag the (unchanged) username as invalidly long. Sure, if you mess around in browser DevTools you get what you deserve, but it's still a good example of unfortunate consequences due to inconsistency.
+
+---
+
+Hacker New discussion [will be here](https://news.ycombinator.com/item?id=43850398), if any results.
