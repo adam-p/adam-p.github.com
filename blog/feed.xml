@@ -1,4 +1,670 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on adam-p</title><link>https://adam-p.ca/blog/</link><description>Recent content in Blog on adam-p</description><generator>Hugo -- gohugo.io</generator><language>en</language><atom:link href="https://adam-p.ca/blog/feed.xml" rel="self" type="application/rss+xml"/><item><title>Bug story: Sorting by timestamp</title><link>https://adam-p.ca/blog/2023/12/sort-by-timestamp/</link><pubDate>Sat, 23 Dec 2023 10:22:41 -0500</pubDate><guid>https://adam-p.ca/blog/2023/12/sort-by-timestamp/</guid><description>&lt;p>While reviewing a co-worker’s results-paging design I realized there was a bug in some paging code I wrote&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> a few years ago. It’s unlikely to manifest and kind of subtle, but I thought that describing it here might be useful to others writing such code (including my future self). It comes down to sorting by timestamp…&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on adam-p</title><link>https://adam-p.ca/blog/</link><description>Recent content in Blog on adam-p</description><generator>Hugo -- gohugo.io</generator><language>en</language><atom:link href="https://adam-p.ca/blog/feed.xml" rel="self" type="application/rss+xml"/><item><title>The best – but not good – way to limit string length</title><link>https://adam-p.ca/blog/2025/04/string-length/</link><pubDate>Mon, 28 Apr 2025 14:13:48 -0400</pubDate><guid>https://adam-p.ca/blog/2025/04/string-length/</guid><description>&lt;p>Getting the length of a string seems simple and is something we do in our code every day. Limiting the length of a string is also extremely common in both frontend and backend code. But both of those actions – especially length limiting – hide a lot of complexity, bug-risk, and even vulnerability danger. In this post, we’re going to examine string length limiting deeply enough to help us fully grok what it means when we do it and how best to do it… and discover that the best still isn’t great.&lt;/p>
+&lt;p>A TL;DR misses the “fully grok” part, but not everyone has time to read everything, so here are the key takeaways:&lt;/p>
+&lt;ol>
+&lt;li>Be aware that there are different ways of measuring string length.&lt;/li>
+&lt;li>Really understand how your programming language stores strings in memory, exposes them to you, and determines string length.&lt;/li>
+&lt;li>Make an intentional decision about how you’re going to count characters when limiting string length.&lt;/li>
+&lt;li>Look carefully at how the “max length” features provided by your language (framework, etc.) actually work. There’s a very good chance that they do not match the limiting method you chose.&lt;/li>
+&lt;li>Make sure you use that same counting method across all the layers of your architecture.&lt;/li>
+&lt;li>Probably limit by counting normalized Unicode code points. (Like &lt;a href="https://google.aip.dev/210#:~:text=Character%20definition">Google recommends&lt;/a>.)&lt;/li>
+&lt;/ol>
+&lt;p>With that out of the way, let’s start our investigation by looking at some of our familiar string length functions:&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;/th>
+&lt;th>&lt;/th>
+&lt;th style="text-align: right">“a”&lt;/th>
+&lt;th style="text-align: right">“字”&lt;/th>
+&lt;th style="text-align: right">“🔤”&lt;/th>
+&lt;th style="text-align: right">“👨‍👩‍👧‍👦”&lt;/th>
+&lt;th style="text-align: right">“र्स्प”&lt;/th>
+&lt;th style="text-align: right">“x̴͙̹̬̑̓͝͝”&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Go&lt;/td>
+&lt;td>&lt;code>len(string)&lt;/code>&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">3&lt;/td>
+&lt;td style="text-align: right">4&lt;/td>
+&lt;td style="text-align: right">25&lt;/td>
+&lt;td style="text-align: right">15&lt;/td>
+&lt;td style="text-align: right">17&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>JavaScript&lt;/td>
+&lt;td>&lt;code>String.length&lt;/code>&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">2&lt;/td>
+&lt;td style="text-align: right">11&lt;/td>
+&lt;td style="text-align: right">5&lt;/td>
+&lt;td style="text-align: right">9&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Python 3&lt;/td>
+&lt;td>&lt;code>len(str)&lt;/code>&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">7&lt;/td>
+&lt;td style="text-align: right">5&lt;/td>
+&lt;td style="text-align: right">9&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Swift&lt;/td>
+&lt;td>&lt;code>String.count&lt;/code>&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>Those four measurements of string length are exemplars of the approaches common to most programming languages: UTF-8 bytes, UTF-16 code units, Unicode code points, and grapheme clusters.&lt;/p>
+&lt;h2 id="character-encodings-and-terminology">
+&lt;a class="heading-anchor" href="#character-encodings-and-terminology">
+##
+&lt;/a>
+Character encodings and terminology
+&lt;/h2>
+&lt;p>There are &lt;a href="https://tonsky.me/blog/unicode/">good explanations&lt;/a> of this stuff elsewhere, but let’s try to quickly get a handle on the concepts we need to go further. (Feel free to skip anything you’re already comfortable with.)&lt;/p>
+&lt;p>First, a working definition of a “&lt;strong>character&lt;/strong>”: This is the human conceptual ideal of the smallest building block of most written languages&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>: a letter, an emoji, an ideograph, a punctuation mark, a symbol, a grapheme. Later on we’ll also think of a character as “if a user types this, they expect a ‘character count’ to increase by 1”. All of the examples in the above table probably look like “a character” to you.&lt;/p>
+&lt;p>(We’re going to avoid using this term lightly, in favour of technical correctness, to avoid confusion. So I’m never going to say “Unicode character”.)&lt;/p>
+&lt;h3 id="unicode">
+&lt;a class="heading-anchor" href="#unicode">
+###
+&lt;/a>
+Unicode
+&lt;/h3>
+&lt;p>&lt;strong>Unicode&lt;/strong> is humanity’s attempt to list all possible characters, plus a whole lot more: control characters, non-printable characters, fragments that can be combined to form characters, and so on.&lt;/p>
+&lt;p>Each entry in the Unicode space is called a “&lt;strong>code point&lt;/strong>” and is represented with a 32-bit unsigned integer, though the actual usable space is only 2²¹ (1.1 million possible values) and only about 150,000 of those values have been assigned. You might also see the term “&lt;strong>Unicode scalar units&lt;/strong>” – these are basically the same as code points, but exclude the reserved “surrogate pair” range.&lt;/p>
+&lt;p>Examples (character: code, decimal)&lt;/p>
+&lt;ul>
+&lt;li>“a”: &lt;a href="https://unicodeplus.com/U+0061">U+0061&lt;/a>, 97&lt;/li>
+&lt;li>“字”: &lt;a href="https://unicodeplus.com/U+5B57">U+5B57&lt;/a>, 23383&lt;/li>
+&lt;li>“🔤”: &lt;a href="https://unicodeplus.com/U+1F524">U+1F524&lt;/a>, 128292&lt;/li>
+&lt;/ul>
+&lt;p>Strictly speaking, a “Unicode code point” is an abstract concept, with a numerical value assigned to each character. There are 3 common concrete schemes for encoding those code points: UTF-8, UTF-16, and UTF-32. “&lt;strong>UTF-32&lt;/strong>” is a direct representation: 32 bits to encode the 32 bits, with endian variants. I’m going to prefer just saying “Unicode code point” for clarity. We’ll discuss UTF-8 and UTF-16 at length below.&lt;/p>
+&lt;p>Note that in Go, a Unicode code point is typically called a “&lt;strong>rune&lt;/strong>”. (Go &lt;a href="https://go.dev/blog/strings#code-points-characters-and-runes">seems to have&lt;/a> introduced the term for the sake of brevity. I certainly appreciate that, but I’m going to stick with universal terms here.)&lt;/p>
+&lt;h3 id="grapheme-cluster">
+&lt;a class="heading-anchor" href="#grapheme-cluster">
+###
+&lt;/a>
+Grapheme cluster
+&lt;/h3>
+&lt;p>Some Unicode code points can be combined and rendered into a single visual character; we call this a &lt;strong>grapheme cluster&lt;/strong> (or extended grapheme cluster).&lt;/p>
+&lt;p>We’ll go through some examples, to help illuminate the complexity.&lt;/p>
+&lt;ul>
+&lt;li>“👨‍👩‍👧‍👦”: composed of 7 code points
+&lt;ol>
+&lt;li>“👨”: &lt;a href="https://unicodeplus.com/U+1F468">U+1F468&lt;/a>, “man”&lt;/li>
+&lt;li>zero-width joiner: &lt;a href="https://unicodeplus.com/U+200D">U+200D&lt;/a>, HTML entity &lt;code>&amp;zwj;&lt;/code>&lt;/li>
+&lt;li>“👩”: &lt;a href="https://unicodeplus.com/U+1F469">U+1F469&lt;/a>, “woman”&lt;/li>
+&lt;li>zero-width joiner: &lt;a href="https://unicodeplus.com/U+200D">U+200D&lt;/a>, HTML entity &lt;code>&amp;zwj;&lt;/code>&lt;/li>
+&lt;li>“👧”: &lt;a href="https://unicodeplus.com/U+1F467">U+1F467&lt;/a>, “girl”&lt;/li>
+&lt;li>zero-width joiner: &lt;a href="https://unicodeplus.com/U+200D">U+200D&lt;/a>, HTML entity &lt;code>&amp;zwj;&lt;/code>&lt;/li>
+&lt;li>“👦”: &lt;a href="https://unicodeplus.com/U+1F466">U+1F466&lt;/a>, “boy”&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ul>
+&lt;p>The family emoji is an example of a “zero-width joiner (ZWJ) sequence”.&lt;/p>
+&lt;p>Not all possible combinations of emoji (or code points generally) can be combined in such a way to create a single grapheme cluster character. The Unicode consortium &lt;a href="https://unicode.org/emoji/charts/emoji-list.html">publishes&lt;/a> all defined emoji, including multi-code-point compounds.&lt;/p>
+&lt;p>Whether and how an emoji is rendered depends on the platform you’re viewing it on. For example, here is what the family emoji looks like in Brave browser on Windows – &lt;img src="https://adam-p.ca/img/blog/family-emoji-windows.png" style="max-width:3em"> – versus on Android – &lt;img src="https://adam-p.ca/img/blog/family-emoji-android.png" style="max-width:3em">.&lt;/p>
+&lt;p>And rendering can change over time. In 2014, with Windows 10, Microsoft introduced the &lt;a href="https://www.windowscentral.com/ninjacat-latest-victim-windows-11s-emojigate">“ninjacat”&lt;/a> ZWJ sequence emoji, combining the “cat” and “ninja” emoji. It wasn’t supported by any other platform. In 2021, Microsoft removed support for it and now it renders as two separate emoji.&lt;/p>
+&lt;p>The family emoji itself has gone through some &lt;a href="https://blog.unicode.org/2023/01/whats-new-in-emoji-151.html">major changes&lt;/a>. (Maybe it was even &lt;a href="https://discussions.apple.com/thread/255561783">removed from iOS&lt;/a> at some point, but it seems to render fine now.)&lt;/p>
+&lt;p>There are also “combining marks” that are accents or other fragments that don’t require a ZWJ between the code points.&lt;/p>
+&lt;ul>
+&lt;li>“é”: composed of 2 code points
+&lt;ol>
+&lt;li>ordinary letter “e”: &lt;a href="https://unicodeplus.com/U+0065">U+0065&lt;/a>&lt;/li>
+&lt;li>“́”: &lt;a href="https://unicodeplus.com/U+0301">U+0301&lt;/a>, “Combining Acute Accent”&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ul>
+&lt;p>This is an example of a grapheme cluster that can instead be represented with a single code point: &lt;a href="https://unicodeplus.com/U+00E9">U+00E9&lt;/a> is “Latin Small Letter E With Acute” and is visually identical to the above, decomposed cluster. (See “Unicode normalization”, below.)&lt;/p>
+&lt;p>Use of characters formed by grapheme clusters (that can’t be normalized away) are extremely uncommon in languages that use European and and East Asian scripts, but fairly common in &lt;a href="https://www.w3.org/International/questions/qa-indic-graphemes">South Asian scripts&lt;/a>, like Hindi where ~25% of characters involve a combining mark.&lt;/p>
+&lt;ul>
+&lt;li>“र्स्प”: composed of 5 code points
+&lt;ol>
+&lt;li>“र”: &lt;a href="https://unicodeplus.com/U+0930">U+0930&lt;/a>, “Devanagari Letter Ra”&lt;/li>
+&lt;li>“्”: &lt;a href="https://unicodeplus.com/U+094D">U+094D&lt;/a>, “Devanagari Sign Virama”&lt;/li>
+&lt;li>“स”: &lt;a href="https://unicodeplus.com/U+0938">U+0938&lt;/a>, “Devanagari Letter Sa”&lt;/li>
+&lt;li>“्”: &lt;a href="https://unicodeplus.com/U+094D">U+094D&lt;/a>, “Devanagari Sign Virama”&lt;/li>
+&lt;li>“प”: &lt;a href="https://unicodeplus.com/U+092A">U+092A&lt;/a>, “Devanagari Letter Pa”&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ul>
+&lt;p>And then there’s &lt;a href="https://zalgo.org/">Zalgo text&lt;/a>, which abuses combining marks in c̴͚͉͔̓̑͂͜r̷̙̎̎̿͊a̵̜͍̱̋̕z̷̭̰͉͊̎́͒y̵̺̿̔ ways:&lt;/p>
+&lt;ul>
+&lt;li>“x̴͙̹̬̑̓͝͝”: composed of 9 code points
+&lt;ol>
+&lt;li>ordinary letter “x”&lt;/li>
+&lt;li>“̴”, &lt;a href="https://unicodeplus.com/U+0334">U+0334&lt;/a>, “Combining Tilde Overlay”&lt;/li>
+&lt;li>“͝”, &lt;a href="https://unicodeplus.com/U+035D">U+035D&lt;/a>, “Combining Double Breve”&lt;/li>
+&lt;li>“̑”, &lt;a href="https://unicodeplus.com/U+0311">U+0311&lt;/a>, “Combining Inverted Breve”&lt;/li>
+&lt;li>“͝”, &lt;a href="https://unicodeplus.com/U+035D">U+035D&lt;/a>, “Combining Double Breve” (again)&lt;/li>
+&lt;li>“̓”, &lt;a href="https://unicodeplus.com/U+0343">U+0343&lt;/a>, “Combining Greek Koronis”&lt;/li>
+&lt;li>“͙”, &lt;a href="https://unicodeplus.com/U+0359">U+0359&lt;/a>, “Combining Asterisk Below”&lt;/li>
+&lt;li>“̹”, &lt;a href="https://unicodeplus.com/U+0339">U+0339&lt;/a>, “Combining Right Half Ring Below”&lt;/li>
+&lt;li>“̬”, &lt;a href="https://unicodeplus.com/U+032C">U+032C&lt;/a>, “Combining Caron Below”&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ul>
+&lt;p>As far as I can tell, &lt;em>there is no limit on the number of code points that can contribute to a single grapheme cluster “character”&lt;/em>. We’ll certainly keep that in mind when we think about how to limit string length, below.&lt;/p>
+&lt;p>(You will sometimes see the word “segmentation” used when talking about extracting grapheme clusters from a string. It generically refers to breaking a string into defined pieces; for example, the JavaScript &lt;a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter">&lt;code>Intl.Segmenter&lt;/code>&lt;/a> API can break a string into graphemes, words, or sentences.)&lt;/p>
+&lt;h3 id="unicode-normalization">
+&lt;a class="heading-anchor" href="#unicode-normalization">
+###
+&lt;/a>
+Unicode normalization
+&lt;/h3>
+&lt;p>&lt;strong>Unicode normalization&lt;/strong> has two functional axes: composition/decomposition and compatibility simplification, resulting in four modes with standard names. The “NF” is “normalization form”; “C” is “canonical composition”, “D” is “canonical decomposition”; “K” is “compatibility simplification”. Which gives us:&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;/th>
+&lt;th style="text-align: center">No Simplification&lt;/th>
+&lt;th style="text-align: center">Simplification&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>Composition&lt;/strong>&lt;/td>
+&lt;td style="text-align: center">NFC&lt;/td>
+&lt;td style="text-align: center">NFKC&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>Decomposition&lt;/strong>&lt;/td>
+&lt;td style="text-align: center">NFD&lt;/td>
+&lt;td style="text-align: center">NFKD&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>&lt;strong>Composition canonicalization&lt;/strong> will combine the two-code-point grapheme cluster form of “é” (U+0065 + U+0301) into the single-code-point form “é” (U+00E9); and similar for other grapheme clusters for which an equivalent single code point exists (and does nothing when there is no single code point; e.g., mostly doesn’t change Zalgo text). &lt;strong>Decomposition canonicalization&lt;/strong> will do the opposite: single-code-point characters will be decomposed into multi-code-point grapheme clusters (this includes decomposing Korean Hangul into jamo phonetic components).&lt;/p>
+&lt;p>&lt;strong>Compatibility simplification&lt;/strong> converts some fancy characters into more ordinary ones. For example, “ℍ” (U+210D) and “ℌ” (U+210C) become plain Latin “H”; superscript “²” becomes plain number “2”; “ﬃ” (ligature) becomes “ffi”. The non-simplifying forms don’t replace such characters. (Note that ordinary diacritics aren’t removed – “é” keeps its accent.) Unlike canonicalization, simplification is not reversible.&lt;/p>
+&lt;p>&lt;strong>NFC&lt;/strong> is good for keeping a string as compact as possible while ensuring greater consistency.&lt;/p>
+&lt;p>&lt;strong>NFKC&lt;/strong> is good if you want the string to be searchable or otherwise comparable using equivalent characters (like matching “ℍ𝔼𝕃𝕃𝕆” when searching for “HELLO”).&lt;/p>
+&lt;p>The decomposition forms (with additional processing) are useful for stripping out all accents; e.g., if you want plain ASCII for searching or for use in filenames.&lt;/p>
+&lt;p>Note that the output of normalization may change between versions of Unicode. See the Unicode Versions section, below, for discussion of how that kind of thing can go wrong.&lt;/p>
+&lt;h3 id="utf-8">
+&lt;a class="heading-anchor" href="#utf-8">
+###
+&lt;/a>
+UTF-8
+&lt;/h3>
+&lt;p>&lt;strong>UTF-8&lt;/strong> encodes code points into a sequence of 1, 2, 3, or 4 one-byte &lt;strong>code units&lt;/strong>. It has the very nice property of providing a compact encoding for most string data; in particular, all ASCII printable characters fit in one byte, with the same ASCII numeric value (e.g., if you open an ASCII view of a UTF-8 encoded source file, you can probably read it just fine). It is by far the most common encoding to find serialized to disk or on the wire (in recent years).&lt;/p>
+&lt;p>Note that there is overhead in the design&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>, so you don’t get the full 8*bytes number of bits to represent code points. Here’s how it &lt;a href="https://en.wikipedia.org/wiki/UTF-8#Description">breaks down&lt;/a>:&lt;/p>
+&lt;ul>
+&lt;li>1 byte: 7 bits&lt;/li>
+&lt;li>2 bytes: 11 bits&lt;/li>
+&lt;li>3 bytes: 16 bits&lt;/li>
+&lt;li>4 bytes: 21 bits&lt;/li>
+&lt;/ul>
+&lt;h3 id="utf-16">
+&lt;a class="heading-anchor" href="#utf-16">
+###
+&lt;/a>
+UTF-16
+&lt;/h3>
+&lt;p>&lt;strong>UTF-16&lt;/strong> doesn’t often get used on the wire or on disk, but many programming languages and OSes use it in-memory. The reason is that some platforms and languages originally supported &lt;strong>UCS-2&lt;/strong>, which is the old 2-byte Unicode standard. When Unicode increased to 4 bytes, UTF-16 was created. It uses 1 or 2 two-byte code units in a code point sequence. Sequences of a single code unit are identical to and backwards compatible with UCS-2, making the transition for UCS-2 platforms reasonably easy.&lt;/p>
+&lt;p>(Two UTF-16 code units making a code point is called a &lt;strong>surrogate pair&lt;/strong>. There is a “surrogate pair” reserved area in the UCS-2 spec that is used to indicate when a second UTF-16 code unit is used in the code point sequence.)&lt;/p>
+&lt;p>UTF-16 has the nice property that the entire “&lt;strong>Basic Multilingual Plane&lt;/strong> (BMP)” fits in a single UTF-16 code unit. That’s the “&lt;a href="https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-1/">majority of the common characters used in the major languages of the world&lt;/a>” (but doesn’t include emoji, notably). The downside is that it takes twice as much space to represent ASCII characters.&lt;/p>
+&lt;p>(Note that it takes &lt;em>three&lt;/em> UTF-8 bytes to fit the entire BMP.)&lt;/p>
+&lt;h3 id="other-encodings">
+&lt;a class="heading-anchor" href="#other-encodings">
+###
+&lt;/a>
+Other encodings
+&lt;/h3>
+&lt;p>We’re not going to get into code pages, WTF-8, CESU, etc. They’re not relevant to the task at hand (and I don’t know enough to say anything useful).&lt;/p>
+&lt;h2 id="string-lengths">
+&lt;a class="heading-anchor" href="#string-lengths">
+##
+&lt;/a>
+String lengths
+&lt;/h2>
+&lt;p>Now that we understand character encoding better, let’s revisit the table above.&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Encoding Count&lt;/th>
+&lt;th style="text-align: right">“a”&lt;/th>
+&lt;th style="text-align: right">“字”&lt;/th>
+&lt;th style="text-align: right">“🔤”&lt;/th>
+&lt;th style="text-align: right">“👨‍👩‍👧‍👦”&lt;/th>
+&lt;th style="text-align: right">“र्स्प”&lt;/th>
+&lt;th style="text-align: right">“x̴͙̹̬̑̓͝͝”&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>UTF-8 code units&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">3&lt;/td>
+&lt;td style="text-align: right">4&lt;/td>
+&lt;td style="text-align: right">25&lt;/td>
+&lt;td style="text-align: right">15&lt;/td>
+&lt;td style="text-align: right">17&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>UTF-16 code units&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">2&lt;/td>
+&lt;td style="text-align: right">11&lt;/td>
+&lt;td style="text-align: right">5&lt;/td>
+&lt;td style="text-align: right">9&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Unicode code points&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">7&lt;/td>
+&lt;td style="text-align: right">5&lt;/td>
+&lt;td style="text-align: right">9&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Grapheme clusters&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;td style="text-align: right">1&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>So, different programming languages (and functions within a language) give us different methods of counting. Some examples&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>UTF-8&lt;/strong>: Go, Rust, C++’s &lt;code>std::u8string&lt;/code>, Haskell’s &lt;code>Text&lt;/code> v2&lt;/li>
+&lt;li>&lt;strong>UTF-16&lt;/strong>: Java/Android, JavaScript (and TypeScript), C#/.NET (and Windows), Objective-C/iOS (&lt;code>NSString&lt;/code>), Haskell’s &lt;code>Text&lt;/code> v1.&lt;/li>
+&lt;li>&lt;strong>Unicode&lt;/strong>: Python 3, Elixir, Ruby, PostgreSQL, Haskell’s &lt;code>Char&lt;/code>&lt;/li>
+&lt;li>&lt;strong>Grapheme cluster&lt;/strong>: Swift’s &lt;code>String.count&lt;/code>, Elixir’s &lt;code>String.length&lt;/code>, Perl 6&lt;/li>
+&lt;/ul>
+&lt;p>Note that many (probably all) languages provide ways of converting between encodings and counting “length” in those other encodings; the above are just defaults. There might also be a difference between which encoding is used in-memory versus which is presented as the main programming interface to access those strings.&lt;/p>
+&lt;p>To understand how our programming languages of choice deal with string length, it’s worth taking a step back and thinking about what a string &lt;em>is&lt;/em>. The definition of “string” that many of us would give is something like “a bunch of characters”. But we’ve seen now that “character” only has an abstract meaning, so it’s not enough to help us when we use a &lt;code>string&lt;/code> type. We need to know and keep in mind two things:&lt;/p>
+&lt;ol>
+&lt;li>the underlying in-memory representation of strings, and&lt;/li>
+&lt;li>the view into that representation presented to us.&lt;/li>
+&lt;/ol>
+&lt;p>A few examples:&lt;/p>
+&lt;p>&lt;a href="https://go.dev/blog/strings">Go’s&lt;/a> &lt;code>string&lt;/code> type is really an array of bytes. The intention is that those bytes hold UTF-8 code units, but there’s no guarantee of UTF-8 sequence validity. &lt;code>len(string)&lt;/code> gives the byte length of the string. If you want to iterate over the bytes/code units, you must first cast the string to &lt;code>[]byte&lt;/code>, because if you just iterate over the string, each step will give you a Unicode code point/rune. Go provides &lt;code>unicode/utf8.RuneCountInString&lt;/code> to get the code point count. It also has the &lt;code>unicode/utf16&lt;/code> package for converting between runes (code points) and UTF-16 code units. It has &lt;a href="https://github.com/golang/go/issues/14820">no built-in support&lt;/a> for grapheme cluster segmentation.&lt;/p>
+&lt;p>JavaScript’s &lt;code>string&lt;/code> type is a set of UTF-16 code units and &lt;code>string.length&lt;/code> gives you a count of those code units. &lt;code>[...string]&lt;/code> gives an array of Unicode code points. &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/TextEncoder">&lt;code>TextEncoder&lt;/code>&lt;/a> converts to UTF-8. &lt;a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter">&lt;code>Intl.Segmenter&lt;/code>&lt;/a> provides access to grapheme clusters.&lt;/p>
+&lt;p>&lt;a href="https://www.swift.org/blog/utf8-string/">Swift’s&lt;/a> underlying representation used to be UTF-16 but has been UTF-8 since 2019. Its &lt;code>Character&lt;/code> type holds a single grapheme cluster and &lt;code>String.count&lt;/code> returns grapheme cluster count. To access encodings, it provides &lt;a href="https://developer.apple.com/documentation/swift/string/utf8view">&lt;code>String.UTF8View&lt;/code>&lt;/a>, &lt;a href="https://developer.apple.com/documentation/swift/string/utf16view">&lt;code>String.UTF16View&lt;/code>&lt;/a>, and &lt;a href="https://developer.apple.com/documentation/swift/string/unicodescalarview">&lt;code>String.UnicodeScalarView&lt;/code>&lt;/a>.&lt;sup id="fnref:4">&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref">4&lt;/a>&lt;/sup>&lt;/p>
+&lt;p>Having a deeper understanding of how strings work under the hood will help prevent the confusion of discovering that a single emoji has a length of 7, and the bugs that can follow from that confusion.&lt;/p>
+&lt;h3 id="limiting-and-consistency">
+&lt;a class="heading-anchor" href="#limiting-and-consistency">
+###
+&lt;/a>
+Limiting and Consistency
+&lt;/h3>
+&lt;p>We finally get to the real point of this post!&lt;/p>
+&lt;p>Because there are 4 different ways to encode characters, there are 4 different ways to count string length. Because there are 4 different ways to count string length, &lt;strong>there are (at least) 4 different ways to limit the length of a string&lt;/strong>.&lt;/p>
+&lt;p>That makes it really easy to be inconsistent across levels of your architecture, leading to bugs and bad user experience. They can be easy to miss in testing, since certain characters and character combinations might be needed to reveal them.&lt;/p>
+&lt;p>Here are a few length limiters that I was looking at when I decided I needed to write this post:&lt;/p>
+&lt;ul>
+&lt;li>Go’s &lt;a href="https://pkg.go.dev/github.com/go-playground/validator/v10">validator&lt;/a> package (not stdlib, but popular): The &lt;code>max&lt;/code> and &lt;code>min&lt;/code> limiters &lt;a href="https://github.com/go-playground/validator/blob/859202275556dac82d4460234867c5c5988d06fd/baked_in.go#L2152">count Unicode code points&lt;/a> (“runes” in Go-speak).&lt;/li>
+&lt;li>If you create a column constraint with PostgreSQL’s &lt;code>char_length()&lt;/code>, it’ll limit by Unicode code points (by default).&lt;/li>
+&lt;li>The HTML attribute &lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/maxlength">&lt;code>maxlength&lt;/code>&lt;/a> on &lt;code>input&lt;/code> or &lt;code>textarea&lt;/code> elements limits by UTF-16 code units. (Except… I have found that IE limits by Unicode code points instead.)&lt;/li>
+&lt;li>React Native’s &lt;a href="https://reactnative.dev/docs/textinput#maxlength">&lt;code>TextInput.maxLength&lt;/code>&lt;/a> limits by UTF-16 code units. This is because &lt;a href="https://github.com/facebook/react-native/blob/70cdf12c4d0d27d9fc94645c5779f34d0883320a/packages/react-native/Libraries/Text/TextInput/RCTBaseTextInputView.mm#L501">on iOS&lt;/a> it uses &lt;a href="https://developer.apple.com/documentation/foundation/nsstring/1414212-length">&lt;code>NSString.length&lt;/code>&lt;/a> and &lt;a href="https://github.com/facebook/react-native/blob/402b93dd0cdaf3ae5f4ca557b157904ef98ca31c/packages/react-native/ReactAndroid/src/main/java/com/facebook/react/views/textinput/ReactTextInputManager.java#L781">on Android&lt;/a> it uses &lt;a href="https://medium.com/@avinash369/decoding-inputfilter-lengthfilter-df449c19d167">&lt;code>InputFilter.LengthFilter&lt;/code>&lt;/a>.&lt;/li>
+&lt;/ul>
+&lt;p>Rant: It’s really annoying that the method of counting length often isn’t immediately apparent in the documentation. I should &lt;em>not&lt;/em> have had to dig into React Native source code to get the answer. (And this isn’t just an RN problem.)&lt;/p>
+&lt;p>Inconsistencies can arise between frontend clients and backend API servers, between API and database, between different client implementations, between different servers accessing the same database, and so on. Let’s look at some problems that inconsistent length-limiting can lead to.&lt;/p>
+&lt;p>If the frontend allows &lt;em>longer&lt;/em> input than the backend (perhaps by the frontend allowing 100 Unicode code points while the backend allows 100 UTF-8 or UTF-16 code units), the frontend may indicate that the user’s input is valid just to have it rejected by the backend.&lt;/p>
+&lt;p>If the frontend has a &lt;em>shorter&lt;/em> input limit than the backend, the user will be unnecessarily restricted. In the case of something like a username, if the account was created in a frontend with consistent counting and then the user tries to login on a client with too-short counting, they might be unable to. One can imagine other too-long data might cause a frontend to freak out: assertion failure, refuse to display it, &lt;a href="https://adam-p.ca/blog/2025/04/string-length/#appendix-a-personal-length-limiting-example">force the user to change it&lt;/a>, etc.&lt;/p>
+&lt;p>Similar problems will occur with length-restrictions at other levels, such as between backend(s) and database.&lt;/p>
+&lt;p>&lt;strong>Be intentional and consistent with how you limit string length.&lt;/strong> Don’t just blindly use the default on whatever OS you happen to be on and whatever language you happen to be programming in.&lt;/p>
+&lt;p>Problem severity reality check: &lt;em>Probably&lt;/em> allowing this kind of inconsistency won’t result in a fatal bug. &lt;em>Probably&lt;/em> it won’t render your UI unusable or crash your server. &lt;em>Probably&lt;/em> it won’t introduce an ugly security vulnerability. &lt;em>Most&lt;/em> users aren’t going to create usernames that are maximum length. &lt;em>Most&lt;/em> users won’t use characters beyond the BMP in their username (although expect emoji elsewhere). You could &lt;em>probably&lt;/em> go your whole career not paying any attention to this and &lt;em>probably&lt;/em> not get bitten hard by it. But a) you’re curious, and b) you want to limit the margins on “most” and “probably”, so let’s figure out how to do this better.&lt;/p>
+&lt;h3 id="how-to-limit">
+&lt;a class="heading-anchor" href="#how-to-limit">
+###
+&lt;/a>
+How to limit?
+&lt;/h3>
+&lt;p>This is the question that really prompted me to write this post: What’s the best way to limit string length input?&lt;/p>
+&lt;p>Let’s go through each encoding type again and consider them as candidates for limiting. We’ll be thinking about it from both UI and API points of view. Keep in mind that the way you’re “limiting” is often different on the frontend versus backend: on the backend, you’re probably just rejecting the input (HTTP 400); on the frontend, you’re either a) showing the user they’ve typed beyond the limit and telling them to fix it, or b) preventing them typing beyond the limit, or c) truncating the input.&lt;/p>
+&lt;p>Let’s also make explicit: Usually, the reason we want to limit &lt;em>count&lt;/em> is because we want to limit &lt;em>size&lt;/em>. We don’t want infinitely long usernames, chat messages, or even books. Even if we had no trouble displaying them, we can’t process and store them. Limiting by count rather than byte-size can be more humane, and we’ll keep this in mind as we consider approaches.&lt;/p>
+&lt;h4 id="grapheme-clusters">
+&lt;a class="heading-anchor" href="#grapheme-clusters">
+####
+&lt;/a>
+Grapheme clusters
+&lt;/h4>
+&lt;p>Because they’re closest to representing what humans think of as a “character”, grapheme clusters seem like they should be the right thing to count. But they’re actually the worst because, again, &lt;em>there’s no limit on the number of code points in a grapheme cluster&lt;/em>. Maybe you can use them to limit &lt;em>count&lt;/em>, but you can’t use them to limit &lt;em>size&lt;/em>. (At maximum “craziness”, zalgo.org adorns the letter “x” with 360 accents and whatnot – for 361 total code points. Swift’s &lt;code>String.count&lt;/code> still, correctly, says that it’s one grapheme cluster.)&lt;/p>
+&lt;p>(Perhaps you could limit the number of code points per cluster, but you’d be breaking the Unicode spec and it’s probably a bad idea. For something along those lines, see the “Hybrid Counting” section below.)&lt;/p>
+&lt;p>Grapheme clusters also require additional processing and interpretation. This is more of a rendering problem (e.g., iPhones have had &lt;a href="https://manishearth.github.io/blog/2018/02/15/picking-apart-the-crashing-ios-string/">multiple&lt;/a> crash &lt;a href="https://www.theregister.com/2013/09/04/unicode_of_death_crash/">bugs&lt;/a>), but a complex code path during input validation (potentially before authentication, etc.) should give anyone pause.&lt;sup id="fnref:5">&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref">5&lt;/a>&lt;/sup>&lt;/p>
+&lt;p>To a greater degree than the other options, operating at the grapheme cluster level is sensitive to differences between Unicode versions. For example, if a new grapheme cluster is added, a newer segmentation algorithm will count it as 1, while an older Unicode version may count it as the individual code points.&lt;/p>
+&lt;p>Not all programming languages have built-in grapheme cluster segmentation support. For example, Go has &lt;a href="https://github.com/rivo/uniseg">third-party packages&lt;/a>, but &lt;a href="https://github.com/golang/go/issues/14820">no support&lt;/a> in the stdlib or in &lt;code>golang.org/x/text&lt;/code>.&lt;/p>
+&lt;h4 id="utf-16-code-units">
+&lt;a class="heading-anchor" href="#utf-16-code-units">
+####
+&lt;/a>
+UTF-16 code units
+&lt;/h4>
+&lt;p>If you’re starting from the frontend, there’s a good chance that UTF-16 will be your default choice. There are reasons why it’s not a good choice.&lt;/p>
+&lt;p>A danger in length-limiting by counting code units is that you inadvertently break a character by truncating some of code units in a sequence. React Native’s iOS limiter &lt;a href="https://github.com/facebook/react-native/issues/10929">suffered this&lt;/a> for at least 5 years before &lt;a href="https://github.com/facebook/react-native/commit/f3b8d4976f8608c2cda1f071923f14b6d4538967">fixing it&lt;/a>. It &lt;a href="https://medium.com/@avinash369/decoding-inputfilter-lengthfilter-df449c19d167">looks like&lt;/a> RN’s Android limiter avoids this (“If a surrogate pair is encountered at the boundary, it backs off by one character to avoid splitting the pair”).&lt;/p>
+&lt;p>Counting by anything except grapheme clusters means that your count can jump by more than one per “character”, which is not the worst thing ever, but obviously undesirable UX. There are two reasons for this jump-counting:&lt;/p>
+&lt;ol>
+&lt;li>Applies to UTF-8, UTF-16, Unicode code points: If the character is a multi-code-point grapheme cluster.&lt;/li>
+&lt;li>Applies to UTF-8, UTF-16: Multiple code units are required to encode the code point.&lt;/li>
+&lt;/ol>
+&lt;p>The first reason can be &lt;em>somewhat&lt;/em> mitigated by using NFC normalization with every keystroke – to the extent possible, that will reduce clusters down to single code points. (Introducing latency while typing is also bad UX! Make sure to test the timing and feel.) We discuss this point more in the Unicode section below.&lt;/p>
+&lt;p>The second reason can’t be mitigated for UTF-8 and UTF-16 – by design, they can require multiple code units per code point. However, it’s &lt;em>much&lt;/em> less of a problem for UTF-16, since the whole Basic Multilingual Plane fits in one code unit, though it depends on the type of input expected – it’ll still be a two-count per emoji, at least.&lt;/p>
+&lt;p>I’m going to reiterate the caveat to that last point: the vast majority of commonly used characters are located in the BMP, and therefore fit in one UTF-16 code unit. Therefore, for the vast majority of commonly used characters, counting by UTF-16 code units is equivalent to counting by Unicode code points. The big exception to this is emoji.&lt;/p>
+&lt;p>Another big factor is that, while UTF-16 is quite commonly used in-memory, it’s very unusual for it to be serialized on the wire or to disk (UTF-8 is used most commonly, rarely UTF-32). Because “size on wire” and “size on disk” are things we care about when limiting, it feels strange to count by the one format that we know won’t be serialized. But let’s not overstate it: UTF-16 will still get us within about a factor of two of serialized size.&lt;/p>
+&lt;p>Using UTF-16 maximizes the amount of encoding conversion we’re going to have to do.&lt;/p>
+&lt;p>Additionally, in programming languages that primarily use UTF-8 or Unicode code points, UTF-16 seems to be a second-class. For example, in Go, &lt;a href="https://go.dev/blog/strings">strings&lt;/a> are UTF-8 and runes are what you get when you iterate over a string, but UTF-16 support requires the &lt;a href="https://pkg.go.dev/unicode/utf16">&lt;code>unicode/utf16&lt;/code>&lt;/a> package. PostgreSQL doesn’t seem to support UTF-16 at all.&lt;/p>
+&lt;p>So, UTF-16 isn’t obviously &lt;em>terrible&lt;/em>, but we can do better.&lt;/p>
+&lt;h4 id="utf-8-1">
+&lt;a class="heading-anchor" href="#utf-8-1">
+####
+&lt;/a>
+UTF-8
+&lt;/h4>
+&lt;p>UTF-8 is a tempting choice because a) it’s a simple byte count, and b) it’s likely what we’re serializing to on the wire and on disk. It’s also very space-efficient for English text, although less so for other languages.&lt;/p>
+&lt;p>Counting characters by UTF-8 bytes in the UI is doomed to be confusing. For anything but plain English, the count will regularly increment by 2 or 3 or 4, and in ways that are not reasonable for a human to predict.&lt;/p>
+&lt;p>It’s important to note that there is a wide range in the significance of a string length limit to the UI/UX. On one end of the spectrum, there are very short fields with visible character counts; an obvious example is the old 140-character tweet limit, which users would stare at while trying to figure out creative contractions that wouldn’t obscure their point too much. On the other end is, say, a 10,000-character message board limit, where it’s not expected that many users will get near it; probably you don’t even bother showing the count, and you just hard-limit the input.&lt;/p>
+&lt;p>When there’s a very high limit, added for sanity and safety’s sake, it doesn’t really matter how you count characters. You’re not exposing the count to the user, and you probably don’t care if the limit is 10,000 UTF-32 code points, 20,000 UTF-16 code units, or 40,000 UTF-8 bytes.&lt;/p>
+&lt;p>But when the count is low and exposed to the user… UTF-8 counting is going to look &lt;em>weird&lt;/em>.&lt;/p>
+&lt;h4 id="unicode-code-points">
+&lt;a class="heading-anchor" href="#unicode-code-points">
+####
+&lt;/a>
+Unicode code points
+&lt;/h4>
+&lt;p>Argument from authority: Google’s &lt;a href="https://google.aip.dev/210#:~:text=Character%20definition">API design guidance&lt;/a> states that string size limits &lt;em>must&lt;/em> be measured in Unicode code points, and that those strings should be NFC Unicode normalized.&lt;/p>
+&lt;p>I think this is approximately the &lt;em>best&lt;/em> approach – not just for APIs, but also for UIs – but it’s &lt;em>not ideal&lt;/em>. (I would also upgrade the “should” be normalized to “should almost always”.)&lt;/p>
+&lt;p>Counting by Unicode/UTF-32 code points means that everything in the Basic Multilingual Plane &lt;em>and&lt;/em> many emoji get a count of 1. That’s an improvement over UTF-16 (and UTF-8). It also doesn’t suffer from the interpretative counting of grapheme clusters.&lt;/p>
+&lt;p>&lt;em>But&lt;/em>…&lt;/p>
+&lt;p>It still suffers from many of the problems mentioned above:&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>It can still count by more than one. Multi-code point grapheme clusters are not uncommon for some scripts (such as Devanagari, used by more than a billion people) and some emoji (such as all &lt;a href="https://unicode.org/emoji/charts/full-emoji-list.html#country-flag">country flags&lt;/a>).&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Input limiting by code point in a way that isn’t grapheme-cluster-aware might truncate characters – causing them to be nonsense or otherwise confusingly incorrect. This isn’t hypothetical! I found that React Native on Android (but not iOS) does exactly this.&lt;/p>
+&lt;img src="https://adam-p.ca/img/blog/cut-off-flag-grapheme-cluster.gif">
+&lt;p>(The Canada flag emoji is a cluster made of a “Regional Indicator Symbol &lt;a href="https://unicodeplus.com/U+1F1E8">Letter C&lt;/a>” followed by a “Regional Indicator Symbol &lt;a href="https://unicodeplus.com/U+1F1E6">Letter A&lt;/a>”, but the length limit is truncating after the “C”.)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Normalization is needed to limit grapheme clusters, and possibly per-keypress in the UI. Not a big deal, but extra complication and processing.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>Even with those caveats, I think counting by Unicode code points is the sanest choice.&lt;/p>
+&lt;h4 id="hybrid-counting">
+&lt;a class="heading-anchor" href="#hybrid-counting">
+####
+&lt;/a>
+Hybrid counting
+&lt;/h4>
+&lt;p>If we were inventing the best possible counting method, what would it look like?&lt;/p>
+&lt;p>Probably: Grapheme clusters without the unbounded risk.&lt;/p>
+&lt;p>We would want:&lt;/p>
+&lt;ul>
+&lt;li>a count of 1 for each “character” – even multi-code-point grapheme clusters in scripts like Devanagari&lt;/li>
+&lt;li>a count of 1 for each emoji – even multi-code-point compounds&lt;/li>
+&lt;li>a count of more than 1 for technically-a-single-grapheme Zalgo explosions&lt;/li>
+&lt;/ul>
+&lt;p>I think it would be reasonable to do that with logic like:&lt;/p>
+&lt;ul>
+&lt;li>Iterate through grapheme clusters:
+&lt;ul>
+&lt;li>Are there N or fewer code points in the cluster? It counts as 1.&lt;/li>
+&lt;li>Otherwise, it counts as 1 plus the number of code points above N.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>What should N be? (Following answer mostly based on this informative &lt;a href="https://stackoverflow.com/a/77226692/729729">StackOverflow post&lt;/a>.)&lt;/p>
+&lt;p>The longest well-defined grapheme cluster I have found is 10 code points ("👨🏻‍❤️‍💋‍👨🏼" – &lt;a href="https://emojitool.com/en/kiss-man-medium-light-skin-tone-man-medium-light-skin-tone">“Kiss - Man: Medium-Light Skin Tone, Man: Medium-Light Skin Tone”&lt;/a>). So maybe 10 should be our limit.&lt;/p>
+&lt;p>Unicode defines a &lt;a href="https://unicode.org/reports/tr15/#Stream_Safe_Text_Format">Stream-Safe Text Format&lt;/a>, which applies a limit of 30 (post NKFD nomalization). “The value of 30 is chosen to be significantly beyond what is required for any linguistic or technical usage. While it would have been feasible to chose a smaller number, this value provides a very wide margin, yet is well within the buffer size limits of practical implementations.” So maybe 30 should be our limit.&lt;/p>
+&lt;p>(If I understand the Stream-Safe Text Process correctly, it provides a decomposition algorithm that is similar to what I suggested above. However, it would be more generous: a Zalgo character with 100 combining marks under my counting system would get a length of “71” (if N=30); under the Stream-Safe Text Process, it would have a length of “4”. I’m inclined to be less generous, but either approach still provides a bound, which is what we want.)&lt;/p>
+&lt;p>Even if I think this kind of approach is optimal, I don’t think it’s perfect.&lt;/p>
+&lt;p>The byte size allowed would need to be about 100x the length limit. That’s… kind of a lot? (My gut feeling is equivocal.)&lt;/p>
+&lt;p>Many of the problems mentioned above with using grapheme clusters also apply here, including Unicode version concerns.&lt;/p>
+&lt;p>It’s very hard to recommend such a non-standard method of counting for anything that’s intended to be consumed externally (e.g., APIs), as it will cause a lot of confusion. Even internally, standardizing that between frontend, backend, and DB would carry a lot of bug risk. So, it would be more feasible if there were a common standard to refer to, code to, and consume, allowing for consistency in understanding and implementation.&lt;/p>
+&lt;p>With a snappy name. Maybe “graph length”.&lt;/p>
+&lt;p>In the Appendix, I include some implementations of this algorithm.&lt;/p>
+&lt;h5 id="twitter-counting">
+&lt;a class="heading-anchor" href="#twitter-counting">
+#####
+&lt;/a>
+Twitter counting
+&lt;/h5>
+&lt;p>Twitter uses an interesting hybrid counting method (&lt;a href="https://docs.x.com/resources/fundamentals/counting-characters">docs&lt;/a>, &lt;a href="https://github.com/twitter/twitter-text/tree/master/js">code&lt;/a> (Apache licensed)). Here are some examples (using &lt;code>twttr.txt.getTweetLength()&lt;/code>):&lt;/p>
+&lt;ul>
+&lt;li>“a”: 1&lt;/li>
+&lt;li>“ӑ”: 1&lt;/li>
+&lt;li>“字”: 2&lt;/li>
+&lt;li>“🔤”: 2&lt;/li>
+&lt;li>“👨‍👩‍👧‍👦”: 2&lt;/li>
+&lt;li>“र्स्प”: 5&lt;/li>
+&lt;li>“x̴͙̹̬̑̓͝͝”: 9&lt;/li>
+&lt;/ul>
+&lt;p>I won’t repeat the docs or logic, but generally:&lt;/p>
+&lt;ul>
+&lt;li>Many letters and punctuation get a count of 1&lt;/li>
+&lt;li>Chinese, Japanese, Korean glyphs get a count of 2&lt;/li>
+&lt;li>All valid emoji (even clusters) get a count of 2&lt;/li>
+&lt;li>All other code points get a count of 2 each&lt;/li>
+&lt;/ul>
+&lt;p>NFC Unicode normalization is performed before any counting. The API requires UTF-8 encoding.&lt;/p>
+&lt;p>(Strange: The doc says that “Ồ” (&lt;a href="https://unicodeplus.com/U+1ED2">U+1ED2&lt;/a>) should have a count of 1, but I get 2.)&lt;/p>
+&lt;p>I like that there’s &lt;em>mostly&lt;/em> an intuitive rule that’s like, “simple characters get a 1-count; complex characters get a 2-count”. Except:&lt;/p>
+&lt;ol>
+&lt;li>My use of “simple” sure is Euro-centric&lt;/li>
+&lt;li>The rule doesn’t apply to more than a billion people (Hindi writers, etc.)&lt;/li>
+&lt;/ol>
+&lt;h2 id="other-considerations">
+&lt;a class="heading-anchor" href="#other-considerations">
+##
+&lt;/a>
+Other considerations
+&lt;/h2>
+&lt;p>There remain important questions and problems that are outside the scope of this post, but I’ll mention them here so you can keep them in mind.&lt;/p>
+&lt;h3 id="unicode-versions">
+&lt;a class="heading-anchor" href="#unicode-versions">
+###
+&lt;/a>
+Unicode versions
+&lt;/h3>
+&lt;p>There have been &lt;a href="https://www.unicode.org/standard/versions/enumeratedversions.html">16 major versions&lt;/a> of the Unicode specification. Older Unicode text is &lt;a href="https://www.unicode.org/versions/#Open_Repertoires">compatible with&lt;/a> newer Unicode versions, but the reverse is not necessarily true. For example, new versions may:&lt;/p>
+&lt;ul>
+&lt;li>Add new emoji and other characters (code points)&lt;/li>
+&lt;li>Add new valid grapheme clusters, including multi-code-point emoji&lt;/li>
+&lt;li>Update grapheme cluster segmentation rules&lt;/li>
+&lt;li>Change character normalization rules&lt;/li>
+&lt;/ul>
+&lt;p>Possible problems that could be introduced include:&lt;/p>
+&lt;ul>
+&lt;li>If counting by grapheme clusters, there could be a mismatch between frontend and backend, causing them to disagree about whether a string is valid.&lt;/li>
+&lt;li>Normalization could be different between frontend and backend, introducing the possibility of string length counting differences.&lt;/li>
+&lt;li>A valid emoji entered on one client may not be valid on other clients with older system Unicode versions.&lt;/li>
+&lt;li>If there are two different backends with different Unicode versions, they may not normalize a username the same way, resulting in one of them being unable to look it up. (Similarly for passwords, pre-hashing. Or any other string matching.)&lt;/li>
+&lt;li>If strings are normalized and hashed (e.g., for signing or HMAC) in one place, and then the raw string is sent somewhere else for verification, the normalization step may not produce the same string, resulting in a different hash. (So don’t try to modify the input before checking. For example, the &lt;a href="https://www.rfc-editor.org/rfc/rfc8785#section-3.1-6">JSON Canonicalization Scheme&lt;/a> specifies that “Although the Unicode standard offers the possibility of rearranging certain character sequences, referred to as “Unicode Normalization”, JCS-compliant string processing does not take this into consideration. That is, all components involved in a scheme depending on JCS MUST preserve Unicode string data “as is”.”)&lt;/li>
+&lt;/ul>
+&lt;p>And so on.&lt;/p>
+&lt;p>For a real-life story of this kind of version mismatch, &lt;a href="https://hsivonen.fi/string-length/">search for “operating system-provided ICU” here&lt;/a>. It also links to a &lt;a href="https://www.postgresql.org/message-id/flat/BA6132ED-1F6B-4A0B-AC22-81278F5AB81E%40tripadvisor.com">scary discussion&lt;/a> (&lt;a href="https://news.ycombinator.com/item?id=18855585">HN discussion&lt;/a>) about Unicode version differences in glibc causing PostgreSQL index corruption when the same data is used on a different server machine. “No surprise; I have been expecting to hear about such breakage, and am surprised we hear about it so rarely. We really have no way of testing for breakage either. :-(” Yikes.&lt;/p>
+&lt;p>&lt;a href="https://ardentperf.com/2023/03/26/did-postgres-lose-my-data/">“Did Postgres Lose My Data?”&lt;/a> is another good dive into Unicode collation (sorting) changes. The author did &lt;a href="https://github.com/ardentperf/glibc-unicode-sorting">an analysis&lt;/a> of actual inter-version differences. (From the &lt;a href="https://www.unicode.org/reports/tr10/">Unicode Technical Report #10&lt;/a>: “Collation order is not fixed. Over time, collation order will vary: there may be fixes needed as more information becomes available about languages; there may be new government or industry standards for the language that require changes; and finally, new characters added to the Unicode Standard will interleave with the previously-defined ones. This means that collations must be carefully versioned.”)&lt;/p>
+&lt;p>I have never seen “Unicode version” be specified as a requirement in an API (or other) spec, but I think it should be, strictly speaking. Otherwise you can’t be certain that both sides understand strings in the same way.&lt;/p>
+&lt;p>On the other hand… This might be another case of being overly paranoid?&lt;/p>
+&lt;h3 id="normalization-concerns">
+&lt;a class="heading-anchor" href="#normalization-concerns">
+###
+&lt;/a>
+Normalization concerns
+&lt;/h3>
+&lt;p>It might be tempting to have your API require that strings be Unicode normalized &lt;em>before&lt;/em> submission, because: a) you’re already normalizing on the frontend in order to count the length, and b) it’s your API and you make the rules. But I think it’s a bad idea.&lt;/p>
+&lt;p>First of all, you’re not going to trust the API-caller to actually do it, so you’ll have to re-run the normalization on the backend anyway.&lt;/p>
+&lt;p>…And then compare your normalized input with the raw input. But then see above for Unicode version concerns – you could end up in a pathological state where the backend refuses to accept perfectly valid input.&lt;/p>
+&lt;p>Note that normalization is not zero-cost, and may be significant on very large data. For example, Django had a &lt;a href="https://www.cve.org/CVERecord?id=CVE-2025-27556">recent possible DoS vulnerability&lt;/a> due to slow normalization.&lt;/p>
+&lt;h3 id="encoding-errors">
+&lt;a class="heading-anchor" href="#encoding-errors">
+###
+&lt;/a>
+Encoding errors
+&lt;/h3>
+&lt;p>Another thing to learn about your programming languages of choice is how they handle bad UTF-8 or UTF-16 encodings, and how you’re going to handle that when it happens.&lt;/p>
+&lt;p>It seems common to replace broken sequences with the &lt;a href="https://en.wikipedia.org/wiki/Specials_%28Unicode_block%29#Replacement_character">Unicode replacement character&lt;/a>, &lt;a href="https://unicodeplus.com/U+FFFD">U+FFFD&lt;/a>. E.g., when Go’s &lt;code>json.Unmarshal&lt;/code> encounters a bad UTF-8 code unit sequence, it &lt;em>silently&lt;/em> replaces it with U+FFFD.&lt;/p>
+&lt;p>Should you detect invalid sequences? Treat them as bad input? Or just pass them through?&lt;/p>
+&lt;h3 id="processing-overhead">
+&lt;a class="heading-anchor" href="#processing-overhead">
+###
+&lt;/a>
+Processing overhead
+&lt;/h3>
+&lt;p>In many cases, accessing (or counting) character encodings other than the one used for natively storing your strings is an O(n) operation. That is, the string needs to be scanned through to answer questions like, “how many UTF-16 code units are in this UTF-8 string?”, “how many Unicode/UTF-32 code points in this UTF-16 string?”, “how many grapheme clusters?” – converting from the internal encoding to the target.&lt;/p>
+&lt;p>For most situations, with most string lengths, this isn’t a significant performance problem, but keep it in mind if you’re doing this inside a big loop, or with huge data, or in an HPC context.&lt;/p>
+&lt;p>Swift, for one, &lt;a href="https://www.swift.org/blog/utf8-string/#breadcrumbs">leaves “breadcrumbs”&lt;/a> after the first conversion, to speed up subsequent non-UTF-8 string accesses. I don’t know about other languages, but I don’t think this is common.&lt;/p>
+&lt;h2 id="additional-reading">
+&lt;a class="heading-anchor" href="#additional-reading">
+##
+&lt;/a>
+Additional reading
+&lt;/h2>
+&lt;p>Henri Sivonen’s &lt;a href="https://hsivonen.fi/string-length/">“It’s Not Wrong that “🤦🏼‍♂️”.length == 7”&lt;/a> is great. It covers some of the same basics I mention here, but goes into different nerdy things. For example, it looks hard at the density of information relative to character count (and various encodings) in many, many different languages. This gets into the “fairness” of limiting different languages by the different encodings, which I didn’t really consider here. (It does this by analyzing the myriad translations of a single document: the Universal Declaration of Human Rights. Smart.)&lt;/p>
+&lt;p>Nikita Prokopov’s &lt;a href="https://tonsky.me/blog/unicode/">“The Absolute Minimum Every Software Developer Must Know About Unicode in 2023 (Still No Excuses!)”&lt;/a> does what it says on the tin. If you feel you want another pass over this stuff after reading this whole post, go there. It also gets into &lt;em>locale-dependent differences in handling of the same code points&lt;/em>, which is good to know and also troubling.&lt;/p>
+&lt;p>Jeremy Schneider’s &lt;a href="https://ardentperf.com/2023/03/26/did-postgres-lose-my-data/">“Did Postgres Lose My Data?”&lt;/a> is a good story about and investigation into the effects of Unicode version changes. It also links to good resources.&lt;/p>
+&lt;h2 id="conclusions">
+&lt;a class="heading-anchor" href="#conclusions">
+##
+&lt;/a>
+Conclusions
+&lt;/h2>
+&lt;p>What prompted me to write this was when I realized that UTF-16 was the (unstated) encoding used for string length counting and limiting in a project I was reviewing. This felt wrong to me: variable number of code units; not first-class in some languages I cared about; kind of a weird in-between. I also didn’t like that the choice wasn’t intentional or aware – it was just whatever the framework used for &lt;code>maxLength&lt;/code> under the hood.&lt;/p>
+&lt;p>When I tried to swoop in with some “senior dev has seen it all” shit… I realized that I didn’t have a solid suggestion with clear reasons. And that’s a good excuse to develop them in a blog post.&lt;/p>
+&lt;p>One surprising – to me – outcome of this research is that UTF-16 isn’t actually a &lt;em>bad&lt;/em> choice: for most languages, most of the time, only one code unit is needed for a non-emoji character. And it’s not like using Unicode code points is a huge improvement, since it also counts by more than one for grapheme clusters.&lt;/p>
+&lt;p>I was hoping for a clear right choice, backed by solid reasons, and I didn’t find one.&lt;/p>
+&lt;p>That being said, I think that counting by Unicode code points (with normalization) is the best approach. Did I take 7,000 words to say “just do what &lt;a href="https://google.aip.dev/210#:~:text=Character%20definition">Google suggests&lt;/a>”? Yes, okay, &lt;em>maybe&lt;/em>, but now I know – and you know! – &lt;em>why&lt;/em>. And that’s important. Plus, we got to learn some interesting and somewhat bonkers stuff about things we take for granted every day.&lt;/p>
+&lt;p>I’ll add a TL;DR at the top with takeaway points.&lt;/p>
+&lt;h2 id="appendix-implement-hybrid-counting-graph-length">
+&lt;a class="heading-anchor" href="#appendix-implement-hybrid-counting-graph-length">
+##
+&lt;/a>
+Appendix: Implement &lt;del>Hybrid Counting&lt;/del> ✨Graph Length✨
+&lt;/h2>
+&lt;p>For fun, let’s see what implementations of the “hybrid counting” approach would look like.&lt;/p>
+&lt;p>JavaScript:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-javascript" data-lang="javascript">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">/**
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"> * Counts the number of grapheme clusters in a string, with a sanity limit on the number
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"> * of Unicode code points allowed in the cluster. After 10 code points in a single cluster,
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"> * the remaining code points in the cluster are counted as one each.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"> * The limit is intended to be larger than the number of code points in in legitimate
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"> * grapheme clusters (as used in emoji and human languages) from less-legitimate uses,
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"> * like Zalgo text.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"> *
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"> * @param {string} s - the input string
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"> * @returns {number} - the grapheme length
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"> */&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00a8c8">function&lt;/span> &lt;span style="color:#75af00">graphLength&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">s&lt;/span>&lt;span style="color:#111">)&lt;/span> &lt;span style="color:#111">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// A bit of research suggests that the locale arugment is ignored for grapheme segmentation
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#00a8c8">const&lt;/span> &lt;span style="color:#75af00">seg&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#00a8c8">new&lt;/span> &lt;span style="color:#75af00">Intl&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Segmenter&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#00a8c8">undefined&lt;/span>&lt;span style="color:#111">,&lt;/span> &lt;span style="color:#111">{&lt;/span> &lt;span style="color:#75af00">granularity&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#d88200">'grapheme'&lt;/span> &lt;span style="color:#111">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00a8c8">let&lt;/span> &lt;span style="color:#75af00">total&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">0&lt;/span>&lt;span style="color:#111">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// Iterate through the grapheme clusters
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#00a8c8">for&lt;/span> &lt;span style="color:#111">(&lt;/span>&lt;span style="color:#00a8c8">const&lt;/span> &lt;span style="color:#111">{&lt;/span> &lt;span style="color:#75af00">segment&lt;/span> &lt;span style="color:#111">}&lt;/span> &lt;span style="color:#00a8c8">of&lt;/span> &lt;span style="color:#75af00">seg&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">segment&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">s&lt;/span>&lt;span style="color:#111">))&lt;/span> &lt;span style="color:#111">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// Spread … turns the cluster string into an array of Unicode code points
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#00a8c8">const&lt;/span> &lt;span style="color:#75af00">n&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#111">[...&lt;/span>&lt;span style="color:#75af00">segment&lt;/span>&lt;span style="color:#111">].&lt;/span>&lt;span style="color:#75af00">length&lt;/span>&lt;span style="color:#111">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00a8c8">if&lt;/span> &lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">n&lt;/span> &lt;span style="color:#f92672">&lt;=&lt;/span> &lt;span style="color:#ae81ff">10&lt;/span>&lt;span style="color:#111">)&lt;/span> &lt;span style="color:#111">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// Short enough to count as one
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#75af00">total&lt;/span> &lt;span style="color:#f92672">+=&lt;/span> &lt;span style="color:#ae81ff">1&lt;/span>&lt;span style="color:#111">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">}&lt;/span> &lt;span style="color:#00a8c8">else&lt;/span> &lt;span style="color:#111">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// Too long. The first 10 code points count as 1, and the rest each count as another 1
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#75af00">total&lt;/span> &lt;span style="color:#f92672">+=&lt;/span> &lt;span style="color:#ae81ff">1&lt;/span> &lt;span style="color:#f92672">+&lt;/span> &lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">n&lt;/span> &lt;span style="color:#f92672">-&lt;/span> &lt;span style="color:#ae81ff">10&lt;/span>&lt;span style="color:#111">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00a8c8">return&lt;/span> &lt;span style="color:#75af00">total&lt;/span>&lt;span style="color:#111">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#111">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Go (using a third-party segmentation package that seems like the de facto standard):&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-golang" data-lang="golang">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">import&lt;/span> &lt;span style="color:#111">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#d88200">"unicode/utf8"&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#d88200">"github.com/rivo/uniseg"&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#111">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00a8c8">func&lt;/span> &lt;span style="color:#75af00">GraphLength&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">s&lt;/span> &lt;span style="color:#00a8c8">string&lt;/span>&lt;span style="color:#111">)&lt;/span> &lt;span style="color:#00a8c8">int&lt;/span> &lt;span style="color:#111">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00a8c8">var&lt;/span> &lt;span style="color:#75af00">total&lt;/span> &lt;span style="color:#00a8c8">int&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75af00">graphemes&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">uniseg&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">NewGraphemes&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">s&lt;/span>&lt;span style="color:#111">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00a8c8">for&lt;/span> &lt;span style="color:#75af00">graphemes&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Next&lt;/span>&lt;span style="color:#111">()&lt;/span> &lt;span style="color:#111">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75af00">cluster&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">graphemes&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Str&lt;/span>&lt;span style="color:#111">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75af00">n&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">utf8&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">RuneCountInString&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">cluster&lt;/span>&lt;span style="color:#111">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00a8c8">if&lt;/span> &lt;span style="color:#75af00">n&lt;/span> &lt;span style="color:#f92672">&lt;=&lt;/span> &lt;span style="color:#ae81ff">10&lt;/span> &lt;span style="color:#111">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75af00">total&lt;/span> &lt;span style="color:#f92672">+=&lt;/span> &lt;span style="color:#ae81ff">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">}&lt;/span> &lt;span style="color:#00a8c8">else&lt;/span> &lt;span style="color:#111">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75af00">total&lt;/span> &lt;span style="color:#f92672">+=&lt;/span> &lt;span style="color:#ae81ff">1&lt;/span> &lt;span style="color:#f92672">+&lt;/span> &lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">n&lt;/span> &lt;span style="color:#f92672">-&lt;/span> &lt;span style="color:#ae81ff">10&lt;/span>&lt;span style="color:#111">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00a8c8">return&lt;/span> &lt;span style="color:#75af00">total&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#111">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Those don’t seem terribly hideous. I would consider using that code.&lt;/p>
+&lt;p>See the Hybrid Counting section for thoughts about using 10 as the count, versus 30.&lt;/p>
+&lt;p>Whatever your limit, you may wish to add a log when you exceed it. If it’s just Zalgo text, that’s fine, but if a new character enters into a common use, then you probably want to know about it and change your limit.&lt;/p>
+&lt;p>You probably want to NFC-normalize a string before getting its graph length.&lt;/p>
+&lt;h2 id="appendix-a-personal-length-limiting-example">
+&lt;a class="heading-anchor" href="#appendix-a-personal-length-limiting-example">
+##
+&lt;/a>
+Appendix: A personal length-limiting example
+&lt;/h2>
+&lt;p>Years ago I wrote some code that did length-limiting for account creation fields. It’s really beside the point of this post, but I thought it might be slightly interesting – at least to myself – to consider that design in light of what I’ve researched here.&lt;/p>
+&lt;p>This was a for a Go backend, with account creation done on a website and logins from native Android and iOS (and IE webview on Windows).&lt;/p>
+&lt;p>There were no length requirements in the spec, but there obviously couldn’t be unbounded input. I wanted to give lots of space for the username and especially the password, including flexible allowance of character types (&lt;a href="https://www.rfc-editor.org/rfc/rfc8265.html#section-3.4">PRECIS&lt;/a> UsernameCasePreserved and OpaqueString). (Nothing about how the usernames would be used required plain ASCII.)&lt;/p>
+&lt;p>So I decided on these design points:&lt;/p>
+&lt;ul>
+&lt;li>Backend:
+&lt;ol>
+&lt;li>Overall request size limited to 4 KB.&lt;/li>
+&lt;li>Username limited to 200 UTF-8 bytes.&lt;/li>
+&lt;li>Password limited to 800 UTF-8 bytes.&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>Frontend:
+&lt;ol>
+&lt;li>Username limited to 50 Unicode code points.&lt;/li>
+&lt;li>Password limited to 200 Unicode code points.&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ul>
+&lt;p>It makes some sense that I used UTF-8 bytes on the backend, since &lt;em>size&lt;/em> was what I was really concerned about. It makes some sense that Unicode code points were used on the frontend, since they’re a way to stay safely within the backend limit. I chose values that I thought were large enough that the vast majority of users wouldn’t hit them.&lt;/p>
+&lt;p>But you can immediately see a few problems.&lt;/p>
+&lt;p>I didn’t properly (or at all) consider grapheme clusters. For a Hindi-speaker/writer, that username length could be reduced to 10 characters. I think that’s below acceptability.&lt;/p>
+&lt;p>After learning about PostgreSQL collation issues due to Unicode version changes, I would think carefully before allowing non-ASCII characters in an indexed field (e.g., username).&lt;/p>
+&lt;p>There’s a mismatch between frontend and backend encoding used for limiting. This is somewhat mitigated by a few things:&lt;/p>
+&lt;ol>
+&lt;li>The limits are fairly generous. (…except for grapheme clusters.)&lt;/li>
+&lt;li>There is only one client where accounts can be created.&lt;/li>
+&lt;li>There is no frontend length limiting done when logging in – only when creating or modifying an account.&lt;/li>
+&lt;/ol>
+&lt;p>So a mundane user wouldn’t be able to get into a bad state. And if someone F12-removes the submit-button-disabled state on the frontend, they can create a username/password beyond 50/200 code points, but they will still be able to log in with them. So that’s okay-ish.&lt;/p>
+&lt;p>What’s less good is that a user with a too-long username won’t be able to &lt;em>edit&lt;/em> their account – adding an email address, say – without changing the username, because the UI will flag the (unchanged) username as invalidly long. Sure, if you mess around in browser DevTools you get what you deserve, but it’s still a good example of unfortunate consequences due to inconsistency.&lt;/p>
+&lt;div class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1">
+&lt;p>When I make generalizations like this, please remember that I don’t actually know what I’m talking about. Maybe many languages consider something smaller than a character to be the atoms? For example, maybe for Japanese kanji it’s the radicals or even the strokes? I don’t know. This kind of glib generalization is just to give most readers a rough idea as we progress through concepts. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:2">
+&lt;p>The overhead enables some cool properties of UTF-8, like: a) The first byte in a UTF-8 code unit sequence tells you how many bytes are in the complete sequence; b) if you look at any byte in a UTF-8 stream, you know exactly where you are in a code unit sequence – handy if you want to back up or skip to the next sequence after an interruption. &lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:3">
+&lt;p>I don’t know most of these languages well or at all. Corrections welcome. &lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:4">
+&lt;p>I really like this explicit view approach, but I worry about the risks of defaulting to grapheme clusters. Someone should do a survey of Swift/Perl/Raku/Elixir projects to see how many are vulnerable to giant-grapheme-cluster attacks. &lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:5">
+&lt;p>I’m about to recommend Unicode normalization during validation, which is certainly also “additional processing and interpretation”. And converting between &lt;em>any&lt;/em> encodings requires some kind of “interpretation”, but with varying complexity. &lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div></description></item><item><title>Bug story: Sorting by timestamp</title><link>https://adam-p.ca/blog/2023/12/sort-by-timestamp/</link><pubDate>Sat, 23 Dec 2023 10:22:41 -0500</pubDate><guid>https://adam-p.ca/blog/2023/12/sort-by-timestamp/</guid><description>&lt;p>While reviewing a co-worker’s results-paging design I realized there was a bug in some paging code I wrote&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> a few years ago. It’s unlikely to manifest and kind of subtle, but I thought that describing it here might be useful to others writing such code (including my future self). It comes down to sorting by timestamp…&lt;/p>
 &lt;p>We’ll start with a table like this:&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-sql" data-lang="sql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00a8c8">CREATE&lt;/span> &lt;span style="color:#00a8c8">TABLE&lt;/span> &lt;span style="color:#111">item&lt;/span>&lt;span style="color:#111">(&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">id&lt;/span> &lt;span style="color:#111">TEXT&lt;/span> &lt;span style="color:#00a8c8">PRIMARY&lt;/span> &lt;span style="color:#00a8c8">KEY&lt;/span> &lt;span style="color:#00a8c8">DEFAULT&lt;/span> &lt;span style="color:#111">generate_unique_id&lt;/span>&lt;span style="color:#111">(),&lt;/span>
