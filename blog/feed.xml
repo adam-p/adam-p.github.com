@@ -478,7 +478,7 @@ Unicode versions
 &lt;li>Add new emoji and other characters (code points)&lt;/li>
 &lt;li>Add new valid grapheme clusters, including multi-code-point emoji&lt;/li>
 &lt;li>Update grapheme cluster segmentation rules&lt;/li>
-&lt;li>Change character normalization rules&lt;/li>
+&lt;li>Add character normalization rules&lt;/li>
 &lt;/ul>
 &lt;p>Possible problems that could be introduced include:&lt;/p>
 &lt;ul>
