@@ -683,7 +683,7 @@ Appendix: A personal length-limiting example
 &lt;p>When I make generalizations like this, please remember that I don’t actually know what I’m talking about. Maybe many languages consider something smaller than a character to be the atoms? For example, maybe for Japanese kanji it’s the radicals or even the strokes? I don’t know. This kind of glib generalization is just to give most readers a rough idea as we progress through concepts. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li id="fn:2">
-&lt;p>The overhead enables some cool properties of UTF-8, like: a) The first byte in a UTF-8 code unit sequence tells you how many bytes are in the complete sequence; b) if you look at any byte in a UTF-8 stream, you know exactly where you are in a code unit sequence – handy if you want to back up or skip to the next sequence after an interruption. &lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
+&lt;p>The overhead enables some cool properties of UTF-8, like: a) The first byte in a UTF-8 code unit sequence tells you how many bytes are in the complete sequence; b) if you look at any byte in a UTF-8 stream, you know if you’re at the start of a sequence or at a later position – handy if you want to back up or skip to the next sequence after an interruption. &lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li id="fn:3">
 &lt;p>I don’t know most of these languages well or at all. Corrections welcome. &lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
