@@ -277,7 +277,7 @@ Additionally, in programming languages that primarily use UTF-8 or Unicode code 
 
 So, UTF-16 isn't obviously _terrible_, but we can do better.
 
-#### UTF-8
+#### UTF-8 bytes
 
 UTF-8 is a tempting choice because a) it's a simple byte count, and b) it's likely what we're serializing to on the wire and on disk. It's also very space-efficient for English text, although less so for other languages.
 
@@ -379,6 +379,34 @@ I like that there's _mostly_ an intuitive rule that's like, "simple characters g
 ## Other considerations
 
 There remain important questions and problems that are outside the scope of this post, but I'll mention them here so you can keep them in mind.
+
+### What to do when the limit is hit
+
+This post is primarily about how to do the counting to determine if a limit has been hit, but also important is the question "and then what?" We'll look at the two main categories of possible reactions and their frontend/backend concerns.
+
+#### Reject
+
+The simplest response to too-long input is just to reject it. You're not manipulating the string to "fix" it, maybe you're not even telling the user how much they're over the limit, you just say "nope, too long".
+
+This is very common in backend code -- an HTTP server will probably reply with 400. Maybe you'll want to indicate which field was too long, maybe not. (You'll definitely want to do request-size-sanity-limiting before you start considering individual fields.)
+
+In the frontend, "rejecting" input might take the form of allowing the user to enter too much data into a field, detecting that it's too long, displaying an error message and disabling form submission.
+
+#### Truncate
+
+In the frontend, this might take the form of halting further input into a field or it might mean actively truncating input before submitting. In the backend, it will mean actively truncating. Either form has the risk of breaking characters.
+
+Unicode code points can be [broken](#utf-16-code-units) if we're limiting by UTF-8 or UTF-16 and we truncate in the middle of a code unit sequence. We'll end up with an invalid encoding sequence.
+
+Grapheme clusters can be [broken](#unicode-code-points) if we're limiting by UTF-8, UTF-16, or Unicode code points and we truncate in the middle of a cluster sequence. We can end up with distorted or different characters or emoji.
+
+So, truncating must be done in a sequence-aware manner. If the limit is hit in the middle of a code point or cluster sequence, you'll need to back off until you find a boundary and do the truncating there. (Or, better yet, find some battle-tested library to do it for you.)
+
+And then do a bunch of testing to make sure it works the way it should. (Note the React Native bugs mentioned elsewhere.)
+
+Discussion about the relative UX merits of rejection versus truncation is interesting, but beyond our scope.
+
+[This section was prompted by an [HN comment](https://news.ycombinator.com/item?id=43852287) from aidenn0.]
 
 ### Unicode versions
 
