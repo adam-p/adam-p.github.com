@@ -361,11 +361,11 @@ UTF-16 code units
 &lt;p>Using UTF-16 maximizes the amount of encoding conversion we’re going to have to do.&lt;/p>
 &lt;p>Additionally, in programming languages that primarily use UTF-8 or Unicode code points, UTF-16 seems to be a second-class. For example, in Go, &lt;a href="https://go.dev/blog/strings">strings&lt;/a> are UTF-8 and runes are what you get when you iterate over a string, but UTF-16 support requires the &lt;a href="https://pkg.go.dev/unicode/utf16">&lt;code>unicode/utf16&lt;/code>&lt;/a> package. PostgreSQL doesn’t seem to support UTF-16 at all.&lt;/p>
 &lt;p>So, UTF-16 isn’t obviously &lt;em>terrible&lt;/em>, but we can do better.&lt;/p>
-&lt;h4 id="utf-8-1">
-&lt;a class="heading-anchor" href="#utf-8-1">
+&lt;h4 id="utf-8-bytes">
+&lt;a class="heading-anchor" href="#utf-8-bytes">
 ####
 &lt;/a>
-UTF-8
+UTF-8 bytes
 &lt;/h4>
 &lt;p>UTF-8 is a tempting choice because a) it’s a simple byte count, and b) it’s likely what we’re serializing to on the wire and on disk. It’s also very space-efficient for English text, although less so for other languages.&lt;/p>
 &lt;p>Counting characters by UTF-8 bytes in the UI is doomed to be confusing. For anything but plain English, the count will regularly increment by 2 or 3 or 4, and in ways that are not reasonable for a human to predict.&lt;/p>
@@ -467,6 +467,35 @@ Twitter counting
 Other considerations
 &lt;/h2>
 &lt;p>There remain important questions and problems that are outside the scope of this post, but I’ll mention them here so you can keep them in mind.&lt;/p>
+&lt;h3 id="what-to-do-when-the-limit-is-hit">
+&lt;a class="heading-anchor" href="#what-to-do-when-the-limit-is-hit">
+###
+&lt;/a>
+What to do when the limit is hit
+&lt;/h3>
+&lt;p>This post is primarily about how to do the counting to determine if a limit has been hit, but also important is the question “and then what?” We’ll look at the two main categories of possible reactions and their frontend/backend concerns.&lt;/p>
+&lt;h4 id="reject">
+&lt;a class="heading-anchor" href="#reject">
+####
+&lt;/a>
+Reject
+&lt;/h4>
+&lt;p>The simplest response to too-long input is just to reject it. You’re not manipulating the string to “fix” it, maybe you’re not even telling the user how much they’re over the limit, you just say “nope, too long”.&lt;/p>
+&lt;p>This is very common in backend code – an HTTP server will probably reply with 400. Maybe you’ll want to indicate which field was too long, maybe not. (You’ll definitely want to do request-size-sanity-limiting before you start considering individual fields.)&lt;/p>
+&lt;p>In the frontend, “rejecting” input might take the form of allowing the user to enter too much data into a field, detecting that it’s too long, displaying an error message and disabling form submission.&lt;/p>
+&lt;h4 id="truncate">
+&lt;a class="heading-anchor" href="#truncate">
+####
+&lt;/a>
+Truncate
+&lt;/h4>
+&lt;p>In the frontend, this might take the form of halting further input into a field or it might mean actively truncating input before submitting. In the backend, it will mean actively truncating. Either form has the risk of breaking characters.&lt;/p>
+&lt;p>Unicode code points can be &lt;a href="https://adam-p.ca/blog/2025/04/string-length/#utf-16-code-units">broken&lt;/a> if we’re limiting by UTF-8 or UTF-16 and we truncate in the middle of a code unit sequence. We’ll end up with an invalid encoding sequence.&lt;/p>
+&lt;p>Grapheme clusters can be &lt;a href="https://adam-p.ca/blog/2025/04/string-length/#unicode-code-points">broken&lt;/a> if we’re limiting by UTF-8, UTF-16, or Unicode code points and we truncate in the middle of a cluster sequence. We can end up with distorted or different characters or emoji.&lt;/p>
+&lt;p>So, truncating must be done in a sequence-aware manner. If the limit is hit in the middle of a code point or cluster sequence, you’ll need to back off until you find a boundary and do the truncating there. (Or, better yet, find some battle-tested library to do it for you.)&lt;/p>
+&lt;p>And then do a bunch of testing to make sure it works the way it should. (Note the React Native bugs mentioned elsewhere.)&lt;/p>
+&lt;p>Discussion about the relative UX merits of rejection versus truncation is interesting, but beyond our scope.&lt;/p>
+&lt;p>[This section was prompted by an &lt;a href="https://news.ycombinator.com/item?id=43852287">HN comment&lt;/a> from aidenn0.]&lt;/p>
 &lt;h3 id="unicode-versions">
 &lt;a class="heading-anchor" href="#unicode-versions">
 ###
