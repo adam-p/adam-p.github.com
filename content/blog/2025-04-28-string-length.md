@@ -147,7 +147,7 @@ Note that there is overhead in the design[^utf8-design], so you don't get the fu
 * 3 bytes: 16 bits
 * 4 bytes: 21 bits
 
-[^utf8-design]: The overhead enables some cool properties of UTF-8, like: a) The first byte in a UTF-8 code unit sequence tells you how many bytes are in the complete sequence; b) if you look at any byte in a UTF-8 stream, you know exactly where you are in a code unit sequence -- handy if you want to back up or skip to the next sequence after an interruption.
+[^utf8-design]: The overhead enables some cool properties of UTF-8, like: a) The first byte in a UTF-8 code unit sequence tells you how many bytes are in the complete sequence; b) if you look at any byte in a UTF-8 stream, you know if you're at the start of a sequence or at a later position -- handy if you want to back up or skip to the next sequence after an interruption.
 
 ### UTF-16
 
