@@ -387,7 +387,7 @@ There have been [16 major versions](https://www.unicode.org/standard/versions/en
 - Add new emoji and other characters (code points)
 - Add new valid grapheme clusters, including multi-code-point emoji
 - Update grapheme cluster segmentation rules
-- Change character normalization rules
+- Add character normalization rules
 
 Possible problems that could be introduced include:
 
