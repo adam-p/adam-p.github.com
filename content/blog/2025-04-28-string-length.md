@@ -54,7 +54,17 @@ Examples (character: code, decimal)
 
 Strictly speaking, a "Unicode code point" is an abstract concept, with a numerical value assigned to each character. There are 3 common concrete schemes for encoding those code points: UTF-8, UTF-16, and UTF-32. "**UTF-32**" is a direct representation: 32 bits to encode the 32 bits, with endian variants. I'm going to prefer just saying "Unicode code point" for clarity. We'll discuss UTF-8 and UTF-16 at length below.
 
-Note that in Go, a Unicode code point is typically called a "**rune**". (Go [seems to have](https://go.dev/blog/strings#code-points-characters-and-runes) introduced the term for the sake of brevity. I certainly appreciate that, but I'm going to stick with universal terms here.)
+Note that in Go, a Unicode code point is typically called a "**rune**". (Go [seems to have](https://go.dev/blog/strings#code-points-characters-and-runes) introduced the term for the sake of brevity. I certainly appreciate that, but I'm going to stick with universal terms here.[^origin-of-rune])
+
+[^origin-of-rune]: Reader Connor Taffe emailed these notes about "rune" (reproduced with permission):
+
+    > I remembered seeing the rune term in Go’s predecessor, Plan 9 C, where UTF-8 was first implemented. My best guess is that it was a synonym for char which was 16 bits wide, since char at 8 bits no longer represented an entire character or code point.
+    >
+    > It was in use as early as 1992, see the [paper](https://www.cl.cam.ac.uk/~mgk25/ucs/UTF-8-Plan9-paper.pdf) on the change to Plan 9, and this [email thread](https://www.cl.cam.ac.uk/~mgk25/ucs/utf-8-history.txt) on the history. The rune term filtered into [stdlib functions](https://man.freebsd.org/cgi/man.cgi?query=rune&sektion=3&apropos=0&manpath=FreeBSD+5.4-RELEASE) of 4.4BSD, which predated C99 wide character facilities. These headers were copied into descendants like [newlib](https://chromium.googlesource.com/native_client/nacl-newlib/+/65e6baefeb2874011001c2f843cf3083e771b62f/newlib/libc/sys/linux/include/rune.h), and [OS X](https://developer.apple.com/documentation/kernel/rune_t?changes=l___3&language=objc).
+    >
+    > A [port of Plan 9’s libutf](https://9fans.github.io/plan9port/unix/) is even present [in Android](https://cs.android.com/android/platform/superproject/+/master:external/libutf/rune.c;drc=a91263e8760ffc1d399224e2640b8ec3dd87bff2;l=111?authuser=3&hl=pt), likely from Russ Cox’s plan9port.
+    >
+    > .NET also provides [System.Text.Rune](https://learn.microsoft.com/en-us/dotnet/fundamentals/runtime-libraries/system-text-rune).
 
 ### Grapheme cluster
 
