@@ -66,6 +66,14 @@ Note that in Go, a Unicode code point is typically called a "**rune**". (Go [see
     >
     > .NET also provides [System.Text.Rune](https://learn.microsoft.com/en-us/dotnet/fundamentals/runtime-libraries/system-text-rune).
 
+    And then...
+
+    > I wasn’t satisfied that we had the whole story so I [reached out](https://bsky.app/profile/connor.zip/post/3lo7l5brx7k24) to Rob Pike on Bluesky to ask who came up with the term “rune,” he shared the following:
+    >
+    > > Actually Ken Thompson suggested it while the two of us were brainstorming for a type name that wasn't 'char'. He said triumphantly and I immediately agreed we had it.
+    > >
+    > > Oh yes, and it was the name we needed in Plan 9 for UTF and ISO 10646, before Unicode and UTF-8 and decades before Go.
+
 ### Grapheme cluster
 
 Some Unicode code points can be combined and rendered into a single visual character; we call this a **grapheme cluster** (or extended grapheme cluster).
