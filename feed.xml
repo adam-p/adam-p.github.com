@@ -90,7 +90,7 @@ Unicode
 &lt;li>“🔤”: &lt;a href="https://unicodeplus.com/U+1F524">U+1F524&lt;/a>, 128292&lt;/li>
 &lt;/ul>
 &lt;p>Strictly speaking, a “Unicode code point” is an abstract concept, with a numerical value assigned to each character. There are 3 common concrete schemes for encoding those code points: UTF-8, UTF-16, and UTF-32. “&lt;strong>UTF-32&lt;/strong>” is a direct representation: 32 bits to encode the 32 bits, with endian variants. I’m going to prefer just saying “Unicode code point” for clarity. We’ll discuss UTF-8 and UTF-16 at length below.&lt;/p>
-&lt;p>Note that in Go, a Unicode code point is typically called a “&lt;strong>rune&lt;/strong>”. (Go &lt;a href="https://go.dev/blog/strings#code-points-characters-and-runes">seems to have&lt;/a> introduced the term for the sake of brevity. I certainly appreciate that, but I’m going to stick with universal terms here.&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>)&lt;/p>
+&lt;p>Note that in Go, a Unicode code point is typically called a “&lt;strong>rune&lt;/strong>”. (Go &lt;a href="https://go.dev/blog/strings#code-points-characters-and-runes">seems to have&lt;/a> introduced the term for the sake of brevity&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>. I certainly appreciate that, but I’m going to stick with universal terms here.)&lt;/p>
 &lt;h3 id="grapheme-cluster">
 &lt;a class="heading-anchor" href="#grapheme-cluster">
 ###
@@ -683,19 +683,8 @@ Appendix: A personal length-limiting example
 &lt;p>When I make generalizations like this, please remember that I don’t actually know what I’m talking about. Maybe many languages consider something smaller than a character to be the atoms? For example, maybe for Japanese kanji it’s the radicals or even the strokes? I don’t know. This kind of glib generalization is just to give most readers a rough idea as we progress through concepts. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li id="fn:2">
-&lt;p>Reader Connor Taffe emailed these notes about “rune” (reproduced with permission):&lt;/p>
-&lt;blockquote>
-&lt;p>I remembered seeing the rune term in Go’s predecessor, Plan 9 C, where UTF-8 was first implemented. My best guess is that it was a synonym for char which was 16 bits wide, since char at 8 bits no longer represented an entire character or code point.&lt;/p>
-&lt;p>It was in use as early as 1992, see the &lt;a href="https://www.cl.cam.ac.uk/~mgk25/ucs/UTF-8-Plan9-paper.pdf">paper&lt;/a> on the change to Plan 9, and this &lt;a href="https://www.cl.cam.ac.uk/~mgk25/ucs/utf-8-history.txt">email thread&lt;/a> on the history. The rune term filtered into &lt;a href="https://man.freebsd.org/cgi/man.cgi?query=rune&amp;sektion=3&amp;apropos=0&amp;manpath=FreeBSD+5.4-RELEASE">stdlib functions&lt;/a> of 4.4BSD, which predated C99 wide character facilities. These headers were copied into descendants like &lt;a href="https://chromium.googlesource.com/native_client/nacl-newlib/+/65e6baefeb2874011001c2f843cf3083e771b62f/newlib/libc/sys/linux/include/rune.h">newlib&lt;/a>, and &lt;a href="https://developer.apple.com/documentation/kernel/rune_t?changes=l___3&amp;language=objc">OS X&lt;/a>.&lt;/p>
-&lt;p>A &lt;a href="https://9fans.github.io/plan9port/unix/">port of Plan 9’s libutf&lt;/a> is even present &lt;a href="https://cs.android.com/android/platform/superproject/+/master:external/libutf/rune.c;drc=a91263e8760ffc1d399224e2640b8ec3dd87bff2;l=111?authuser=3&amp;hl=pt">in Android&lt;/a>, likely from Russ Cox’s plan9port.&lt;/p>
-&lt;p>.NET also provides &lt;a href="https://learn.microsoft.com/en-us/dotnet/fundamentals/runtime-libraries/system-text-rune">System.Text.Rune&lt;/a>.&lt;/p>&lt;/blockquote>
-&lt;p>And then…&lt;/p>
-&lt;blockquote>
-&lt;p>I wasn’t satisfied that we had the whole story so I &lt;a href="https://bsky.app/profile/connor.zip/post/3lo7l5brx7k24">reached out&lt;/a> to Rob Pike on Bluesky to ask who came up with the term “rune,” he shared the following:&lt;/p>
-&lt;blockquote>
-&lt;p>Actually Ken Thompson suggested it while the two of us were brainstorming for a type name that wasn’t ‘char’. He said triumphantly and I immediately agreed we had it.&lt;/p>
-&lt;p>Oh yes, and it was the name we needed in Plan 9 for UTF and ISO 10646, before Unicode and UTF-8 and decades before Go.&lt;/p>&lt;/blockquote>&lt;/blockquote>
- &lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/li>
+&lt;p>After reading this post, Connor Taffe took a &lt;a href="https://connor.zip/posts/2025-05-03-rune">deep dive&lt;/a> into the origins of “rune” (and UTF-8). &lt;a href="https://en.wikipedia.org/wiki/A_Deepness_in_the_Sky#Interstellar_culture">Code archeology&lt;/a> is cool. &lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
+&lt;/li>
 &lt;li id="fn:3">
 &lt;p>The overhead enables some cool properties of UTF-8, like: a) The first byte in a UTF-8 code unit sequence tells you how many bytes are in the complete sequence; b) if you look at any byte in a UTF-8 stream, you know if you’re at the start of a sequence or at a later position – handy if you want to back up or skip to the next sequence after an interruption. &lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
 &lt;/li>
