@@ -263,3 +263,20 @@ table {
   }
 }
 
+details.toc {
+  border: thin solid $border-color;
+  border-radius: 5px;
+  padding: 0.5em;
+  margin: 1em 0;
+
+  summary {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: $headings-color;
+  }
+
+  // Clear the style that adds space to the bottom of a ul
+  ul {
+    margin-bottom: 0;
+  }
+}
