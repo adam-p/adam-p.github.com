@@ -2,6 +2,16 @@ baseURL: 'https://adam-p.ca/'
 languageCode: 'en-us'
 title: 'adam-p'
 
+
+
+
+
+
+
+
+
+
+
 languages:
   en:
     languageName: English
