@@ -12982,3 +12982,14 @@ table {
     table {
       display: block;
       overflow-x: auto; } }
+details.toc {
+  border: thin solid #d8d3d0;
+  border-radius: 5px;
+  padding: 0.5em;
+  margin: 1em 0; }
+  details.toc summary {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #754f4f; }
+  details.toc ul {
+    margin-bottom: 0; }
