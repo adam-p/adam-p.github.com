@@ -254,23 +254,93 @@ Similarly, when configured to look at `X-Forwarded-For`, Apache's [mod_remoteip]
 
 ### Akamai
 
-Akamai does very wrong things, but at least warns about it. Here is [the documentation](https://community.akamai.com/customers/s/article/Difference-Between-Akamai-True-Client-IP-header-and-Default-X-Forwarded-For) about how it handles `X-Forwarded-For` and `True-Client-IP` (original emphasis):
+TL;DR: always set "Send True Client IP Header" to "yes" and always set "Allow Clients To Set True Client IP Header" to "no".
 
-> `X-Forwarded-For` header is the default header proxies use to report the end user IP that is requesting the content. However, this header is often overwritten by other proxies and is also overwritten by Akamai parent servers and thus are not very reliable.
->
-> The `True-Client-IP` header sent by Akamai does not get overwritten by proxy or Akamai servers and will contain the IP of the client when sending the request to the origin.
->
-> `True-Client-IP` is a self provisioned feature enabled in the Property Manager.
->
-> _Note that if the `True-Client-IP` header is already present in the request from the client it will not be overwritten or sent twice. It is not a security feature._
->
-> The connecting IP is appended to `X-Forwarded-For` header by proxy server and thus it can contain multiple IPs in the list with comma as separator. `True-Client-IP` contains only one IP. If the the end user uses proxy server to connect to Akamai edge server, `True-Client-IP` is the first IP from in `X-Forwarded-For` header. If the end user connects to Akamai edge server directly, `True-Client-IP` is the connecting public IP seen by Akamai.
+In the original version of this post, I said that ["Akamai does very wrong things, but at least warns about it."](https://github.com/adam-p/adam-p.github.com/blob/5edea5c18308d6260730fad9e319c737f0d2dfc7/content/blog/2022-02-26-x-forwarded-for.md#akamai). However, a reader [recently brought to my attention](https://github.com/adam-p/adam-p.github.com/issues/11) that there's a separate Akamai setting influencing the behaviour of the `True-Client-IP` header that improves the situation.
 
-The relevant bits are "`True-Client-IP` is the first IP from in `X-Forwarded-For` header" and "if the True-Client-IP header is already present in the request from the client it will not be overwritten". So `True-Client-IP` is either the leftmost XFF IP or keeps the original value spoofed by the client. Just the worst possible thing.
+Because a lot of Akamai's documentation is inaccessible without an account, I'm going to quote copiously, so we all have the same information.
 
-However, there is also the sentence "It is not a security feature." Well, that's certainly true. Does that warning make it okay? What's the chance that there aren't a ton of Akamai users out using `True-Client-IP` for security-related purposes?
+In their document ["Difference Between the True-Client-IP header sent by edge server and XForwarded-For header"](https://community.akamai.com/customers/s/article/Difference-Between-Akamai-True-Client-IP-header-and-Default-X-Forwarded-For) they say:
 
-(I'm not sure how to interpret the above when it says that the XFF header is "overwritten by Akamai parent servers". Does it mean "appended to" when it says "overwritten"? Or is Akamai actually blowing away the existing header value? That would be against the spirit of XFF.)
+> **Question**
+>
+> What is the difference between X-Forwarded-For and True-Client-IP Headers?
+>
+> **Answer**
+>
+> The `X-Forwarded-For` header is the default header proxies use to report the IPs that a content passes through. This header can be overwritten by other proxies and by parent edge servers. Because of this, it is not always complete.
+>
+> The `True-Client-IP` header contains the connecting public IP seen by edge server contacted for a request. This means that if a client is behind a proxy, the header will log the value of that proxy in the `True-Client-IP` header.
+>
+> That header is passed through to an origin. It will not be overwritten by proxy or other edge servers.
+>
+> `True-Client-IP` has to be explicitly enabled in the Origin Server behavior section (https://techdocs.akamai.com/property-mgr/docs/origin-server#true-client-ip-header), your Property Manager configuration.
+>
+> **Important**
+>
+> If a header named `True-Client-IP` is present in the request coming from the client, it will not be overwritten or sent twice. It is not a security feature.
+>
+> The connecting IP is appended to `X-Forwarded-For` header by proxy server and thus it can contain multiple IPs in the list with comma as separator. `True-Client-IP` contains only one IP.
+
+That document was my primary reference when I wrote this, although it has changed considerably -- see my [previous quoting of it](https://github.com/adam-p/adam-p.github.com/blob/5edea5c18308d6260730fad9e319c737f0d2dfc7/content/blog/2022-02-26-x-forwarded-for.md#akamai).
+
+It suggests that `True-Client-IP` will have the actual connecting IP only if there isn't already a `True-Client-IP` present (and if it's enabled). So, it can be trivially spoofed. Not good, but also not completely true -- that document fails to mention another setting: "Allow Clients To Set True Client IP Header".
+
+Here are the relevant contents of ["What IP address does True-Client-IP header have?"](https://community.akamai.com/customers/s/article/What-IP-address-does-True-Client-IP-header-have):
+
+> **Question**
+>
+> What IP address would True-Client-IP header sent to the origin have?
+>
+> Are there any conditions to affect True-Client-IP header values?
+>
+> **Answer**
+>
+> If "Send True Client IP Header" option is set to Yes in property configurations, edge server sends True-Client-IP request header by default to the origin server.
+>
+> If "Allow Clients To Set True Client IP Header" option is set to No in property configurations, edge server sends True-Client-IP header to the origin server, that has an IP address that connected to the edge server such as a proxy server.
+>
+> If "Allow Clients To Set True Client IP Header" option is set to Yes and a client initiates a request with a True-Client-IP request header, the origin server receives the True-Client-IP header as is.
+>
+> Here is the summary(Assume that "True Client IP Header Name" is left as True-Client-IP as default in property configurations.):
+>
+> **Send True Client IP Header: No**
+> | Client's request | True-Client-Header the origin receives |
+> | - | - |
+> | Client's request has a True-Client-Header | The origin receives the header as is. |
+> | Client's request does not have any True-Client-Header | The origin does not receive the header. |
+>
+> **Send True Client IP Header: Yes**
+> | Allow Clients To Set True Client IP Header | Client's request | True-Client-Header the origin receives |
+> | - | - | - |
+> | No | Client's request has/does not have a True-Client-Header. | The origin receives True-Client-IP header that has a connecting IP to edge server. |
+> | Yes | Client's request has a True-Client-Header. | The origin receives True-Client-IP header that the client sent as is. |
+> | Yes | Client's request does not have any True-Client-Header. | The origin receives True-Client-IP header that has a connecting IP to edge server. |
+>
+> Please refer to following document regarding "Allow Clients To Set True Client IP Header", "Send True Client IP Header" and "True Client IP Header Name" options:
+>
+> https://techdocs.akamai.com/property-mgr/docs/origin-server
+
+The page at that last link isn't login-gated, but the relevant section is short so we'll quote it for posterity:
+
+> **True Client IP Header**
+>
+> If you enable the Send True Client IP Header option, edge servers pass the original client IP address to the origin.
+>
+> Normally, the client IP is passed in the `X-Forwarded-For` header that is routinely modified by proxies along the way. With this option enabled, the default header name `True-Client-IP` is used unless you set a custom name for the header in the True Client IP Header Name field. Additionally, with the **Allow Clients To Set True Client IP** Header toggle you can determine if the client name for this header is passed through and accepted, or whether to apply the value you defined in the **True Client IP Header Name** field instead.
+
+So, to summarize:
+* If "Send True Client IP Header" is "no", then `True-Client-IP` can be spoofed (and otherwise won't be present).
+* If "Send True Client IP Header" is "yes" and "Allow Clients To Set True Client IP Header" is "yes", then `True-Client-IP` can be spoofed.
+* If "Send True Client IP Header" is "yes" and "Allow Clients To Set True Client IP Header" is "no", then `True-Client-IP` _can't_ be spoofed. Thank goodness.
+
+It's good that there is a configuration that allows for a safe `True-Client-IP` configuration. (For the record, I haven't been able to figure out what the defaults are for those settings.)
+
+Things that are less good:
+
+- "Allow Clients To Set True Client IP Header" can be set to "no".
+- The "What is the difference between X-Forwarded-For and True-Client-IP Headers?" document doesn't mention the "Allow Clients To Set True Client IP Header" setting _at all_.
+- If "Send True Client IP Header" is set to "no", the `True-Client-IP` still gets passed through. We'll see below that some rate-limiting packages will use that header _by default_ -- so you could be using it even if you thought you explicitly disabled it in Akamai.
 
 ### Fastly
 
@@ -280,7 +350,7 @@ Fastly adds the [`Fastly-Client-IP`](https://developer.fastly.com/reference/http
 
 _However_:
 
-> The value is not protected from modification at the edge of the Fastly network, so if a client sets this header themselves, we will use it. If you want to prevent this [you need to do some additional configuration].
+> The value is not protected from modification at the edge of the Fastly network, so if a client sets this header themselves, we will use it. If you want to prevent this \[you need to do some additional configuration\].
 
 So, by default `Fastly-Client-IP` is trivially spoofable. Again, it seems highly likely that there are a lot of people using its default behaviour for security-related purposes and making themselves vulnerable to attack.
 
