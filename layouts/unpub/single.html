@@ -19,14 +19,12 @@
   </div>
 </section>
 <hr>
-<aside>
-  <p>
-    <h5> {{ .WordCount | lang.FormatNumber 0 }} Words </h5>
-  </p>
+<footer class="page-info">
+  <h5> {{ .WordCount | lang.FormatNumber 0 }} Words </h5>
 
   <p>
-    Last Update:
-    <time datetime="{{ .Page.Lastmod.Format "Mon Jan 10 17:13:38 2020 -0700" }}" class="text-muted">
+    Last update:
+    <time datetime="{{ .Page.Lastmod.Format "2006-01-02T15:04:05Z07:00" }}" class="text-muted">
       {{ $.Page.Lastmod.Format "January 02, 2006" }}
     </time>
     <br>
@@ -49,13 +47,13 @@
   <p>
     {{ with .NextInSection }}
         Next: <a class="next" href="{{.RelPermalink}}"> {{.Title}}</a>
+        <br>
     {{ end }}
-    <br>
     {{ with .PrevInSection }}
       Previous: <a class="previous" href="{{.RelPermalink}}"> {{.Title}}</a>
     {{ end }}
   </p>
-</aside>
+</footer><!-- .page-info -->
 {{ end }}
 
 {{ define "footer" }}

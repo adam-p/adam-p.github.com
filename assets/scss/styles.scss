@@ -280,3 +280,96 @@ details.toc {
     margin-bottom: 0;
   }
 }
+footer.page-info {
+  --pi-accent: tint-color($link-color, 45%);
+  margin: 2rem 0 0;
+  padding: 1rem 1rem 0.75rem;
+  background: mix($body-bg, #fff, 65%);
+  border: 1px solid shade-color($body-bg, 8%);
+  border-left: 4px solid var(--pi-accent);
+  border-radius: 0.55rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.07);
+  font-size: 0.9rem;
+  line-height: 1.4;
+
+  > p {
+    margin: 0 0 0.85rem;
+    &:last-child { margin-bottom: 0; }
+    h5 {
+      margin: 0 0 0.35rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: $headings-color;
+    }
+  }
+
+  time {
+    font-variant-numeric: tabular-nums;
+    opacity: 0.9;
+  }
+
+  a {
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: rgba($link-color, 0.35);
+    text-underline-offset: 2px;
+    &:hover { text-decoration-color: currentColor; }
+  }
+
+  #tags {
+    list-style: none;
+    margin: 0.25rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.55rem;
+
+    li { margin: 0; }
+
+    a {
+      display: inline-block;
+      padding: 0.25rem 0.55rem 0.3rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: var(--pi-accent);
+      color: contrast-color(var(--pi-accent), $black, $white);
+      border-radius: 0.4rem;
+      text-decoration: none;
+      line-height: 1;
+      position: relative;
+      &:hover { filter: brightness(1.08); }
+      &:focus-visible {
+        outline: 2px solid $link-color;
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  .next, .previous { font-weight: 600; }
+
+  .next a, .previous a {
+    text-decoration: none;
+    border-bottom: 1px solid rgba($link-color, 0.3);
+    &:hover { border-bottom-color: currentColor; }
+  }
+
+  // Narrow screens
+  @media (max-width: 575.98px) {
+    padding: 0.85rem 0.85rem 0.6rem;
+    font-size: 0.85rem;
+    #tags a {
+      font-size: 0.6rem;
+      padding: 0.22rem 0.5rem 0.25rem;
+    }
+  }
+
+  // Print tweaks (specific to this block)
+  @media print {
+    box-shadow: none;
+    background: lighten($body-bg, 3%);
+    border-color: shade-color($body-bg, 12%);
+  }
+}
