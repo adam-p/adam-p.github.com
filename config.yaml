@@ -2,6 +2,11 @@ baseURL: 'https://adam-p.ca/'
 languageCode: 'en-us'
 title: 'adam-p'
 
+params:
+  author:
+    name: Adam Pritchard
+    email: pritchard.adam@gmail.com
+
 languages:
   en:
     languageName: English
