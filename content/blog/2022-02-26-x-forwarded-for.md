@@ -402,6 +402,11 @@ Chi's rate limiter is also the one instance I found of the XFF list being split 
 
 [2022-03-03: Disclosed to maintainer via email. 2022-03-04: Maintainer requested that I [make an issue](https://github.com/go-chi/chi/issues/711).]
 
+[2026-06-06: **Update:** Chi has substantially improved its core middleware. [PR #967](https://github.com/go-chi/chi/pull/967) (in [v5.3.0](https://github.com/go-chi/chi/releases/tag/v5.3.0)) adds a new `middleware.ClientIP*` API that does it right: there's no default and no fallback header list -- you pick exactly one source for your network architecture; `X-Forwarded-For` handling is rightmost-ish (by trusted CIDR ranges or by trusted-proxy count); single-IP headers take the last value; and it no longer mutates `r.RemoteAddr`. The old `middleware.RealIP` is kept but deprecated, so probably don't use it. Credit to the chi maintainers for taking this on. (See also issues [#708](https://github.com/go-chi/chi/issues/708) and [#711](https://github.com/go-chi/chi/issues/711).)
+
+Chi's rate limiter, [httprate](https://github.com/go-chi/httprate), is partly improved: its default (`LimitByIP`) now keys on `RemoteAddr` only, and the spoofable "real IP" behavior is now opt-in via `KeyByRealIP`/`LimitByRealIP`. But that opt-in path is otherwise unchanged -- it still falls through a default header list and takes the leftmost `X-Forwarded-For` IP via `Header.Get` -- so all the cautions above apply if you use it.]
+
+
 ### didip/tollbooth
 
 The [Tollbooth HTTP rate limiter](https://github.com/didip/tollbooth) is better, but you still need to be aware of what it's doing in order to use it properly.
