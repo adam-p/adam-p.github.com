@@ -1,156 +1,157 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Code on adam-p</title><link>https://adam-p.ca/tags/code/</link><description>Recent content in Code on adam-p</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 17 Feb 2015 00:00:00 +0000</lastBuildDate><atom:link href="https://adam-p.ca/tags/code/feed.xml" rel="self" type="application/rss+xml"/><item><title>Why and How to Use a Contributor License Agreement</title><link>https://adam-p.ca/blog/2015/02/contributor-license-agreement/</link><pubDate>Tue, 17 Feb 2015 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2015/02/contributor-license-agreement/</guid><description>
-&lt;h2 id="background-and-motivation">
-&lt;a class="heading-anchor" href="#background-and-motivation">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Code on adam-p</title><link>https://adam-p.ca/tags/code/</link><description>Recent content in Code on adam-p</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>pritchard.adam@gmail.com (Adam Pritchard)</managingEditor><webMaster>pritchard.adam@gmail.com (Adam Pritchard)</webMaster><lastBuildDate>Tue, 17 Feb 2015 00:00:00 +0000</lastBuildDate><atom:link href="https://adam-p.ca/tags/code/feed.xml" rel="self" type="application/rss+xml"/><item><title>Why and How to Use a Contributor License Agreement</title><link>https://adam-p.ca/blog/2015/02/contributor-license-agreement/</link><pubDate>Tue, 17 Feb 2015 00:00:00 +0000</pubDate><author>pritchard.adam@gmail.com (Adam Pritchard)</author><guid>https://adam-p.ca/blog/2015/02/contributor-license-agreement/</guid><description>
+&lt;h2 id="background-and-motivation"&gt;
+&lt;a class="heading-anchor" href="#background-and-motivation"&gt;
 ##
-&lt;/a>
+&lt;/a&gt;
 Background and Motivation
-&lt;/h2>
-&lt;p>I received a &lt;a href="https://github.com/adam-p/markdown-here/pull/232">pull request&lt;/a> for Markdown Here that was great: it found a bug, fixed it, and included tests for the fix. However, the PR submitter didn’t write the tests using the existing framework, so I figured I’d massage his test code into the proper form.&lt;/p>
-&lt;p>And then I noticed that he included a &lt;a href="https://github.com/adam-p/markdown-here/commit/52cd013413ff4645ed124cef68b5fc9044d65a96#diff-555e8e637d661924e36cdddfba81a23aR9">copyright line&lt;/a> in the test file. It says “MIT License”, which is the license used for the rest of the project, but that got me thinking about what that might mean…&lt;/p>
-&lt;p>Wikipedia suggests that the &lt;a href="https://en.wikipedia.org/wiki/MIT_License">MIT License&lt;/a> would require me to include his copyright+license notice wherever I use his code. Not a big deal, but annoying. And maybe a slippery slope – what if I get a bunch more code submissions?&lt;/p>
-&lt;p>So I did some research into “Contributor License Agreements” and found that there are a couple more things to be concerned about:&lt;/p>
-&lt;p>If you ever want to change the project license, you have to get the agreement of all contributors. That includes dual-licensing. Good info about that (and CLAs in general), with specific KDE example: &lt;a href="https://julien.ponge.org/blog/in-defense-of-contributor-license-agreements/">“In Defense of License Agreements”&lt;/a>.&lt;/p>
-&lt;p>Patent something something. Contributors retain the patent rights unless explicitly granted in the CLA.&lt;/p>
-&lt;p>And just to be clear: Contributors have the copyright on their code &lt;em>by default&lt;/em>, regardless of whether they put the © notice on it. I’m not sure about the license.&lt;/p>
-&lt;p>So I decided to require MDH contributors to “sign” a CLA. Seemed kind of irresponsible not to.&lt;/p>
-&lt;h2 id="picking-a-cla">
-&lt;a class="heading-anchor" href="#picking-a-cla">
+&lt;/h2&gt;
+&lt;p&gt;I received a &lt;a href="https://github.com/adam-p/markdown-here/pull/232"&gt;pull request&lt;/a&gt; for Markdown Here that was great: it found a bug, fixed it, and included tests for the fix. However, the PR submitter didn’t write the tests using the existing framework, so I figured I’d massage his test code into the proper form.&lt;/p&gt;
+&lt;p&gt;And then I noticed that he included a &lt;a href="https://github.com/adam-p/markdown-here/commit/52cd013413ff4645ed124cef68b5fc9044d65a96#diff-555e8e637d661924e36cdddfba81a23aR9"&gt;copyright line&lt;/a&gt; in the test file. It says “MIT License”, which is the license used for the rest of the project, but that got me thinking about what that might mean…&lt;/p&gt;
+&lt;p&gt;Wikipedia suggests that the &lt;a href="https://en.wikipedia.org/wiki/MIT_License"&gt;MIT License&lt;/a&gt; would require me to include his copyright+license notice wherever I use his code. Not a big deal, but annoying. And maybe a slippery slope – what if I get a bunch more code submissions?&lt;/p&gt;
+&lt;p&gt;So I did some research into “Contributor License Agreements” and found that there are a couple more things to be concerned about:&lt;/p&gt;
+&lt;p&gt;If you ever want to change the project license, you have to get the agreement of all contributors. That includes dual-licensing. Good info about that (and CLAs in general), with specific KDE example: &lt;a href="https://julien.ponge.org/blog/in-defense-of-contributor-license-agreements/"&gt;“In Defense of License Agreements”&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Patent something something. Contributors retain the patent rights unless explicitly granted in the CLA.&lt;/p&gt;
+&lt;p&gt;And just to be clear: Contributors have the copyright on their code &lt;em&gt;by default&lt;/em&gt;, regardless of whether they put the © notice on it. I’m not sure about the license.&lt;/p&gt;
+&lt;p&gt;So I decided to require MDH contributors to “sign” a CLA. Seemed kind of irresponsible not to.&lt;/p&gt;
+&lt;h2 id="picking-a-cla"&gt;
+&lt;a class="heading-anchor" href="#picking-a-cla"&gt;
 ##
-&lt;/a>
+&lt;/a&gt;
 Picking a CLA
-&lt;/h2>
-&lt;p>Spending your weekend reading CLAs is a drag.&lt;/p>
-&lt;p>I decided to use &lt;a href="http://www.harmonyagreements.org/">Harmony Agreements&lt;/a> to &lt;a href="http://selector.harmonyagreements.org/">generate&lt;/a> the agreement. (I chose “any license” for the “outbound license option”.) The agreement it provides seems pretty good and pretty standard.&lt;/p>
-&lt;p>(Well… when I first generated a agreement I chose the “copyright assignment” version instead of “copyright license”. I even committed it and got the pull-request submitter to sign it. But then I re-read it and realized it was a) not very standard, b) maybe not enforceable, and c) kind of heinous. So I changed to the “copyright license” form. The difference is something like “you’re transferring absolute power to me and you lose the ability to use your own code” versus “you’re letting me do whatever I want with your code but it’s still yours” – exclusive vs. non-exclusive license, kind of thing.)&lt;/p>
-&lt;h2 id="signing">
-&lt;a class="heading-anchor" href="#signing">
+&lt;/h2&gt;
+&lt;p&gt;Spending your weekend reading CLAs is a drag.&lt;/p&gt;
+&lt;p&gt;I decided to use &lt;a href="http://www.harmonyagreements.org/"&gt;Harmony Agreements&lt;/a&gt; to &lt;a href="http://selector.harmonyagreements.org/"&gt;generate&lt;/a&gt; the agreement. (I chose “any license” for the “outbound license option”.) The agreement it provides seems pretty good and pretty standard.&lt;/p&gt;
+&lt;p&gt;(Well… when I first generated a agreement I chose the “copyright assignment” version instead of “copyright license”. I even committed it and got the pull-request submitter to sign it. But then I re-read it and realized it was a) not very standard, b) maybe not enforceable, and c) kind of heinous. So I changed to the “copyright license” form. The difference is something like “you’re transferring absolute power to me and you lose the ability to use your own code” versus “you’re letting me do whatever I want with your code but it’s still yours” – exclusive vs. non-exclusive license, kind of thing.)&lt;/p&gt;
+&lt;h2 id="signing"&gt;
+&lt;a class="heading-anchor" href="#signing"&gt;
 ##
-&lt;/a>
+&lt;/a&gt;
 “Signing”
-&lt;/h2>
-&lt;p>Ugh.&lt;/p>
-&lt;p>Some projects – like Apache – require you to print out the agreement, sign it, and mail, fax, or scan-and-email it back to them. Another one (I forget which) uses some Adobe e-signing plugin where you draw your signature on the screen. Google requires you to be signed in, but it’s just a button press; ditto Twitter (signed in with Twitter, I mean). &lt;a href="https://www.clahub.com/">CLAHub&lt;/a> requires a Github sign-in (with optional typing of “I AGREE”). I think I also saw some projects that just require a filled-in form.&lt;/p>
-&lt;p>CLAHub is really cool. It gives you a nice link for your CLA, collects agreements, and runs a bot that watches your project’s PRs, checks against the CLAs, and comments on the PR as to whether the PR-user has agreed yet or not. Except… there’s a notice saying it’s not ready for prime-time, the bot is broken, and the blog hasn’t been updated in a year. Also, entrusting a (flaky?) third party with the agreements seems dangerous (although they can be downloaded, so blah).&lt;/p>
-&lt;p>The article I linked above mentions “some [projects] collect agreements through a simple web form (Google Doc is a fine choice)”. So I created a Google Form with the CLA and a form for the contributor to provide contact info and indicate agreement. But…&lt;/p>
-&lt;p>Then I started thinking about non-repudiability. So I did a little reading about &lt;a href="https://en.wikipedia.org/wiki/Electronic_signature">electronic signatures&lt;/a> (not to be confused with digital signatures). Which is a horrible rabbit hole. Anyway, it made me seriously doubt that a row in a Google Spreadsheet with someone’s maybe-correct address and the words “I AGREE” really constitutes a legal signature. (Even in the Google and Twitter cases – how would they prove that they didn’t just fiddle some bits to make it look like I signed?)&lt;/p>
-&lt;p>And if you’re going to do this annoying CLA crap then you might as well hope that it means something, right?&lt;/p>
-&lt;p>Then I found &lt;a href="https://github.com/Medium/opensource/blob/master/sign-cla.md">Medium’s open source project&lt;/a>. It requires contributors to commit a file along with their pull request stating that they agree to the CLA. That seemed… totally reasonable. The agreement is in-band with the code. In a way that I can’t manipulate without invalidating. And much, much less annoying for the contributor than printing/signing/faxing.&lt;/p>
-&lt;p>So that’s how I did it. See MDH’s &lt;a href="https://github.com/adam-p/markdown-here/blob/master/CONTRIBUTING.md#contributor-license-agreement">CONTRIBUTING.md&lt;/a>. (That’s the &lt;a href="https://github.com/blog/1184-contributing-guidelines">filename to use&lt;/a>.)&lt;/p>
-&lt;h2 id="backlash-warning">
-&lt;a class="heading-anchor" href="#backlash-warning">
+&lt;/h2&gt;
+&lt;p&gt;Ugh.&lt;/p&gt;
+&lt;p&gt;Some projects – like Apache – require you to print out the agreement, sign it, and mail, fax, or scan-and-email it back to them. Another one (I forget which) uses some Adobe e-signing plugin where you draw your signature on the screen. Google requires you to be signed in, but it’s just a button press; ditto Twitter (signed in with Twitter, I mean). &lt;a href="https://www.clahub.com/"&gt;CLAHub&lt;/a&gt; requires a Github sign-in (with optional typing of “I AGREE”). I think I also saw some projects that just require a filled-in form.&lt;/p&gt;
+&lt;p&gt;CLAHub is really cool. It gives you a nice link for your CLA, collects agreements, and runs a bot that watches your project’s PRs, checks against the CLAs, and comments on the PR as to whether the PR-user has agreed yet or not. Except… there’s a notice saying it’s not ready for prime-time, the bot is broken, and the blog hasn’t been updated in a year. Also, entrusting a (flaky?) third party with the agreements seems dangerous (although they can be downloaded, so blah).&lt;/p&gt;
+&lt;p&gt;The article I linked above mentions “some [projects] collect agreements through a simple web form (Google Doc is a fine choice)”. So I created a Google Form with the CLA and a form for the contributor to provide contact info and indicate agreement. But…&lt;/p&gt;
+&lt;p&gt;Then I started thinking about non-repudiability. So I did a little reading about &lt;a href="https://en.wikipedia.org/wiki/Electronic_signature"&gt;electronic signatures&lt;/a&gt; (not to be confused with digital signatures). Which is a horrible rabbit hole. Anyway, it made me seriously doubt that a row in a Google Spreadsheet with someone’s maybe-correct address and the words “I AGREE” really constitutes a legal signature. (Even in the Google and Twitter cases – how would they prove that they didn’t just fiddle some bits to make it look like I signed?)&lt;/p&gt;
+&lt;p&gt;And if you’re going to do this annoying CLA crap then you might as well hope that it means something, right?&lt;/p&gt;
+&lt;p&gt;Then I found &lt;a href="https://github.com/Medium/opensource/blob/master/sign-cla.md"&gt;Medium’s open source project&lt;/a&gt;. It requires contributors to commit a file along with their pull request stating that they agree to the CLA. That seemed… totally reasonable. The agreement is in-band with the code. In a way that I can’t manipulate without invalidating. And much, much less annoying for the contributor than printing/signing/faxing.&lt;/p&gt;
+&lt;p&gt;So that’s how I did it. See MDH’s &lt;a href="https://github.com/adam-p/markdown-here/blob/master/CONTRIBUTING.md#contributor-license-agreement"&gt;CONTRIBUTING.md&lt;/a&gt;. (That’s the &lt;a href="https://github.com/blog/1184-contributing-guidelines"&gt;filename to use&lt;/a&gt;.)&lt;/p&gt;
+&lt;h2 id="backlash-warning"&gt;
+&lt;a class="heading-anchor" href="#backlash-warning"&gt;
 ##
-&lt;/a>
+&lt;/a&gt;
 Backlash warning
-&lt;/h2>
-&lt;p>Doing the CLA read-and-agree dance is more effort than not doing it. And some people are offended at the idea of doing it (see the tweet at the top of the “In Defense Of” post.) So, it seems unavoidable that a project with a CLA will get fewer contributions than one without – some people just won’t get past that hurdle.&lt;/p>
-&lt;p>But it still seems necessary.&lt;/p>
-&lt;hr>
-&lt;p>[Note: This is actually an email I wrote to my co-workers after going through this CLA exercise with Markdown Here. That’s why the tone is a bit informal and “blah” is used as if it means something.]&lt;/p></description></item><item><title>No One Knows to Click on a Page Action</title><link>https://adam-p.ca/blog/2013/03/pageaction-interaction/</link><pubDate>Sun, 24 Mar 2013 00:00:00 +0000</pubDate><guid>https://adam-p.ca/blog/2013/03/pageaction-interaction/</guid><description>&lt;p>&lt;strong>Page actions&lt;/strong> – the buttons in a browser’s address bar – are a &lt;strong>surprising UI failure&lt;/strong>.&lt;/p>
-&lt;p>When adding a button for a browser extension, a choice must be made whether to make it a “page action” or a “browser action” (button on the toolbar). But &lt;strong>browsers have failed to communicate the interactiveness&lt;/strong> of page actions, and &lt;strong>almost no one – techy or layman – realizes that they’re clickable&lt;/strong>.&lt;/p>
-&lt;hr>
-&lt;p>To complement the context menu item and hotkey, and to fulfil &lt;a href="https://github.com/adam-p/markdown-here/issues/34">a user feature request&lt;/a>, I decided to add a button to the &lt;a href="https://www.markdown-here.com">&lt;strong>Markdown Here&lt;/strong>&lt;/a> browser extension. It turned out that simply deciding &lt;em>where&lt;/em> to put the button was a big part of the effort…&lt;/p>
-&lt;h2 id="page-action-vs-browser-action">
-&lt;a class="heading-anchor" href="#page-action-vs-browser-action">
+&lt;/h2&gt;
+&lt;p&gt;Doing the CLA read-and-agree dance is more effort than not doing it. And some people are offended at the idea of doing it (see the tweet at the top of the “In Defense Of” post.) So, it seems unavoidable that a project with a CLA will get fewer contributions than one without – some people just won’t get past that hurdle.&lt;/p&gt;
+&lt;p&gt;But it still seems necessary.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;[Note: This is actually an email I wrote to my co-workers after going through this CLA exercise with Markdown Here. That’s why the tone is a bit informal and “blah” is used as if it means something.]&lt;/p&gt;</description></item><item><title>No One Knows to Click on a Page Action</title><link>https://adam-p.ca/blog/2013/03/pageaction-interaction/</link><pubDate>Sun, 24 Mar 2013 00:00:00 +0000</pubDate><author>pritchard.adam@gmail.com (Adam Pritchard)</author><guid>https://adam-p.ca/blog/2013/03/pageaction-interaction/</guid><description>&lt;p&gt;&lt;strong&gt;Page actions&lt;/strong&gt; – the buttons in a browser’s address bar – are a &lt;strong&gt;surprising UI failure&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;When adding a button for a browser extension, a choice must be made whether to make it a “page action” or a “browser action” (button on the toolbar). But &lt;strong&gt;browsers have failed to communicate the interactiveness&lt;/strong&gt; of page actions, and &lt;strong&gt;almost no one – techy or layman – realizes that they’re clickable&lt;/strong&gt;.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;To complement the context menu item and hotkey, and to fulfil &lt;a href="https://github.com/adam-p/markdown-here/issues/34"&gt;a user feature request&lt;/a&gt;, I decided to add a button to the &lt;a href="https://www.markdown-here.com"&gt;&lt;strong&gt;Markdown Here&lt;/strong&gt;&lt;/a&gt; browser extension. It turned out that simply deciding &lt;em&gt;where&lt;/em&gt; to put the button was a big part of the effort…&lt;/p&gt;
+&lt;h2 id="page-action-vs-browser-action"&gt;
+&lt;a class="heading-anchor" href="#page-action-vs-browser-action"&gt;
 ##
-&lt;/a>
+&lt;/a&gt;
 Page Action vs. Browser Action
-&lt;/h2>
-&lt;p>I’m going to use the Chrome extension development terminology:&lt;/p>
-&lt;dl>
-&lt;dt>Page actions...&lt;/dt>
-&lt;dd>are the buttons and status indicators located in the address/omni/awesome bar. (&lt;a href="https://developer.chrome.com/extensions/pageAction.html">See &lt;code>pageAction&lt;/code> API info&lt;/a>.)&lt;/dd>
-&lt;dt>Browser actions...&lt;/dt>
-&lt;dd>are buttons on the browser toolbar. (&lt;a href="https://developer.chrome.com/extensions/browserAction.html">See &lt;code>browserAction&lt;/code> API info&lt;/a>.)&lt;/dd>
-&lt;/dl>
-&lt;p>&lt;img src="https://adam-p.ca/img/blog/firefox-button.png" alt="Firefox page and browser buttons">&lt;/p>
-&lt;p>In the screenshot above you can see the two styles co-existing in Firefox, which suggests there’s no real implementation decision to make – just provide both, and let the user decide which style they like. That’s true in Firefox (although there’s still the lesser decision of whether or not to add the toolbar button by default), but in Chrome you can either have a page action &lt;em>or&lt;/em> a browser action, not both.&lt;/p>
-&lt;p>The choice initially seemed pretty obvious: use a page action. From Chrome’s &lt;a href="https://developer.chrome.com/extensions/browserAction.html#tips">documentation for browser actions&lt;/a>:&lt;/p>
-&lt;blockquote>
-&lt;p>Don’t use browser actions for features that make sense for only a few pages. Use page actions instead.&lt;/p>&lt;/blockquote>
-&lt;p>Markdown Here’s button is only applicable to some rich-edit compose elements (email, mostly), so that admonition seems to apply pretty directly. Like many people, I don’t like occasional-use buttons cluttering up my toolbar, so I initially implemented the button as a page action.&lt;/p>
-&lt;h2 id="apparently-imperceptible-affordance">
-&lt;a class="heading-anchor" href="#apparently-imperceptible-affordance">
+&lt;/h2&gt;
+&lt;p&gt;I’m going to use the Chrome extension development terminology:&lt;/p&gt;
+&lt;dl&gt;
+&lt;dt&gt;Page actions...&lt;/dt&gt;
+&lt;dd&gt;are the buttons and status indicators located in the address/omni/awesome bar. (&lt;a href="https://developer.chrome.com/extensions/pageAction.html"&gt;See &lt;code&gt;pageAction&lt;/code&gt; API info&lt;/a&gt;.)&lt;/dd&gt;
+&lt;dt&gt;Browser actions...&lt;/dt&gt;
+&lt;dd&gt;are buttons on the browser toolbar. (&lt;a href="https://developer.chrome.com/extensions/browserAction.html"&gt;See &lt;code&gt;browserAction&lt;/code&gt; API info&lt;/a&gt;.)&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;p&gt;&lt;img src="https://adam-p.ca/img/blog/firefox-button.png" alt="Firefox page and browser buttons"&gt;&lt;/p&gt;
+&lt;p&gt;In the screenshot above you can see the two styles co-existing in Firefox, which suggests there’s no real implementation decision to make – just provide both, and let the user decide which style they like. That’s true in Firefox (although there’s still the lesser decision of whether or not to add the toolbar button by default), but in Chrome you can either have a page action &lt;em&gt;or&lt;/em&gt; a browser action, not both.&lt;/p&gt;
+&lt;p&gt;The choice initially seemed pretty obvious: use a page action. From Chrome’s &lt;a href="https://developer.chrome.com/extensions/browserAction.html#tips"&gt;documentation for browser actions&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Don’t use browser actions for features that make sense for only a few pages. Use page actions instead.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Markdown Here’s button is only applicable to some rich-edit compose elements (email, mostly), so that admonition seems to apply pretty directly. Like many people, I don’t like occasional-use buttons cluttering up my toolbar, so I initially implemented the button as a page action.&lt;/p&gt;
+&lt;h2 id="apparently-imperceptible-affordance"&gt;
+&lt;a class="heading-anchor" href="#apparently-imperceptible-affordance"&gt;
 ##
-&lt;/a>
+&lt;/a&gt;
 Apparently Imperceptible Affordance
-&lt;/h2>
-&lt;p>…And then I showed the cool new button to my significant other, who said something along the lines of “I can click that?” Which is a pretty damning statement, for a button.&lt;/p>
-&lt;p>I must admit that I had some suspicions about the obviousness of page actions’ clickability. I’m fairly sure it took me a while to realize I could click them, and I’m a) pretty technically savvy, and b) pretty hover-over-everything-that-looks-interesting curious. But what if a user is &lt;em>not&lt;/em> both of those things…?&lt;/p>
-&lt;p>So I asked around. I asked in the &lt;a href="https://groups.google.com/forum/#!topic/markdown-here/NjQRYcD1mgY/discussion">Markdown Here Google Group&lt;/a>, the &lt;a href="https://ux.stackexchange.com/questions/33987/browser-extensions-page-action-or-browser-action">UX StackExchange&lt;/a>, and on &lt;a href="https://plus.google.com/u/0/112228900913862544865/posts/9HbUjid2UvV">Google+&lt;/a>. These are the sorts of responses I got:&lt;/p>
-&lt;ul>
-&lt;li>“This [is] purely anecdotal, but I work in the web industry, and use [C]hrome everyday, and didn’t realise the page actions were clickable. I agree with you that they look more like signifiers than they do clickable buttons.”&lt;/li>
-&lt;li>“But I agree that they don’t function well as buttons, perhaps this is by the design of the icon (not “raising” the element to give it depth).”&lt;/li>
-&lt;li>“pageAction in the abstract is a great idea, but I always find its use a little jarring. And I agree it’s not button-like at all, more just informational.”&lt;/li>
-&lt;/ul>
-&lt;p>(Yes, there were some people who knew that page actions are clickable. But the fact that many computer/tech/web/UX-savvy people &lt;em>didn’t&lt;/em> know is the more significant observation.)&lt;/p>
-&lt;p>I also asked around among people at the office (coders) and among non-programmer friends, and the vast majority of both groups didn’t know they could interact with page actions. At best they thought of them as status indicators, and at worst they couldn’t remember ever having noticed them before. &lt;em>Ugh&lt;/em>.&lt;/p>
-&lt;h3 id="missing-cues">
-&lt;a class="heading-anchor" href="#missing-cues">
+&lt;/h2&gt;
+&lt;p&gt;…And then I showed the cool new button to my significant other, who said something along the lines of “I can click that?” Which is a pretty damning statement, for a button.&lt;/p&gt;
+&lt;p&gt;I must admit that I had some suspicions about the obviousness of page actions’ clickability. I’m fairly sure it took me a while to realize I could click them, and I’m a) pretty technically savvy, and b) pretty hover-over-everything-that-looks-interesting curious. But what if a user is &lt;em&gt;not&lt;/em&gt; both of those things…?&lt;/p&gt;
+&lt;p&gt;So I asked around. I asked in the &lt;a href="https://groups.google.com/forum/#!topic/markdown-here/NjQRYcD1mgY/discussion"&gt;Markdown Here Google Group&lt;/a&gt;, the &lt;a href="https://ux.stackexchange.com/questions/33987/browser-extensions-page-action-or-browser-action"&gt;UX StackExchange&lt;/a&gt;, and on &lt;a href="https://plus.google.com/u/0/112228900913862544865/posts/9HbUjid2UvV"&gt;Google+&lt;/a&gt;. These are the sorts of responses I got:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;“This [is] purely anecdotal, but I work in the web industry, and use [C]hrome everyday, and didn’t realise the page actions were clickable. I agree with you that they look more like signifiers than they do clickable buttons.”&lt;/li&gt;
+&lt;li&gt;“But I agree that they don’t function well as buttons, perhaps this is by the design of the icon (not “raising” the element to give it depth).”&lt;/li&gt;
+&lt;li&gt;“pageAction in the abstract is a great idea, but I always find its use a little jarring. And I agree it’s not button-like at all, more just informational.”&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;(Yes, there were some people who knew that page actions are clickable. But the fact that many computer/tech/web/UX-savvy people &lt;em&gt;didn’t&lt;/em&gt; know is the more significant observation.)&lt;/p&gt;
+&lt;p&gt;I also asked around among people at the office (coders) and among non-programmer friends, and the vast majority of both groups didn’t know they could interact with page actions. At best they thought of them as status indicators, and at worst they couldn’t remember ever having noticed them before. &lt;em&gt;Ugh&lt;/em&gt;.&lt;/p&gt;
+&lt;h3 id="missing-cues"&gt;
+&lt;a class="heading-anchor" href="#missing-cues"&gt;
 ###
-&lt;/a>
+&lt;/a&gt;
 Missing Cues
-&lt;/h3>
-&lt;p>It’s hard to blame users for this lack of &lt;a href="https://en.wikipedia.org/wiki/Affordance">affordance&lt;/a> recognition. At least, not yet.&lt;/p>
-&lt;p>Page actions do not display any of the typical this-is-a-clickable-thing traits. For the most part, page actions:&lt;/p>
-&lt;ul>
-&lt;li>are not raised or underlined, like a standard button or a link, so most people won’t hover over them, but even if the user does hover, page actions…&lt;/li>
-&lt;li>do not change at all when hovered over – no outline, no colour change, no raise-up, no clicky-hand mouse cursor.&lt;/li>
-&lt;/ul>
-&lt;p>Some page actions have a verb-based tooltip if you hover long enough. &lt;em>Some&lt;/em>. &lt;em>If&lt;/em>. &lt;em>Long enough&lt;/em>.&lt;/p>
-&lt;p>It’s a little shocking how poorly the interactiveness is communicated to the user.&lt;/p>
-&lt;h3 id="maybe-our-future-selves-will-get-it">
-&lt;a class="heading-anchor" href="#maybe-our-future-selves-will-get-it">
+&lt;/h3&gt;
+&lt;p&gt;It’s hard to blame users for this lack of &lt;a href="https://en.wikipedia.org/wiki/Affordance"&gt;affordance&lt;/a&gt; recognition. At least, not yet.&lt;/p&gt;
+&lt;p&gt;Page actions do not display any of the typical this-is-a-clickable-thing traits. For the most part, page actions:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;are not raised or underlined, like a standard button or a link, so most people won’t hover over them, but even if the user does hover, page actions…&lt;/li&gt;
+&lt;li&gt;do not change at all when hovered over – no outline, no colour change, no raise-up, no clicky-hand mouse cursor.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Some page actions have a verb-based tooltip if you hover long enough. &lt;em&gt;Some&lt;/em&gt;. &lt;em&gt;If&lt;/em&gt;. &lt;em&gt;Long enough&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;It’s a little shocking how poorly the interactiveness is communicated to the user.&lt;/p&gt;
+&lt;h3 id="maybe-our-future-selves-will-get-it"&gt;
+&lt;a class="heading-anchor" href="#maybe-our-future-selves-will-get-it"&gt;
 ###
-&lt;/a>
+&lt;/a&gt;
 Maybe our future selves will get it?
-&lt;/h3>
-&lt;!-- dropping into HTML to float the image, since it's so vertical -->
-&lt;a href="https://adam-p.ca/img/blog/windows8-clickable.png">
-&lt;img src="https://adam-p.ca/img/blog/windows8-clickable.png" alt="Windows 8 clickable text" class="pull-right" style="max-height: 20em; margin-left: 2em;">
-&lt;/a>
-&lt;p>Above I coyly dropped “At least, not yet.” There is a trend in UI design toward everything on-screen being interactive unless explicitly disabled-looking. Windows 8 has gone this way, as has Chrome and, to a slightly lesser extent, Firefox. There’s very, very little text or window chrome that’s non-interactive.&lt;/p>
-&lt;p>But even if you accept the “everything is interactive” ideal, page actions are still different than most other elements, since there’s no hover effect. And page actions are further hampered by the minimalistic design aesthetic that Chrome and Firefox seem to have adopted for them – a monochrome outline icon that can easily be read as disabled.&lt;/p>
-&lt;p>Maybe once users have fully embraced/internalized the idea that there are no extraneous UI elements, they won’t need hover effects and raised borders. Maybe there’ll be a great awakening to the utility of page actions. But until then…&lt;/p>
-&lt;h2 id="how-to-rescue-page-actions">
-&lt;a class="heading-anchor" href="#how-to-rescue-page-actions">
+&lt;/h3&gt;
+&lt;!-- dropping into HTML to float the image, since it's so vertical --&gt;
+&lt;a href="https://adam-p.ca/img/blog/windows8-clickable.png"&gt;
+&lt;img src="https://adam-p.ca/img/blog/windows8-clickable.png" alt="Windows 8 clickable text" class="pull-right" style="max-height: 20em; margin-left: 2em;"&gt;
+&lt;/a&gt;
+&lt;p&gt;Above I coyly dropped “At least, not yet.” There is a trend in UI design toward everything on-screen being interactive unless explicitly disabled-looking. Windows 8 has gone this way, as has Chrome and, to a slightly lesser extent, Firefox. There’s very, very little text or window chrome that’s non-interactive.&lt;/p&gt;
+&lt;p&gt;But even if you accept the “everything is interactive” ideal, page actions are still different than most other elements, since there’s no hover effect. And page actions are further hampered by the minimalistic design aesthetic that Chrome and Firefox seem to have adopted for them – a monochrome outline icon that can easily be read as disabled.&lt;/p&gt;
+&lt;p&gt;Maybe once users have fully embraced/internalized the idea that there are no extraneous UI elements, they won’t need hover effects and raised borders. Maybe there’ll be a great awakening to the utility of page actions. But until then…&lt;/p&gt;
+&lt;h2 id="how-to-rescue-page-actions"&gt;
+&lt;a class="heading-anchor" href="#how-to-rescue-page-actions"&gt;
 ##
-&lt;/a>
+&lt;/a&gt;
 How to rescue page actions
-&lt;/h2>
-&lt;p>Page actions need to look less like small, monochrome, passive, static icons. They need some standard button cues, both initially and on hover; they should employ one or more of: raisèd-ness, colour, border, more visual strength.&lt;/p>
-&lt;p>(I suspect that even the Chrome-style toolbar buttons – like the three-line settings button – are also below most laypeople’s threshold to recognize the click affordance. I’ve seen that in action in my own family-tech-support experience. Those buttons also lack most historical click cues. But let’s tilt at one windmill at a time…)&lt;/p>
-&lt;h3 id="tangent-chrome-needs-to-allow-both-page-and-browser-actions">
-&lt;a class="heading-anchor" href="#tangent-chrome-needs-to-allow-both-page-and-browser-actions">
+&lt;/h2&gt;
+&lt;p&gt;Page actions need to look less like small, monochrome, passive, static icons. They need some standard button cues, both initially and on hover; they should employ one or more of: raisèd-ness, colour, border, more visual strength.&lt;/p&gt;
+&lt;p&gt;(I suspect that even the Chrome-style toolbar buttons – like the three-line settings button – are also below most laypeople’s threshold to recognize the click affordance. I’ve seen that in action in my own family-tech-support experience. Those buttons also lack most historical click cues. But let’s tilt at one windmill at a time…)&lt;/p&gt;
+&lt;h3 id="tangent-chrome-needs-to-allow-both-page-and-browser-actions"&gt;
+&lt;a class="heading-anchor" href="#tangent-chrome-needs-to-allow-both-page-and-browser-actions"&gt;
 ###
-&lt;/a>
+&lt;/a&gt;
 Tangent: Chrome needs to allow both page and browser actions
-&lt;/h3>
-&lt;p>Finally, Chrome should allow extensions to provide both page actions and browser actions.&lt;/p>
-&lt;p>In the screenshot at the top of this post, you see can that &lt;a href="https://getpocket.com/">Pocket’s&lt;/a> Firefox extension uses both button styles: the page action is for saving the current page, while the browser action is for showing your saved pages. Similarly for the bookmarks buttons: page action for bookmarking the page, browser action for viewing bookmarks.&lt;/p>
-&lt;p>(Markdown Here also has a button in each place, but it’s not as compelling a use case, since it’s just a convenience to work around the page action affordance opacity. Both buttons toggle Markdown rendering; the page action only shows when focus is in a valid target; you can hide the toolbar button if you’re one of the few page-action-savvy users. But, still, I wish I could provide the same flexibility to my Chrome users that I do to my Firefox users.)&lt;/p>
-&lt;p>In Chrome, Pocket only has a browser action (which, oddly enough, acts only like its Firefox page action), and bookmarks only have a page action (and a whole toolbar). I can’t think of any reason for Chrome to prevent extensions from providing both, and there are certainly good use cases for allowing them.&lt;/p>
-&lt;h2 id="so-its-back-to-a-browser-action">
-&lt;a class="heading-anchor" href="#so-its-back-to-a-browser-action">
+&lt;/h3&gt;
+&lt;p&gt;Finally, Chrome should allow extensions to provide both page actions and browser actions.&lt;/p&gt;
+&lt;p&gt;In the screenshot at the top of this post, you see can that &lt;a href="https://getpocket.com/"&gt;Pocket’s&lt;/a&gt; Firefox extension uses both button styles: the page action is for saving the current page, while the browser action is for showing your saved pages. Similarly for the bookmarks buttons: page action for bookmarking the page, browser action for viewing bookmarks.&lt;/p&gt;
+&lt;p&gt;(Markdown Here also has a button in each place, but it’s not as compelling a use case, since it’s just a convenience to work around the page action affordance opacity. Both buttons toggle Markdown rendering; the page action only shows when focus is in a valid target; you can hide the toolbar button if you’re one of the few page-action-savvy users. But, still, I wish I could provide the same flexibility to my Chrome users that I do to my Firefox users.)&lt;/p&gt;
+&lt;p&gt;In Chrome, Pocket only has a browser action (which, oddly enough, acts only like its Firefox page action), and bookmarks only have a page action (and a whole toolbar). I can’t think of any reason for Chrome to prevent extensions from providing both, and there are certainly good use cases for allowing them.&lt;/p&gt;
+&lt;h2 id="so-its-back-to-a-browser-action"&gt;
+&lt;a class="heading-anchor" href="#so-its-back-to-a-browser-action"&gt;
 ##
-&lt;/a>
+&lt;/a&gt;
 So it’s back to a browser action
-&lt;/h2>
-&lt;p>I finally switched the Markdown Here toggle button in Chrome to be a browser action. Even though it clearly, spiritually, should be a page action, I just can’t ignore the fact that most users will not recognize it as clickable in that form.&lt;/p>
-&lt;p>I have had &lt;a href="https://github.com/adam-p/markdown-here/issues/45">one complaint&lt;/a> about the button location, but the user seemed satisfied that I made the rational choice after I explained it.&lt;/p>
-&lt;hr>
-&lt;a name="update-20171028"/>
-&lt;h2 id="update-2017-10-28">
-&lt;a class="heading-anchor" href="#update-2017-10-28">
+&lt;/h2&gt;
+&lt;p&gt;I finally switched the Markdown Here toggle button in Chrome to be a browser action. Even though it clearly, spiritually, should be a page action, I just can’t ignore the fact that most users will not recognize it as clickable in that form.&lt;/p&gt;
+&lt;p&gt;I have had &lt;a href="https://github.com/adam-p/markdown-here/issues/45"&gt;one complaint&lt;/a&gt; about the button location, but the user seemed satisfied that I made the rational choice after I explained it.&lt;/p&gt;
+&lt;hr&gt;
+&lt;a name="update-20171028"/&gt;
+&lt;h2 id="update-2017-10-28"&gt;
+&lt;a class="heading-anchor" href="#update-2017-10-28"&gt;
 ##
-&lt;/a>
+&lt;/a&gt;
 Update 2017-10-28
-&lt;/h2>
-&lt;p>Last year &lt;strong>Chrome turned page actions into browser actions&lt;/strong>. The &lt;a href="https://productforums.google.com/d/msg/chrome/wOUFbsKqPg0/K9FBzJh7BAAJ">description of the change&lt;/a> suggests that this was a security decision. Evil stealth extensions were being installed, so now all extensions have to have toolbar buttons to expose them to users. (FWIW, I don’t think this is a good solution to the problem. I’m sure the majority of users don’t pay much attention to random toolbar buttons.) It makes little sense for page action-centric extensions to have both a sometimes-visible address bar button and an always-visible toolbar button, so the Chrome team did away with the address bar button.&lt;/p>
-&lt;p>Firefox hasn’t made a similar change. You’d think that if there’s solid security rationale for one browser, that it’d apply to all browsers.&lt;/p>
-&lt;p>This makes the documentation for &lt;code>pageAction&lt;/code> pretty confusing. Check out &lt;a href="https://developer.chrome.com/extensions/pageAction">Chrome’s&lt;/a> versus &lt;a href="https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/pageAction">Mozilla’s&lt;/a> documentation. Chrome’s documentation is kind of incoherent now. There seems to be no reason at all to use page actions, but the doc still suggests that you do.&lt;/p>
-&lt;p>I felt that page actions were kind of unusable before, but… this is worse?&lt;/p>
-&lt;p>The reason I was looking at this again is because I created another extension, called &lt;a href="https://github.com/adam-p/breached">Breached&lt;/a>, where a page action would, in theory, make the most sense. The button is enabled/shown when the user visits a site that has suffered a breach in the past, exposing user accounts. This is a pretty rare thing (for many people… who don’t use Yahoo Mail), so dedicating a perma-visible toolbar button to it is pretty wasteful. Still, I initially went with a browser action for the reasons given in this post. I even added a notification (shown once per site), so the user could hide the toolbar button and still notice when they visit a breached site.&lt;/p>
-&lt;p>Then a &lt;a href="https://addons.mozilla.org/en-US/firefox/addon/breached/reviews/940746/">reviewer&lt;/a> requested that it be a page action. I thought about it again and realized that the notification also helps with the “no one knows to click on a page action” problem by telling the user they can click on it. And the always-visible button still bugged me (and, let’s face it, most users won’t know how to hide buttons). So I changed it to a page action. And… discovered that there’s no visible difference in Chrome. Except page actions don’t support badge text, which I was using to show the number of breaches.&lt;/p>
-&lt;p>Anyway, I’m leaving Breached as a page action, for the sake of Firefox users.&lt;/p>
-&lt;hr>
-&lt;p>Postscript: First blog post ever! Yay! Thanks to &lt;a href="https://caseywatts.github.com/">Casey Watts&lt;/a> for suggesting that I write it.&lt;/p></description></item></channel></rss>
+&lt;/h2&gt;
+&lt;p&gt;Last year &lt;strong&gt;Chrome turned page actions into browser actions&lt;/strong&gt;. The &lt;a href="https://productforums.google.com/d/msg/chrome/wOUFbsKqPg0/K9FBzJh7BAAJ"&gt;description of the change&lt;/a&gt; suggests that this was a security decision. Evil stealth extensions were being installed, so now all extensions have to have toolbar buttons to expose them to users. (FWIW, I don’t think this is a good solution to the problem. I’m sure the majority of users don’t pay much attention to random toolbar buttons.) It makes little sense for page action-centric extensions to have both a sometimes-visible address bar button and an always-visible toolbar button, so the Chrome team did away with the address bar button.&lt;/p&gt;
+&lt;p&gt;Firefox hasn’t made a similar change. You’d think that if there’s solid security rationale for one browser, that it’d apply to all browsers.&lt;/p&gt;
+&lt;p&gt;This makes the documentation for &lt;code&gt;pageAction&lt;/code&gt; pretty confusing. Check out &lt;a href="https://developer.chrome.com/extensions/pageAction"&gt;Chrome’s&lt;/a&gt; versus &lt;a href="https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/pageAction"&gt;Mozilla’s&lt;/a&gt; documentation. Chrome’s documentation is kind of incoherent now. There seems to be no reason at all to use page actions, but the doc still suggests that you do.&lt;/p&gt;
+&lt;p&gt;I felt that page actions were kind of unusable before, but… this is worse?&lt;/p&gt;
+&lt;p&gt;The reason I was looking at this again is because I created another extension, called &lt;a href="https://github.com/adam-p/breached"&gt;Breached&lt;/a&gt;, where a page action would, in theory, make the most sense. The button is enabled/shown when the user visits a site that has suffered a breach in the past, exposing user accounts. This is a pretty rare thing (for many people… who don’t use Yahoo Mail), so dedicating a perma-visible toolbar button to it is pretty wasteful. Still, I initially went with a browser action for the reasons given in this post. I even added a notification (shown once per site), so the user could hide the toolbar button and still notice when they visit a breached site.&lt;/p&gt;
+&lt;p&gt;Then a &lt;a href="https://addons.mozilla.org/en-US/firefox/addon/breached/reviews/940746/"&gt;reviewer&lt;/a&gt; requested that it be a page action. I thought about it again and realized that the notification also helps with the “no one knows to click on a page action” problem by telling the user they can click on it. And the always-visible button still bugged me (and, let’s face it, most users won’t know how to hide buttons). So I changed it to a page action. And… discovered that there’s no visible difference in Chrome. Except page actions don’t support badge text, which I was using to show the number of breaches.&lt;/p&gt;
+&lt;p&gt;Anyway, I’m leaving Breached as a page action, for the sake of Firefox users.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Postscript: First blog post ever! Yay! Thanks to &lt;a href="https://caseywatts.github.com/"&gt;Casey Watts&lt;/a&gt; for suggesting that I write it.&lt;/p&gt;</description></item></channel></rss>

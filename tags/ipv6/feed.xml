@@ -1,231 +1,236 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ipv6 on adam-p</title><link>https://adam-p.ca/tags/ipv6/</link><description>Recent content in Ipv6 on adam-p</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 22 Mar 2022 18:32:38 -0400</lastBuildDate><atom:link href="https://adam-p.ca/tags/ipv6/feed.xml" rel="self" type="application/rss+xml"/><item><title>Should you strip the IPv6 zone?</title><link>https://adam-p.ca/blog/2022/03/strip-ipv6-zone/</link><pubDate>Tue, 22 Mar 2022 18:32:38 -0400</pubDate><guid>https://adam-p.ca/blog/2022/03/strip-ipv6-zone/</guid><description>&lt;p>There have recently been three different (but related) contexts where I have asked or been asked that question:&lt;/p>
-&lt;ol>
-&lt;li>When a reverse proxy is adding the client IP to the &lt;code>X-Forwarded-For&lt;/code> header.&lt;/li>
-&lt;li>When the client IP is being used for rate limiting.&lt;/li>
-&lt;li>When checking if a client IP is contained in a configured list of ranges/prefixes/CIDRs.&lt;/li>
-&lt;/ol>
-&lt;p>As I understood more about zones my opinion on this changed. This is an attempt to capture my understanding and where I ended up.&lt;/p>
-&lt;h2 id="what-are-ipv6-zones">
-&lt;a class="heading-anchor" href="#what-are-ipv6-zones">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ipv6 on adam-p</title><link>https://adam-p.ca/tags/ipv6/</link><description>Recent content in Ipv6 on adam-p</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>pritchard.adam@gmail.com (Adam Pritchard)</managingEditor><webMaster>pritchard.adam@gmail.com (Adam Pritchard)</webMaster><lastBuildDate>Tue, 22 Mar 2022 18:32:38 -0400</lastBuildDate><atom:link href="https://adam-p.ca/tags/ipv6/feed.xml" rel="self" type="application/rss+xml"/><item><title>Should you strip the IPv6 zone?</title><link>https://adam-p.ca/blog/2022/03/strip-ipv6-zone/</link><pubDate>Tue, 22 Mar 2022 18:32:38 -0400</pubDate><author>pritchard.adam@gmail.com (Adam Pritchard)</author><guid>https://adam-p.ca/blog/2022/03/strip-ipv6-zone/</guid><description>&lt;p&gt;There have recently been three different (but related) contexts where I have asked or been asked that question:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;When a reverse proxy is adding the client IP to the &lt;code&gt;X-Forwarded-For&lt;/code&gt; header.&lt;/li&gt;
+&lt;li&gt;When the client IP is being used for rate limiting.&lt;/li&gt;
+&lt;li&gt;When checking if a client IP is contained in a configured list of ranges/prefixes/CIDRs.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;As I understood more about zones my opinion on this changed. This is an attempt to capture my understanding and where I ended up.&lt;/p&gt;
+&lt;h2 id="what-are-ipv6-zones"&gt;
+&lt;a class="heading-anchor" href="#what-are-ipv6-zones"&gt;
 ##
-&lt;/a>
+&lt;/a&gt;
 What are IPv6 zones?
-&lt;/h2>
-&lt;p>Only link-local addresses have zone identifiers&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>. The &lt;a href="https://en.wikipedia.org/wiki/IPv6#Link-local_address">Wikipedia definition&lt;/a>&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup> of IPv6 link-local address assignment will get us started:&lt;/p>
-&lt;blockquote>
-&lt;p>All interfaces of IPv6 hosts require a link-local address, which have the prefix fe80::/10. This prefix is combined with a 64-bit suffix, which the host can compute and assign by itself without the presence or cooperation of an external network component like a DHCP server, in a process called &lt;em>link-local address autoconfiguration&lt;/em>.&lt;/p>&lt;/blockquote>
-&lt;p>Link-local addresses are guaranteed to be unique within a “link” – the subnet or network segment the interface is connected to. They have no uniqueness guarantees beyond that, and are not routed beyond the link they belong to.&lt;/p>
-&lt;p>Because a single machine might have multiple interfaces on separate links, there might be peers on those separate links with the same link-local address as each other. In order to correctly address those peers, there needs to be an additional qualifier – the zone identifier.&lt;/p>
-&lt;p>In addition to a link-local address, each interface gets a zone identifier. If you list the interfaces on your machine, you’ll see link-local addresses like &lt;code>fe80::2934:e0a2:73b1:80da%21&lt;/code> or &lt;code>fe80::9105:d0ed:bbda:9935%eth0&lt;/code> – the part after the percent sign is the zone.&lt;/p>
-&lt;p>If you want to connect to the link-local address of another machine you share a link with, it’s not enough to know that its IP is &lt;code>fe80::abcd&lt;/code> – you also need to know which of your interfaces to connect through to get to it. So the zone-qualified address would be like &lt;code>fe80::abcd%eth0&lt;/code>. You then have enough information to connect to that machine.&lt;/p>
-&lt;p>It’s important to note that the zone identifier has no meaning outside of the computer that owns the interface. Your IP+zone for a peer machine might be &lt;code>fe80::abcd%eth0&lt;/code>, but the address that machine has for its own interface might be &lt;code>fe80::abcd%wifi0&lt;/code> and its address for your machine would then be &lt;code>fe80::9105:d0ed:bbda:9935%wifi0&lt;/code>.&lt;/p>
-&lt;p>Link-local addresses may change on reboot (depending on assignment method and the addresses of other peers on the link). Zones probably won’t change, since they use either the index or name of the interface (or both), but I don’t know if there’s a guarantee of that.&lt;/p>
-&lt;p>I’m not sure if zones are directly modifiable, but it’s possible in Linux to change interface names, which should result in a zone change.&lt;/p>
-&lt;h2 id="so-should-zones-be-stripped">
-&lt;a class="heading-anchor" href="#so-should-zones-be-stripped">
+&lt;/h2&gt;
+&lt;p&gt;Only link-local addresses have zone identifiers&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;. The &lt;a href="https://en.wikipedia.org/wiki/IPv6#Link-local_address"&gt;Wikipedia definition&lt;/a&gt;&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt; of IPv6 link-local address assignment will get us started:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;All interfaces of IPv6 hosts require a link-local address, which have the prefix fe80::/10. This prefix is combined with a 64-bit suffix, which the host can compute and assign by itself without the presence or cooperation of an external network component like a DHCP server, in a process called &lt;em&gt;link-local address autoconfiguration&lt;/em&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Link-local addresses are guaranteed to be unique within a “link” – the subnet or network segment the interface is connected to. They have no uniqueness guarantees beyond that, and are not routed beyond the link they belong to.&lt;/p&gt;
+&lt;p&gt;Because a single machine might have multiple interfaces on separate links, there might be peers on those separate links with the same link-local address as each other. In order to correctly address those peers, there needs to be an additional qualifier – the zone identifier.&lt;/p&gt;
+&lt;p&gt;In addition to a link-local address, each interface gets a zone identifier. If you list the interfaces on your machine, you’ll see link-local addresses like &lt;code&gt;fe80::2934:e0a2:73b1:80da%21&lt;/code&gt; or &lt;code&gt;fe80::9105:d0ed:bbda:9935%eth0&lt;/code&gt; – the part after the percent sign is the zone.&lt;/p&gt;
+&lt;p&gt;If you want to connect to the link-local address of another machine you share a link with, it’s not enough to know that its IP is &lt;code&gt;fe80::abcd&lt;/code&gt; – you also need to know which of your interfaces to connect through to get to it. So the zone-qualified address would be like &lt;code&gt;fe80::abcd%eth0&lt;/code&gt;. You then have enough information to connect to that machine.&lt;/p&gt;
+&lt;p&gt;It’s important to note that the zone identifier has no meaning outside of the computer that owns the interface. Your IP+zone for a peer machine might be &lt;code&gt;fe80::abcd%eth0&lt;/code&gt;, but the address that machine has for its own interface might be &lt;code&gt;fe80::abcd%wifi0&lt;/code&gt; and its address for your machine would then be &lt;code&gt;fe80::9105:d0ed:bbda:9935%wifi0&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Link-local addresses may change on reboot (depending on assignment method and the addresses of other peers on the link). Zones probably won’t change, since they use either the index or name of the interface (or both), but I don’t know if there’s a guarantee of that.&lt;/p&gt;
+&lt;p&gt;I’m not sure if zones are directly modifiable, but it’s possible in Linux to change interface names, which should result in a zone change.&lt;/p&gt;
+&lt;h2 id="so-should-zones-be-stripped"&gt;
+&lt;a class="heading-anchor" href="#so-should-zones-be-stripped"&gt;
 ##
-&lt;/a>
+&lt;/a&gt;
 So should zones be stripped?
-&lt;/h2>
-&lt;p>As &lt;a href="https://datatracker.ietf.org/doc/html/rfc6874#section-1">RFC 6874&lt;/a> says:&lt;/p>
-&lt;blockquote>
-&lt;p>It should be noted that zone identifiers have purely local meaning within the node in which they are defined, often being the same as IPv6 interface names. They are completely meaningless for any other node.&lt;/p>&lt;/blockquote>
-&lt;p>That suggests that we should be discarding the zone from addresses that are destined for use anywhere other than the machine that added the zone. But, as we’ve seen, link-local IP addresses are meaningless without the associated zone. So… what’s the right answer?&lt;/p>
-&lt;p>Let’s examine the individual contexts I mentioned at the top.&lt;/p>
-&lt;h3 id="adding-to-the-x-forwarded-for-header">
-&lt;a class="heading-anchor" href="#adding-to-the-x-forwarded-for-header">
+&lt;/h2&gt;
+&lt;p&gt;As &lt;a href="https://datatracker.ietf.org/doc/html/rfc6874#section-1"&gt;RFC 6874&lt;/a&gt; says:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;It should be noted that zone identifiers have purely local meaning within the node in which they are defined, often being the same as IPv6 interface names. They are completely meaningless for any other node.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;That suggests that we should be discarding the zone from addresses that are destined for use anywhere other than the machine that added the zone. But, as we’ve seen, link-local IP addresses are meaningless without the associated zone. So… what’s the right answer?&lt;/p&gt;
+&lt;p&gt;Let’s examine the individual contexts I mentioned at the top.&lt;/p&gt;
+&lt;h3 id="adding-to-the-x-forwarded-for-header"&gt;
+&lt;a class="heading-anchor" href="#adding-to-the-x-forwarded-for-header"&gt;
 ###
-&lt;/a>
-Adding to the &lt;code>X-Forwarded-For&lt;/code> header
-&lt;/h3>
-&lt;p>(I wrote extensively about the &lt;a href="https://adam-p.ca/blog/2022/03/x-forwarded-for/">hazards of using the &lt;code>X-Forwarded-For&lt;/code> header&lt;/a>. I won’t be repeating it here so we can stay out of the weeds.)&lt;/p>
-&lt;p>The main use of the &lt;code>X-Forwarded-For&lt;/code> header is to get the “real” client IP. A secondary use is to see what path a request took.&lt;/p>
-&lt;p>The address being appended to the XFF header is the address of the &lt;em>peer&lt;/em> connecting to the machine in question, via its own link-local address. So it’ll look like “remote_fe80_ip%local_zone_id”.&lt;/p>
-&lt;p>I think it’s better if the link-local address zone is preserved. Without it, we won’t know which link the address belongs to, so we won’t know which remote machine made the connection.&lt;/p>
-&lt;p>Of course, it depends on how the XFF values will actually be used. However, that’s not always known so it seems better to include more information rather than less.&lt;/p>
-&lt;h3 id="rate-limiting-by-ip">
-&lt;a class="heading-anchor" href="#rate-limiting-by-ip">
+&lt;/a&gt;
+Adding to the &lt;code&gt;X-Forwarded-For&lt;/code&gt; header
+&lt;/h3&gt;
+&lt;p&gt;(I wrote extensively about the &lt;a href="https://adam-p.ca/blog/2022/03/x-forwarded-for/"&gt;hazards of using the &lt;code&gt;X-Forwarded-For&lt;/code&gt; header&lt;/a&gt;. I won’t be repeating it here so we can stay out of the weeds.)&lt;/p&gt;
+&lt;p&gt;The main use of the &lt;code&gt;X-Forwarded-For&lt;/code&gt; header is to get the “real” client IP. A secondary use is to see what path a request took.&lt;/p&gt;
+&lt;p&gt;The address being appended to the XFF header is the address of the &lt;em&gt;peer&lt;/em&gt; connecting to the machine in question, via its own link-local address. So it’ll look like “remote_fe80_ip%local_zone_id”.&lt;/p&gt;
+&lt;p&gt;I think it’s better if the link-local address zone is preserved. Without it, we won’t know which link the address belongs to, so we won’t know which remote machine made the connection.&lt;/p&gt;
+&lt;p&gt;Of course, it depends on how the XFF values will actually be used. However, that’s not always known so it seems better to include more information rather than less.&lt;/p&gt;
+&lt;h3 id="rate-limiting-by-ip"&gt;
+&lt;a class="heading-anchor" href="#rate-limiting-by-ip"&gt;
 ###
-&lt;/a>
+&lt;/a&gt;
 Rate limiting by IP
-&lt;/h3>
-&lt;p>This is partly an extension of the XFF consideration, as that header is often the source of the IP we use for rate limiting.&lt;/p>
-&lt;p>First of all, let’s deal with the possibility of zone spoofing via &lt;code>X-Forwarded-For&lt;/code>. If we include the zone in the key we’re using to rate limit, then the possibility arises of an attacker altering the zone to avoid being rate-limited. I think we can dismiss this concern because if an attacker has the ability to change the zone value, then it will likely be no harder (and probably easier) to change the IP itself.&lt;/p>
-&lt;p>If we’re getting the client IP directly from the socket (rather than a header), then we don’t need to worry about spoofing. However, one thing that can go wrong is if the rate-limiting server changes interface names. Then the same client will end up with different “ip%zone” values.&lt;/p>
-&lt;p>Which leads us to another potential problem: If the rate-limiting DB is shared between multiple servers, then the same client will have different “ip%zone” values for each server, as they’ll have different interface names/indexes. The rate limit for a single link-local client will effectively be multiplied by the number of servers.&lt;/p>
-&lt;p>If we strip the zone, then we lose some specificity, which may result in different machines on different links being rate-limited because they coincidentally have the same link-local IP. While this is true, &lt;a href="https://en.wikipedia.org/wiki/Link-local_address#IPv6">the way link-local address are generated&lt;/a> makes this extremely unlikely. So we can dismiss this as well.&lt;/p>
-&lt;p>The shared rate-limiting DB case seems more weighty than the others, so my feeling is that it’s better to strip the zone.&lt;/p>
-&lt;h3 id="rangesprefixescidrs">
-&lt;a class="heading-anchor" href="#rangesprefixescidrs">
+&lt;/h3&gt;
+&lt;p&gt;This is partly an extension of the XFF consideration, as that header is often the source of the IP we use for rate limiting.&lt;/p&gt;
+&lt;p&gt;First of all, let’s deal with the possibility of zone spoofing via &lt;code&gt;X-Forwarded-For&lt;/code&gt;. If we include the zone in the key we’re using to rate limit, then the possibility arises of an attacker altering the zone to avoid being rate-limited. I think we can dismiss this concern because if an attacker has the ability to change the zone value, then it will likely be no harder (and probably easier) to change the IP itself.&lt;/p&gt;
+&lt;p&gt;If we’re getting the client IP directly from the socket (rather than a header), then we don’t need to worry about spoofing. However, one thing that can go wrong is if the rate-limiting server changes interface names. Then the same client will end up with different “ip%zone” values.&lt;/p&gt;
+&lt;p&gt;Which leads us to another potential problem: If the rate-limiting DB is shared between multiple servers, then the same client will have different “ip%zone” values for each server, as they’ll have different interface names/indexes. The rate limit for a single link-local client will effectively be multiplied by the number of servers.&lt;/p&gt;
+&lt;p&gt;If we strip the zone, then we lose some specificity, which may result in different machines on different links being rate-limited because they coincidentally have the same link-local IP. While this is true, &lt;a href="https://en.wikipedia.org/wiki/Link-local_address#IPv6"&gt;the way link-local address are generated&lt;/a&gt; makes this extremely unlikely. So we can dismiss this as well.&lt;/p&gt;
+&lt;p&gt;The shared rate-limiting DB case seems more weighty than the others, so my feeling is that it’s better to strip the zone.&lt;/p&gt;
+&lt;h3 id="rangesprefixescidrs"&gt;
+&lt;a class="heading-anchor" href="#rangesprefixescidrs"&gt;
 ###
-&lt;/a>
+&lt;/a&gt;
 Ranges/prefixes/CIDRs
-&lt;/h3>
-&lt;p>I’ll only be considering the “does this prefix contain this IP” use of prefixes (mostly because that’s the use I was looking at in this context).&lt;/p>
-&lt;p>This one seems more obvious: If the user includes a zone in a prefix, then the IP prefix should be respected; if there’s no zone in the prefix, then the zone should be stripped from the IP before checking if the prefix contains it.&lt;/p>
-&lt;p>To make that more concrete:&lt;/p>
-&lt;ul>
-&lt;li>With zone: Prefix &lt;code>fe80::%eth0/10&lt;/code> should contain &lt;code>fe80::abcd%eth0&lt;/code> but not &lt;code>fe80::abcd%wifi0&lt;/code>.&lt;/li>
-&lt;li>Without zone: Prefix &lt;code>fe80::/10&lt;/code> should contain &lt;code>fe80::abcd%eth0&lt;/code> &lt;em>and&lt;/em> &lt;code>fe80::abcd%wifi0&lt;/code>.&lt;/li>
-&lt;/ul>
-&lt;p>What if the prefix contains a zone but the IP has had the zone already stripped? I don’t think there’s a good answer – neither “contains” or “does not contain” is entirely sane. So that’s another reason not to prematurely strip the zone.&lt;/p>
-&lt;h3 id="additional-concerns">
-&lt;a class="heading-anchor" href="#additional-concerns">
+&lt;/h3&gt;
+&lt;p&gt;I’ll only be considering the “does this prefix contain this IP” use of prefixes (mostly because that’s the use I was looking at in this context).&lt;/p&gt;
+&lt;p&gt;This one seems more obvious: If the user includes a zone in a prefix, then the IP prefix should be respected; if there’s no zone in the prefix, then the zone should be stripped from the IP before checking if the prefix contains it.&lt;/p&gt;
+&lt;p&gt;To make that more concrete:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;With zone: Prefix &lt;code&gt;fe80::%eth0/10&lt;/code&gt; should contain &lt;code&gt;fe80::abcd%eth0&lt;/code&gt; but not &lt;code&gt;fe80::abcd%wifi0&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Without zone: Prefix &lt;code&gt;fe80::/10&lt;/code&gt; should contain &lt;code&gt;fe80::abcd%eth0&lt;/code&gt; &lt;em&gt;and&lt;/em&gt; &lt;code&gt;fe80::abcd%wifi0&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;What if the prefix contains a zone but the IP has had the zone already stripped? I don’t think there’s a good answer – neither “contains” or “does not contain” is entirely sane. So that’s another reason not to prematurely strip the zone.&lt;/p&gt;
+&lt;h3 id="additional-concerns"&gt;
+&lt;a class="heading-anchor" href="#additional-concerns"&gt;
 ###
-&lt;/a>
+&lt;/a&gt;
 Additional concerns
-&lt;/h3>
-&lt;p>There are other factors involved in all of these considerations.&lt;/p>
-&lt;p>The first is that link-local addresses probably shouldn’t be put to any use that requires these considerations. They should probably only be used for low-level automatic network coordination – any direct use of a link-local address would be better served by a &lt;a href="https://en.wikipedia.org/wiki/Unique_local_address">unique local address&lt;/a>. But if you’re writing a general-purpose library or reverse proxy you can’t just say “well, no one should use them” and wash your hands of it.&lt;/p>
-&lt;p>Another consideration is the restrictions imposed by your tools and programming language. For example, I recently &lt;a href="https://adam-p.ca/blog/2022/03/go-netip-flaw/">wrote a post&lt;/a> examining Go’s handling of prefixes and IPs with zones. In that case, Go’s address prefix types don’t support zones at all (in some confusing ways). I suspect that zone handling elsewhere is similarly uneven.&lt;/p>
-&lt;p>An example of such constraints limiting design is the &lt;a href="https://github.com/caddyserver/caddy/blob/79cbe7bfd06565d0e7ab0717119f78960ed54c08/modules/caddyhttp/reverseproxy/reverseproxy.go#L622-L626">Caddy reverse proxy&lt;/a> stripping the zone &lt;a href="https://github.com/caddyserver/caddy/pull/4507#issuecomment-1075475379">because of&lt;/a> the Go zone-handling limitations.&lt;/p>
-&lt;p>Finally, another quote from &lt;a href="https://datatracker.ietf.org/doc/html/rfc6874#section-1">RFC 6874&lt;/a>:&lt;/p>
-&lt;blockquote>
-&lt;p>Today, [zone identifiers] are meaningful only when attached to addresses with less than global scope, but it is possible that other uses might be defined in the future.&lt;/p>&lt;/blockquote>
-&lt;p>So even if link-local addresses aren’t important to you now, it doesn’t mean that zones won’t be important to you later. (But, yeah, that’s hand-wavy and not very compelling.)&lt;/p>
-&lt;h3 id="conclusions">
-&lt;a class="heading-anchor" href="#conclusions">
+&lt;/h3&gt;
+&lt;p&gt;There are other factors involved in all of these considerations.&lt;/p&gt;
+&lt;p&gt;The first is that link-local addresses probably shouldn’t be put to any use that requires these considerations. They should probably only be used for low-level automatic network coordination – any direct use of a link-local address would be better served by a &lt;a href="https://en.wikipedia.org/wiki/Unique_local_address"&gt;unique local address&lt;/a&gt;. But if you’re writing a general-purpose library or reverse proxy you can’t just say “well, no one should use them” and wash your hands of it.&lt;/p&gt;
+&lt;p&gt;Another consideration is the restrictions imposed by your tools and programming language. For example, I recently &lt;a href="https://adam-p.ca/blog/2022/03/go-netip-flaw/"&gt;wrote a post&lt;/a&gt; examining Go’s handling of prefixes and IPs with zones. In that case, Go’s address prefix types don’t support zones at all (in some confusing ways). I suspect that zone handling elsewhere is similarly uneven.&lt;/p&gt;
+&lt;p&gt;An example of such constraints limiting design is the &lt;a href="https://github.com/caddyserver/caddy/blob/79cbe7bfd06565d0e7ab0717119f78960ed54c08/modules/caddyhttp/reverseproxy/reverseproxy.go#L622-L626"&gt;Caddy reverse proxy&lt;/a&gt; stripping the zone &lt;a href="https://github.com/caddyserver/caddy/pull/4507#issuecomment-1075475379"&gt;because of&lt;/a&gt; the Go zone-handling limitations.&lt;/p&gt;
+&lt;p&gt;Finally, another quote from &lt;a href="https://datatracker.ietf.org/doc/html/rfc6874#section-1"&gt;RFC 6874&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Today, [zone identifiers] are meaningful only when attached to addresses with less than global scope, but it is possible that other uses might be defined in the future.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;So even if link-local addresses aren’t important to you now, it doesn’t mean that zones won’t be important to you later. (But, yeah, that’s hand-wavy and not very compelling.)&lt;/p&gt;
+&lt;h3 id="conclusions"&gt;
+&lt;a class="heading-anchor" href="#conclusions"&gt;
 ###
-&lt;/a>
+&lt;/a&gt;
 Conclusions
-&lt;/h3>
-&lt;p>Zones should be kept until the point of use, and then the decision to keep or strip them should be based on the specific use of the IP and ramifications of zones to that use.&lt;/p>
-&lt;p>This means that reverse proxies should be including the zone in the &lt;code>X-Forwarded-For&lt;/code> header, rate limiters should probably be discarding them, and prefix-contains-IP checks should be based on whether there’s a zone in the prefix. But these are only examples – there are myriad uses of IP addresses, and the particular use will dictate (or at least inform) the fate of the zone.&lt;/p>
-&lt;p>Of course, this is all debatable. To see some other other opinions, check out the few comments I got when I asked about this in the &lt;a href="https://old.reddit.com/r/ipv6/comments/tee1gt/should_zone_identifier_be_in_xforwardedfor_ip/">r/ipv6 subreddit&lt;/a>. If you have a differing opinion or know of anyone else having written about this, please let me know.&lt;/p>
-&lt;h2 id="appendix-checking-your-own-link-local-addresses-and-zones">
-&lt;a class="heading-anchor" href="#appendix-checking-your-own-link-local-addresses-and-zones">
+&lt;/h3&gt;
+&lt;p&gt;Zones should be kept until the point of use, and then the decision to keep or strip them should be based on the specific use of the IP and ramifications of zones to that use.&lt;/p&gt;
+&lt;p&gt;This means that reverse proxies should be including the zone in the &lt;code&gt;X-Forwarded-For&lt;/code&gt; header, rate limiters should probably be discarding them, and prefix-contains-IP checks should be based on whether there’s a zone in the prefix. But these are only examples – there are myriad uses of IP addresses, and the particular use will dictate (or at least inform) the fate of the zone.&lt;/p&gt;
+&lt;p&gt;Of course, this is all debatable. To see some other other opinions, check out the few comments I got when I asked about this in the &lt;a href="https://old.reddit.com/r/ipv6/comments/tee1gt/should_zone_identifier_be_in_xforwardedfor_ip/"&gt;r/ipv6 subreddit&lt;/a&gt;. If you have a differing opinion or know of anyone else having written about this, please let me know.&lt;/p&gt;
+&lt;h2 id="appendix-checking-your-own-link-local-addresses-and-zones"&gt;
+&lt;a class="heading-anchor" href="#appendix-checking-your-own-link-local-addresses-and-zones"&gt;
 ##
-&lt;/a>
+&lt;/a&gt;
 Appendix: Checking your own link-local addresses and zones
-&lt;/h2>
-&lt;p>Windows:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-no-highlight" data-lang="no-highlight">&lt;span style="display:flex;">&lt;span>$ ipconfig
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>...
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Wireless LAN adapter Wi-Fi:
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Connection-specific DNS Suffix . : home
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Link-local IPv6 Address . . . . . : fe80::2934:e0a2:73b1:80da%21
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> IPv4 Address. . . . . . . . . . . : 192.168.1.11
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Subnet Mask . . . . . . . . . . . : 255.255.255.0
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Default Gateway . . . . . . . . . : 192.168.1.1
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>...
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>$ ping fe80::2934:e0a2:73b1:80da%21
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Pinging fe80::2934:e0a2:73b1:80da%21 with 32 bytes of data:
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Reply from fe80::2934:e0a2:73b1:80da%21: time&lt;1ms
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>...
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>$ ping fe80::2934:e0a2:73b1:80da%nope
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Ping request could not find host fe80::2934:e0a2:73b1:80da%nope. Please check the name and try again.
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Ubuntu (under WSL1 in this case, so same values):&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-no-highlight" data-lang="no-highlight">&lt;span style="display:flex;">&lt;span>$ ip address
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>...
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>21: wifi0: &lt;BROADCAST,MULTICAST,UP> mtu 1500 group default qlen 1
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> link/ieee802.11 64:bc:58:11:a9:f9
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> inet 192.168.1.11/24 brd 192.168.1.255 scope global dynamic
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> valid_lft 244176sec preferred_lft 244176sec
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> inet6 fe80::2934:e0a2:73b1:80da/64 scope link dynamic
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> valid_lft forever preferred_lft forever
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>...
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>$ ping fe80::2934:e0a2:73b1:80da%21
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>PING fe80::2934:e0a2:73b1:80da%21(fe80::2934:e0a2:73b1:80da%wifi0) 56 data bytes
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>64 bytes from fe80::2934:e0a2:73b1:80da%wifi0: icmp_seq=1 ttl=128 time=0.283 ms
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>...
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>$ ping fe80::2934:e0a2:73b1:80da%wifi0
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>PING fe80::2934:e0a2:73b1:80da%wifi0(fe80::2934:e0a2:73b1:80da%wifi0) 56 data bytes
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>64 bytes from fe80::2934:e0a2:73b1:80da%wifi0: icmp_seq=1 ttl=128 time=0.298 ms
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>...
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>$ ping fe80::2934:e0a2:73b1:80da%nope
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>ping: fe80::2934:e0a2:73b1:80da%nope: Name or service not known
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="footnotes" role="doc-endnotes">
-&lt;hr>
-&lt;ol>
-&lt;li id="fn:1">
-&lt;p>This is not entirely true. Site-local addresses also used zone identifiers, but they were &lt;a href="https://en.wikipedia.org/wiki/Unique_local_address#History">deprecated and went out of use&lt;/a> about 15 years ago. Also, the “zone identifier” is &lt;a href="https://en.wikipedia.org/wiki/IPv6_address#zone_index">sometimes called&lt;/a> a “zone index”. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:2">
-&lt;p>Well, one of the definitions. There’s also &lt;a href="https://en.wikipedia.org/wiki/Link-local_address">a whole entry&lt;/a> devoted to link-local addresses. &lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;/div></description></item><item><title>A tiny flaw in Go's netip design</title><link>https://adam-p.ca/blog/2022/03/go-netip-flaw/</link><pubDate>Mon, 21 Mar 2022 18:30:38 -0400</pubDate><guid>https://adam-p.ca/blog/2022/03/go-netip-flaw/</guid><description>&lt;p>Update 2022-03-23: Matt Layher &lt;a href="https://github.com/golang/go/issues/51899">created a Go issue&lt;/a> about this.&lt;/p>
-&lt;p>Update 2022-04-14: In response to that issue, two weeks ago a change &lt;a href="https://github.com/golang/go/commit/ae9ce822ff4015fbbe7aa4303e6f3c160f2c53af">was committed&lt;/a> to Go that makes &lt;code>netip.ParsePrefix&lt;/code> behave like &lt;code>net.ParseCIDR&lt;/code>: they both return an error when a zone is present. It wasn’t released in 1.18.1, but I’m guessing it’ll be in 1.18.2. So that’s great!&lt;/p>
-&lt;hr>
-&lt;p>Does this surprise you? (Try it in the &lt;a href="https://go.dev/play/p/4bHXBiBktUH">playground&lt;/a>.)&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-golang" data-lang="golang">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">prefix&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">netip&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">MustParsePrefix&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"fe80::%zone/10"&lt;/span>&lt;span style="color:#111">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">addr&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">netip&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">MustParseAddr&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"fe80::1%zone"&lt;/span>&lt;span style="color:#111">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">prefix&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Contains&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">addr&lt;/span>&lt;span style="color:#111">))&lt;/span> &lt;span style="color:#75715e">// ==> false&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Go’s new-as-of-1.18 &lt;a href="https://pkg.go.dev/net/netip">&lt;code>netip&lt;/code> package&lt;/a> is better in every way than the previous &lt;code>net.IP&lt;/code>, etc., but this one design decision will probably burn someone, somewhere, sometime.&lt;/p>
-&lt;p>If you pass a prefix with a zone to the older &lt;code>net.ParseCIDR&lt;/code> it returns an error. If you pass a prefix with a zone to the newer &lt;code>netip.ParsePrefix&lt;/code>, it succeeds but silently discards the zone. If you then pass an IP address that is clearly contained by the original prefix – &lt;em>including the zone&lt;/em> – to &lt;code>netip.Prefix.Contains&lt;/code>… it returns false!&lt;/p>
-&lt;h2 id="why-is-it-like-this">
-&lt;a class="heading-anchor" href="#why-is-it-like-this">
+&lt;/h2&gt;
+&lt;p&gt;Windows:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-no-highlight" data-lang="no-highlight"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ ipconfig
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Wireless LAN adapter Wi-Fi:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Connection-specific DNS Suffix . : home
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Link-local IPv6 Address . . . . . : fe80::2934:e0a2:73b1:80da%21
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IPv4 Address. . . . . . . . . . . : 192.168.1.11
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Subnet Mask . . . . . . . . . . . : 255.255.255.0
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Default Gateway . . . . . . . . . : 192.168.1.1
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ ping fe80::2934:e0a2:73b1:80da%21
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Pinging fe80::2934:e0a2:73b1:80da%21 with 32 bytes of data:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Reply from fe80::2934:e0a2:73b1:80da%21: time&lt;1ms
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ ping fe80::2934:e0a2:73b1:80da%nope
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Ping request could not find host fe80::2934:e0a2:73b1:80da%nope. Please check the name and try again.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Ubuntu (under WSL1 in this case, so same values):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-no-highlight" data-lang="no-highlight"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ ip address
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;21: wifi0: &lt;BROADCAST,MULTICAST,UP&gt; mtu 1500 group default qlen 1
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; link/ieee802.11 64:bc:58:11:a9:f9
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; inet 192.168.1.11/24 brd 192.168.1.255 scope global dynamic
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valid_lft 244176sec preferred_lft 244176sec
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; inet6 fe80::2934:e0a2:73b1:80da/64 scope link dynamic
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valid_lft forever preferred_lft forever
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ ping fe80::2934:e0a2:73b1:80da%21
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;PING fe80::2934:e0a2:73b1:80da%21(fe80::2934:e0a2:73b1:80da%wifi0) 56 data bytes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;64 bytes from fe80::2934:e0a2:73b1:80da%wifi0: icmp_seq=1 ttl=128 time=0.283 ms
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ ping fe80::2934:e0a2:73b1:80da%wifi0
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;PING fe80::2934:e0a2:73b1:80da%wifi0(fe80::2934:e0a2:73b1:80da%wifi0) 56 data bytes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;64 bytes from fe80::2934:e0a2:73b1:80da%wifi0: icmp_seq=1 ttl=128 time=0.298 ms
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ ping fe80::2934:e0a2:73b1:80da%nope
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ping: fe80::2934:e0a2:73b1:80da%nope: Name or service not known
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;This is not entirely true. Site-local addresses also used zone identifiers, but they were &lt;a href="https://en.wikipedia.org/wiki/Unique_local_address#History"&gt;deprecated and went out of use&lt;/a&gt; about 15 years ago. Also, the “zone identifier” is &lt;a href="https://en.wikipedia.org/wiki/IPv6_address#zone_index"&gt;sometimes called&lt;/a&gt; a “zone index”. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;↩︎&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;Well, one of the definitions. There’s also &lt;a href="https://en.wikipedia.org/wiki/Link-local_address"&gt;a whole entry&lt;/a&gt; devoted to link-local addresses. &lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;↩︎&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item><item><title>A tiny flaw in Go's netip design</title><link>https://adam-p.ca/blog/2022/03/go-netip-flaw/</link><pubDate>Mon, 21 Mar 2022 18:30:38 -0400</pubDate><author>pritchard.adam@gmail.com (Adam Pritchard)</author><guid>https://adam-p.ca/blog/2022/03/go-netip-flaw/</guid><description>&lt;p&gt;Update 2022-03-23: Matt Layher &lt;a href="https://github.com/golang/go/issues/51899"&gt;created a Go issue&lt;/a&gt; about this.&lt;/p&gt;
+&lt;p&gt;Update 2022-04-14: In response to that issue, two weeks ago a change &lt;a href="https://github.com/golang/go/commit/ae9ce822ff4015fbbe7aa4303e6f3c160f2c53af"&gt;was committed&lt;/a&gt; to Go that makes &lt;code&gt;netip.ParsePrefix&lt;/code&gt; behave like &lt;code&gt;net.ParseCIDR&lt;/code&gt;: they both return an error when a zone is present. It wasn’t released in 1.18.1, but I’m guessing it’ll be in 1.18.2. So that’s great!&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Does this surprise you? (Try it in the &lt;a href="https://go.dev/play/p/4bHXBiBktUH"&gt;playground&lt;/a&gt;.)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-golang" data-lang="golang"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75af00"&gt;prefix&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#75af00"&gt;netip&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;MustParsePrefix&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#d88200"&gt;"fe80::%zone/10"&lt;/span&gt;&lt;span style="color:#111"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75af00"&gt;addr&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#75af00"&gt;netip&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;MustParseAddr&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#d88200"&gt;"fe80::1%zone"&lt;/span&gt;&lt;span style="color:#111"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75af00"&gt;fmt&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;Println&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#75af00"&gt;prefix&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;Contains&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#75af00"&gt;addr&lt;/span&gt;&lt;span style="color:#111"&gt;))&lt;/span&gt; &lt;span style="color:#75715e"&gt;// ==&gt; false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Go’s new-as-of-1.18 &lt;a href="https://pkg.go.dev/net/netip"&gt;&lt;code&gt;netip&lt;/code&gt; package&lt;/a&gt; is better in every way than the previous &lt;code&gt;net.IP&lt;/code&gt;, etc., but this one design decision will probably burn someone, somewhere, sometime.&lt;/p&gt;
+&lt;p&gt;If you pass a prefix with a zone to the older &lt;code&gt;net.ParseCIDR&lt;/code&gt; it returns an error. If you pass a prefix with a zone to the newer &lt;code&gt;netip.ParsePrefix&lt;/code&gt;, it succeeds but silently discards the zone. If you then pass an IP address that is clearly contained by the original prefix – &lt;em&gt;including the zone&lt;/em&gt; – to &lt;code&gt;netip.Prefix.Contains&lt;/code&gt;… it returns false!&lt;/p&gt;
+&lt;h2 id="why-is-it-like-this"&gt;
+&lt;a class="heading-anchor" href="#why-is-it-like-this"&gt;
 ##
-&lt;/a>
+&lt;/a&gt;
 Why is it like this?
-&lt;/h2>
-&lt;p>I learned about this from &lt;a href="https://old.reddit.com/r/ipv6/comments/thyhcn/does_it_make_sense_and_is_it_legal_to_have_a_zone/i1by8n5/">a Reddit comment&lt;/a> by &lt;a href="https://github.com/mdlayher">Matt Layher&lt;/a>&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> who worked on &lt;code>netip&lt;/code> (or the original &lt;code>inet.af/netaddr&lt;/code>):&lt;/p>
-&lt;blockquote>
-&lt;p>For what it’s worth, I helped work on the library that ultimately became Go’s net/netip and we decided we would remove zones in our CIDR prefix parser because we didn’t find any documented usage of a a CIDR like “fe80::%eth0/64” in the wild.&lt;/p>&lt;/blockquote>
-&lt;p>Which is fair, but I don’t think the resulting behaviour is ideal.&lt;/p>
-&lt;h2 id="what-do-the-docs-say">
-&lt;a class="heading-anchor" href="#what-do-the-docs-say">
+&lt;/h2&gt;
+&lt;p&gt;I learned about this from &lt;a href="https://old.reddit.com/r/ipv6/comments/thyhcn/does_it_make_sense_and_is_it_legal_to_have_a_zone/i1by8n5/"&gt;a Reddit comment&lt;/a&gt; by &lt;a href="https://github.com/mdlayher"&gt;Matt Layher&lt;/a&gt;&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt; who worked on &lt;code&gt;netip&lt;/code&gt; (or the original &lt;code&gt;inet.af/netaddr&lt;/code&gt;):&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;For what it’s worth, I helped work on the library that ultimately became Go’s net/netip and we decided we would remove zones in our CIDR prefix parser because we didn’t find any documented usage of a a CIDR like “fe80::%eth0/64” in the wild.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Which is fair, but I don’t think the resulting behaviour is ideal.&lt;/p&gt;
+&lt;h2 id="what-do-the-docs-say"&gt;
+&lt;a class="heading-anchor" href="#what-do-the-docs-say"&gt;
 ##
-&lt;/a>
+&lt;/a&gt;
 What do the docs say?
-&lt;/h2>
-&lt;p>The &lt;a href="https://pkg.go.dev/net/netip@go1.18#Prefix.Contains">documentation&lt;/a> for &lt;code>netip.Prefix.Contains&lt;/code> does make clear the behaviour (emphasis added):&lt;/p>
-&lt;blockquote>
-&lt;p>Contains reports whether the network p includes ip.&lt;/p>
-&lt;p>An IPv4 address will not match an IPv6 prefix. A v6-mapped IPv6 address will not match an IPv4 prefix. A zero-value IP will not match any prefix. &lt;strong>If ip has an IPv6 zone, Contains returns false, because Prefixes strip zones.&lt;/strong>&lt;/p>&lt;/blockquote>
-&lt;p>It’s good that it’s documented, but… how many people are going to read the doc for that method? Most people who use it are going to know what it means for a prefix (or CIDR) to “contain” an IP address. And many of us will already be familiar with the older &lt;code>net.IPMask.Contains&lt;/code>, which has the one-sentence &lt;a href="https://pkg.go.dev/net@go1.18#IPNet.Contains">documentation&lt;/a>: “Contains reports whether the network includes ip.” And the &lt;a href="https://pkg.go.dev/net/netip@go1.18#ParsePrefix">doc&lt;/a> for &lt;code>netip.ParsePrefix&lt;/code> says nothing about discarding the zone.&lt;/p>
-&lt;h2 id="why-do-i-care-about-this-fringe-thing-that-no-one-uses">
-&lt;a class="heading-anchor" href="#why-do-i-care-about-this-fringe-thing-that-no-one-uses">
+&lt;/h2&gt;
+&lt;p&gt;The &lt;a href="https://pkg.go.dev/net/netip@go1.18#Prefix.Contains"&gt;documentation&lt;/a&gt; for &lt;code&gt;netip.Prefix.Contains&lt;/code&gt; does make clear the behaviour (emphasis added):&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Contains reports whether the network p includes ip.&lt;/p&gt;
+&lt;p&gt;An IPv4 address will not match an IPv6 prefix. A v6-mapped IPv6 address will not match an IPv4 prefix. A zero-value IP will not match any prefix. &lt;strong&gt;If ip has an IPv6 zone, Contains returns false, because Prefixes strip zones.&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;It’s good that it’s documented, but… how many people are going to read the doc for that method? Most people who use it are going to know what it means for a prefix (or CIDR) to “contain” an IP address. And many of us will already be familiar with the older &lt;code&gt;net.IPMask.Contains&lt;/code&gt;, which has the one-sentence &lt;a href="https://pkg.go.dev/net@go1.18#IPNet.Contains"&gt;documentation&lt;/a&gt;: “Contains reports whether the network includes ip.” And the &lt;a href="https://pkg.go.dev/net/netip@go1.18#ParsePrefix"&gt;doc&lt;/a&gt; for &lt;code&gt;netip.ParsePrefix&lt;/code&gt; says nothing about discarding the zone.&lt;/p&gt;
+&lt;h2 id="why-do-i-care-about-this-fringe-thing-that-no-one-uses"&gt;
+&lt;a class="heading-anchor" href="#why-do-i-care-about-this-fringe-thing-that-no-one-uses"&gt;
 ##
-&lt;/a>
+&lt;/a&gt;
 Why do I care about this fringe thing that no one uses?
-&lt;/h2>
-&lt;p>I’m writing a &lt;a href="https://github.com/realclientip/realclientip-go">library&lt;/a> that will take a configured list of prefixes/CIDRs/ranges, parse them, and then later check if incoming IPs are contained by them. And whether the IP is contained or not could lead to security-relevant decisions, so the accuracy is important.&lt;/p>
-&lt;p>With the older &lt;code>net&lt;/code> package, if the user tried to configure the library to use &lt;code>"fe80::/10%zone"&lt;/code>, the parsing would fail and there would be an immediate error. If I switch to using &lt;code>netip&lt;/code>, the parsing will succeed but then the &lt;code>Contains&lt;/code> checks will return false and the resulting behaviour will be wrong. (The ramifications of that will depend on how the library is being used. It could mean rate-limiting a link-local IP. It could mean using a link-local IP for an access control check where it should instead be an external IP.)&lt;/p>
-&lt;p>So even though the Go/netip/netaddr team didn’t find any instance of a link-local-with-zone-prefix “in the wild”, I still need to code (defensively) for the possibility of it.&lt;/p>
-&lt;p>To be safe I’m going to have to force the &lt;code>netip&lt;/code> code to behave like the &lt;code>net&lt;/code> code: return an error from the prefix parsing code if there’s a percent sign.&lt;/p>
-&lt;h2 id="bonus-ipv4-mapped-ipv6-handling-has-also-changed">
-&lt;a class="heading-anchor" href="#bonus-ipv4-mapped-ipv6-handling-has-also-changed">
+&lt;/h2&gt;
+&lt;p&gt;I’m writing a &lt;a href="https://github.com/realclientip/realclientip-go"&gt;library&lt;/a&gt; that will take a configured list of prefixes/CIDRs/ranges, parse them, and then later check if incoming IPs are contained by them. And whether the IP is contained or not could lead to security-relevant decisions, so the accuracy is important.&lt;/p&gt;
+&lt;p&gt;With the older &lt;code&gt;net&lt;/code&gt; package, if the user tried to configure the library to use &lt;code&gt;"fe80::/10%zone"&lt;/code&gt;, the parsing would fail and there would be an immediate error. If I switch to using &lt;code&gt;netip&lt;/code&gt;, the parsing will succeed but then the &lt;code&gt;Contains&lt;/code&gt; checks will return false and the resulting behaviour will be wrong. (The ramifications of that will depend on how the library is being used. It could mean rate-limiting a link-local IP. It could mean using a link-local IP for an access control check where it should instead be an external IP.)&lt;/p&gt;
+&lt;p&gt;So even though the Go/netip/netaddr team didn’t find any instance of a link-local-with-zone-prefix “in the wild”, I still need to code (defensively) for the possibility of it.&lt;/p&gt;
+&lt;p&gt;To be safe I’m going to have to force the &lt;code&gt;netip&lt;/code&gt; code to behave like the &lt;code&gt;net&lt;/code&gt; code: return an error from the prefix parsing code if there’s a percent sign.&lt;/p&gt;
+&lt;h2 id="bonus-ipv4-mapped-ipv6-handling-has-also-changed"&gt;
+&lt;a class="heading-anchor" href="#bonus-ipv4-mapped-ipv6-handling-has-also-changed"&gt;
 ##
-&lt;/a>
+&lt;/a&gt;
 Bonus: IPv4-mapped IPv6 handling has also changed
-&lt;/h2>
-&lt;p>As hinted at in the &lt;code>netip.Prefix.Contains&lt;/code> doc I quoted above…&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-golang" data-lang="golang">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">prefix&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">netip&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">MustParsePrefix&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"1.0.0.0/8"&lt;/span>&lt;span style="color:#111">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// Let's check that it's working as expected&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">addr&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">netip&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">MustParseAddr&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"1.1.1.1"&lt;/span>&lt;span style="color:#111">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">prefix&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Contains&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">addr&lt;/span>&lt;span style="color:#111">))&lt;/span> &lt;span style="color:#75715e">// ==> true&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// Now let's try the "IPv4-mapped IPv6" representation of the same address&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">addr&lt;/span> &lt;span style="color:#111">=&lt;/span> &lt;span style="color:#75af00">netip&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">MustParseAddr&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"::ffff:1.1.1.1"&lt;/span>&lt;span style="color:#111">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">addr&lt;/span>&lt;span style="color:#111">)&lt;/span> &lt;span style="color:#75715e">// ==> "::ffff:1.1.1.1"&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">prefix&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Contains&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">addr&lt;/span>&lt;span style="color:#111">))&lt;/span> &lt;span style="color:#75715e">// ==> false!&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// But with the older net.IP and net.NetIP...&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">_&lt;/span>&lt;span style="color:#111">,&lt;/span> &lt;span style="color:#75af00">cidr&lt;/span>&lt;span style="color:#111">,&lt;/span> &lt;span style="color:#75af00">_&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">net&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">ParseCIDR&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"1.0.0.0/8"&lt;/span>&lt;span style="color:#111">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">ip&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">net&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">ParseIP&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#d88200">"::ffff:1.1.1.1"&lt;/span>&lt;span style="color:#111">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">ip&lt;/span>&lt;span style="color:#111">)&lt;/span> &lt;span style="color:#75715e">// ==> "1.1.1.1"&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">fmt&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">cidr&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">Contains&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">ip&lt;/span>&lt;span style="color:#111">))&lt;/span> &lt;span style="color:#75715e">// ==> true!&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>(Try it in the &lt;a href="https://go.dev/play/p/ANR5tJEDohN">playground&lt;/a>.)&lt;/p>
-&lt;p>The older &lt;code>net&lt;/code> code would convert IPv4-mapped IPv6 addresses to IPv4 addresses, with the result that they would be contained by IPv4 CIDRs. The new &lt;code>netip&lt;/code> code does &lt;em>not&lt;/em> convert to IPv4, and the resulting address is &lt;em>not&lt;/em> contained by an IPv4 prefix.&lt;/p>
-&lt;p>I haven’t yet thought about this enough to form a strong opinion, but it’s good to know.&lt;/p>
-&lt;p>Update 2022-04-14: I &lt;a href="https://github.com/golang/go/issues/51906">created an issue&lt;/a> about this a few weeks ago. (I also &lt;a href="https://github.com/golang/go/pull/51950">PR’d some documentation fixes&lt;/a> regarding the consistent use of “IPv4-mapped IPv6”. It’s been merged.)&lt;/p>
-&lt;div class="footnotes" role="doc-endnotes">
-&lt;hr>
-&lt;ol>
-&lt;li id="fn:1">
-&lt;p>Who super helpfully answered my Reddit question and I’m totally not taking a swipe at him. To be clear, I still think &lt;code>netip&lt;/code> is great and will be using it wherever I can make 1.18 the minimum Go version. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">↩︎&lt;/a>&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;/div></description></item></channel></rss>
+&lt;/h2&gt;
+&lt;p&gt;As hinted at in the &lt;code&gt;netip.Prefix.Contains&lt;/code&gt; doc I quoted above…&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-golang" data-lang="golang"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75af00"&gt;prefix&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#75af00"&gt;netip&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;MustParsePrefix&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#d88200"&gt;"1.0.0.0/8"&lt;/span&gt;&lt;span style="color:#111"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Let's check that it's working as expected&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75af00"&gt;addr&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#75af00"&gt;netip&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;MustParseAddr&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#d88200"&gt;"1.1.1.1"&lt;/span&gt;&lt;span style="color:#111"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75af00"&gt;fmt&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;Println&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#75af00"&gt;prefix&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;Contains&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#75af00"&gt;addr&lt;/span&gt;&lt;span style="color:#111"&gt;))&lt;/span&gt; &lt;span style="color:#75715e"&gt;// ==&gt; true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Now let's try the "IPv4-mapped IPv6" representation of the same address&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75af00"&gt;addr&lt;/span&gt; &lt;span style="color:#111"&gt;=&lt;/span&gt; &lt;span style="color:#75af00"&gt;netip&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;MustParseAddr&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#d88200"&gt;"::ffff:1.1.1.1"&lt;/span&gt;&lt;span style="color:#111"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75af00"&gt;fmt&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;Println&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#75af00"&gt;addr&lt;/span&gt;&lt;span style="color:#111"&gt;)&lt;/span&gt; &lt;span style="color:#75715e"&gt;// ==&gt; "::ffff:1.1.1.1"&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75af00"&gt;fmt&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;Println&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#75af00"&gt;prefix&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;Contains&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#75af00"&gt;addr&lt;/span&gt;&lt;span style="color:#111"&gt;))&lt;/span&gt; &lt;span style="color:#75715e"&gt;// ==&gt; false!&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// But with the older net.IP and net.NetIP...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75af00"&gt;_&lt;/span&gt;&lt;span style="color:#111"&gt;,&lt;/span&gt; &lt;span style="color:#75af00"&gt;cidr&lt;/span&gt;&lt;span style="color:#111"&gt;,&lt;/span&gt; &lt;span style="color:#75af00"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#75af00"&gt;net&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;ParseCIDR&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#d88200"&gt;"1.0.0.0/8"&lt;/span&gt;&lt;span style="color:#111"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75af00"&gt;ip&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#75af00"&gt;net&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;ParseIP&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#d88200"&gt;"::ffff:1.1.1.1"&lt;/span&gt;&lt;span style="color:#111"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75af00"&gt;fmt&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;Println&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#75af00"&gt;ip&lt;/span&gt;&lt;span style="color:#111"&gt;)&lt;/span&gt; &lt;span style="color:#75715e"&gt;// ==&gt; "1.1.1.1"&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75af00"&gt;fmt&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;Println&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#75af00"&gt;cidr&lt;/span&gt;&lt;span style="color:#111"&gt;.&lt;/span&gt;&lt;span style="color:#75af00"&gt;Contains&lt;/span&gt;&lt;span style="color:#111"&gt;(&lt;/span&gt;&lt;span style="color:#75af00"&gt;ip&lt;/span&gt;&lt;span style="color:#111"&gt;))&lt;/span&gt; &lt;span style="color:#75715e"&gt;// ==&gt; true!&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;(Try it in the &lt;a href="https://go.dev/play/p/ANR5tJEDohN"&gt;playground&lt;/a&gt;.)&lt;/p&gt;
+&lt;p&gt;The older &lt;code&gt;net&lt;/code&gt; code would convert IPv4-mapped IPv6 addresses to IPv4 addresses, with the result that they would be contained by IPv4 CIDRs. The new &lt;code&gt;netip&lt;/code&gt; code does &lt;em&gt;not&lt;/em&gt; convert to IPv4, and the resulting address is &lt;em&gt;not&lt;/em&gt; contained by an IPv4 prefix.&lt;/p&gt;
+&lt;p&gt;I haven’t yet thought about this enough to form a strong opinion, but it’s good to know.&lt;/p&gt;
+&lt;p&gt;Update 2022-04-14: I &lt;a href="https://github.com/golang/go/issues/51906"&gt;created an issue&lt;/a&gt; about this a few weeks ago. (I also &lt;a href="https://github.com/golang/go/pull/51950"&gt;PR’d some documentation fixes&lt;/a&gt; regarding the consistent use of “IPv4-mapped IPv6”. It’s been merged.)&lt;/p&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;Who super helpfully answered my Reddit question and I’m totally not taking a swipe at him. To be clear, I still think &lt;code&gt;netip&lt;/code&gt; is great and will be using it wherever I can make 1.18 the minimum Go version. &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;↩︎&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item></channel></rss>
