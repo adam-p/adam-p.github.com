@@ -280,6 +280,69 @@ details.toc {
     margin-bottom: 0;
   }
 }
+
+// Aside element styling (subtle callout / sidenote)
+aside {
+  $accent: tint-color($link-color, 40%);
+
+  position: relative;
+  margin: 1.25rem 0; // vertical rhythm; no horizontal margin so it fits mobile
+  padding: 1rem 1rem 0.85rem 1rem; // slightly more top padding to accommodate label
+  background: mix($body-bg, #fff, 70%); // slightly brighter than page background
+  border: 1px solid shade-color($body-bg, 8%);
+  border-left: 4px solid $accent;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  font-size: 0.95rem;
+  color: $body-color;
+
+  &::before {
+    content: attr(data-label);
+    position: absolute;
+    top: -0.65rem;
+    left: 0.75rem;
+    background: $accent;
+    color: contrast-color($accent, $black, $white);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.15rem 0.4rem 0.2rem;
+    border-radius: 0.4rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  // Tighten last-child spacing
+  p:last-child,
+  ul:last-child,
+  ol:last-child,
+  blockquote:last-child {
+    margin-bottom: 0;
+  }
+
+  // Heading inside aside: smaller & consistent
+  h1, h2, h3, h4, h5, h6 {
+    margin-top: 0.25rem;
+    font-family: $headings-font-family;
+    font-size: 1.05em;
+  }
+
+  code, pre code { background: rgba(0,0,0,0.04); }
+
+  @media print {
+    box-shadow: none;
+    background: lighten($body-bg, 2%);
+  }
+
+  @media (min-width: 768px) {
+    // Slight horizontal offset on larger screens to pull it out of the flow
+    margin-left: 1.25rem;
+    margin-right: 1.25rem;
+  }
+} // aside
+
 footer.page-info {
   --pi-accent: tint-color($link-color, 45%);
   margin: 2rem 0 0;

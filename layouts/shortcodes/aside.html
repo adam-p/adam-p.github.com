@@ -1,0 +1,6 @@
+{{- $class := or (.Get "class") "" }}
+{{- $label := or (.Get "label") "aside" }}
+
+<aside data-label="{{ $label }}"{{- with $class }} class="{{ . }}"{{- end }}>
+  {{ .Inner | .Page.RenderString (dict "display" "block") -}}
+</aside>
