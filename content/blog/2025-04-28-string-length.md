@@ -126,7 +126,7 @@ As far as I can tell, _there is no limit on the number of code points that can c
 | **Composition**   | NFC                 | NFKC             |
 | **Decomposition** | NFD                 | NFKD             |
 
-**Composition canonicalization** will combine the two-code-point grapheme cluster form of "é" (U+0065 + U+0301) into the single-code-point form "é" (U+00E9); and similar for other grapheme clusters for which an equivalent single code point exists (and does nothing when there is no single code point; e.g., mostly doesn't change Zalgo text). **Decomposition canonicalization** will do the opposite: single-code-point characters will be decomposed into multi-code-point grapheme clusters (this includes decomposing Korean Hangul into jamo phonetic components).
+**Composition canonicalization** will combine the two-code-point grapheme cluster form of "é" (U+0065 + U+0301) into the single-code-point form "é" (U+00E9); and similar for other grapheme clusters for which an equivalent single code point exists (and does nothing when there is no single code point, e.g., mostly doesn't change Zalgo text -- with a few exceptions; see "Normalization concerns", below). **Decomposition canonicalization** will do the opposite: single-code-point characters will be decomposed into multi-code-point grapheme clusters (this includes decomposing Korean Hangul into jamo phonetic components).
 
 **Compatibility simplification** converts some fancy characters into more ordinary ones. For example, "ℍ" (U+210D) and "ℌ" (U+210C) become plain Latin "H"; superscript "²" becomes plain number "2"; "ﬃ" (ligature) becomes "ffi". The non-simplifying forms don't replace such characters. (Note that ordinary diacritics aren't removed -- "é" keeps its accent.) Unlike canonicalization, simplification is not reversible.
 
@@ -411,6 +411,8 @@ Grapheme clusters can be [broken](#unicode-code-points) if we're limiting by UTF
 
 So, truncating must be done in a sequence-aware manner. If the limit is hit in the middle of a code point or cluster sequence, you'll need to back off until you find a boundary and do the truncating there. (Or, better yet, find some battle-tested library to do it for you.)
 
+Truncate the same form of the string that you counted, and store that form. If you count the NFC-normalized string but then truncate or store the raw input, the truncation point you computed won't line up with the raw string, and what you store can be longer than what you counted.
+
 And then do a bunch of testing to make sure it works the way it should. (Note the React Native bugs mentioned elsewhere.)
 
 Discussion about the relative UX merits of rejection versus truncation is interesting, but beyond our scope.
@@ -453,6 +455,8 @@ You're not going to trust the API-caller to actually do it, so you'll have to no
 Identifiers are the exception. If the server normalizes an identifier on receipt, the identifier it stores can differ from the one the client sent, and the client is left holding a string that doesn't match the server's. Requiring NFC and rejecting anything else means that both sides hold exactly the same string. That's what Google [requires](https://google.aip.dev/210#:~:text=must%20reject%20any%20inputs) for APIs that allow all valid Unicode characters in unique identifiers: "the API must reject any inputs that are not in Normalization Form C."
 
 The Unicode version risk is narrower than it sounds. Unicode's [normalization stability policy](https://www.unicode.org/policies/stability_policy.html#Normalization) guarantees that a string containing only characters assigned in a given Unicode version normalizes the same way in every later version. So disagreement is only possible for text containing characters newer than one side's Unicode version -- and new emoji aren't affected, since normalization doesn't change them. For identifiers, I think that's an acceptable risk in exchange for both sides holding the same string.
+
+Also, don't assume normalization makes a string shorter. Usually NFC shortens a string or leaves it alone, but some characters are excluded from composition and get decomposed even under NFC: "क़" (U+0958, Devanagari Letter Qa) becomes U+0915 U+093C, two code points. NFKC can expand more: the ligature "ﬃ" becomes "ffi". So a string that fits the limit before normalization can exceed it after, which matters if one layer counts the raw input and another counts the normalized form.
 
 Note that normalization is not zero-cost, and may be significant on very large data. For example, Django had a [recent possible DoS vulnerability](https://www.cve.org/CVERecord?id=CVE-2025-27556) due to slow normalization.
 
