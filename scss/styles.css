@@ -12994,6 +12994,52 @@ details.toc {
   details.toc ul {
     margin-bottom: 0; }
 
+aside {
+  position: relative;
+  margin: 1.25rem 0;
+  padding: 1rem 1rem 0.85rem 1rem;
+  background: #f4f2f2;
+  border: 1px solid #dcdad9;
+  border-left: 4px solid #cb7575;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  font-size: 0.95rem;
+  color: #473030; }
+  aside::before {
+    content: attr(data-label);
+    position: absolute;
+    top: -0.65rem;
+    left: 0.75rem;
+    background: #cb7575;
+    color: contrast-color(#cb7575, #000, #fff);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.15rem 0.4rem 0.2rem;
+    border-radius: 0.4rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    line-height: 1;
+    pointer-events: none; }
+  aside p:last-child,
+  aside ul:last-child,
+  aside ol:last-child,
+  aside blockquote:last-child {
+    margin-bottom: 0; }
+  aside h1, aside .h1, aside h2, aside .h2, aside h3, aside .h3, aside h4, aside .h4, aside h5, aside .h5, aside h6, aside .h6 {
+    margin-top: 0.25rem;
+    font-family: "Exo 2", Georgia, Cambria, "Times New Roman", Times, serif;
+    font-size: 1.05em; }
+  aside code, aside pre code {
+    background: rgba(0, 0, 0, 0.04); }
+  @media print {
+    aside {
+      box-shadow: none;
+      background: #f4f2f2; } }
+  @media (min-width: 768px) {
+    aside {
+      margin-left: 1.25rem;
+      margin-right: 1.25rem; } }
 footer.page-info {
   --pi-accent: tint-color($link-color, 45%);
   margin: 2rem 0 0;
