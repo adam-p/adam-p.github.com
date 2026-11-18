@@ -416,7 +416,7 @@ Truncate the same form of the string that you counted, and store that form. If y
 
 And then do a bunch of testing to make sure it works the way it should. (Note the React Native bugs mentioned elsewhere.)
 
-Discussion about the relative UX merits of rejection versus truncation is interesting, but beyond our scope.
+Discussion about the relative UX merits of rejection versus truncation is interesting, but beyond our scope. (See [this appendix](#appendix-a-length-limiting-example-across-programs) for a concrete case where truncating is clearly better.)
 
 [This section was prompted by an [HN comment](https://news.ycombinator.com/item?id=43852287) from aidenn0.]
 
@@ -610,6 +610,43 @@ There's a mismatch between frontend and backend encoding used for limiting. This
 So a mundane user wouldn't be able to get into a bad state. And if someone F12-removes the submit-button-disabled state on the frontend, they can create a username/password beyond 50/200 code points, but they will still be able to log in with them. So that's okay-ish.
 
 What's less good is that a user with a too-long username won't be able to _edit_ their account -- adding an email address, say -- without changing the username, because the UI will flag the (unchanged) username as invalidly long. Sure, if you mess around in browser DevTools you get what you deserve, but it's still a good example of unfortunate consequences due to inconsistency.
+
+## Appendix: A length-limiting example across programs
+
+Recently I applied this post's advice to a real system, and it turned out to be a clean example of inconsistent counting: not between the layers of one architecture, but between programs, written by different teams, that exchange one string.
+
+One app creates a sharing link, and another app imports it. The link carries a token containing an ID, which is what matters, and a display name, which is only a label shown to the user. Several programs create these tokens and two consume them, and each limited the name with whatever its platform offered:
+
+| Program | Role | Name limit | Unit counted |
+|---|---|---|---|
+| Desktop app (Go), signed out | sender | none | -- |
+| Desktop app (Go) signed in; mobile and web app (React Native) | sender | 3 to 32, [PRECIS nickname](https://www.rfc-editor.org/rfc/rfc8266) rules, NFKC-normalized | Unicode code points |
+| Command-line tool (Go) | sender | 1 to 32 | Unicode code points |
+| Windows app (HTML UI) | sender | HTML `maxlength="32"` | UTF-16 code units |
+| Newer client (Flutter) | receiver | 1 to 128 | UTF-16 code units (Dart `String.length`) |
+| Older client (Java) | receiver | non-empty, no maximum | -- |
+
+Nobody chose UTF-16 code units for the newer client's limit; it's just what Dart's `String.length` returns. And a name that broke the newer client's rule didn't fail gracefully: the whole token was rejected, discarding the perfectly good ID along with the label.
+
+What the mismatches did:
+
+- The one real failure: the signed-out desktop app could produce a name over 128 UTF-16 code units (129 ASCII characters, or 65 emoji), and the newer client rejected it, with an error message that didn't mention the name. The limited senders could never hit it: 32 code points is at most 64 UTF-16 code units.
+- The newer client's limit allowed 128 characters from the Basic Multilingual Plane but only 64 emoji. Inconsistent, but unreachable from the limited senders.
+- The Windows app allowed only 16 emoji where the code-point senders allowed 32. A mismatch between senders, but not a failure.
+- The Windows app could also send an empty name, which both clients rejected. Not a length problem, but the same kind of uncoordinated validation.
+
+The fix in the newer client treats the token as untrusted input, since the link can be opened from any web page or message:
+
+1. **Bound the size before parsing anything.** Reject a token longer than 4,096 characters before decoding it. (The token is base64url, so it's ASCII, and every way of counting gives the same answer.) This is the request-size sanity limit from "Reject", above. Rejecting is fine here, because no legitimate sender comes close.
+2. **Never reject because of the name.** The name is cosmetic; if it's missing or empty, the client shows a generic label. Losing the ID over the label is the wrong trade.
+3. **Clean the name, then count it.** Control characters become spaces; bidirectional-text controls (which could reorder the surrounding UI text) and other invisible format characters are removed, except the zero-width joiner and non-joiner, which emoji sequences and Persian need; whitespace is collapsed and trimmed. Counting happens after cleaning, so the limit applies to the form that's displayed.
+4. **Count Unicode code points, with a limit of 32**, matching the senders that have a limit, so every name they produce arrives unchanged.
+5. **Don't normalize.** The name is only displayed, never compared with another system's copy, and the count isn't shown to anyone. That's the case described under "Unicode code points", above, where normalization buys little. (And Dart has no built-in normalization.)
+6. **Truncate at grapheme cluster boundaries.** Walk the grapheme clusters from the start, keeping each whole cluster while the code point count stays within the limit, and stop at the first one that doesn't fit. Don't skip it and continue with later clusters: that would remove characters from the middle of the name. If anything was cut, append "…", which counts toward the limit. If not even the first cluster fits (Zalgo text, say), the name becomes empty.
+
+Step 6 is a cheap, standards-friendly cousin of graph length: the limit is in code points, so Zalgo text is still bounded, but no emoji, flag, or Devanagari conjunct gets split.
+
+The general lesson is TL;DR item 5 across teams rather than layers: several programs exchanged one string, each limited it with its platform's default, and the strictest receiver turned a cosmetic field into a hard failure.
 
 ---
 
