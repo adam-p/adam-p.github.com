@@ -179,7 +179,7 @@ Now that we understand character encoding better, let's revisit the table above.
 So, different programming languages (and functions within a language) give us different methods of counting. Some examples[^corrections]:
 
 - **UTF-8**: Go, Rust, C++'s `std::u8string`, Haskell's `Text` v2
-- **UTF-16**: Java/Android, JavaScript (and TypeScript), C#/.NET (and Windows), Objective-C/iOS (`NSString`), Haskell's `Text` v1.
+- **UTF-16**: Java/Android, JavaScript (and TypeScript), Dart, C#/.NET (and Windows), Objective-C/iOS (`NSString`), Haskell's `Text` v1.
 - **Unicode**: Python 3, Ruby, PostgreSQL, Haskell's `Char`
 - **Grapheme cluster**: Swift's `String.count`, Elixir's `String.length`, Raku
 
@@ -218,6 +218,7 @@ Here are a few length limiters that I was looking at when I decided I needed to 
 * If you create a column constraint with PostgreSQL's `char_length()`, it'll limit by Unicode code points (by default).
 * The HTML attribute [`maxlength`](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/maxlength) on `input` or `textarea` elements limits by UTF-16 code units. (Except... I have found that IE limits by Unicode code points instead.)
 * React Native's [`TextInput.maxLength`](https://reactnative.dev/docs/textinput#maxlength) limits by UTF-16 code units. This is because [on iOS](https://github.com/facebook/react-native/blob/70cdf12c4d0d27d9fc94645c5779f34d0883320a/packages/react-native/Libraries/Text/TextInput/RCTBaseTextInputView.mm#L501) it uses [`NSString.length`](https://developer.apple.com/documentation/foundation/nsstring/1414212-length) and [on Android](https://github.com/facebook/react-native/blob/402b93dd0cdaf3ae5f4ca557b157904ef98ca31c/packages/react-native/ReactAndroid/src/main/java/com/facebook/react/views/textinput/ReactTextInputManager.java#L781) it uses [`InputFilter.LengthFilter`](https://medium.com/@avinash369/decoding-inputfilter-lengthfilter-df449c19d167).
+* Flutter's [`TextField.maxLength`](https://api.flutter.dev/flutter/material/TextField/maxLength.html) limits by grapheme clusters ("user-perceived characters", via the [`characters`](https://pub.dev/packages/characters) package), even though Dart's own `String.length` counts UTF-16 code units. That makes it the only limiter here whose count doesn't bound the size of the input: a single Zalgo "character" with hundreds of combining marks counts as 1. (See "Grapheme clusters", below.)
 
 Rant: It's really annoying that the method of counting length often isn't immediately apparent in the documentation. I should _not_ have had to dig into React Native source code to get the answer. (And this isn't just an RN problem.)
 
@@ -253,7 +254,7 @@ Grapheme clusters also require additional processing and interpretation. This is
 
 To a greater degree than the other options, operating at the grapheme cluster level is sensitive to differences between Unicode versions. For example, if a new grapheme cluster is added, a newer segmentation algorithm will count it as 1, while an older Unicode version may count it as the individual code points.
 
-Not all programming languages have built-in grapheme cluster segmentation support. For example, Go has [third-party packages](https://github.com/rivo/uniseg), but [no support](https://github.com/golang/go/issues/14820) in the stdlib or in `golang.org/x/text`.
+Not all programming languages have built-in grapheme cluster segmentation support. For example, Go has [third-party packages](https://github.com/rivo/uniseg), but [no support](https://github.com/golang/go/issues/14820) in the stdlib or in `golang.org/x/text`. Dart's comes from the [`characters`](https://pub.dev/packages/characters) package, which is published by the Dart team but isn't part of the core library.
 
 #### UTF-16 code units
 
@@ -302,7 +303,7 @@ Google's guidance gives two reasons for normalizing, at two strengths: all value
 1. **Equality.** If a string is going to be compared, looked up, or checked for uniqueness (usernames, identifiers, search terms), then the composed and decomposed forms of "é" must be the same string. Normalization is essential here.
 2. **Fairer counts.** NFC makes a decomposed "é" count as one code point instead of two. But it only helps where a precomposed form exists; Devanagari conjuncts, flags, and emoji sequences still count as more than one. This is a real but modest benefit, and it matters most when the count is shown to the user.
 
-Note what's _not_ on that list: consistency of limit checks across layers. Every layer needs to count the same form, but raw, unnormalized input is a form too, and it's the one whose code point count can't drift between Unicode versions (see "Unicode versions", below). So for a string that's only displayed, never compared, and limited for safety rather than shown as a count, normalization buys little and adds processing (and, in some languages, a dependency).
+Note what's _not_ on that list: consistency of limit checks across layers. Every layer needs to count the same form, but raw, unnormalized input is a form too, and it's the one whose code point count can't drift between Unicode versions (see "Unicode versions", below). So for a string that's only displayed, never compared, and limited for safety rather than shown as a count, normalization buys little and adds processing (and, in some languages, like Dart, a dependency).
 
 Counting by Unicode/UTF-32 code points means that everything in the Basic Multilingual Plane _and_ many emoji get a count of 1. That's an improvement over UTF-16 (and UTF-8). It also doesn't suffer from the interpretative counting of grapheme clusters.
 
@@ -437,6 +438,8 @@ Possible problems that could be introduced include:
 - If strings are normalized and hashed (e.g., for signing or HMAC) in one place, and then the raw string is sent somewhere else for verification, the normalization step may not produce the same string, resulting in a different hash. (So don't try to modify the input before checking. For example, the [JSON Canonicalization Scheme](https://www.rfc-editor.org/rfc/rfc8785#section-3.1-6) specifies that "Although the Unicode standard offers the possibility of rearranging certain character sequences, referred to as "Unicode Normalization", JCS-compliant string processing does not take this into consideration. That is, all components involved in a scheme depending on JCS MUST preserve Unicode string data "as is".")
 
 And so on.
+
+Where the Unicode data comes from matters too. Some implementations use the operating system's Unicode data (like the glibc and ICU examples below), so behaviour can change with the device or server. Others bundle their own: Dart's `characters` package ships its own tables (Unicode 16.0.0 as of version 1.4.0), so grapheme segmentation is fixed by the app build rather than the OS. That's consistent across devices running the same build, but it won't necessarily match your backend.
 
 For a real-life story of this kind of version mismatch, [search for "operating system-provided ICU" here](https://hsivonen.fi/string-length/). It also links to a [scary discussion](https://www.postgresql.org/message-id/flat/BA6132ED-1F6B-4A0B-AC22-81278F5AB81E%40tripadvisor.com) ([HN discussion](https://news.ycombinator.com/item?id=18855585)) about Unicode version differences in glibc causing PostgreSQL index corruption when the same data is used on a different server machine. "No surprise;  I have been expecting to hear about such breakage, and am surprised we hear about it so rarely.  We really have no way of testing for breakage either.  :-(" Yikes.
 
