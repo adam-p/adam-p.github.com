@@ -16,7 +16,7 @@ A TL;DR misses the "fully grok" part, but not everyone has time to read everythi
 3. Make an intentional decision about how you're going to count characters when limiting string length.
 4. Look carefully at how the "max length" features provided by your language (framework, etc.) actually work. There's a very good chance that they do not match the limiting method you chose.
 5. Make sure you use that same counting method across all the layers of your architecture.
-6. Probably limit by counting normalized Unicode code points. (Like [Google recommends](https://google.aip.dev/210#:~:text=Character%20definition).)
+6. Probably limit by counting Unicode code points. (Like [Google recommends](https://google.aip.dev/210#:~:text=Character%20definition).) NFC-normalize strings that will be compared or used as identifiers, and consider it for counts shown to users.
 
 <!--more-->
 
@@ -295,7 +295,14 @@ But when the count is low and exposed to the user... UTF-8 counting is going to 
 
 Argument from authority: Google's [API design guidance](https://google.aip.dev/210#:~:text=Character%20definition) states that string size limits _must_ be measured in Unicode code points, and that those strings should be NFC Unicode normalized.
 
-I think this is approximately the _best_ approach -- not just for APIs, but also for UIs -- but it's _not ideal_. (I would also upgrade the "should" be normalized to "should almost always".)
+I think this is approximately the _best_ approach -- not just for APIs, but also for UIs -- but it's _not ideal_.
+
+Google's guidance gives two reasons for normalizing, at two strengths: all values _should_ be NFC normalized, to avoid discrepancies in size (code points and code units); unique identifiers _must_ be, so that two visually identical strings can't identify different resources. I think that's the right split, and it's worth being explicit about what normalization buys you:
+
+1. **Equality.** If a string is going to be compared, looked up, or checked for uniqueness (usernames, identifiers, search terms), then the composed and decomposed forms of "é" must be the same string. Normalization is essential here.
+2. **Fairer counts.** NFC makes a decomposed "é" count as one code point instead of two. But it only helps where a precomposed form exists; Devanagari conjuncts, flags, and emoji sequences still count as more than one. This is a real but modest benefit, and it matters most when the count is shown to the user.
+
+Note what's _not_ on that list: consistency of limit checks across layers. Every layer needs to count the same form, but raw, unnormalized input is a form too, and it's the one whose code point count can't drift between Unicode versions (see "Unicode versions", below). So for a string that's only displayed, never compared, and limited for safety rather than shown as a count, normalization buys little and adds processing (and, in some languages, a dependency).
 
 Counting by Unicode/UTF-32 code points means that everything in the Basic Multilingual Plane _and_ many emoji get a count of 1. That's an improvement over UTF-16 (and UTF-8). It also doesn't suffer from the interpretative counting of grapheme clusters.
 
@@ -439,11 +446,13 @@ On the other hand... This might be another case of being overly paranoid?
 
 ### Normalization concerns
 
-It might be tempting to have your API require that strings be Unicode normalized _before_ submission, because: a) you're already normalizing on the frontend in order to count the length, and b) it's your API and you make the rules. But I think it's a bad idea.
+It might be tempting to have your API require that strings be Unicode normalized _before_ submission, because: a) you're already normalizing on the frontend in order to count the length, and b) it's your API and you make the rules. For most strings, I think it's a bad idea.
 
-First of all, you're not going to trust the API-caller to actually do it, so you'll have to re-run the normalization on the backend anyway.
+You're not going to trust the API-caller to actually do it, so you'll have to normalize on the backend anyway, compare the result with the raw input, and reject the input if they differ. And that check can go wrong: if the client and server have different Unicode versions, and the string contains characters that only the newer one knows about, they can disagree about whether the string is normalized. The backend could end up refusing perfectly valid input. For most strings, it's simpler to just normalize on receipt.
 
-...And then compare your normalized input with the raw input. But then see above for Unicode version concerns -- you could end up in a pathological state where the backend refuses to accept perfectly valid input.
+Identifiers are the exception. If the server normalizes an identifier on receipt, the identifier it stores can differ from the one the client sent, and the client is left holding a string that doesn't match the server's. Requiring NFC and rejecting anything else means that both sides hold exactly the same string. That's what Google [requires](https://google.aip.dev/210#:~:text=must%20reject%20any%20inputs) for APIs that allow all valid Unicode characters in unique identifiers: "the API must reject any inputs that are not in Normalization Form C."
+
+The Unicode version risk is narrower than it sounds. Unicode's [normalization stability policy](https://www.unicode.org/policies/stability_policy.html#Normalization) guarantees that a string containing only characters assigned in a given Unicode version normalizes the same way in every later version. So disagreement is only possible for text containing characters newer than one side's Unicode version -- and new emoji aren't affected, since normalization doesn't change them. For identifiers, I think that's an acceptable risk in exchange for both sides holding the same string.
 
 Note that normalization is not zero-cost, and may be significant on very large data. For example, Django had a [recent possible DoS vulnerability](https://www.cve.org/CVERecord?id=CVE-2025-27556) due to slow normalization.
 
