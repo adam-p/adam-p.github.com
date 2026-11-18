@@ -1,5 +1,5 @@
 baseURL: 'https://adam-p.ca/'
-languageCode: 'en-us'
+locale: 'en-us'
 title: 'adam-p'
 
 params:
@@ -9,7 +9,7 @@ params:
 
 languages:
   en:
-    languageName: English
+    label: English
     menu:
       main:
         - url: /blog/
