@@ -648,6 +648,12 @@ Step 6 is a cheap, standards-friendly cousin of graph length: the limit is in co
 
 The general lesson is TL;DR item 5 across teams rather than layers: several programs exchanged one string, each limited it with its platform's default, and the strictest receiver turned a cosmetic field into a hard failure.
 
+## LLM disclosure
+
+The original post was entirely written by hand, with minimal LLM input. As of 2026-11-18, review and edits are happening with LLM assistance. I plan on coming up with a policy for LLM usage and writing on this blog, but... I haven't done it yet.
+
+I really don't like publishing stuff I didn't write myself but, at least this time, I think it's important to make these updates to the post -- and if I have to block of hours of time to do it, I don't think it'll get done. So, I'm going for maximum accuracy over purity of textual provenance... this time.
+
 ---
 
 Hacker News discussion [will be here](https://news.ycombinator.com/item?id=43850398), if any results.
