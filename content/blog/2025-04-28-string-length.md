@@ -45,7 +45,7 @@ First, a working definition of a "**character**": This is the human conceptual i
 
 **Unicode** is humanity's attempt to list all possible characters, plus a whole lot more: control characters, non-printable characters, fragments that can be combined to form characters, and so on.
 
-Each entry in the Unicode space is called a "**code point**" and is represented with a 32-bit unsigned integer, though the actual usable space is only 2²¹ (1.1 million possible values) and only about 150,000 of those values have been assigned. You might also see the term "**Unicode scalar units**" -- these are basically the same as code points, but exclude the reserved "surrogate pair" range.
+Each entry in the Unicode space is called a "**code point**" and is represented with a 32-bit unsigned integer, though only 21 bits are actually needed: the code space runs from U+0000 to U+10FFFF (about 1.1 million possible values) and only about 150,000 of those values have been assigned. You might also see the term "**Unicode scalar values**" -- these are basically the same as code points, but exclude the reserved "surrogate pair" range.
 
 Examples (character: code, decimal)
 - "a": [U+0061](https://unicodeplus.com/U+0061), 97
@@ -79,7 +79,7 @@ Not all possible combinations of emoji (or code points generally) can be combine
 
 Whether and how an emoji is rendered depends on the platform you're viewing it on. For example, here is what the family emoji looks like in Brave browser on Windows -- <img src="/img/blog/family-emoji-windows.png" style="max-width:3em"> -- versus on Android -- <img src="/img/blog/family-emoji-android.png" style="max-width:3em">.
 
-And rendering can change over time. In 2014, with Windows 10, Microsoft introduced the ["ninjacat"](https://www.windowscentral.com/ninjacat-latest-victim-windows-11s-emojigate) ZWJ sequence emoji, combining the "cat" and "ninja" emoji. It wasn't supported by any other platform. In 2021, Microsoft removed support for it and now it renders as two separate emoji.
+And rendering can change over time. In 2016, with the Windows 10 Anniversary Update, Microsoft introduced the ["ninjacat"](https://www.windowscentral.com/ninjacat-latest-victim-windows-11s-emojigate) ZWJ sequence emoji, combining the "cat face" and "bust in silhouette" emoji. It wasn't supported by any other platform. In 2021, Microsoft removed support for it and now it renders as two separate emoji.
 
 The family emoji itself has gone through some [major changes](https://blog.unicode.org/2023/01/whats-new-in-emoji-151.html). (Maybe it was even [removed from iOS](https://discussions.apple.com/thread/255561783) at some point, but it seems to render fine now.)
 
@@ -91,7 +91,7 @@ There are also "combining marks" that are accents or other fragments that don't 
 
 This is an example of a grapheme cluster that can instead be represented with a single code point: [U+00E9](https://unicodeplus.com/U+00E9) is "Latin Small Letter E With Acute" and is visually identical to the above, decomposed cluster. (See "Unicode normalization", below.)
 
-Use of characters formed by grapheme clusters (that can't be normalized away) are extremely uncommon in languages that use European and and East Asian scripts, but fairly common in [South Asian scripts](https://www.w3.org/International/questions/qa-indic-graphemes), like Hindi where ~25% of characters involve a combining mark.
+Use of characters formed by grapheme clusters (that can't be normalized away) are extremely uncommon in languages that use European and East Asian scripts, but fairly common in [South Asian scripts](https://www.w3.org/International/questions/qa-indic-graphemes), like Hindi where ~25% of characters involve a combining mark.
 
 - "र्स्प": composed of 5 code points
   1. "र": [U+0930](https://unicodeplus.com/U+0930), "Devanagari Letter Ra"
@@ -153,9 +153,9 @@ Note that there is overhead in the design[^utf8-design], so you don't get the fu
 
 ### UTF-16
 
-**UTF-16** doesn't often get used on the wire or on disk, but many programming languages and OSes use it in-memory. The reason is that some platforms and languages originally supported **UCS-2**, which is the old 2-byte Unicode standard. When Unicode increased to 4 bytes, UTF-16 was created. It uses 1 or 2 two-byte code units in a code point sequence. Sequences of a single code unit are identical to and backwards compatible with UCS-2, making the transition for UCS-2 platforms reasonably easy.
+**UTF-16** doesn't often get used on the wire or on disk, but many programming languages and OSes use it in-memory. The reason is that some platforms and languages originally supported **UCS-2**, which is the old 2-byte Unicode standard. When Unicode grew beyond 16 bits (to 21 bits), UTF-16 was created. It uses 1 or 2 two-byte code units in a code point sequence. Sequences of a single code unit are identical to and backwards compatible with UCS-2, making the transition for UCS-2 platforms reasonably easy.
 
-(Two UTF-16 code units making a code point is called a **surrogate pair**. There is a "surrogate pair" reserved area in the UCS-2 spec that is used to indicate when a second UTF-16 code unit is used in the code point sequence.)
+(Two UTF-16 code units making a code point is called a **surrogate pair**. Unicode reserves a range of code points, U+D800 to U+DFFF, that never represent characters on their own; UTF-16 uses values from that range to indicate when a second UTF-16 code unit is used in the code point sequence.)
 
 UTF-16 has the nice property that the entire "**Basic Multilingual Plane** (BMP)" fits in a single UTF-16 code unit. That's the "[majority of the common characters used in the major languages of the world](https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-1/)" (but doesn't include emoji, notably). The downside is that it takes twice as much space to represent ASCII characters.
 
@@ -180,8 +180,8 @@ So, different programming languages (and functions within a language) give us di
 
 - **UTF-8**: Go, Rust, C++'s `std::u8string`, Haskell's `Text` v2
 - **UTF-16**: Java/Android, JavaScript (and TypeScript), C#/.NET (and Windows), Objective-C/iOS (`NSString`), Haskell's `Text` v1.
-- **Unicode**: Python 3, Elixir, Ruby, PostgreSQL, Haskell's `Char`
-- **Grapheme cluster**: Swift's `String.count`, Elixir's `String.length`, Perl 6
+- **Unicode**: Python 3, Ruby, PostgreSQL, Haskell's `Char`
+- **Grapheme cluster**: Swift's `String.count`, Elixir's `String.length`, Raku
 
 [^corrections]: I don't know most of these languages well or at all. Corrections welcome.
 
@@ -194,7 +194,7 @@ To understand how our programming languages of choice deal with string length, i
 
 A few examples:
 
-[Go's](https://go.dev/blog/strings) `string` type is really an array of bytes. The intention is that those bytes hold UTF-8 code units, but there's no guarantee of UTF-8 sequence validity. `len(string)` gives the byte length of the string. If you want to iterate over the bytes/code units, you must first cast the string to `[]byte`, because if you just iterate over the string, each step will give you a Unicode code point/rune. Go provides `unicode/utf8.RuneCountInString` to get the code point count. It also has the `unicode/utf16` package for converting between runes (code points) and UTF-16 code units. It has [no built-in support](https://github.com/golang/go/issues/14820) for grapheme cluster segmentation.
+[Go's](https://go.dev/blog/strings) `string` type is really an array of bytes. The intention is that those bytes hold UTF-8 code units, but there's no guarantee of UTF-8 sequence validity. `len(string)` gives the byte length of the string. Indexing a string (`s[i]`) gives you a byte/code unit, but iterating over it with `range` gives you a Unicode code point/rune at each step. Go provides `unicode/utf8.RuneCountInString` to get the code point count. It also has the `unicode/utf16` package for converting between runes (code points) and UTF-16 code units. It has [no built-in support](https://github.com/golang/go/issues/14820) for grapheme cluster segmentation.
 
 JavaScript's `string` type is a set of UTF-16 code units and `string.length` gives you a count of those code units. `[...string]` gives an array of Unicode code points. [`TextEncoder`](https://developer.mozilla.org/en-US/docs/Web/API/TextEncoder) converts to UTF-8. [`Intl.Segmenter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter) provides access to grapheme clusters.
 
@@ -259,7 +259,7 @@ Not all programming languages have built-in grapheme cluster segmentation suppor
 
 If you're starting from the frontend, there's a good chance that UTF-16 will be your default choice. There are reasons why it's not a good choice.
 
-A danger in length-limiting by counting code units is that you inadvertently break a character by truncating some of code units in a sequence. React Native's iOS limiter [suffered this](https://github.com/facebook/react-native/issues/10929) for at least 5 years before [fixing it](https://github.com/facebook/react-native/commit/f3b8d4976f8608c2cda1f071923f14b6d4538967). It [looks like](https://medium.com/@avinash369/decoding-inputfilter-lengthfilter-df449c19d167) RN's Android limiter avoids this ("If a surrogate pair is encountered at the boundary, it backs off by one character to avoid splitting the pair").
+A danger in length-limiting by counting code units is that you inadvertently break a character by truncating some of the code units in a sequence. React Native's iOS limiter [suffered this](https://github.com/facebook/react-native/issues/10929) for at least 5 years before [fixing it](https://github.com/facebook/react-native/commit/f3b8d4976f8608c2cda1f071923f14b6d4538967). It [looks like](https://medium.com/@avinash369/decoding-inputfilter-lengthfilter-df449c19d167) RN's Android limiter avoids this ("If a surrogate pair is encountered at the boundary, it backs off by one character to avoid splitting the pair").
 
 Counting by anything except grapheme clusters means that your count can jump by more than one per "character", which is not the worst thing ever, but obviously undesirable UX. There are two reasons for this jump-counting:
 1. Applies to UTF-8, UTF-16, Unicode code points: If the character is a multi-code-point grapheme cluster.
@@ -275,7 +275,7 @@ Another big factor is that, while UTF-16 is quite commonly used in-memory, it's 
 
 Using UTF-16 maximizes the amount of encoding conversion we're going to have to do.
 
-Additionally, in programming languages that primarily use UTF-8 or Unicode code points, UTF-16 seems to be a second-class. For example, in Go, [strings](https://go.dev/blog/strings) are UTF-8 and runes are what you get when you iterate over a string, but UTF-16 support requires the [`unicode/utf16`](https://pkg.go.dev/unicode/utf16) package. PostgreSQL doesn't seem to support UTF-16 at all.
+Additionally, in programming languages that primarily use UTF-8 or Unicode code points, UTF-16 seems to be a second-class citizen. For example, in Go, [strings](https://go.dev/blog/strings) are UTF-8 and runes are what you get when you iterate over a string, but UTF-16 support requires the [`unicode/utf16`](https://pkg.go.dev/unicode/utf16) package. PostgreSQL doesn't seem to support UTF-16 at all.
 
 So, UTF-16 isn't obviously _terrible_, but we can do better.
 
@@ -311,7 +311,7 @@ It still suffers from many of the problems mentioned above:
 
    (The Canada flag emoji is a cluster made of a "Regional Indicator Symbol [Letter C](https://unicodeplus.com/U+1F1E8)" followed by a "Regional Indicator Symbol [Letter A](https://unicodeplus.com/U+1F1E6)", but the length limit is truncating after the "C".)
 
-3. Normalization is needed to limit grapheme clusters, and possibly per-keypress in the UI. Not a big deal, but extra complication and processing.
+3. Normalization (NFC) is needed so that clusters with a precomposed form count as one code point, possibly per-keypress in the UI. Not a big deal, but extra complication and processing.
 
 Even with those caveats, I think counting by Unicode code points is the sanest choice.
 
@@ -336,9 +336,9 @@ What should N be? (Following answer mostly based on this informative [StackOverf
 
 The longest well-defined grapheme cluster I have found is 10 code points ("👨🏻‍❤️‍💋‍👨🏼" -- ["Kiss - Man: Medium-Light Skin Tone, Man: Medium-Light Skin Tone"](https://emojitool.com/en/kiss-man-medium-light-skin-tone-man-medium-light-skin-tone)). So maybe 10 should be our limit.
 
-Unicode defines a [Stream-Safe Text Format](https://unicode.org/reports/tr15/#Stream_Safe_Text_Format), which applies a limit of 30 (post NKFD nomalization). "The value of 30 is chosen to be significantly beyond what is required for any linguistic or technical usage. While it would have been feasible to chose a smaller number, this value provides a very wide margin, yet is well within the buffer size limits of practical implementations." So maybe 30 should be our limit.
+Unicode defines a [Stream-Safe Text Format](https://unicode.org/reports/tr15/#Stream_Safe_Text_Format), which applies a limit of 30 (post NFKD normalization). "The value of 30 is chosen to be significantly beyond what is required for any linguistic or technical usage. While it would have been feasible to chose a smaller number, this value provides a very wide margin, yet is well within the buffer size limits of practical implementations." So maybe 30 should be our limit.
 
-(If I understand the Stream-Safe Text Process correctly, it provides a decomposition algorithm that is similar to what I suggested above. However, it would be more generous: a Zalgo character with 100 combining marks under my counting system would get a length of "71" (if N=30); under the Stream-Safe Text Process, it would have a length of "4". I'm inclined to be less generous, but either approach still provides a bound, which is what we want.)
+(If I understand the Stream-Safe Text Process correctly, it provides a decomposition algorithm that is similar to what I suggested above. However, it would be more generous: a Zalgo character with 100 combining marks under my counting system would get a length of "72" (if N=30); under the Stream-Safe Text Process, it would have a length of "4". I'm inclined to be less generous, but either approach still provides a bound, which is what we want.)
 
 Even if I think this kind of approach is optimal, I don't think it's perfect.
 
@@ -496,15 +496,14 @@ JavaScript:
  * Counts the number of grapheme clusters in a string, with a sanity limit on the number
  * of Unicode code points allowed in the cluster. After 10 code points in a single cluster,
  * the remaining code points in the cluster are counted as one each.
- * The limit is intended to be larger than the number of code points in in legitimate
- * grapheme clusters (as used in emoji and human languages) from less-legitimate uses,
- * like Zalgo text.
+ * The limit is intended to distinguish legitimate grapheme clusters (as used in emoji
+ * and human languages) from less-legitimate uses, like Zalgo text.
  *
  * @param {string} s  - the input string
  * @returns {number}  - the grapheme length
  */
 function graphLength(s) {
-  // A bit of research suggests that the locale arugment is ignored for grapheme segmentation
+  // A bit of research suggests that the locale argument is ignored for grapheme segmentation
   const seg = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
 
   let total = 0;
@@ -598,4 +597,4 @@ What's less good is that a user with a too-long username won't be able to _edit_
 
 ---
 
-Hacker New discussion [will be here](https://news.ycombinator.com/item?id=43850398), if any results.
+Hacker News discussion [will be here](https://news.ycombinator.com/item?id=43850398), if any results.
